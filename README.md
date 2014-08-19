@@ -1,7 +1,7 @@
 TraceProv API
 ====
 
-Java interface provenance management. 
+Java interface for provenance management. 
 
 **Project status**: developing [milestone 1.0](https://github.com/opendatatrentino/traceprov/issues?milestone=1&state=open)
 
@@ -53,8 +53,8 @@ Additional labels for pre-release and build metadata are available as extensions
 
 #### Projects using this API
 
-* (https://github.com/opendatatrentino/Jackan)[Jackan]: client for accessing opendata catalogs
-* (https://github.com/opendatatrentino/OpenDataRise)[OpenDataRise]: power tool to cleanse and semantify open data, based on Refine
+* [Jackan](https://github.com/opendatatrentino/Jackan): client for accessing opendata catalogs
+* [OpenDataRise](https://github.com/opendatatrentino/OpenDataRise): power tool to cleanse and semantify open data, based on Refine
 
 
 #### Credits:
