@@ -46,6 +46,10 @@ public class ColumnRef implements IColumnRef {
         return true;
     }
     
-    
+    @Override
+    public String toString(){
+        return "Reference to column with index = " + index;
+    }
+
     
 }

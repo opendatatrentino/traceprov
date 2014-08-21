@@ -44,5 +44,9 @@ public class DcatMetadataRef implements IDcatMetadataRef {
     }
     
     
+    @Override
+    public String toString(){
+        return "Reference to dataset metadata property " + propertyURI;
+    }
     
 }
