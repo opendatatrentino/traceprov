@@ -3,7 +3,7 @@ TraceProv API
 
 Java interface for provenance management. 
 
-**Project status**: developing [milestone 1.0](https://github.com/opendatatrentino/traceprov/issues?milestone=1&state=open)
+**Project status**: Currently holds Java models for [DCAT catalog vocabulary](http://www.w3.org/TR/vocab-dcat/) and references to dataset elements.
 
 **Roadmap**: see [project issues](https://github.com/opendatatrentino/traceprov/issues)
 
