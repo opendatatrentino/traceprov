@@ -21,9 +21,14 @@ package eu.trentorise.opendata.traceprov.impl.dcat;
 import eu.trentorise.opendata.traceprov.dcat.IFoafAgent;
 
 
-
+/**
+ * Mutable implementation of a FOAF Agent: http://xmlns.com/foaf/spec/
+ * @author David Leoni
+ */
 public class FoafAgent implements IFoafAgent {
     private String URI;
+    private String name;
+    private String mbox;
 
     public FoafAgent() {
     }
@@ -37,4 +42,23 @@ public class FoafAgent implements IFoafAgent {
     public void setURI(String URI) {
         this.URI = URI;
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMbox() {
+        return mbox;
+    }
+
+    public void setMbox(String mbox) {
+        this.mbox = mbox;
+    }
+
+
 }

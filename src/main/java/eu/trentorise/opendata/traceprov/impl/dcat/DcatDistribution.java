@@ -20,7 +20,7 @@ package eu.trentorise.opendata.traceprov.impl.dcat;
 import eu.trentorise.opendata.traceprov.dcat.IDcatDistribution;
 
 /**
- *
+ * Mutable implementation of a dcat:Distribution: http://www.w3.org/TR/vocab-dcat/#Class:_Distribution
  * @author David Leoni
  */
 public class DcatDistribution implements IDcatDistribution {

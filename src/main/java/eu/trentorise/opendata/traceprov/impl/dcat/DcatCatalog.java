@@ -21,7 +21,7 @@ import eu.trentorise.opendata.traceprov.dcat.IDcatCatalog;
 import eu.trentorise.opendata.traceprov.dcat.IFoafAgent;
 
 /**
- *
+ * Mutable implementation of a dcat:Catalog  http://www.w3.org/TR/vocab-dcat/#Class:_Dataset
  * @author David Leoni
  */
 public class DcatCatalog implements IDcatCatalog {

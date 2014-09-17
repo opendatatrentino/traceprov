@@ -20,6 +20,11 @@ package eu.trentorise.opendata.traceprov.impl.dcat;
 import eu.trentorise.opendata.traceprov.dcat.ISkosConcept;
 import eu.trentorise.opendata.traceprov.dcat.ISkosConceptScheme;
 
+/**
+ * Mutable implementation of a SkosConcept:
+ * http://www.w3.org/2009/08/skos-reference/skos.html#Concept
+ * @author David Leoni
+ */
 public class SkosConcept implements ISkosConcept {
     private String URI;
     private String prefLabel;

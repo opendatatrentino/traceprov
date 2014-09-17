@@ -20,7 +20,10 @@ package eu.trentorise.opendata.traceprov.impl.dcat;
 
 import eu.trentorise.opendata.traceprov.dcat.IDcatCatalogRecord;
 
-
+/**
+ * Mutable implementation of a dcat:CatalogRecord  http://www.w3.org/TR/vocab-dcat/#Class:_Catalog_record
+ * @author David Leoni
+ */
 public class DcatCatalogRecord implements IDcatCatalogRecord {
     
     private String URI;    

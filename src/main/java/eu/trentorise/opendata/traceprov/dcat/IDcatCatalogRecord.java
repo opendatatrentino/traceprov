@@ -20,7 +20,7 @@ package eu.trentorise.opendata.traceprov.dcat;
 
 
 /**
- * Models a dcat: http://www.w3.org/TR/vocab-dcat/#Class:_Catalog_record
+ * Models a dcat:CatalogRecord http://www.w3.org/TR/vocab-dcat/#Class:_Catalog_record
  * 
  * If the catalog publisher decides to keep metadata describing its records
  * (i.e. the records containing metadata describing the datasets),

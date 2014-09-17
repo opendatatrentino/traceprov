@@ -28,5 +28,18 @@ public interface IFoafAgent {
      * Returns the URI of the agent.
      */
     String getURI();
-
+    
+    /**
+     * http://xmlns.com/foaf/0.1/name
+     * @return 
+     */
+    String getName();
+    
+    /**
+     * Returns the mail box
+     * http://xmlns.com/foaf/0.1/mbox
+     */
+    String getMbox();
+        
+    
 }

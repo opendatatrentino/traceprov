@@ -23,14 +23,17 @@ import eu.trentorise.opendata.traceprov.dcat.IFoafAgent;
 import eu.trentorise.opendata.traceprov.dcat.ISkosConcept;
 import java.util.List;
 
-
+/**
+ * Mutable implementation of a dcat:Dataset  http://www.w3.org/TR/vocab-dcat/#Class:_Dataset
+ * @author David Leoni
+ */
 public class DcatDataset implements IDcatDataset {
     
     private String URI;    
     private String accrualPeriodicity;    
     private String contactPoint;    
     private String description;        
-    private List<IDcatDistribution> distributions;
+    private List<? extends IDcatDistribution> distributions;
     private String issued;
     private String identifier;
     private List<String> keywords;    
@@ -76,11 +79,11 @@ public class DcatDataset implements IDcatDataset {
     }
 
     @Override
-    public List<IDcatDistribution> getDistributions() {
+    public List<? extends IDcatDistribution> getDistributions() {
         return distributions;
     }
 
-    public void setDistributions(List<IDcatDistribution> distributions) {
+    public void setDistributions(List<? extends IDcatDistribution> distributions) {
         this.distributions = distributions;
     }
 
@@ -93,6 +96,7 @@ public class DcatDataset implements IDcatDataset {
         this.issued = issued;
     }
 
+    
     @Override
     public String getIdentifier() {
         return identifier;

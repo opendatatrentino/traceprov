@@ -18,7 +18,8 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 /**
- * Models a Dcat catalog. Following properties were not included:
+ * Models a dcat:catalog http://www.w3.org/TR/vocab-dcat/#class-catalog <br/>
+ * Following properties were not included: <br/>
  * List<DcatDataset> datasets and List<DcatCatalogRecord> records
  *
  * @author David Leoni
