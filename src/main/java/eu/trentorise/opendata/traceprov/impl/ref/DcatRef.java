@@ -1,12 +1,12 @@
 package eu.trentorise.opendata.traceprov.impl.ref;
 
-import eu.trentorise.opendata.traceprov.ref.IDcatMetadataRef;
+import eu.trentorise.opendata.traceprov.ref.IDcatRef;
 
 /**
  * Implements also equals and hashcode.
  * @author David Leoni
  */
-public class DcatMetadataRef implements IDcatMetadataRef {
+public class DcatRef implements IDcatRef {
         
     private String propertyURI;  
 
@@ -14,11 +14,11 @@ public class DcatMetadataRef implements IDcatMetadataRef {
         return propertyURI;
     }
 
-    public DcatMetadataRef(String propertyURI) {
+    public DcatRef(String propertyURI) {
         this.propertyURI = propertyURI;
     }
         
-    private DcatMetadataRef() {
+    private DcatRef() {
     }
 
     @Override
@@ -36,7 +36,7 @@ public class DcatMetadataRef implements IDcatMetadataRef {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final DcatMetadataRef other = (DcatMetadataRef) obj;
+        final DcatRef other = (DcatRef) obj;
         if ((this.propertyURI == null) ? (other.propertyURI != null) : !this.propertyURI.equals(other.propertyURI)) {
             return false;
         }

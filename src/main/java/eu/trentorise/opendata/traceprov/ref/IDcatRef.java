@@ -22,7 +22,7 @@ package eu.trentorise.opendata.traceprov.ref;
  * Represent a reference to an element of a dcat dataset, like for example the title
  * @author David Leoni
  */
-public interface IDcatMetadataRef {
+public interface IDcatRef {
     
     static public String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
     

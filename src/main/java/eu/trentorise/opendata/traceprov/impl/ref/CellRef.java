@@ -58,11 +58,13 @@ public class CellRef implements ICellRef {
         }
         return true;
     }
-    
+
     @Override
-    public String toString(){
-        return "Reference to cell with row index = " + row + " and column index = " + columnIndex;
+    public String toString() {
+        return "CellRef{" + "row=" + row + ", columnIndex=" + columnIndex + '}';
     }
+    
+    
     
 }
 
