@@ -26,10 +26,15 @@ import eu.trentorise.opendata.traceprov.dcat.ISkosConceptScheme;
  * @author David Leoni
  */
 public class SkosConcept implements ISkosConcept {
+    
+    public static SkosConcept UNKWOWN_SKOS_CONCEPT = new SkosConcept();
+    
     private String URI;
     private String prefLabel;
 
     public SkosConcept() {
+        URI = "";
+        prefLabel = "";
     }
     
     
@@ -41,15 +46,21 @@ public class SkosConcept implements ISkosConcept {
     }
 
     public void setPrefLabel(String prefLabel) {
+        if (prefLabel == null){
+            throw new IllegalArgumentException("null prefLabel is not accepted!");
+        }
         this.prefLabel = prefLabel;
     }
 
     @Override
-    public ISkosConceptScheme getInScheme() {
+    public ISkosConceptScheme getInScheme() {        
         return inScheme;
     }
 
     public void setInScheme(ISkosConceptScheme inScheme) {
+        if (inScheme == null){
+            throw new IllegalArgumentException("null inScheme is not accepted!");
+        }        
         this.inScheme = inScheme;
     }
 
@@ -59,6 +70,10 @@ public class SkosConcept implements ISkosConcept {
     }
 
     public void setURI(String URI) {
+        if (URI == null){
+            throw new IllegalArgumentException("null URI is not accepted!");
+        }
+        
         this.URI = URI;
     }
 }

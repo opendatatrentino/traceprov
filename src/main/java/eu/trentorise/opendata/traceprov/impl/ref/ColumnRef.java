@@ -13,6 +13,10 @@ import javax.annotation.concurrent.Immutable;
 public class ColumnRef implements IColumnRef {
     private int index;
 
+    /**
+     * 
+     * @param index column index starting from zero
+     */
     public ColumnRef(int index) {
         this.index = index;
     }
@@ -20,6 +24,7 @@ public class ColumnRef implements IColumnRef {
     private ColumnRef(){
     }    
 
+     /** @returns index column index starting from zero  */
     public int getIndex() {
         return index;
     }

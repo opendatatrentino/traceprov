@@ -19,6 +19,7 @@
 package eu.trentorise.opendata.traceprov.impl.dcat;
 
 import eu.trentorise.opendata.traceprov.dcat.IFoafAgent;
+import static eu.trentorise.opendata.traceprov.impl.TraceProvUtils.checkNonNull;
 
 
 /**
@@ -26,11 +27,17 @@ import eu.trentorise.opendata.traceprov.dcat.IFoafAgent;
  * @author David Leoni
  */
 public class FoafAgent implements IFoafAgent {
+    
+    public static FoafAgent UNKNOWN_AGENT = new FoafAgent();
+    
     private String URI;
     private String name;
     private String mbox;
 
     public FoafAgent() {
+        URI = "";
+        name = "";
+        mbox = "";
     }
     
     
@@ -40,6 +47,10 @@ public class FoafAgent implements IFoafAgent {
     }
 
     public void setURI(String URI) {
+        if (URI == null){
+            throw new IllegalArgumentException("null URI is not accepted!");
+        }
+        
         this.URI = URI;
     }
 
@@ -49,6 +60,7 @@ public class FoafAgent implements IFoafAgent {
     }
 
     public void setName(String name) {
+        checkNonNull(name, "FoafAgent name");
         this.name = name;
     }
 
@@ -57,6 +69,7 @@ public class FoafAgent implements IFoafAgent {
     }
 
     public void setMbox(String mbox) {
+        checkNonNull(mbox, "FoafAgent mbox");        
         this.mbox = mbox;
     }
 

@@ -24,7 +24,7 @@ package eu.trentorise.opendata.traceprov.dcat;
 public interface IDcatDistribution {
 
     /**
-     * dcat:accessURL . For relation with Dataset.landingPage see
+     * dcat:accessURL  For relation with Dataset.landingPage see
      * http://www.w3.org/TR/vocab-dcat/#a-dataset-available-only-behind-some-web-page
      */
     String getAccessURL();
@@ -62,7 +62,8 @@ public interface IDcatDistribution {
     String getIssued();
 
     /**
-     * dct:license
+     * A legal document giving official permission to do something with the resource.
+     * dct:license  http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#license     
      */
     String getLicense();
 

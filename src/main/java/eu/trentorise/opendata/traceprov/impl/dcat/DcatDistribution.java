@@ -41,6 +41,20 @@ public class DcatDistribution implements IDcatDistribution {
     private String title;
 
     public DcatDistribution() {
+        URI = "";    
+        byteSize = -1;
+        accessURL = "";    
+        datasetIdentifier = "";    
+        description = "";
+        downloadURL = "";
+        format = "";
+        issued = "";    
+        license = "";
+        mediaType = "";
+        modified = "";     
+        rights = "";    
+        spatial = "";       
+        title = "";        
     }
 
     
@@ -51,6 +65,9 @@ public class DcatDistribution implements IDcatDistribution {
     }
            
     public void setByteSize(int byteSize) {
+        if (byteSize < - 1){
+            throw new IllegalArgumentException("bytesize must be >= -1  Found instead: " + byteSize);
+        }
         this.byteSize = byteSize;
     }
 
@@ -60,6 +77,9 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setAccessURL(String accessURL) {
+        if (accessURL == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
         this.accessURL = accessURL;
     }
 
@@ -69,6 +89,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setDescription(String description) {
+        if (description == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.description = description;
     }
 
@@ -78,6 +102,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setDownloadURL(String downloadURL) {
+        if (downloadURL == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.downloadURL = downloadURL;
     }
 
@@ -87,6 +115,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setFormat(String format) {
+        if (format == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.format = format;
     }
 
@@ -96,6 +128,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setIssued(String issued) {
+        if (issued == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.issued = issued;
     }
 
@@ -104,7 +140,15 @@ public class DcatDistribution implements IDcatDistribution {
         return license;
     }
 
+    /**
+     * A legal document giving official permission to do something with the resource.
+     * dct:license  http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#license     
+     */    
     public void setLicense(String license) {
+        if (license == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.license = license;
     }
 
@@ -114,6 +158,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setMediaType(String mediaType) {
+        if (mediaType == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.mediaType = mediaType;
     }
 
@@ -123,6 +171,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setModified(String modified) {
+        if (modified == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.modified = modified;
     }
 
@@ -132,6 +184,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setRights(String rights) {
+        if (rights == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.rights = rights;
     }
 
@@ -156,6 +212,10 @@ public class DcatDistribution implements IDcatDistribution {
      * Property not in Dcat standard, added for convenience
     */
     public void setDatasetIdentifier(String datasetIdentifier) {
+        if (datasetIdentifier == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.datasetIdentifier = datasetIdentifier;
     }
 
@@ -165,6 +225,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setSpatial(String spatial) {
+        if (spatial == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.spatial = spatial;
     }
 
@@ -174,6 +238,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     public void setURI(String URI) {
+        if (URI == null){
+            throw new IllegalArgumentException("null values are not accepted!");
+        }
+        
         this.URI = URI;
     }
     

@@ -116,4 +116,31 @@ public class TraceProvUtils {
         return url;
     }
 
+    /** 
+     * Checks if provided string is non null and non empty . If not, throws IllegalArgumentException
+    */
+    public static void checkNonEmpty(String string, String stringName){
+        checkNonNull(string, stringName);
+        if (string.length() == 0){
+            throw new IllegalArgumentException("Parameter " + stringName + " has zero length!");
+        }
+    }
+    
+    /** 
+     * Checks if provided object is non null. If not, throws IllegalArgumentException
+    */
+    public static void checkNonNull(Object obj, String objName){
+        if (obj == null){
+            throw new IllegalArgumentException("Parameter " + objName + " can't be null!");
+        }        
+    }
+    
+    /** 
+     * Checks if provided string is non null and non empty . 
+    */    
+    public static boolean isNonEmpty(String string){
+        return string == null                 
+                || string.length() == 0;
+    }    
+    
 }
