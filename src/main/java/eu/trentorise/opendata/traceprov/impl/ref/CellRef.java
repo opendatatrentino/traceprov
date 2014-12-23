@@ -9,8 +9,8 @@ import javax.annotation.concurrent.Immutable;
  */
 @Immutable
 public class CellRef implements ICellRef {
-    public final int row;
-    public final int columnIndex;
+    private int row;
+    private int columnIndex;
 
     public CellRef(int row, int columnIndex) {
         this.row = row;

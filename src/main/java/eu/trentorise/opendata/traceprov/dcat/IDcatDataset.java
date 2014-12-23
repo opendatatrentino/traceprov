@@ -42,7 +42,6 @@ public interface IDcatDataset {
     /**
      * dct:description http://purl.org/dc/terms/description
      *
-     * @return
      */
     String getDescription();
 

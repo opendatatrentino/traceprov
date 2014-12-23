@@ -28,7 +28,7 @@ import static eu.trentorise.opendata.traceprov.impl.TraceProvUtils.checkNonNull;
  */
 public class FoafAgent implements IFoafAgent {
     
-    public static FoafAgent UNKNOWN_AGENT = new FoafAgent();
+    public static final FoafAgent UNKNOWN_AGENT = new FoafAgent();
     
     private String URI;
     private String name;

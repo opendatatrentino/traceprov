@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  */
 public class TraceProvUtils {
 
-    public static Logger logger = Logger.getLogger(TraceProvUtils.class.getName());
+    private static final Logger logger = Logger.getLogger(TraceProvUtils.class.getName());
 
     // todo put better url
     public static final String TRACEPROV_PREFIX = "https://github.com/opendatatrentino/traceprov#";
@@ -50,7 +50,7 @@ public class TraceProvUtils {
      * @return a Locale, Locale.ROOT if null input
      * @throws IllegalArgumentException if the string is an invalid format
      */
-    static public Locale languageTagToLocale(String str) {
+    public static Locale languageTagToLocale(String str) {
 
         if (str == null) {
             logger.warning("Found null locale, returning Locale.ROOT");
@@ -95,8 +95,8 @@ public class TraceProvUtils {
      * @see #languageTagToLocale(java.lang.String) fo the inverse operation
      *
      */
-    static public String localeToLanguageTag(Locale locale) {
-        if (locale == null){
+    public static String localeToLanguageTag(Locale locale) {
+        if (locale == null) {
             logger.warning("Found null locale, returning empty string (which corresponds to Locale.ROOT)");
             return "";
         }
@@ -108,7 +108,6 @@ public class TraceProvUtils {
      * provided url already ends with a slash it just returns it.
      *
      * @param url
-     * @return
      */
     public String addSlash(String url) {
         checkNonNull(url, "url");
@@ -124,10 +123,11 @@ public class TraceProvUtils {
      */
     public static String removeTrailingSlash(String url) {
         checkNonNull(url, "url");
-        while (url.endsWith("/")) {
-            url = url.substring(0, url.length() - 1);
+        String tempUrl = url;
+        while (tempUrl.endsWith("/")) {
+            tempUrl = tempUrl.substring(0, tempUrl.length() - 1);
         }
-        return url;
+        return tempUrl;
     }
 
     /**

@@ -27,7 +27,7 @@ import eu.trentorise.opendata.traceprov.dcat.ISkosConceptScheme;
  */
 public class SkosConcept implements ISkosConcept {
     
-    public static SkosConcept UNKWOWN_SKOS_CONCEPT = new SkosConcept();
+    public static final SkosConcept UNKWOWN_SKOS_CONCEPT = new SkosConcept();
     
     private String URI;
     private String prefLabel;

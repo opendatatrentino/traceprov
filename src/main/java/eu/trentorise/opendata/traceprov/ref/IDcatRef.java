@@ -24,7 +24,7 @@ package eu.trentorise.opendata.traceprov.ref;
  */
 public interface IDcatRef {
     
-    static public String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
+    static String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
     
     /**
      * Let's say we are referring to a title of a dcat dataset, then we would
