@@ -1,7 +1,9 @@
 package eu.trentorise.opendata.trasceprov.test;
 
 import eu.trentorise.opendata.traceprov.impl.TraceProvUtils;
+import java.util.Locale;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
@@ -33,5 +35,12 @@ public class UtilsTest {
         } catch (IllegalArgumentException ex){
             
         }
+    }
+    
+    @Test
+    public void testLanguageTag(){
+        // we want gracious null handling
+        assertEquals(Locale.ROOT, TraceProvUtils.languageTagToLocale(null));
+        assertEquals("", TraceProvUtils.localeToLanguageTag(null));
     }
 }

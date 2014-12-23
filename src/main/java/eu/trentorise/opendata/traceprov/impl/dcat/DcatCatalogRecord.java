@@ -34,6 +34,12 @@ public class DcatCatalogRecord implements IDcatCatalogRecord {
     private DcatDataset primaryTopic;
 
     public DcatCatalogRecord() {
+        URI = "";    
+        title = "";    
+        description = "";
+        issued = "";
+        modified = "";
+        primaryTopic = DcatDataset.UNKNOWN_DATASET; 
     }
 
     

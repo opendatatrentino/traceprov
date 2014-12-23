@@ -19,12 +19,14 @@ package eu.trentorise.opendata.traceprov.impl.dcat;
 
 import eu.trentorise.opendata.traceprov.dcat.IDcatCatalog;
 import eu.trentorise.opendata.traceprov.dcat.IFoafAgent;
+import static eu.trentorise.opendata.traceprov.impl.TraceProvUtils.checkNonNull;
 
 /**
  * Mutable implementation of a dcat:Catalog  http://www.w3.org/TR/vocab-dcat/#Class:_Dataset
  * @author David Leoni
  */
 public class DcatCatalog implements IDcatCatalog {
+    public static final DcatCatalog UNKNOWN_CATALOG = new DcatCatalog();
 
     private String URI;
     private String description;
@@ -38,6 +40,16 @@ public class DcatCatalog implements IDcatCatalog {
     private String title;
 
     public DcatCatalog() {
+        URI = "";
+        description = "";
+        homepage = "";
+        issued = "";
+        language = "";
+        license = "";
+        modified = "";
+        publisher = FoafAgent.UNKNOWN_AGENT;
+        rights = "";
+        title = "";        
     }
 
     @Override
@@ -46,6 +58,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setDescription(String description) {
+        checkNonNull(description, "dcat catalog description");
         this.description = description;
     }
 
@@ -55,6 +68,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setHomepage(String homepage) {
+        checkNonNull(description, "dcat catalog homepage");
         this.homepage = homepage;
     }
 
@@ -64,6 +78,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setIssued(String issued) {
+        checkNonNull(description, "dcat catalog issued");
         this.issued = issued;
     }
 
@@ -73,6 +88,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setLanguage(String language) {
+        checkNonNull(description, "dcat catalog language");
         this.language = language;
     }
 
@@ -82,6 +98,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setLicense(String license) {
+        checkNonNull(description, "dcat catalog license");
         this.license = license;
     }
 
@@ -91,6 +108,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setModified(String modified) {
+        checkNonNull(description, "dcat catalog modified");
         this.modified = modified;
     }
 
@@ -100,6 +118,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setPublisher(IFoafAgent publisher) {
+        checkNonNull(description, "dcat catalog publisher");
         this.publisher = publisher;
     }
 
@@ -109,6 +128,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setRights(String rights) {
+        checkNonNull(description, "dcat catalog rights");
         this.rights = rights;
     }
 
@@ -118,6 +138,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setTitle(String title) {
+        checkNonNull(description, "dcat catalog title");
         this.title = title;
     }
 
@@ -127,6 +148,7 @@ public class DcatCatalog implements IDcatCatalog {
     }
 
     public void setURI(String URI) {
+        checkNonNull(description, "dcat catalog URI");
         this.URI = URI;
     }
 

@@ -1,6 +1,7 @@
 package eu.trentorise.opendata.traceprov.impl;
 
 import java.util.Locale;
+import java.util.logging.Logger;
 
 /**
  *
@@ -8,12 +9,18 @@ import java.util.Locale;
  */
 public class TraceProvUtils {
 
+    public static Logger logger = Logger.getLogger(TraceProvUtils.class.getName());
+
+    // todo put better url
+    public static final String TRACEPROV_PREFIX = "https://github.com/opendatatrentino/traceprov#";
+
     /**
      * Java 7 has Locale.forLanguageTag(format), this is the substitute for Java
      * 6 <br/>
      *
-     * Copied from apache.commons.lang <br/>
-     *
+     * Copied from apache.commons.lang, with the change it returns Locale.ROOT
+     * for null input <br/>
+     * -------------------------------------------------------------------------
      * <p>
      * Converts a String to a Locale.</p>
      *
@@ -40,13 +47,14 @@ public class TraceProvUtils {
      * </p>
      *
      * @param str the locale String to convert, null returns null
-     * @return a Locale, null if null input
+     * @return a Locale, Locale.ROOT if null input
      * @throws IllegalArgumentException if the string is an invalid format
      */
     static public Locale languageTagToLocale(String str) {
 
         if (str == null) {
-            return null;
+            logger.warning("Found null locale, returning Locale.ROOT");
+            return Locale.ROOT;
         }
         int len = str.length();
         if (len != 2 && len != 5 && len < 7) {
@@ -88,6 +96,10 @@ public class TraceProvUtils {
      *
      */
     static public String localeToLanguageTag(Locale locale) {
+        if (locale == null){
+            logger.warning("Found null locale, returning empty string (which corresponds to Locale.ROOT)");
+            return "";
+        }
         return locale.getLanguage();
     }
 
@@ -99,6 +111,7 @@ public class TraceProvUtils {
      * @return
      */
     public String addSlash(String url) {
+        checkNonNull(url, "url");
         if (url.endsWith("/")) {
             return url;
         } else {
@@ -110,37 +123,40 @@ public class TraceProvUtils {
      * Removes all trailing slash at the end of the provided url.
      */
     public static String removeTrailingSlash(String url) {
+        checkNonNull(url, "url");
         while (url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
         }
         return url;
     }
 
-    /** 
-     * Checks if provided string is non null and non empty . If not, throws IllegalArgumentException
-    */
-    public static void checkNonEmpty(String string, String stringName){
+    /**
+     * Checks if provided string is non null and non empty . If not, throws
+     * IllegalArgumentException
+     */
+    public static void checkNonEmpty(String string, String stringName) {
         checkNonNull(string, stringName);
-        if (string.length() == 0){
+        if (string.length() == 0) {
             throw new IllegalArgumentException("Parameter " + stringName + " has zero length!");
         }
     }
-    
-    /** 
-     * Checks if provided object is non null. If not, throws IllegalArgumentException
-    */
-    public static void checkNonNull(Object obj, String objName){
-        if (obj == null){
+
+    /**
+     * Checks if provided object is non null. If not, throws
+     * IllegalArgumentException
+     */
+    public static void checkNonNull(Object obj, String objName) {
+        if (obj == null) {
             throw new IllegalArgumentException("Parameter " + objName + " can't be null!");
-        }        
+        }
     }
-    
-    /** 
-     * Checks if provided string is non null and non empty . 
-    */    
-    public static boolean isNonEmpty(String string){
-        return string == null                 
+
+    /**
+     * Checks if provided string is non null and non empty .
+     */
+    public static boolean isNonEmpty(String string) {
+        return string == null
                 || string.length() == 0;
-    }    
-    
+    }
+
 }

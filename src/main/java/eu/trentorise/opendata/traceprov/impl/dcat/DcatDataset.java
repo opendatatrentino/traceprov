@@ -32,6 +32,9 @@ import java.util.List;
  * @author David Leoni
  */
 public class DcatDataset implements IDcatDataset {
+    
+
+    public static final DcatDataset UNKNOWN_DATASET = new DcatDataset();
 
     private String URI;
     private String accrualPeriodicity;
