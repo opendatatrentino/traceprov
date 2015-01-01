@@ -29,11 +29,11 @@ public class SkosConcept implements ISkosConcept {
     
     public static final SkosConcept UNKWOWN_SKOS_CONCEPT = new SkosConcept();
     
-    private String URI;
+    private String uri;
     private String prefLabel;
 
     public SkosConcept() {
-        URI = "";
+       uri = "";
         prefLabel = "";
     }
     
@@ -65,15 +65,15 @@ public class SkosConcept implements ISkosConcept {
     }
 
     @Override
-    public String getURI() {
-        return URI;
+    public String getUri() {
+        return uri;
     }
 
-    public void setURI(String URI) {
-        if (URI == null){
-            throw new IllegalArgumentException("null URI is not accepted!");
+    public void setUri(String uri) {
+        if ( uri == null){
+            throw new IllegalArgumentException("nulluri is not accepted!");
         }
         
-        this.URI = URI;
+        this.uri =uri;
     }
 }

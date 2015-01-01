@@ -25,9 +25,9 @@ package eu.trentorise.opendata.traceprov.dcat;
 public interface IFoafAgent {
 
      /**
-     * Returns the URI of the agent.
+     * Returns the uri of the agent.
      */
-    String getURI();
+    String getUri();
     
     /**
      * http://xmlns.com/foaf/0.1/name

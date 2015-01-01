@@ -31,6 +31,6 @@ public interface ISkosConceptScheme {
      */
     String getPrefLabel();
 
-    String getURI();
+    String getUri();
 
 }

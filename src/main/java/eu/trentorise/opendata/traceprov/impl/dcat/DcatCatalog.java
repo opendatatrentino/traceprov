@@ -19,20 +19,26 @@ package eu.trentorise.opendata.traceprov.impl.dcat;
 
 import eu.trentorise.opendata.traceprov.dcat.IDcatCatalog;
 import eu.trentorise.opendata.traceprov.dcat.IFoafAgent;
+import eu.trentorise.opendata.traceprov.dcat.ISkosConceptScheme;
 import static eu.trentorise.opendata.traceprov.impl.TraceProvUtils.checkNonNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Mutable implementation of a dcat:Catalog  http://www.w3.org/TR/vocab-dcat/#Class:_Dataset
+ * Mutable implementation of a dcat:Catalog
+ * http://www.w3.org/TR/vocab-dcat/#Class:_Dataset
+ *
  * @author David Leoni
  */
 public class DcatCatalog implements IDcatCatalog {
+
     public static final DcatCatalog UNKNOWN_CATALOG = new DcatCatalog();
 
-    private String URI;
+    private String uri;
     private String description;
     private String homepage;
     private String issued;
-    private String language;
+    private List<String> languages;
     private String license;
     private String modified;
     private IFoafAgent publisher;
@@ -40,16 +46,16 @@ public class DcatCatalog implements IDcatCatalog {
     private String title;
 
     public DcatCatalog() {
-        URI = "";
+       uri = "";
         description = "";
         homepage = "";
         issued = "";
-        language = "";
+        languages = new ArrayList();
         license = "";
         modified = "";
         publisher = FoafAgent.UNKNOWN_AGENT;
         rights = "";
-        title = "";        
+        title = "";
     }
 
     @Override
@@ -67,6 +73,9 @@ public class DcatCatalog implements IDcatCatalog {
         return homepage;
     }
 
+    /**
+     * Sets a foaf:homepage
+     */
     public void setHomepage(String homepage) {
         checkNonNull(description, "dcat catalog homepage");
         this.homepage = homepage;
@@ -77,19 +86,26 @@ public class DcatCatalog implements IDcatCatalog {
         return issued;
     }
 
+    /**
+     * i.e. dct:issued "2011-12-11"^^xsd:date ;
+     */
     public void setIssued(String issued) {
         checkNonNull(description, "dcat catalog issued");
         this.issued = issued;
     }
 
     @Override
-    public String getLanguage() {
-        return language;
+    public List<String> getLanguages() {
+        return languages;
     }
 
-    public void setLanguage(String language) {
-        checkNonNull(description, "dcat catalog language");
-        this.language = language;
+    /**
+     * Sets language in format specified by dct:language
+     * <http://id.loc.gov/vocabulary/iso639-1/en>
+     */
+    public void setLanguages(List<String> languages) {
+        checkNonNull(languages, "dcat catalog languages");
+        this.languages = languages;
     }
 
     @Override
@@ -97,6 +113,9 @@ public class DcatCatalog implements IDcatCatalog {
         return license;
     }
 
+    /**
+     * Sets dct:license
+     */     
     public void setLicense(String license) {
         checkNonNull(description, "dcat catalog license");
         this.license = license;
@@ -107,6 +126,9 @@ public class DcatCatalog implements IDcatCatalog {
         return modified;
     }
 
+    /**
+     * Sets dct:modified
+     */
     public void setModified(String modified) {
         checkNonNull(description, "dcat catalog modified");
         this.modified = modified;
@@ -122,11 +144,15 @@ public class DcatCatalog implements IDcatCatalog {
         this.publisher = publisher;
     }
 
+    
     @Override
     public String getRights() {
         return rights;
     }
 
+    /**
+     * Sets rights as specified by dct:rights
+     */    
     public void setRights(String rights) {
         checkNonNull(description, "dcat catalog rights");
         this.rights = rights;
@@ -137,19 +163,33 @@ public class DcatCatalog implements IDcatCatalog {
         return title;
     }
 
+    
+    /**
+     * Sets title as specified by 
+     * <a href="http://purl.org/dc/terms/title">dct:title</a>
+     */    
     public void setTitle(String title) {
         checkNonNull(description, "dcat catalog title");
         this.title = title;
     }
 
     @Override
-    public String getURI() {
-        return URI;
+    public String getUri() {
+        return uri;
+    }
+    
+    
+    public void setUri(String uri) {
+        checkNonNull(description, "dcat cataloguri");
+        this.uri =uri;
     }
 
-    public void setURI(String URI) {
-        checkNonNull(description, "dcat catalog URI");
-        this.URI = URI;
+    public String getSpatial() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ISkosConceptScheme getCategories() {
+        return 
     }
 
 }

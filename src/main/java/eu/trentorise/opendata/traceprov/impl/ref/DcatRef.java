@@ -8,14 +8,14 @@ import eu.trentorise.opendata.traceprov.ref.IDcatRef;
  */
 public class DcatRef implements IDcatRef {
         
-    private String propertyURI;  
+    private String propertyUri;  
 
-    public String getPropertyURI() {
-        return propertyURI;
+    public String getPropertyUri() {
+        return propertyUri;
     }
 
-    public DcatRef(String propertyURI) {
-        this.propertyURI = propertyURI;
+    public DcatRef(String propertyUri) {
+        this.propertyUri = propertyUri;
     }
         
     private DcatRef() {
@@ -24,7 +24,7 @@ public class DcatRef implements IDcatRef {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 53 * hash + (this.propertyURI != null ? this.propertyURI.hashCode() : 0);
+        hash = 53 * hash + (this.propertyUri != null ? this.propertyUri.hashCode() : 0);
         return hash;
     }
 
@@ -37,7 +37,7 @@ public class DcatRef implements IDcatRef {
             return false;
         }
         final DcatRef other = (DcatRef) obj;
-        if ((this.propertyURI == null) ? (other.propertyURI != null) : !this.propertyURI.equals(other.propertyURI)) {
+        if ((this.propertyUri == null) ? (other.propertyUri != null) : !this.propertyUri.equals(other.propertyUri)) {
             return false;
         }
         return true;
@@ -46,7 +46,7 @@ public class DcatRef implements IDcatRef {
     
     @Override
     public String toString(){
-        return "Reference to dataset metadata property " + propertyURI;
+        return "Reference to dataset metadata property " + propertyUri;
     }
     
 }

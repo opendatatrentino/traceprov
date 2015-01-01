@@ -32,11 +32,14 @@ import java.util.List;
  * @author David Leoni
  */
 public class DcatDataset implements IDcatDataset {
-    
 
+    /**
+     * to be used when there is to assign somewhere a dcat dataset which is not
+     * known. The id of the dataset will be the empty string.
+     */
     public static final DcatDataset UNKNOWN_DATASET = new DcatDataset();
 
-    private String URI;
+    private String uri;
     private String accrualPeriodicity;
     private String contactPoint;
     private String description;
@@ -54,7 +57,7 @@ public class DcatDataset implements IDcatDataset {
     private ISkosConcept theme;
 
     public DcatDataset() {
-        URI = "";
+        uri = "";
         accrualPeriodicity = "";
         contactPoint = "";
         description = "";
@@ -77,8 +80,9 @@ public class DcatDataset implements IDcatDataset {
         return accrualPeriodicity;
     }
 
+    
     public void setAccrualPeriodicity(String accrualPeriodicity) {
-        if (accrualPeriodicity == null){
+        if (accrualPeriodicity == null) {
             throw new IllegalArgumentException("null accrualPeriodicity is not allowed!");
         }
         this.accrualPeriodicity = accrualPeriodicity;
@@ -90,10 +94,10 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setContactPoint(String contactPoint) {
-        if (contactPoint == null){
+        if (contactPoint == null) {
             throw new IllegalArgumentException("null contactPoint is not allowed!");
         }
-        
+
         this.contactPoint = contactPoint;
     }
 
@@ -103,9 +107,9 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setDescription(String description) {
-        if (description == null){
+        if (description == null) {
             throw new IllegalArgumentException("null description is not allowed!");
-        }        
+        }
         this.description = description;
     }
 
@@ -115,10 +119,10 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setDistributions(List<? extends IDcatDistribution> distributions) {
-        if (distributions == null){
+        if (distributions == null) {
             throw new IllegalArgumentException("null distributions are not allowed!");
-        }        
-        
+        }
+
         this.distributions = distributions;
     }
 
@@ -128,10 +132,7 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setIssued(String issued) {
-        if (issued == null){
-            throw new IllegalArgumentException("null issued is not allowed!");
-        }        
-        
+        checkNonNull(issued, "dcat dataset issued date");
         this.issued = issued;
     }
 
@@ -141,10 +142,8 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setIdentifier(String identifier) {
-        if (identifier == null){
-            throw new IllegalArgumentException("null identifier is not allowed!");
-        }        
-        
+        checkNonNull(identifier, "dcat dataset identifier");
+
         this.identifier = identifier;
     }
 
@@ -154,10 +153,7 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setKeywords(List<String> keywords) {
-        if (keywords == null){
-            throw new IllegalArgumentException("null keywords are not allowed!");
-        }        
-        
+        checkNonNull(keywords, "dcat dataset keywords");
         this.keywords = keywords;
     }
 
@@ -167,10 +163,8 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setLandingPage(String landingPage) {
-        if (landingPage == null){
-            throw new IllegalArgumentException("null landingPage is not allowed!");
-        }        
-        
+        checkNonNull(landingPage, "dcat dataset landing page");
+
         this.landingPage = landingPage;
     }
 
@@ -180,7 +174,7 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setLanguage(String language) {
-        checkNonNull(language, "dcat dataset language");                
+        checkNonNull(language, "dcat dataset language");
         this.language = language;
     }
 
@@ -190,10 +184,7 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setModified(String modified) {
-        if (modified == null){
-            throw new IllegalArgumentException("null modified is not allowed!");
-        }        
-        
+        checkNonNull(modified, "dcat dataset modified date");
         this.modified = modified;
     }
 
@@ -202,12 +193,13 @@ public class DcatDataset implements IDcatDataset {
         return publisher;
     }
 
+    /**
+     * Sets the publisher as a FoafAgent. If the publisher is unknown, don't put
+     * null, use instead an object like {@link FoafAgent#UNKNOWN_AGENT}
+     */
     public void setPublisher(IFoafAgent publisher) {
-        
-        if (publisher == null){
-            throw new IllegalArgumentException("null publisher is not allowed!");
-        }        
-        
+        checkNonNull(publisher, "dcat dataset publisher");
+
         this.publisher = publisher;
     }
 
@@ -217,10 +209,10 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setSpatial(String spatial) {
-        if (spatial == null){
+        if (spatial == null) {
             throw new IllegalArgumentException("null spatial is not allowed!");
-        }        
-        
+        }
+
         this.spatial = spatial;
     }
 
@@ -230,10 +222,10 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setTitle(String title) {
-        if (title == null){
+        if (title == null) {
             throw new IllegalArgumentException("null title is not allowed!");
-        }        
-        
+        }
+
         this.title = title;
     }
 
@@ -243,37 +235,37 @@ public class DcatDataset implements IDcatDataset {
     }
 
     public void setTemporal(String temporal) {
-        if (temporal == null){
+        if (temporal == null) {
             throw new IllegalArgumentException("null temporal is not allowed!");
-        }        
-        
+        }
+
         this.temporal = temporal;
     }
 
     @Override
-    public ISkosConcept getTheme() {
+    public ISkosConcept getCategory() {
         return theme;
     }
 
     public void setTheme(ISkosConcept theme) {
-        if (theme == null){
+        if (theme == null) {
             throw new IllegalArgumentException("null theme is not allowed!");
-        }        
-        
+        }
+
         this.theme = theme;
     }
 
     @Override
-    public String getURI() {
-        return URI;
+    public String getUri() {
+        return uri;
     }
 
-    public void setURI(String URI) {
-        if (URI == null){
-            throw new IllegalArgumentException("null URI is not allowed!");
-        }        
-        
-        this.URI = URI;
+    public void setUri(String uri) {
+        if (uri == null) {
+            throw new IllegalArgumentException("nulluri is not allowed!");
+        }
+
+        this.uri = uri;
     }
 
 }

@@ -31,6 +31,6 @@ public interface IDcatRef {
      * return "http://purl.org/dc/terms/title", as dcat express title with a
      * Dublin core vocabulary attribute
      */
-    String getPropertyURI();
+    String getPropertyUri();
 
 }

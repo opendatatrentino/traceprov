@@ -20,7 +20,7 @@ package eu.trentorise.opendata.traceprov.dcat;
 
 
 /**
- * Models a dcat:CatalogRecord http://www.w3.org/TR/vocab-dcat/#Class:_Catalog_record
+ * Models a  <a href="http://www.w3.org/TR/vocab-dcat/#Class:_Catalog_record">dcat:CatalogRecorda</a>
  * 
  * If the catalog publisher decides to keep metadata describing its records
  * (i.e. the records containing metadata describing the datasets),
@@ -50,6 +50,10 @@ public interface IDcatCatalogRecord {
      */
     String getModified();
 
+    /** 
+     * Links the catalog record to the dcat:Dataset resource described in the record.
+     * Defined in foaf:primaryTopic
+     */
     IDcatDataset getPrimaryTopic();
 
     /**
@@ -57,6 +61,6 @@ public interface IDcatCatalogRecord {
      */
     String getTitle();
 
-    String getURI();
+    String getUri();
 
 }

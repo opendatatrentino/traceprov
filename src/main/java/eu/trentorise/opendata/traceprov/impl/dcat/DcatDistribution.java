@@ -1,72 +1,72 @@
-/** *****************************************************************************
-* Copyright 2013-2014 Trento Rise (www.trentorise.eu/)
-*
+/**
+ * *****************************************************************************
+ * Copyright 2013-2014 Trento Rise (www.trentorise.eu/)
+ * 
 * All rights reserved. This program and the accompanying materials are made
-* available under the terms of the GNU Lesser General Public License (LGPL)
-* version 2.1 which accompanies this distribution, and is available at
-*
+ * available under the terms of the GNU Lesser General Public License (LGPL)
+ * version 2.1 which accompanies this distribution, and is available at
+ * 
 * http://www.gnu.org/licenses/lgpl-2.1.html
-*
+ * 
 * This library is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-* FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-* details.
-*
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
 *******************************************************************************
-*/  
-
+ */
 package eu.trentorise.opendata.traceprov.impl.dcat;
 
 import eu.trentorise.opendata.traceprov.dcat.IDcatDistribution;
 import static eu.trentorise.opendata.traceprov.impl.TraceProvUtils.checkNonNull;
 
 /**
- * Mutable implementation of a dcat:Distribution: http://www.w3.org/TR/vocab-dcat/#Class:_Distribution
+ * Mutable implementation of a dcat:Distribution:
+ * http://www.w3.org/TR/vocab-dcat/#Class:_Distribution
+ *
  * @author David Leoni
  */
 public class DcatDistribution implements IDcatDistribution {
-    
-    private String URI;    
+
+    private String uri;
     private int byteSize;
-    private String accessURL;    
-    private String datasetIdentifier;    
+    private String accessURL;
+    private String datasetIdentifier;
     private String description;
     private String downloadURL;
     private String format;
-    private String issued;    
+    private String issued;
     private String license;
     private String mediaType;
-    private String modified;     
-    private String rights;    
-    private String spatial;       
+    private String modified;
+    private String rights;
+    private String spatial;
     private String title;
 
     public DcatDistribution() {
-        URI = "";    
+        uri = "";
         byteSize = -1;
-        accessURL = "";    
-        datasetIdentifier = "";    
+        accessURL = "";
+        datasetIdentifier = "";
         description = "";
         downloadURL = "";
         format = "";
-        issued = "";    
+        issued = "";
         license = "";
         mediaType = "";
-        modified = "";     
-        rights = "";    
-        spatial = "";       
-        title = "";        
+        modified = "";
+        rights = "";
+        spatial = "";
+        title = "";
     }
 
-    
-    
     @Override
     public int getByteSize() {
         return byteSize;
     }
-           
+
     public void setByteSize(int byteSize) {
-        if (byteSize < - 1){
+        if (byteSize < - 1) {
             throw new IllegalArgumentException("bytesize must be >= -1  Found instead: " + byteSize);
         }
         this.byteSize = byteSize;
@@ -77,7 +77,7 @@ public class DcatDistribution implements IDcatDistribution {
         return accessURL;
     }
 
-    public void setAccessURL(String accessURL) {        
+    public void setAccessURL(String accessURL) {
         checkNonNull(accessURL, "access URL");
         this.accessURL = accessURL;
     }
@@ -89,7 +89,7 @@ public class DcatDistribution implements IDcatDistribution {
 
     public void setDescription(String description) {
         checkNonNull(description, "description");
-        
+
         this.description = description;
     }
 
@@ -129,9 +129,10 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     /**
-     * A legal document giving official permission to do something with the resource.
-     * dct:license  http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#license     
-     */    
+     * A legal document giving official permission to do something with the
+     * resource, as specified by
+     * <a href="http://purl.org/dc/terms/license">dct:license</a>
+     */
     public void setLicense(String license) {
         checkNonNull(license, "license");
         this.license = license;
@@ -175,18 +176,15 @@ public class DcatDistribution implements IDcatDistribution {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    /**
-     * Property not in Dcat standard, added for convenience
-    */
+    
     @Override
-    public String getDatasetURI() {
+    public String getDatasetUri() {
         return datasetIdentifier;
     }
 
     /**
      * Property not in Dcat standard, added for convenience
-    */
+     */
     public void setDatasetIdentifier(String datasetIdentifier) {
         checkNonNull(datasetIdentifier, "dataset identifier");
         this.datasetIdentifier = datasetIdentifier;
@@ -203,13 +201,13 @@ public class DcatDistribution implements IDcatDistribution {
     }
 
     @Override
-    public String getURI() {
-        return URI;
+    public String getUri() {
+        return uri;
     }
 
-    public void setURI(String URI) {
-        checkNonNull(URI, "URI");
-        this.URI = URI;
+    public void setUri(String uri) {
+        checkNonNull(uri, "Uri");
+        this.uri = uri;
     }
-    
+
 }

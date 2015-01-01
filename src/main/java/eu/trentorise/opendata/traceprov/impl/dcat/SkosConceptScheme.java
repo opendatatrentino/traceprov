@@ -26,7 +26,7 @@ import eu.trentorise.opendata.traceprov.dcat.ISkosConceptScheme;
  */
 public class SkosConceptScheme implements ISkosConceptScheme {
 
-    private String URI;
+    private String uri;
     private String prefLabel;
 
     public SkosConceptScheme() {
@@ -42,12 +42,12 @@ public class SkosConceptScheme implements ISkosConceptScheme {
     }
 
     @Override
-    public String getURI() {
-        return URI;
+    public String getUri() {
+        return uri;
     }
 
-    public void setURI(String URI) {
-        this.URI = URI;
+    public void setUri(String uri) {
+        this.uri =uri;
     }
 
 }
