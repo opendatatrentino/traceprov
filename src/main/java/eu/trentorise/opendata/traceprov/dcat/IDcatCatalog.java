@@ -18,6 +18,9 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import org.joda.time.DateTime;
 
 /**
  * A data catalog is a curated collection of metadata about datasets, as
@@ -38,7 +41,7 @@ public interface IDcatCatalog {
      * A free-text account of the catalog, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>
      */
-    String getDescription();
+    Map<Locale, String> getDescription();
 
     /**
      * The homepage of the catalog. It should be unique and precisely identify
@@ -49,16 +52,18 @@ public interface IDcatCatalog {
     String getHomepage();
 
     /**
-     * Date of formal issuance (e.g., publication) of the catalog. Must be in a
+     * Date of formal issuance (e.g., publication) of the catalog, as specified
+     * by <a href="http://purl.org/dc/terms/issued">dct:issued</a>
+     *
+     * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11". Specified by
-     * <a href="http://purl.org/dc/terms/issued">dct:issued</a>
+     * compliant</a> string format i.e. "2011-12-11".
      *
      * @see IDcatDataset#getIssued()
      * @see IDcatDistribution#getIssued()
      * @see IDcatCatalogRecord#getIssued()
      */
-    String getIssued();
+    DateTime getIssued();
 
     /**
      * The languages of the catalog. This refers to the language used in the
@@ -66,17 +71,17 @@ public interface IDcatCatalog {
      * the catalog. The publisher might also choose to describe the language on
      * the dataset level.
      *
-     * Language codes defined by the Library of Congress
+     * Java Locale should be created out of language codes defined by the
+     * Library of Congress
      * (<a href="http://id.loc.gov/vocabulary/iso639-1.html">ISO 639-1</a>,
-     * <a href="http://id.loc.gov/vocabulary/iso639-2.html">ISO 639-2</a>)
-     * should be used. If a ISO 639-1 (two-letter) code is defined for language,
-     * then its corresponding IRI should be used; if no ISO 639-1 code is
-     * defined, then IRI corresponding to the ISO 639-2 (three-letter) code
-     * should be used.
+     * <a href="http://id.loc.gov/vocabulary/iso639-2.html">ISO 639-2</a>). If a
+     * ISO 639-1 (two-letter) code is defined for language, then its
+     * corresponding IRI should be used; if no ISO 639-1 code is defined, then
+     * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
      *
      * @see IDcatDataset#getLanguage()
      */
-    List<String> getLanguages();
+    List<Locale> getLanguages();
 
     /**
      * This links to the license document under which the <b>catalog</b> is made
@@ -93,7 +98,7 @@ public interface IDcatCatalog {
      * compliant</a> string format i.e. "2011-12-11" . Specified by
      * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
      */
-    String getModified();
+    DateTime getModified();
 
     /**
      * The entity responsible for making the catalog online.
@@ -123,11 +128,14 @@ public interface IDcatCatalog {
     String getSpatial();
 
     /**
-     * The taxonomy of categories used to classify catalog's datasets, as specified by <a href="http://www.w3.org/TR/vocab-dcat/#Property:catalog_themes"> dcat:themeTaxonomy </a>. Note the
-     * property name in the specs is 'themes' but 'categories' is also used as
-     * synonim in other places of the specs and seems more natural.
-     * 
-     * @see IDcatDataset#getCategory() 
+     * The taxonomy of categories used to classify catalog's datasets, as
+     * specified by
+     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:catalog_themes">
+     * dcat:themeTaxonomy </a>. Note the property name in the specs is 'themes'
+     * but 'categories' is also used as synonim in other places of the specs and
+     * seems more natural.
+     *
+     * @see IDcatDataset#getCategory()
      */
     ISkosConceptScheme getCategories();
 
@@ -136,7 +144,7 @@ public interface IDcatCatalog {
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
      */
     // todo put example
-    String getTitle();
+    Map<Locale, String> getTitle();
 
     /**
      * Property not in DCAT spec. This should uniquely identify the catalog,

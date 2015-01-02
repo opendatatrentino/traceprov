@@ -17,6 +17,9 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import java.util.Locale;
+import java.util.Map;
+
 /**
  * Models a minimal FOAF Agent: http://xmlns.com/foaf/spec/
  *
@@ -32,7 +35,7 @@ public interface IFoafAgent {
     /**
      * http://xmlns.com/foaf/0.1/name
      */
-    String getName();
+    Map<Locale, String> getName();
     
     /**
      * Returns the mail box

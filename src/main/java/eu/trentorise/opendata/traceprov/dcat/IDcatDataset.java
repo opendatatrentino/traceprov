@@ -18,6 +18,8 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
@@ -56,7 +58,7 @@ public interface IDcatDataset {
      * Free-text account of the dataset, as specified in
      * <a href="http://purl.org/dc/terms/description">dct:description</a>
      */
-    String getDescription();
+    Map<Locale, String> getDescription();
 
     /**
      * Returns the distributions belonging to this dataset.
@@ -72,11 +74,12 @@ public interface IDcatDataset {
     String getIdentifier();
 
     /**
-     * Date of formal issuance (e.g., publication) of the dataset. 
-     * 
+     * Date of formal issuance (e.g., publication) of the dataset.
+     *
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11". 
+     * compliant</a> string format i.e. "2011-12-11".
+     * 
      */
     DateTime getIssued();
 
@@ -113,15 +116,15 @@ public interface IDcatDataset {
      * distribution will have one of these languages as value of its
      * {@link IDcatDistribution#getLanguage()} property).
      *
-     * Language codes defined by the Library of Congress
+     * Java Locale should be created out of Language codes defined by the
+     * Library of Congress
      * (<a href="http://id.loc.gov/vocabulary/iso639-1.html">ISO 639-1</a>,
-     * <a href="http://id.loc.gov/vocabulary/iso639-2.html">ISO 639-2</a>)
-     * should be used. If a ISO 639-1 (two-letter) code is defined for language,
-     * then its corresponding IRI should be used; if no ISO 639-1 code is
-     * defined, then IRI corresponding to the ISO 639-2 (three-letter) code
-     * should be used.
+     * <a href="http://id.loc.gov/vocabulary/iso639-2.html">ISO 639-2</a>)... If
+     * a ISO 639-1 (two-letter) code is defined for language, then its
+     * corresponding IRI should be used; if no ISO 639-1 code is defined, then
+     * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
      */
-    List<String> getLanguage();
+    List<Locale> getLanguage();
 
     /**
      * Most recent date on which the dataset was changed, updated or modified.
@@ -172,14 +175,14 @@ public interface IDcatDataset {
      * {@link IDcatCatalog#getThemes()}. Notice that 'theme' is also used as
      * synonym of 'category' in dcat specs.
      */
-    List<ISkosConcept> getCategory();
+    List<? extends ISkosConcept> getCategories();
 
     /**
      * A name given to the dataset as specified by
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
-     * i.e. "Apple Production Statistics"
+     * i.e. "Apple Production Statistics".
      */
-    String getTitle();
+    Map<Locale, String> getTitle();
 
     /**
      * Returns the URI of the dataset. Not present in the dcat specs.

@@ -18,6 +18,8 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
@@ -39,8 +41,7 @@ public interface IDcatDistribution {
      * {@link IDcatDataset#getLandingPage()} should be returned by this method,
      * too.
      *
-     *
-     * The result is specified by
+     * This field is specified by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:accessURL</a>.
      * For relation with {@link IDcatDataset#getLandingPage()} see
      * <a href="http://www.w3.org/TR/vocab-dcat/#example-landing-page">
@@ -68,7 +69,7 @@ public interface IDcatDistribution {
      * Free-text account of the distribution, as specified in
      * <a href="http://purl.org/dc/terms/description">dct:description</a>
      */
-    String getDescription();
+    Map<Locale, String> getDescription();
 
     /**
      * A file that contains the distribution of the dataset in a given format
@@ -101,7 +102,7 @@ public interface IDcatDistribution {
      * Date of formal issuance (e.g., publication) of the distribution. This
      * property should be set using the first known date of issuance.
      *
-     * Note Dcat standard requires dates in string format to be
+     * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
@@ -121,15 +122,15 @@ public interface IDcatDistribution {
      * returned by the containing dataset {@link IDcatDataset#getLanguage()}
      * method.
      *
-     * Language codes defined by the Library of Congress
+     * Java Locale should be created out of language codes as defined by the
+     * Library of Congress
      * (<a href="http://id.loc.gov/vocabulary/iso639-1.html">ISO 639-1</a>,
-     * <a href="http://id.loc.gov/vocabulary/iso639-2.html">ISO 639-2</a>)
-     * should be used. If a ISO 639-1 (two-letter) code is defined for language,
-     * then its corresponding IRI should be used; if no ISO 639-1 code is
-     * defined, then IRI corresponding to the ISO 639-2 (three-letter) code
-     * should be used.
+     * <a href="http://id.loc.gov/vocabulary/iso639-2.html">ISO 639-2</a>). If a
+     * ISO 639-1 (two-letter) code is defined for language, then its
+     * corresponding IRI should be used; if no ISO 639-1 code is defined, then
+     * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
      */
-    String getLanguage();
+    Locale getLanguage();
 
     /**
      * A link to the license document under which the distribution is made
@@ -190,12 +191,16 @@ public interface IDcatDistribution {
      * <a href="http://purl.org/dc/terms/title"> dct:title </a>
      *
      */
-    String getTitle();
+    Map<Locale, String> getTitle();
 
     /**
      * Returns the uri of the distribution (which is not the uri of the file
      * pointed to).
+     *
+     * @see #getDownloadURL()
+     * @see #getAccessURL()
      */
+    // todo should we put an example?
     String getUri();
 
 }

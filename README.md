@@ -18,6 +18,6 @@ Java interface for provenance management.
 
 #### Credits:
 
-* David Leoni - Trento Rise - david.leoni@unitn.it
+* David Leoni - DISI at University of Trento - david.leoni@unitn.it
 * Moaz Reyad - DISI at University of Trento - moaz.reyad@unitn.it
 * Ivan Tankoyeu - DISI at University of Trento - tankoyeu@disi.unitn.it
