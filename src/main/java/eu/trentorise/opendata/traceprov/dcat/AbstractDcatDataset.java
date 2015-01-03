@@ -17,9 +17,11 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import com.google.common.base.Optional;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
 /**
@@ -30,19 +32,24 @@ import org.joda.time.DateTime;
  * This class represents the actual dataset as published by the dataset
  * publisher. In cases where a distinction between the actual dataset and its
  * entry in the catalog is necessary (because metadata such as modification date
- * and maintainer might differ), the {@link IDcatCatalogRecord} class can be
+ * and maintainer might differ), the {@link AbstractDcatCatalogRecord} class can be
  * used for the latter.
  *
  * @author David Leoni
  */
-public interface IDcatDataset {
+@Value.Immutable(singleton = true)
+@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "" )
+public abstract class AbstractDcatDataset {
 
     /**
      * Returns the frequency at which dataset is published, as defined by
      * <a href="http://purl.org/dc/terms/accrualPeriodicity">
      * dct:accrualPeriodicity </a>
      */
-    String getAccrualPeriodicity();
+    @Value.Default
+    public String getAccrualPeriodicity() {
+        return "";
+    }
 
     /**
      * Link a dataset to relevant contact information which is provided using
@@ -52,18 +59,21 @@ public interface IDcatDataset {
      *
      * i.e. dcat:contactPoint <http://example.org/transparency-office/contact>
      */
-    String getContactPoint();
+    @Value.Default
+    public String getContactPoint() {
+        return "";
+    }
 
     /**
      * Free-text account of the dataset, as specified in
      * <a href="http://purl.org/dc/terms/description">dct:description</a>
      */
-    Map<Locale, String> getDescription();
+    public abstract Map<Locale, String> getDescription();
 
     /**
      * Returns the distributions belonging to this dataset.
      */
-    List<? extends IDcatDistribution> getDistributions();
+    public abstract List<DcatDistribution> getDistributions();
 
     /*
      A unique identifier of the dataset, defined by
@@ -71,7 +81,12 @@ public interface IDcatDataset {
      The identifier might be used as part of the uri of the dataset, but still 
      having it represented explicitly is useful.
      */
-    String getIdentifier();
+    @Value.Default
+    public String getIdentifier() {
+        return "";
+    }
+
+    ;
 
     /**
      * Date of formal issuance (e.g., publication) of the dataset.
@@ -81,7 +96,7 @@ public interface IDcatDataset {
      * compliant</a> string format i.e. "2011-12-11".
      * 
      */
-    DateTime getIssued();
+    public abstract Optional<DateTime> getIssued();
 
     /**
      * A set of keywords or tags describing the dataset, as specified by
@@ -89,20 +104,25 @@ public interface IDcatDataset {
      * dcat:keyword </a>
      * For example: "accountability","transparency" ,"payments"
      */
-    List<String> getKeywords();
+    public abstract List<String> getKeywords();
 
     /**
      * A Web page that can be navigated to in a Web browser to gain access to
      * the dataset, its distributions and/or additional information. If the
      * distribution(s) are accessible only through a landing page (i.e. direct
      * download URLs are not known), then the landing page link SHOULD be
-     * duplicated as accessURL on a distribution. For relation with
-     * {@link IDcatDistribution#getAccessURL()} and
-     * {@link IDcatDistribution#getDownloadURL()} see
+     * duplicated as accessURL on a distribution. 
+     * 
+     * For relation with
+     * {@link AbstractDcatDistribution#getAccessURL()} and
+     * {@link AbstractDcatDistribution#getDownloadURL()} see
      * <a href="http://www.w3.org/TR/vocab-dcat/#example-landing-page">
      * official dcat documentation </a>
      */
-    String getLandingPage();
+    @Value.Default
+    public String getLandingPage() {
+        return "";
+    }
 
     /**
      * The language of the dataset.
@@ -110,11 +130,11 @@ public interface IDcatDataset {
      * This overrides the value of the catalog language in case of conflict. If
      * the dataset is available in multiple languages, use multiple values for
      * this property. If each language is available separately, define an
-     * instance of {@link IDcatDistribution} for each language and describe the
+     * instance of {@link DcatDistribution} for each language and describe the
      * specific language of each distribution (i.e. the dataset will have
-     * multiple language values from {@link #getLanguage()} and each
+     * multiple language values from {@link #getLanguages()} and each
      * distribution will have one of these languages as value of its
-     * {@link IDcatDistribution#getLanguage()} property).
+     * {@link AbstractDcatDistribution#getLanguage()} property).
      *
      * Java Locale should be created out of Language codes defined by the
      * Library of Congress
@@ -124,7 +144,7 @@ public interface IDcatDataset {
      * corresponding IRI should be used; if no ISO 639-1 code is defined, then
      * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
      */
-    List<Locale> getLanguage();
+    public abstract List<Locale> getLanguages();
 
     /**
      * Most recent date on which the dataset was changed, updated or modified.
@@ -140,23 +160,31 @@ public interface IDcatDataset {
      *
      * @see #getAccrualPeriodicity()
      */
-    DateTime getModified();
+    public abstract Optional<DateTime> getModified();
 
     /**
      * An entity responsible for making the dataset available.
      *
-     * @see IFoafAgent
-     * @see IFoafPerson
-     * @see IFoafOrganization
+     * Default value is {@link FoafAgent#of()}
+     *
+     * @see AbstractFoafAgent
+     * @see AbstractFoafPerson
+     * @see AbstractFoafOrganization
      */
-    IFoafAgent getPublisher();
-
+    @Value.Default
+    public FoafAgent getPublisher() {
+        return FoafAgent.of();
+    }
+    
     /**
      * Spatial coverage of the dataset, as specified by
      * <a href="http://purl.org/dc/terms/spatial">dct:spatial</a>
      * i.e. dct:spatial <http://www.geonames.org/6695072> ;
      */
-    String getSpatial();
+    @Value.Default
+    public String getSpatial(){
+        return "";
+    };
 
     /**
      * The temporal period that the dataset covers, that is, an interval of time
@@ -166,29 +194,35 @@ public interface IDcatDataset {
      * i.e. dct:temporal
      * <http://reference.data.gov.uk/id/quarter/2006-Q1> ;
      */
-    String getTemporal();
+    @Value.Default
+    public  String getTemporal(){
+        return "";
+    };
 
     /**
      * The main category of the dataset. A dataset can belong to multiple
-     * categories. The set of {@link ISkosConcept}s used to categorize the
-     * datasets are organized in the {@link ISkosConceptScheme} returned by
-     * {@link IDcatCatalog#getThemes()}. Notice that 'theme' is also used as
+     * categories. The set of {@link AbstractSkosConcept}s used to categorize the
+     * datasets are organized in the {@link AbstractSkosConceptScheme} returned by
+     * {@link AbstractDcatCatalog#getCategories()}. Notice that 'theme' is also used as
      * synonym of 'category' in dcat specs.
      */
-    List<? extends ISkosConcept> getCategories();
+    public abstract List<SkosConcept> getCategories();
 
     /**
      * A name given to the dataset as specified by
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
      * i.e. "Apple Production Statistics".
      */
-    Map<Locale, String> getTitle();
+    public abstract Map<Locale, String> getTitle();
 
     /**
      * Returns the URI of the dataset. Not present in the dcat specs.
      *
      * @see #getIdentifier()
      */
-    String getUri();
+    @Value.Default
+    public String getUri(){
+        return "";
+    };
 
 }

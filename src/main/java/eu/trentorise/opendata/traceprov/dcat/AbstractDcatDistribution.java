@@ -17,9 +17,10 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
-import java.util.List;
+import com.google.common.base.Optional;
 import java.util.Locale;
 import java.util.Map;
+import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
 /**
@@ -28,7 +29,9 @@ import org.joda.time.DateTime;
  *
  * @author David Leoni
  */
-public interface IDcatDistribution {
+@Value.Immutable(singleton = true)
+@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "" )
+public abstract class AbstractDcatDistribution {
 
     /**
      *
@@ -38,38 +41,49 @@ public interface IDcatDistribution {
      * you are not sure whether it is. If the distribution(s) are accessible
      * only through a landing page (i.e. direct download URLs are not known),
      * then the link returned by containing dataset
-     * {@link IDcatDataset#getLandingPage()} should be returned by this method,
+     * {@link AbstractDcatDataset#getLandingPage()} should be returned by this method,
      * too.
      *
      * This field is specified by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:accessURL</a>.
-     * For relation with {@link IDcatDataset#getLandingPage()} see
+     * For relation with {@link AbstractDcatDataset#getLandingPage()} see
      * <a href="http://www.w3.org/TR/vocab-dcat/#example-landing-page">
      * official dcat documentation </a>
      *
      */
-    String getAccessURL();
+    @Value.Default
+    public String getAccessURL() {
+        return "";
+    }
 
     /**
      * The size of a distribution in bytes, as specified by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_size">dcat:byteSize</a>.
      * The size in bytes can be approximated when the precise size is not known.
-     * When the size of the distribution is not known returns 0 (this default
-     * value is not defined by DCAT standard).
+     * When the size of the distribution is not known field must be set to 0
+     * (this default value is not defined by DCAT standard).
      */
-    int getByteSize();
+    @Value.Default
+    public int getByteSize() {
+        return 0;
+    }
+
+    ;
 
     /**
      * Property not in Dcat standard, added for convenience. Result must be the
-     * same as containing dataset {@link IDcatDataset#getUri()}
+     * same as containing dataset {@link AbstractDcatDataset#getUri()}
      */
-    String getDatasetUri();
+    @Value.Default
+    public String getDatasetUri() {
+        return "";
+    }
 
     /**
      * Free-text account of the distribution, as specified in
      * <a href="http://purl.org/dc/terms/description">dct:description</a>
      */
-    Map<Locale, String> getDescription();
+    public abstract Map<Locale, String> getDescription();
 
     /**
      * A file that contains the distribution of the dataset in a given format
@@ -84,11 +98,14 @@ public interface IDcatDistribution {
      * locations.
      *
      * i.e. dcat:downloadURL <http://www.example.org/files/001.csv> ; For
-     * relation with {@link IDcatDataset#getLandingPage()} see
+     * relation with {@link AbstractDcatDataset#getLandingPage()} see
      * <a href="http://www.w3.org/TR/vocab-dcat/#a-dataset-available-only-behind-some-web-page">
      * official dcat documentation </a>
      */
-    String getDownloadURL();
+    @Value.Default
+    public String getDownloadURL() {
+        return "";
+    }
 
     /**
      * The file format of the distribution, as specified in
@@ -96,7 +113,10 @@ public interface IDcatDistribution {
      * {@link #getMediaType()} SHOULD be used if the type of the distribution is
      * defined by IANA.
      */
-    String getFormat();
+    @Value.Default
+    public String getFormat() {
+        return "";
+    }
 
     /**
      * Date of formal issuance (e.g., publication) of the distribution. This
@@ -108,18 +128,18 @@ public interface IDcatDistribution {
      *
      * @see #getModified()
      */
-    DateTime getIssued();
+    public abstract Optional<DateTime> getIssued();
 
     /**
      * The language of the distribution. Note that this does not explicitly
      * appear in the Distribution description in W3C Recommendation of 16
      * January 2014., but it's existence is indeed cited in the Dataset
-     * description (see {@link IDcatDataset#getLanguage()}). So we made up the
+     * description (see {@link AbstractDcatDataset#getLanguages()}). So we made up the
      * property and the description below to fill the gap.
      *
      * This overrides the value of the dataset and catalog language in case of
      * conflict. The returned language should be also in the list of languages
-     * returned by the containing dataset {@link IDcatDataset#getLanguage()}
+     * returned by the containing dataset {@link AbstractDcatDataset#getLanguages()}
      * method.
      *
      * Java Locale should be created out of language codes as defined by the
@@ -129,8 +149,15 @@ public interface IDcatDistribution {
      * ISO 639-1 (two-letter) code is defined for language, then its
      * corresponding IRI should be used; if no ISO 639-1 code is defined, then
      * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
+     *
+     * If no locale is known {@link Locale#ROOT} must be used.
      */
-    Locale getLanguage();
+    @Value.Default
+    public Locale getLanguage() {
+        return Locale.ROOT;
+    }
+
+    ;
 
     /**
      * A link to the license document under which the distribution is made
@@ -140,9 +167,14 @@ public interface IDcatDistribution {
      * dct:license</a>
      *
      * @see #getRights()
-     * @see IDcatCatalog#getLicense()
+     * @see AbstractDcatCatalog#getLicense()
      */
-    String getLicense();
+    @Value.Default
+    public String getLicense() {
+        return "";
+    }
+
+    ;
 
     /**
      * The media type of the distribution as defined by
@@ -154,7 +186,12 @@ public interface IDcatDistribution {
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_media_type">
      * dcat:mediaType</a>.
      */
-    String getMediaType();
+    @Value.Default
+    public String getMediaType() {
+        return "";
+    }
+
+    ;
 
     /**
      * Most recent date on which the distribution was changed, updated or
@@ -164,9 +201,9 @@ public interface IDcatDistribution {
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
-     * @see IDcatDataset#getModified()
+     * @see AbstractDcatDataset#getModified()
      */
-    DateTime getModified();
+    public abstract Optional<DateTime> getModified();
 
     /**
      * Information about rights held in and over the distribution, as specified
@@ -180,10 +217,13 @@ public interface IDcatDistribution {
      * well as other information that supplements the licence such as
      * attribution.
      *
-     * @see IDcatDistribution#getLicense()
-     * @see IDcatCatalog#getRights()
+     * @see AbstractDcatDistribution#getLicense()
+     * @see AbstractDcatCatalog#getRights()
      */
-    String getRights();
+    @Value.Default
+    public String getRights() {
+        return "";
+    }
 
     /**
      * A human readable name given to the distribution, i.e. "CSV Distribution
@@ -191,7 +231,7 @@ public interface IDcatDistribution {
      * <a href="http://purl.org/dc/terms/title"> dct:title </a>
      *
      */
-    Map<Locale, String> getTitle();
+  public abstract Map<Locale, String> getTitle();
 
     /**
      * Returns the uri of the distribution (which is not the uri of the file
@@ -201,6 +241,9 @@ public interface IDcatDistribution {
      * @see #getAccessURL()
      */
     // todo should we put an example?
-    String getUri();
+    @Value.Default
+    public String getUri() {
+        return "";
+    }
 
 }

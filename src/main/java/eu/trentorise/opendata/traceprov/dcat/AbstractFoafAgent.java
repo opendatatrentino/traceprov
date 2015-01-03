@@ -12,30 +12,45 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  *******************************************************************************
  */
-
 package eu.trentorise.opendata.traceprov.dcat;
 
+import java.util.Locale;
+import java.util.Map;
+import org.immutables.value.Value;
+
 /**
- * Models a SkosConcept:
- * http://www.w3.org/2009/08/skos-reference/skos.html#Concept
+ * Models a minimal FOAF Agent: http://xmlns.com/foaf/spec/
  *
  * @author David Leoni
  */
-public interface ISkosConcept {
+@Value.Immutable(singleton = true)
+@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "")
+public abstract class AbstractFoafAgent {
 
     /**
-     * skos:inScheme
+     * Returns the uri of the agent.
      */
-    ISkosConceptScheme getInScheme();
+    @Value.Default
+    public String getUri() {
+        return "";
+    }
 
     /**
-     * skos:prefLabel i.e. "Accountability"
+     * http://xmlns.com/foaf/0.1/name
      */
-    String getPrefLabel();
+    @Value.Parameter
+    public abstract Map<Locale, String> getName();
 
-    String getUri();
+    /**
+     * Returns the mail box http://xmlns.com/foaf/0.1/mbox
+     */
+    @Value.Default
+    @Value.Parameter
+    public String getMbox() {
+        return "";
+    }
 
 }

@@ -17,8 +17,10 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import com.google.common.base.Optional;
 import java.util.Locale;
 import java.util.Map;
+import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
 /**
@@ -34,8 +36,8 @@ import org.joda.time.DateTime;
  * to the catalog.
  *
  * As a practical example, while :dataset-001 was issued on 2011-12-05, its
- * description on Imaginary Catalog was added on 2011-12-11. This can be represented by
- * DCAT as in the following:
+ * description on Imaginary Catalog was added on 2011-12-11. This can be
+ * represented by DCAT as in the following:
  *
  * <pre>
  * :catalog dcat:record :record-001 .
@@ -52,13 +54,15 @@ import org.joda.time.DateTime;
  *
  * @author David Leoni
  */
-public interface IDcatCatalogRecord {
+@Value.Immutable(singleton = true)
+@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "" )
+public abstract class AbstractDcatCatalogRecord {
 
     /**
      * free-text account of the record, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>
      */
-    Map<Locale, String> getDescription();
+    public abstract Map<Locale, String> getDescription();
 
     /**
      * The date of listing the corresponding dataset in the catalog, as
@@ -70,9 +74,9 @@ public interface IDcatCatalogRecord {
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
-     * @see IDcatDataset#getIssued()
+     * @see AbstractDcatDataset#getIssued()
      */
-    DateTime getIssued();
+    public abstract Optional<DateTime> getIssued();
 
     /**
      * Most recent date on which the catalog entry was changed, updated or
@@ -85,30 +89,31 @@ public interface IDcatCatalogRecord {
      * Specified by
      * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
      *
-     * @see IDcatDataset#getModified()
+     * @see AbstractDcatDataset#getModified()
      */
-    DateTime getModified();
+    public abstract Optional<DateTime> getModified();
 
     /**
      * Links the catalog record to the dcat:Dataset resource described in the
      * record. Each catalog record can have at most one primary topic i.e.
-     * describes one dataset. If no primary topic is available,
-     * {@link eu.trentorise.opendata.traceprov.impl.dcat.DcatDataset#UNKNOWN_DATASET}
-     * will be returned instead. Specified by
+     * describes one dataset. Specified by
      * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic">
      * foaf:primaryTopic </a>
      */
-    IDcatDataset getPrimaryTopic();
+    public abstract Optional<DcatDataset> getPrimaryTopic();
 
     /**
      * A name given to the record, as specified by
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
      */
-    Map<Locale, String> getTitle();
+    public abstract Map<Locale, String> getTitle();
 
     /**
      * Property not in DCAT spec. This should uniquely identify the record.
      */
-    String getUri();
+    @Value.Default
+    public String getUri(){
+        return "";
+    };
 
 }

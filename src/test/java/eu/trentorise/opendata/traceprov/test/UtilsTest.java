@@ -1,6 +1,6 @@
-package eu.trentorise.opendata.trasceprov.test;
+package eu.trentorise.opendata.traceprov.test;
 
-import eu.trentorise.opendata.traceprov.impl.TraceProvUtils;
+import eu.trentorise.opendata.traceprov.TraceProvUtils;
 import java.util.Locale;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;

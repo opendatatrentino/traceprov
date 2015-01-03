@@ -1,4 +1,4 @@
-package eu.trentorise.opendata.traceprov.impl;
+package eu.trentorise.opendata.traceprov;
 
 import java.util.Locale;
 import java.util.logging.Logger;

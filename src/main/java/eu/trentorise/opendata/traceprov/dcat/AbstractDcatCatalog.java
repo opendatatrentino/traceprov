@@ -17,9 +17,12 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
 /**
@@ -35,13 +38,15 @@ import org.joda.time.DateTime;
  *
  * @author David Leoni
  */
-public interface IDcatCatalog {
+@Value.Immutable(singleton = true)
+@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "")
+public abstract class AbstractDcatCatalog {
 
     /**
      * A free-text account of the catalog, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>
      */
-    Map<Locale, String> getDescription();
+    public abstract Map<Locale, String> getDescription();
 
     /**
      * The homepage of the catalog. It should be unique and precisely identify
@@ -49,7 +54,10 @@ public interface IDcatCatalog {
      * when different URIs are used. Specified by
      * <a href="http://xmlns.com/foaf/spec/#term_homepage">foaf:homepage</a>
      */
-    String getHomepage();
+    @Value.Default
+    public String getHomepage() {
+        return "";
+    }
 
     /**
      * Date of formal issuance (e.g., publication) of the catalog, as specified
@@ -59,11 +67,11 @@ public interface IDcatCatalog {
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
-     * @see IDcatDataset#getIssued()
-     * @see IDcatDistribution#getIssued()
-     * @see IDcatCatalogRecord#getIssued()
+     * @see AbstractDcatDataset#getIssued()
+     * @see AbstractDcatDistribution#getIssued()
+     * @see AbstractDcatCatalogRecord#getIssued()
      */
-    DateTime getIssued();
+    public abstract Optional<DateTime> getIssued();
 
     /**
      * The languages of the catalog. This refers to the language used in the
@@ -79,9 +87,9 @@ public interface IDcatCatalog {
      * corresponding IRI should be used; if no ISO 639-1 code is defined, then
      * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
      *
-     * @see IDcatDataset#getLanguage()
+     * @see AbstractDcatDataset#getLanguages()
      */
-    List<Locale> getLanguages();
+    public abstract List<Locale> getLanguages();
 
     /**
      * This links to the license document under which the <b>catalog</b> is made
@@ -89,7 +97,10 @@ public interface IDcatCatalog {
      * applies to all of its datasets and distributions, it should be replicated
      * on each distribution. Specified by <a href=""> dct:license </a>
      */
-    String getLicense();
+    @Value.Default
+    public String getLicense() {
+        return "";
+    }
 
     /**
      * Most recent date on which the catalog was changed, updated or modified.
@@ -98,16 +109,20 @@ public interface IDcatCatalog {
      * compliant</a> string format i.e. "2011-12-11" . Specified by
      * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
      */
-    DateTime getModified();
+    public abstract Optional<DateTime> getModified();
 
     /**
-     * The entity responsible for making the catalog online.
+     * The entity responsible for making the catalog online. If not present,
+     * {@link FoafAgent#of()} is returned.
      *
-     * @see IFoafAgent
-     * @see IFoafPerson
-     * @see IFoafOrganization
+     * @see AbstractFoafAgent
+     * @see AbstractFoafPerson
+     * @see AbstractFoafOrganization
      */
-    IFoafAgent getPublisher();
+    @Value.Default
+    public FoafAgent getPublisher() {
+        return FoafAgent.of();
+    }
 
     /**
      * This describes the rights under which <b>the catalog</b> can be
@@ -117,15 +132,21 @@ public interface IDcatCatalog {
      * <a href="http://purl.org/dc/terms/rights">dct:rights</a>.
      *
      * @see #getLicense()
-     * @see IDcatDistribution#getRights()
+     * @see AbstractDcatDistribution#getRights()
      */
-    String getRights();
+    @Value.Default
+    public String getRights() {
+        return "";
+    }
 
     /**
      * Returns the geographical area covered by the catalog, as defined by
      * <a href="http://purl.org/dc/terms/spatial">dct:spatial</a>
      */
-    String getSpatial();
+    @Value.Default
+    public String getSpatial() {
+        return "";
+    }
 
     /**
      * The taxonomy of categories used to classify catalog's datasets, as
@@ -135,21 +156,29 @@ public interface IDcatCatalog {
      * but 'categories' is also used as synonim in other places of the specs and
      * seems more natural.
      *
-     * @see IDcatDataset#getCategory()
+     * When field is not available {@link SkosConceptScheme#of()} is returned.
+     *
+     * @see AbstractDcatDataset#getCategories()
      */
-    ISkosConceptScheme getCategories();
+    @Value.Default
+    public SkosConceptScheme getCategories() {
+        return SkosConceptScheme.of();
+    }
 
     /**
      * A name given to the catalog, as specified by
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
      */
     // todo put example
-    Map<Locale, String> getTitle();
+    public abstract Map<Locale, String> getTitle();
 
     /**
      * Property not in DCAT spec. This should uniquely identify the catalog,
      * giving the same result as {@link #getHomepage()}
      */
-    String getUri();
+    @Value.Default
+    public String getUri() {
+        return "";
+    }
 
 }

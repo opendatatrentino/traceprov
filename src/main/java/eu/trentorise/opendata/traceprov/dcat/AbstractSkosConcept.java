@@ -15,39 +15,40 @@
  *
  *******************************************************************************
  */
-package eu.trentorise.opendata.traceprov.impl.dcat;
+package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.traceprov.dcat.ISkosConceptScheme;
+import org.immutables.value.Value;
 
 /**
- * Mutable implementation of a SKOS ConceptScheme:
- * http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme
+ * Models a <a href="http://www.w3.org/2009/08/skos-reference/skos.html#Concept"> SkosConcept </a>
+ * 
+ *
  * @author David Leoni
  */
-public class SkosConceptScheme implements ISkosConceptScheme {
+@Value.Immutable(singleton = true)
+@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "")
+public abstract class AbstractSkosConcept {
 
-    private String uri;
-    private String prefLabel;
-
-    public SkosConceptScheme() {
+    /**
+     * skos:inScheme Default value is the empty concept scheme
+     * {@link SkosConceptScheme#of()}
+     */
+    @Value.Default
+    public AbstractSkosConceptScheme getInScheme() {
+        return SkosConceptScheme.of();
     }
 
-    @Override
+    /**
+     * skos:prefLabel i.e. "Accountability"
+     */
+    @Value.Default
     public String getPrefLabel() {
-        return prefLabel;
+        return "";
     }
 
-    public void setPrefLabel(String prefLabel) {
-        this.prefLabel = prefLabel;
-    }
-
-    @Override
+    @Value.Default
     public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri =uri;
+        return "";
     }
 
 }

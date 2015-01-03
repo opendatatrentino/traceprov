@@ -15,23 +15,32 @@
  * 
 *******************************************************************************
  */
-package eu.trentorise.opendata.traceprov.ref;
+package eu.trentorise.opendata.traceprov.dcat;
+
+import org.immutables.value.Value;
 
 /**
- * Represents a reference to a cell in a dataset in tabular format
+ * Models a
+ * <a href="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme">SKOS
+ * ConceptScheme</a>
  *
  * @author David Leoni
  */
-public interface ICellRef {
+@Value.Immutable(singleton = true)
+@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "" )
+public abstract class AbstractSkosConceptScheme {
 
     /**
-     * Returns the index of column the cell belongs to.
+     * skos:prefLabel i.e. "A set of domains to classify documents"
      */
-    int getColumnIndex();
+    @Value.Default
+    public  String getPrefLabel(){
+        return "";
+    }
 
-    /**
-     * Returns the index of row the cell belongs to.
-     */    
-    int getRowIndex();
+    @Value.Default
+    public  String getUri(){
+        return "";
+    }
 
 }
