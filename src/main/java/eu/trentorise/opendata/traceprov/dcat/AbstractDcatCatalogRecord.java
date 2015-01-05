@@ -18,6 +18,7 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 import com.google.common.base.Optional;
+import eu.trentorise.opendata.traceprov.BuilderStyle;
 import java.util.Locale;
 import java.util.Map;
 import org.immutables.value.Value;
@@ -54,8 +55,8 @@ import org.joda.time.DateTime;
  *
  * @author David Leoni
  */
-@Value.Immutable(singleton = true)
-@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "" )
+@Value.Immutable
+@BuilderStyle
 public abstract class AbstractDcatCatalogRecord {
 
     /**
@@ -100,7 +101,7 @@ public abstract class AbstractDcatCatalogRecord {
      * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic">
      * foaf:primaryTopic </a>
      */
-    public abstract Optional<DcatDataset> getPrimaryTopic();
+    public abstract Optional<AbstractDcatDataset> getPrimaryTopic();
 
     /**
      * A name given to the record, as specified by

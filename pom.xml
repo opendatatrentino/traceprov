@@ -241,6 +241,7 @@
         <artifactId>jsr305</artifactId>
         <version>${traceprov.findbugs.version}</version>
     </dependency>
+    
     <dependency>
         <groupId>com.google.code.findbugs</groupId>
         <artifactId>annotations</artifactId>

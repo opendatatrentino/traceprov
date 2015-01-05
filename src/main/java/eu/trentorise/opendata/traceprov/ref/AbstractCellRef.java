@@ -1,5 +1,6 @@
 package eu.trentorise.opendata.traceprov.ref;
 
+import eu.trentorise.opendata.traceprov.SimpleStyle;
 import org.immutables.value.Value;
 
 
@@ -9,9 +10,9 @@ import org.immutables.value.Value;
  *
  * @author David Leoni
  */
-@Value.Immutable(singleton = true, builder = false)
-@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "")
-public abstract class AbstractCellRef {
+@Value.Immutable
+@SimpleStyle
+abstract class AbstractCellRef {
 
     /**
      * Returns the index of column the cell belongs to.

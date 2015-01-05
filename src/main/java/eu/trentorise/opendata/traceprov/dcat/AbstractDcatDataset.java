@@ -18,6 +18,7 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 import com.google.common.base.Optional;
+import eu.trentorise.opendata.traceprov.BuilderStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -37,8 +38,8 @@ import org.joda.time.DateTime;
  *
  * @author David Leoni
  */
-@Value.Immutable(singleton = true)
-@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "" )
+@Value.Immutable
+@BuilderStyle
 public abstract class AbstractDcatDataset {
 
     /**
@@ -73,7 +74,7 @@ public abstract class AbstractDcatDataset {
     /**
      * Returns the distributions belonging to this dataset.
      */
-    public abstract List<DcatDistribution> getDistributions();
+    public abstract List<AbstractDcatDistribution> getDistributions();
 
     /*
      A unique identifier of the dataset, defined by
@@ -172,7 +173,7 @@ public abstract class AbstractDcatDataset {
      * @see AbstractFoafOrganization
      */
     @Value.Default
-    public FoafAgent getPublisher() {
+    public AbstractFoafAgent getPublisher() {
         return FoafAgent.of();
     }
     

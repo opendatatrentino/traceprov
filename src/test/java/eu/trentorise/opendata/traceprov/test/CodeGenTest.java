@@ -6,10 +6,8 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
-import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.ref.CellRef;
 import java.util.Locale;
-import org.immutables.value.internal.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -28,23 +26,23 @@ public class CodeGenTest {
         assertEquals("a", DcatDataset.builder().setUri("a").build().getUri());
 
         assertEquals("b", dataset.withUri("b").getUri());
-
+        
+        DcatDataset.builder().addAllDistributions(DcatDataset.of().getDistributions());                
     }
-    
-    
-    public void dcataDatasetUsageExample(){
+
+    public void dcataDatasetUsageExample() {
         DcatDataset dataset = DcatDataset
-                              .builder()
-                              .putTitle(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013")
-                              .setLandingPage("http://dati.trentino.it/dataset/impianti-di-risalita-vivifiemme-2013")
-                              .build();
+                .builder()
+                .putTitle(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013")
+                .setLandingPage("http://dati.trentino.it/dataset/impianti-di-risalita-vivifiemme-2013")
+                .build();
     }
 
     @Test
     public void testRefCodeGen() {
 
         assertEquals(CellRef.of(), CellRef.of(0, 0));
-        assertEquals(1, CellRef.of(1, 0).getRowIndex());
+        assertEquals(1, CellRef.of(1, 0).getRowIndex());        
 
     }
 

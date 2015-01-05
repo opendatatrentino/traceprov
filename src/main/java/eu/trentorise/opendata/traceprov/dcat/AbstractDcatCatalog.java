@@ -19,6 +19,7 @@ package eu.trentorise.opendata.traceprov.dcat;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import eu.trentorise.opendata.traceprov.BuilderStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,8 +39,8 @@ import org.joda.time.DateTime;
  *
  * @author David Leoni
  */
-@Value.Immutable(singleton = true)
-@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "")
+@Value.Immutable
+@BuilderStyle
 public abstract class AbstractDcatCatalog {
 
     /**
@@ -112,15 +113,16 @@ public abstract class AbstractDcatCatalog {
     public abstract Optional<DateTime> getModified();
 
     /**
-     * The entity responsible for making the catalog online. If not present,
-     * {@link FoafAgent#of()} is returned.
+     * The entity responsible for making the catalog online. 
+     * 
+     * Default value is {@link FoafAgent#of()}.
      *
      * @see AbstractFoafAgent
      * @see AbstractFoafPerson
      * @see AbstractFoafOrganization
      */
     @Value.Default
-    public FoafAgent getPublisher() {
+    public AbstractFoafAgent getPublisher() {
         return FoafAgent.of();
     }
 
@@ -161,7 +163,7 @@ public abstract class AbstractDcatCatalog {
      * @see AbstractDcatDataset#getCategories()
      */
     @Value.Default
-    public SkosConceptScheme getCategories() {
+    public AbstractSkosConceptScheme getCategories() {
         return SkosConceptScheme.of();
     }
 

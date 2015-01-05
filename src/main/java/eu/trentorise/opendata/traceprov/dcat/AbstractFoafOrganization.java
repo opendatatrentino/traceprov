@@ -1,13 +1,14 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
+import eu.trentorise.opendata.traceprov.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
  *
  * @author David Leoni
  */
-@Value.Immutable(singleton = true)
-@Value.Style(get = {"is*", "get*"}, init = "set*", typeAbstract = {"Abstract*"}, typeImmutable = "" )
+@Value.Immutable
+@BuilderStyle
 public abstract class AbstractFoafOrganization extends AbstractFoafAgent {
 
 }
