@@ -5,6 +5,7 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
+import eu.trentorise.opendata.traceprov.Dict;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.ref.CellRef;
 import java.util.Locale;
@@ -32,8 +33,8 @@ public class CodeGenTest {
 
     public void dcataDatasetUsageExample() {
         DcatDataset dataset = DcatDataset
-                .builder()
-                .putTitle(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013")
+                .builder()                
+                .setTitle(Dict.of(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013"))
                 .setLandingPage("http://dati.trentino.it/dataset/impianti-di-risalita-vivifiemme-2013")
                 .build();
     }

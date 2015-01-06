@@ -18,11 +18,10 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.traceprov.BuilderStyle;
+import eu.trentorise.opendata.traceprov.Dict;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
@@ -47,7 +46,10 @@ public abstract class AbstractDcatCatalog {
      * A free-text account of the catalog, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>
      */
-    public abstract Map<Locale, String> getDescription();
+    @Value.Default
+    public Dict getDescription(){
+        return Dict.of();
+    };
 
     /**
      * The homepage of the catalog. It should be unique and precisely identify
@@ -113,8 +115,8 @@ public abstract class AbstractDcatCatalog {
     public abstract Optional<DateTime> getModified();
 
     /**
-     * The entity responsible for making the catalog online. 
-     * 
+     * The entity responsible for making the catalog online.
+     *
      * Default value is {@link FoafAgent#of()}.
      *
      * @see AbstractFoafAgent
@@ -172,7 +174,10 @@ public abstract class AbstractDcatCatalog {
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
      */
     // todo put example
-    public abstract Map<Locale, String> getTitle();
+    @Value.Default
+    public Dict getTitle(){
+        return Dict.of();
+    };
 
     /**
      * Property not in DCAT spec. This should uniquely identify the catalog,

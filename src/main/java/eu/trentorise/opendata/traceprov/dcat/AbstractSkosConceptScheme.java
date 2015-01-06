@@ -27,7 +27,7 @@ import org.immutables.value.Value;
  *
  * @author David Leoni
  */
-@Value.Immutable 
+@Value.Immutable
 @BuilderStyle
 public abstract class AbstractSkosConceptScheme {
 
@@ -35,12 +35,12 @@ public abstract class AbstractSkosConceptScheme {
      * skos:prefLabel i.e. "A set of domains to classify documents"
      */
     @Value.Default
-    public  String getPrefLabel(){
+    public String getPrefLabel() {
         return "";
     }
 
     @Value.Default
-    public  String getUri(){
+    public String getUri() {
         return "";
     }
 

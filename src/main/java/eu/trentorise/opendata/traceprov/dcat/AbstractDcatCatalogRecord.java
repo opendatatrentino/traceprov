@@ -15,12 +15,12 @@
  * 
 *******************************************************************************
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.traceprov.dcat; 
+
+import eu.trentorise.opendata.traceprov.Dict;
 
 import com.google.common.base.Optional;
 import eu.trentorise.opendata.traceprov.BuilderStyle;
-import java.util.Locale;
-import java.util.Map;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
@@ -63,7 +63,11 @@ public abstract class AbstractDcatCatalogRecord {
      * free-text account of the record, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>
      */
-    public abstract Map<Locale, String> getDescription();
+    @Value.Default
+    public Dict getDescription(){
+        return Dict.of();
+    }
+            
 
     /**
      * The date of listing the corresponding dataset in the catalog, as
@@ -107,7 +111,10 @@ public abstract class AbstractDcatCatalogRecord {
      * A name given to the record, as specified by
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
      */
-    public abstract Map<Locale, String> getTitle();
+    @Value.Default
+    public  Dict getTitle(){
+        return Dict.of();
+    };
 
     /**
      * Property not in DCAT spec. This should uniquely identify the record.

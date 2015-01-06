@@ -17,10 +17,10 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import eu.trentorise.opendata.traceprov.Dict;
 import com.google.common.base.Optional;
 import eu.trentorise.opendata.traceprov.BuilderStyle;
 import java.util.Locale;
-import java.util.Map;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
@@ -42,8 +42,8 @@ public abstract class AbstractDcatDistribution {
      * you are not sure whether it is. If the distribution(s) are accessible
      * only through a landing page (i.e. direct download URLs are not known),
      * then the link returned by containing dataset
-     * {@link AbstractDcatDataset#getLandingPage()} should be returned by this method,
-     * too.
+     * {@link AbstractDcatDataset#getLandingPage()} should be returned by this
+     * method, too.
      *
      * This field is specified by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:accessURL</a>.
@@ -84,7 +84,10 @@ public abstract class AbstractDcatDistribution {
      * Free-text account of the distribution, as specified in
      * <a href="http://purl.org/dc/terms/description">dct:description</a>
      */
-    public abstract Map<Locale, String> getDescription();
+    @Value.Default
+    public Dict getDescription(){
+        return Dict.of();
+    };
 
     /**
      * A file that contains the distribution of the dataset in a given format
@@ -135,13 +138,13 @@ public abstract class AbstractDcatDistribution {
      * The language of the distribution. Note that this does not explicitly
      * appear in the Distribution description in W3C Recommendation of 16
      * January 2014., but it's existence is indeed cited in the Dataset
-     * description (see {@link AbstractDcatDataset#getLanguages()}). So we made up the
-     * property and the description below to fill the gap.
+     * description (see {@link AbstractDcatDataset#getLanguages()}). So we made
+     * up the property and the description below to fill the gap.
      *
      * This overrides the value of the dataset and catalog language in case of
      * conflict. The returned language should be also in the list of languages
-     * returned by the containing dataset {@link AbstractDcatDataset#getLanguages()}
-     * method.
+     * returned by the containing dataset
+     * {@link AbstractDcatDataset#getLanguages()} method.
      *
      * Java Locale should be created out of language codes as defined by the
      * Library of Congress
@@ -192,8 +195,6 @@ public abstract class AbstractDcatDistribution {
         return "";
     }
 
-    ;
-
     /**
      * Most recent date on which the distribution was changed, updated or
      * modified.
@@ -232,7 +233,10 @@ public abstract class AbstractDcatDistribution {
      * <a href="http://purl.org/dc/terms/title"> dct:title </a>
      *
      */
-  public abstract Map<Locale, String> getTitle();
+    @Value.Default
+    public Dict getTitle(){
+        return Dict.of();
+    };
 
     /**
      * Returns the uri of the distribution (which is not the uri of the file

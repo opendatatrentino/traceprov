@@ -15,7 +15,7 @@
  * 
 *******************************************************************************
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.traceprov.dcat; import eu.trentorise.opendata.traceprov.Dict;
 
 import com.google.common.base.Optional;
 import eu.trentorise.opendata.traceprov.BuilderStyle;
@@ -69,7 +69,10 @@ public abstract class AbstractDcatDataset {
      * Free-text account of the dataset, as specified in
      * <a href="http://purl.org/dc/terms/description">dct:description</a>
      */
-    public abstract Map<Locale, String> getDescription();
+    @Value.Default
+    public Dict getDescription(){
+        return Dict.of();
+    };
 
     /**
      * Returns the distributions belonging to this dataset.
@@ -86,9 +89,7 @@ public abstract class AbstractDcatDataset {
     public String getIdentifier() {
         return "";
     }
-
-    ;
-
+    
     /**
      * Date of formal issuance (e.g., publication) of the dataset.
      *
@@ -214,7 +215,10 @@ public abstract class AbstractDcatDataset {
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
      * i.e. "Apple Production Statistics".
      */
-    public abstract Map<Locale, String> getTitle();
+    @Value.Default
+    public Dict getTitle(){
+        return Dict.of();
+    };
 
     /**
      * Returns the URI of the dataset. Not present in the dcat specs.

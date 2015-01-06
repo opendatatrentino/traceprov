@@ -17,16 +17,19 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import eu.trentorise.opendata.traceprov.Dict;
 import eu.trentorise.opendata.traceprov.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
- * Models a <a href="http://www.w3.org/2009/08/skos-reference/skos.html#Concept"> SkosConcept </a>
- * 
+ * Models a
+ * <a href="http://www.w3.org/2009/08/skos-reference/skos.html#Concept">
+ * SkosConcept </a>
+ *
  *
  * @author David Leoni
  */
-@Value.Immutable 
+@Value.Immutable
 @BuilderStyle
 public abstract class AbstractSkosConcept {
 
@@ -35,6 +38,7 @@ public abstract class AbstractSkosConcept {
      * {@link SkosConceptScheme#of()}
      */
     @Value.Default
+    @Value.Parameter
     public AbstractSkosConceptScheme getInScheme() {
         return SkosConceptScheme.of();
     }
@@ -42,12 +46,14 @@ public abstract class AbstractSkosConcept {
     /**
      * skos:prefLabel i.e. "Accountability"
      */
+    @Value.Parameter
     @Value.Default
-    public String getPrefLabel() {
-        return "";
-    }
+    public Dict getPrefLabel(){
+        return Dict.of();
+    };
 
     @Value.Default
+    @Value.Parameter
     public String getUri() {
         return "";
     }

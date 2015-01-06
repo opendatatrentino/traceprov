@@ -17,9 +17,9 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import eu.trentorise.opendata.traceprov.Dict;
+
 import eu.trentorise.opendata.traceprov.BuilderStyle;
-import java.util.Locale;
-import java.util.Map;
 import org.immutables.value.Value;
 
 /**
@@ -43,7 +43,10 @@ public abstract class AbstractFoafAgent {
      * http://xmlns.com/foaf/0.1/name
      */
     @Value.Parameter
-    public abstract Map<Locale, String> getName();
+    @Value.Default
+    public Dict getName(){
+        return Dict.of();
+    };
 
     /**
      * Returns the mail box http://xmlns.com/foaf/0.1/mbox
