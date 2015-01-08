@@ -59,6 +59,8 @@ import org.joda.time.DateTime;
 @BuilderStyle
 public abstract class AbstractDcatCatalogRecord {
 
+    public static final String CLASS_URI="http://www.w3.org/ns/dcat#record";
+    
     /**
      * free-text account of the record, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>

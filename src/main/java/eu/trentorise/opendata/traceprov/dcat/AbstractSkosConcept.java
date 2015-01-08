@@ -32,6 +32,9 @@ import org.immutables.value.Value;
 @Value.Immutable
 @BuilderStyle
 public abstract class AbstractSkosConcept {
+    
+    public static final String CLASS_URI="http://www.w3.org/2004/02/skos/core#Concept";
+    
 
     /**
      * skos:inScheme Default value is the empty concept scheme

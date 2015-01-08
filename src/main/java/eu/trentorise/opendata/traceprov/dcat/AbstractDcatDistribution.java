@@ -34,6 +34,9 @@ import org.joda.time.DateTime;
 @BuilderStyle
 public abstract class AbstractDcatDistribution {
 
+    public static final String CLASS_URI="http://www.w3.org/ns/dcat#distribution";
+    
+    
     /**
      *
      * A landing page, feed, SPARQL endpoint or other type of resource that
@@ -85,9 +88,11 @@ public abstract class AbstractDcatDistribution {
      * <a href="http://purl.org/dc/terms/description">dct:description</a>
      */
     @Value.Default
-    public Dict getDescription(){
+    public Dict getDescription() {
         return Dict.of();
-    };
+    }
+
+    ;
 
     /**
      * A file that contains the distribution of the dataset in a given format
@@ -234,9 +239,11 @@ public abstract class AbstractDcatDistribution {
      *
      */
     @Value.Default
-    public Dict getTitle(){
+    public Dict getTitle() {
         return Dict.of();
-    };
+    }
+
+    ;
 
     /**
      * Returns the uri of the distribution (which is not the uri of the file

@@ -23,7 +23,7 @@ import org.immutables.value.Value;
  * NOTE: Annotated abstract class name MUST begin with 'Abstract'.
  * 
  * @author David Leoni
- * @see GenerateSimpleImmutable
+ * @see SimpleStyle
  */
 @Value.Style(get = {"is*", "get*"},
         init = "set*",

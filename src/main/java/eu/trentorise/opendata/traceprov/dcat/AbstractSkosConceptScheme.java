@@ -31,6 +31,8 @@ import org.immutables.value.Value;
 @BuilderStyle
 public abstract class AbstractSkosConceptScheme {
 
+    public static final String CLASS_URI="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme";
+    
     /**
      * skos:prefLabel i.e. "A set of domains to classify documents"
      */

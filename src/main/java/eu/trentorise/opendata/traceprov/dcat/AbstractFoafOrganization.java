@@ -4,11 +4,11 @@ import eu.trentorise.opendata.traceprov.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
- *
+ * Models a <a href="http://xmlns.com/foaf/0.1/Organization"> foaf:Organization </a>
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStyle
 public abstract class AbstractFoafOrganization extends AbstractFoafAgent {
-
+    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Organization";
 }

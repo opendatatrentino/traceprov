@@ -3,8 +3,7 @@ package eu.trentorise.opendata.traceprov;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import java.util.LinkedHashMap;
+import com.google.common.collect.ImmutableListMultimap;
 
 /**
  * *****************************************************************************
@@ -25,8 +24,6 @@ import java.util.LinkedHashMap;
  */
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -46,10 +43,10 @@ public final class Dict {
 
     private static final Dict INSTANCE = new Dict();
 
-    private ImmutableMap<Locale, ImmutableList<String>> _strings;
+    private ImmutableListMultimap<Locale, String> _strings;
 
     private Dict() {
-        _strings = ImmutableMap.of();
+        _strings = ImmutableListMultimap.of();
     }
 
     /**
@@ -66,11 +63,8 @@ public final class Dict {
      * @param locale if locale is unknown use {@link Locale#ROOT}
      */
     public static Dict of(Locale locale, String... strings) {
-        Preconditions.checkNotNull(locale);
-        Preconditions.checkNotNull(strings);
-
         Dict ret = new Dict();
-        ret._strings = ImmutableMap.of(locale, ImmutableList.copyOf(strings));
+        ret._strings = ImmutableListMultimap.<Locale, String>builder().putAll(locale, strings).build();
         return ret;
     }
 
@@ -88,7 +82,7 @@ public final class Dict {
      * Constructs a Dict with the provided strings. Strings will be under
      * unknown locale {@link Locale#ROOT}
      *
-     * @param string a non-null list of non-null strings
+     * @param strings a non-null list of non-null strings
      */
     public static Dict of(List<String> strings) {
         return of(Locale.ROOT, strings);
@@ -97,25 +91,17 @@ public final class Dict {
     /**
      * Constructs a Dict with the strings in the provided locale
      *
-     * @param string a non-null list of non-null strings
+     * @param strings a non-null list of non-null strings
      * @param locale if locale is unknown use {@link Locale#ROOT}
      */
     public static Dict of(Locale locale, List<String> strings) {
-        Preconditions.checkNotNull(locale);
-        Preconditions.checkNotNull(strings);
-
         Dict ret = new Dict();
-        ret._strings = ImmutableMap.of(locale, ImmutableList.copyOf(strings));
+        ret._strings = ImmutableListMultimap.<Locale, String>builder().putAll(locale, strings).build();
         return ret;
     }
 
-    private Dict(Builder dictBuilder) {
-        ImmutableMap.Builder<Locale, ImmutableList<String>> mapBuilder = ImmutableMap.builder();
-
-        for (Entry<Locale, ImmutableList.Builder<String>> entry : dictBuilder.stringsBuilder.entrySet()) {
-            mapBuilder.put(entry.getKey(), entry.getValue().build());
-        }
-        this._strings = mapBuilder.build();
+    private Dict(Builder dictBuilder) {       
+        this._strings = dictBuilder.stringsBuilder.build();
     }
 
     /**
@@ -125,7 +111,7 @@ public final class Dict {
      * @return the strings in the given locale if present. If no string is
      * present an empty list is returned.
      *
-     * @see #getTranslation
+     * @see #string(java.util.Locale) 
      */
     public ImmutableList<String> strings(Locale locale) {
         Preconditions.checkNotNull(locale);
@@ -232,7 +218,7 @@ public final class Dict {
      */
     public LocalizedString prettyString(Locale... locales) {
         Preconditions.checkNotNull(locales);
-        
+
         for (Locale loc : locales) {
             Preconditions.checkNotNull(loc);
             String t = nonEmptyString(loc);
@@ -264,7 +250,7 @@ public final class Dict {
      */
     private static String padLeft(String msg, int maxLength) {
         Preconditions.checkNotNull(msg);
-        
+
         String nmot;
         if (msg.length() > maxLength) {
             nmot = msg.substring(0, msg.length() - 3) + "...";
@@ -287,27 +273,17 @@ public final class Dict {
         private Builder() {
         }
 
-        private Map<Locale, ImmutableList.Builder<String>> stringsBuilder
-                = new LinkedHashMap(); // hashmap, otherwise I can't get contents
+        private ImmutableListMultimap.Builder<Locale, String> stringsBuilder = ImmutableListMultimap.<Locale, String>builder();
 
         /**
-         * Adds provided string(s) to the list of already inserted translations
-         * for the given locale.
+         * Stores an array of values with the same locale in the built multimap.
          *
          * @param locale the locale of the string
-         * @param string the string in the given locale
+         * @param strings the string in the given locale
          * @return {@code this} builder for chained invocation
          */
-        public final Builder addStrings(Locale locale, String... string) {
-            Preconditions.checkNotNull(locale);
-
-            ImmutableList.Builder<String> listBuilder = stringsBuilder.get(locale);
-
-            if (listBuilder == null) {
-                stringsBuilder.put(locale, ImmutableList.<String>builder().add(string));
-            } else {
-                listBuilder.addAll(ImmutableList.copyOf(string));
-            }
+        public Builder putAll(Locale locale, String... strings) {
+            stringsBuilder.putAll(locale, strings);
             return this;
         }
 
@@ -316,39 +292,36 @@ public final class Dict {
         }
 
         /*
-         * Adds provided strings to the list of already inserted translations
-         * for the given locale.
+         * Stores a collection of values with the same locale in the built dictionary.
          *
          * @param locale the locale of the string
          * @param string the string in the given locale
          * @return {@code this} builder for chained invocation
          */
-        public final Builder addAllStrings(Locale locale, Iterable<String> elements) {
-            Preconditions.checkNotNull(locale);
-
-            ImmutableList.Builder<String> listBuilder = stringsBuilder.get(locale);
-
-            if (listBuilder == null) {
-                stringsBuilder.put(locale, ImmutableList.<String>builder().addAll(elements));
-            } else {
-                listBuilder.addAll(elements);
-            }
+        public Builder putAll(Locale locale, Iterable<String> strings) {
+            stringsBuilder.putAll(locale, strings);
             return this;
         }
 
         /**
-         * Adds string to the list of already inserted translations using the
-         * default locale {@link Locale#ROOT}
+         * Stores a collection of values with default locale {@link Locale#ROOT}
+         * in the built dictionary.
          *
          * @return {@code this} builder for chained invocation
          */
-        public final Builder addString(String string) {
-            Preconditions.checkNotNull(string);
-
-            addStrings(Locale.ROOT, string);
+        public Builder putAll(String... strings) {
+            stringsBuilder.putAll(Locale.ROOT, strings);
             return this;
         }
 
+        /**
+         * Stores another dictionary's entries in the built dictionary. New keys
+         * and values follow any existing keys and values.
+         */
+        public Builder putAll(Dict dict) {
+            stringsBuilder.putAll(dict._strings);
+            return this;
+        }
     }
 
     @Override
@@ -371,40 +344,6 @@ public final class Dict {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Merges dictionary with provided one to create a new dictionary.
-     * Duplicates are eliminated. Translations of the second dictionary will be
-     * appended after the ones from this dictionary.
-     *
-     * @param dict
-     * @return a new dictionary resulting from the merge.
-     */
-    public Dict merge(Dict dict) {
-        Preconditions.checkNotNull(dict);
-        
-        Dict.Builder db = Dict.builder();
-
-        for (Locale localeA : _strings.keySet()) {
-            ImmutableSet.Builder<String> setBuilder_1 = ImmutableSet.<String>builder();
-
-            setBuilder_1.addAll(_strings.get(localeA));
-            if (dict.locales().contains(localeA)) {
-                setBuilder_1.addAll(dict.strings(localeA));
-
-            }
-            db.addAllStrings(localeA, setBuilder_1.build());
-        }
-        for (Locale localeB : dict.locales()) {
-            if (!_strings.keySet().contains(localeB)) {
-                ImmutableSet.Builder<String> setBuilder_2 = ImmutableSet.<String>builder();
-                setBuilder_2.addAll(dict.strings(localeB));
-                db.addAllStrings(localeB, setBuilder_2.build());
-            }
-        }
-
-        return db.build();
     }
 
     /**

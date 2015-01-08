@@ -31,6 +31,9 @@ import org.immutables.value.Value;
 @BuilderStyle
 public abstract class AbstractFoafAgent {
 
+    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";
+    
+    
     /**
      * Returns the uri of the agent.
      */

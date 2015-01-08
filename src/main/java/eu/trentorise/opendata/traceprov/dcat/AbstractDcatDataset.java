@@ -42,6 +42,8 @@ import org.joda.time.DateTime;
 @BuilderStyle
 public abstract class AbstractDcatDataset {
 
+    public static final String CLASS_URI="http://www.w3.org/ns/dcat#dataset";
+    
     /**
      * Returns the frequency at which dataset is published, as defined by
      * <a href="http://purl.org/dc/terms/accrualPeriodicity">

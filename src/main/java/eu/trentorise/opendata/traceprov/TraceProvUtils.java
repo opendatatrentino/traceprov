@@ -8,11 +8,11 @@ import java.util.logging.Logger;
  * @author David Leoni
  */
 public class TraceProvUtils {
-
+        
     private static final Logger logger = Logger.getLogger(TraceProvUtils.class.getName());
 
     // todo put better url
-    public static final String TRACEPROV_PREFIX = "https://github.com/opendatatrentino/traceprov#";
+    public static final String TRACEPROV_PREFIX = "https://github.com/opendatatrentino/traceprov#";        
 
     /**
      * Java 7 has Locale.forLanguageTag(format), this is the substitute for Java
