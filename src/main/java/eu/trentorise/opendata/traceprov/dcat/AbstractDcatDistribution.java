@@ -15,9 +15,9 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.traceprov.Dict;
+import eu.trentorise.opendata.commons.Dict;
 import com.google.common.base.Optional;
-import eu.trentorise.opendata.traceprov.BuilderStyle;
+import eu.trentorise.opendata.commons.BuilderStyle;
 import java.util.Locale;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;

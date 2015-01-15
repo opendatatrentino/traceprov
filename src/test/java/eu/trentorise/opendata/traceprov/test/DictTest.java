@@ -15,14 +15,14 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
-import eu.trentorise.opendata.traceprov.Dict;
-import eu.trentorise.opendata.traceprov.LocalizedString;
-import java.util.ArrayList;
-import java.util.List;
+import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.commons.LocalizedString;
+import eu.trentorise.opendata.traceprov.TraceProvConfig;
 import java.util.Locale;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,6 +31,11 @@ import org.junit.Test;
  */
 public class DictTest {
 
+    @BeforeClass
+    public static void setUpClass() {        
+        TraceProvConfig.of().loadLogConfig();
+    }    
+    
     @Test
     public void testDict() {
         assertTrue(Dict.of().isEmpty());

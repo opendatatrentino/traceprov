@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Trento Rise  (trentorise.eu) 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,29 +15,18 @@
  */
 package eu.trentorise.opendata.traceprov;
 
-import java.util.Locale;
-import org.immutables.value.Value;
-
 /**
  *
  * @author David Leoni
  */
-@Value.Immutable
-@SimpleStyle
-abstract class AbstractLocalizedString {
-    
-    /**
-     * Default locale is {@link Locale#ROOT}
-     */
-    @Value.Default
-    @Value.Parameter
-    public Locale getLocale(){
-        return Locale.ROOT;
+public class TraceProvException extends RuntimeException {
+
+    public TraceProvException(String msg) {
+        super("TraceProv: " + msg);
     }
-    
-    @Value.Default
-    @Value.Parameter
-    public String getString(){
-        return "";
+
+    public TraceProvException(String msg, Throwable ex) {
+        super("TraceProv: " + msg, ex);
     }
+
 }

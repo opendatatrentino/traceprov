@@ -15,7 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.ref;
 
-import eu.trentorise.opendata.traceprov.SimpleStyle;
+import eu.trentorise.opendata.commons.SimpleStyle;
 import org.immutables.value.Value;
 
 /**

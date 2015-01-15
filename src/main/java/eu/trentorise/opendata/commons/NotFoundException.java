@@ -13,38 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.ref;
-
-import eu.trentorise.opendata.commons.SimpleStyle;
-import org.immutables.value.Value;
-
-
+package eu.trentorise.opendata.commons;
 
 /**
- * Represents a reference to a cell in a dataset in tabular format
- *
- * @author David Leoni
+ * @author David Leoni <david.leoni@unitn.it>
  */
-@Value.Immutable
-@SimpleStyle
-abstract class AbstractCellRef {
+public class NotFoundException extends RuntimeException {
 
-    /**
-     * Returns the index of column the cell belongs to.
-     */
-    @Value.Default
-    @Value.Parameter
-    public int getRowIndex() {
-        return 0;
+    public NotFoundException(Exception ex) {
+        super(ex);
     }
 
-    /**
-     * Returns the index of row the cell belongs to.
-     */       
-    @Value.Default
-    @Value.Parameter
-    public int getColumnIndex() {
-        return 0;
-    }        
+    public NotFoundException(String s, Exception ex) {
+        super(s, ex);
+    }
 
+    public NotFoundException(String s) {
+        super(s);
+    }
 }

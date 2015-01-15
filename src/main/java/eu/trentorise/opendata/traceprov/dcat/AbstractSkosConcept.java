@@ -15,8 +15,8 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.traceprov.Dict;
-import eu.trentorise.opendata.traceprov.BuilderStyle;
+import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.commons.BuilderStyle;
 import org.immutables.value.Value;
 
 /**

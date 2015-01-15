@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2015 Trento Rise  (trentorise.eu) 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,38 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.ref;
+package eu.trentorise.opendata.traceprov;
 
-import eu.trentorise.opendata.commons.SimpleStyle;
-import org.immutables.value.Value;
-
-
+import eu.trentorise.opendata.commons.OdtConfig;
 
 /**
- * Represents a reference to a cell in a dataset in tabular format
  *
  * @author David Leoni
  */
-@Value.Immutable
-@SimpleStyle
-abstract class AbstractCellRef {
+public class TraceProvConfig extends OdtConfig {
 
-    /**
-     * Returns the index of column the cell belongs to.
-     */
-    @Value.Default
-    @Value.Parameter
-    public int getRowIndex() {
-        return 0;
+    private static TraceProvConfig INSTANCE = new TraceProvConfig();
+
+    private TraceProvConfig(){
+        super();
     }
-
-    /**
-     * Returns the index of row the cell belongs to.
-     */       
-    @Value.Default
-    @Value.Parameter
-    public int getColumnIndex() {
-        return 0;
-    }        
+    
+    public static TraceProvConfig of() {
+        return INSTANCE;
+    }
 
 }

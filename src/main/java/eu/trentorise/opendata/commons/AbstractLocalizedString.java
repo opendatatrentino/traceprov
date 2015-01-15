@@ -13,49 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.commons;
 
-import eu.trentorise.opendata.commons.Dict;
-
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.SimpleStyle;
+import java.util.Locale;
 import org.immutables.value.Value;
 
 /**
- * Models a minimal FOAF Agent: http://xmlns.com/foaf/spec/
  *
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class AbstractFoafAgent {
-
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";
-    
+@SimpleStyle
+abstract class AbstractLocalizedString {
     
     /**
-     * Returns the uri of the agent.
-     */
-    @Value.Default
-    public String getUri() {
-        return "";
-    }
-
-    /**
-     * http://xmlns.com/foaf/0.1/name
-     */
-    @Value.Parameter
-    @Value.Default
-    public Dict getName(){
-        return Dict.of();
-    };
-
-    /**
-     * Returns the mail box http://xmlns.com/foaf/0.1/mbox
+     * Default locale is {@link Locale#ROOT}
      */
     @Value.Default
     @Value.Parameter
-    public String getMbox() {
+    public Locale getLocale(){
+        return Locale.ROOT;
+    }
+    
+    @Value.Default
+    @Value.Parameter
+    public String getString(){
         return "";
     }
-
 }

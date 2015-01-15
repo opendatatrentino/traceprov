@@ -15,10 +15,15 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
-import eu.trentorise.opendata.traceprov.TraceProvUtils;
+
+import eu.trentorise.opendata.commons.BuildInfo;
+import eu.trentorise.opendata.commons.OdtUtils;
+import eu.trentorise.opendata.traceprov.TraceProvConfig;
 import java.util.Locale;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -27,25 +32,30 @@ import org.junit.Test;
  */
 public class UtilsTest {
     
+    @BeforeClass
+    public static void setUpClass() {        
+        TraceProvConfig.of().loadLogConfig();
+    }    
+    
     @Test
     public void testChecker(){
         try {
-            TraceProvUtils.checkNonEmpty(null, "my string");
+            OdtUtils.checkNonEmpty(null, "my string");
             Assert.fail();
         } catch (IllegalArgumentException ex){
             
         }
         try {
-            TraceProvUtils.checkNonEmpty("", "my string");
+            OdtUtils.checkNonEmpty("", "my string");
             Assert.fail();
         } catch (IllegalArgumentException ex){
             
         }
                 
-        TraceProvUtils.checkNonNull("", "my obj");
+        OdtUtils.checkNonNull("", "my obj");
         
         try {
-            TraceProvUtils.checkNonNull(null, "my obj");
+            OdtUtils.checkNonNull(null, "my obj");
             Assert.fail();
         } catch (IllegalArgumentException ex){
             
@@ -55,7 +65,15 @@ public class UtilsTest {
     @Test
     public void testLanguageTag(){
         // we want gracious null handling
-        assertEquals(Locale.ROOT, TraceProvUtils.languageTagToLocale(null));
-        assertEquals("", TraceProvUtils.localeToLanguageTag(null));
+        assertEquals(Locale.ROOT, OdtUtils.languageTagToLocale(null));
+        assertEquals("", OdtUtils.localeToLanguageTag(null));
     }
+    
+    @Test
+    public void testBuildInfo(){
+        BuildInfo buildInfo = OdtUtils.readBuildInfo(OdtUtils.class);
+        assertTrue(buildInfo.getScmUrl().length() > 0);
+        assertTrue(buildInfo.getVersion().length() > 0);
+    }
+    
 }

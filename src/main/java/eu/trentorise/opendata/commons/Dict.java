@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov;
+package eu.trentorise.opendata.commons;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;

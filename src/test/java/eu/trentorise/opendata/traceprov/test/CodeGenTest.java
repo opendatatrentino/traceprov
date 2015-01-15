@@ -15,18 +15,25 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
-import eu.trentorise.opendata.traceprov.Dict;
+import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.traceprov.TraceProvConfig;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.ref.CellRef;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
  * @author David Leoni
  */
 public class CodeGenTest {
+    
+    @BeforeClass
+    public static void setUpClass() {        
+        TraceProvConfig.of().loadLogConfig();
+    }
 
     @Test
     public void testDcatCodeGen() {

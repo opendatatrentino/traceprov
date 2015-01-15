@@ -13,21 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov;
+package eu.trentorise.opendata.commons;
 
+import eu.trentorise.opendata.traceprov.TraceProvException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 /**
+ * Utility funtions shared by Open Data in Trentino projects.
  *
  * @author David Leoni
  */
-public class TraceProvUtils {
-        
-    private static final Logger logger = Logger.getLogger(TraceProvUtils.class.getName());
+public class OdtUtils {
+
+    private static final Logger logger = Logger.getLogger(OdtUtils.class.getName());
 
     // todo put better url
-    public static final String TRACEPROV_PREFIX = "https://github.com/opendatatrentino/traceprov#";        
+    public static final String TRACEPROV_PREFIX = "https://github.com/opendatatrentino/traceprov#";
+
+    public static final String BUILD_PROPERTIES_PATH = "META-INF/odt-commons-build.properties";
 
     /**
      * Java 7 has Locale.forLanguageTag(format), this is the substitute for Java
@@ -172,6 +179,37 @@ public class TraceProvUtils {
     public static boolean isNonEmpty(String string) {
         return string == null
                 || string.length() == 0;
+    }
+
+    /**
+     * Parses file at {@link #BUILD_PROPERTIES_PATH} of the jar holding the
+     * provided class.
+     *
+     * @throws eu.​trentorise.​opendata.​traceprov.​TraceProvException if file
+     * is not found.
+     */
+    public static BuildInfo readBuildInfo(Class clazz) {
+        InputStream stream = clazz.getResourceAsStream("/" + BUILD_PROPERTIES_PATH);
+        Properties props = new Properties();
+        if (stream == null) {
+            throw new NotFoundException("Couldn't find " + BUILD_PROPERTIES_PATH + " file in package containing class " + clazz.getSimpleName() + "  !!");
+        } else {
+            try {
+                props.load(stream);
+            }
+            catch (IOException ex) {
+                throw new TraceProvException("Couldn't load " + BUILD_PROPERTIES_PATH + " file in package containing class " + clazz.getSimpleName() + "  !!", ex);
+            }
+        }
+        return BuildInfo.builder()
+                .setBuildJdk(props.getProperty("build-jdk", ""))
+                .setBuiltBy(props.getProperty("built-by", ""))
+                .setCreatedBy(props.getProperty("created-by", ""))
+                .setGitSha(props.getProperty("git-sha", ""))
+                .setScmUrl(props.getProperty("scm-url", ""))
+                .setTimestamp(props.getProperty("timestamp", ""))
+                .setVersion(props.getProperty("version", ""))
+                .build();
     }
 
 }

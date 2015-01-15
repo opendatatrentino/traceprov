@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov;
+package eu.trentorise.opendata.commons;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -33,7 +31,7 @@ import org.immutables.value.Value;
  * class to have bean style getters. The generated builder will have bean style
  * setters. Also, generated immutable objects will all have an empty object
  * retrievable with a method of the form ImmutableMyClass.of(). Immutable class
- * will have same visibility as abstract one.
+ * will have same visibility as the abstract one.
  *
  * NOTE: Annotated abstract class name MUST begin with 'Abstract'.
  * 
@@ -50,10 +48,3 @@ import org.immutables.value.Value;
 public @interface BuilderStyle {
 }
 
-
-
-@Value.Immutable
-@BuilderStyle
-abstract class AbstractSomeTestClass {
-
-}

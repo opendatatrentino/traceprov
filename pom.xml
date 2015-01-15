@@ -50,12 +50,15 @@
     </licenses>
 
     <properties>
+        <scmUrl>https://github.com/opendatatrentino/traceprov/traceprov</scmUrl>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <traceprov.findbugs.version>
             [2.0.1, 3.0.0]
         </traceprov.findbugs.version>
         <netbeans.hint.license>apache20</netbeans.hint.license>
+        
     </properties>
     
 
@@ -174,7 +177,42 @@
                     </execution>
                 </executions>
             </plugin>                                
-                                                                        
+                       
+                       
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.3</version>                
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                </configuration>
+                                   
+            </plugin>                         
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.5</version>        
+                <configuration>                    
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>                            
+                        </manifest>
+                        <manifestEntries>
+                            <gitSha>${buildNumber}</gitSha>
+                            <timestamp>${timestamp}</timestamp>
+                        </manifestEntries>
+                    </archive>                    
+                </configuration>        
+            </plugin>
+                                                                                                                                                                          
         </plugins>      
 
         <pluginManagement>
@@ -191,18 +229,28 @@
                 </plugin>
             </plugins>
         </pluginManagement>      
+              
                   
+        <resources>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <includes>
+                    <include>META-INF/odt-commons-build.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>                          
     </build>
 
     <scm>
-        <url>git@github.com:opendatatrentino/traceprov.git</url>
-        <connection>scm:git:git@github.com:opendatatrentino/traceprov.git</connection>
-        <developerConnection>scm:git:git@github.com:opendatatrentino/traceprov.git</developerConnection>
+        <url>${scmUrl}</url>
+        <connection>scm:git:${scmUrl}.git</connection>
+        <developerConnection>scm:git:${scmUrl}.git</developerConnection>        
     </scm>
     
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/opendatatrentino/traceprov/issues</url>
+        <url>${scmUrl}/issues</url>
     </issueManagement>    
     
     <description>Java library to record provenance of datasets </description>
@@ -239,7 +287,7 @@
             <artifactId>guava</artifactId>
             <version>[12.0, 18.0]</version>
         </dependency>        
-        
+                                
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>

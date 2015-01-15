@@ -16,8 +16,8 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 import com.google.common.base.Optional;
-import eu.trentorise.opendata.traceprov.BuilderStyle;
-import eu.trentorise.opendata.traceprov.Dict;
+import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.Dict;
 import java.util.List;
 import java.util.Locale;
 import org.immutables.value.Value;

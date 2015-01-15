@@ -1,5 +1,5 @@
-/* 
- * Copyright 2015 Trento Rise  (trentorise.eu) 
+/*
+ * Copyright 2015 Trento Rise  (trentorise.eu)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,48 +13,70 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
-
-import eu.trentorise.opendata.commons.Dict;
+package eu.trentorise.opendata.commons;
 
 import eu.trentorise.opendata.commons.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
- * Models a minimal FOAF Agent: http://xmlns.com/foaf/spec/
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStyle
-public abstract class AbstractFoafAgent {
+public abstract class AbstractBuildInfo {
 
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";
-    
-    
     /**
-     * Returns the uri of the agent.
+     * i.e. 1.0
      */
     @Value.Default
-    public String getUri() {
+    public String getVersion() {
+        return "";
+    }
+
+
+    /**
+     * i.e. David Leoni
+     */
+    @Value.Default
+    public String getBuiltBy() {
         return "";
     }
 
     /**
-     * http://xmlns.com/foaf/0.1/name
+     * i.e. JDK 1.7.0_17
      */
-    @Value.Parameter
     @Value.Default
-    public Dict getName(){
-        return Dict.of();
-    };
+    public String getBuildJdk() {
+        return "";
+    }
 
     /**
-     * Returns the mail box http://xmlns.com/foaf/0.1/mbox
+     * i.e. Apache Maven 3.0.5
      */
     @Value.Default
-    @Value.Parameter
-    public String getMbox() {
+    public String getCreatedBy() {
+        return "";
+    }
+
+
+    /**
+     * i.e. git commit SHA, i.e. bdd5c2c75e6438da0d23ac8f2368f9e9cacf2087
+     */
+    @Value.Default
+    public String getGitSha() {
+        return "";
+    }
+
+    /* i.e. https://github.com/opendatatrentino/traceprov */
+    @Value.Default
+    public String getScmUrl() {
+        return "";
+    }    
+    
+    /* i.e. 1421246376174 */
+    @Value.Default
+    public String getTimestamp() {
         return "";
     }
 
