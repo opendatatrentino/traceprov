@@ -21,6 +21,7 @@ import eu.trentorise.opendata.traceprov.TraceProvConfig;
 import java.util.Locale;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -86,6 +87,14 @@ public class DictTest {
     public void testNonEmpty(){
         Dict dict = Dict.builder().putAll(Locale.FRENCH, "", "a").build();
         assertEquals("a", dict.nonEmptyString(Locale.FRENCH));        
+    }
+    
+    @Test
+    public void testWith(){
+        assertEquals(Dict.of("a").with("b"), Dict.of("a","b"));
+        assertNotEquals(Dict.of("b").with("a"), Dict.of("a","b"));
+        assertEquals(Dict.of("a").with(Locale.ITALIAN, "b"), Dict.of(Locale.ITALIAN, "b").with("a"));
+        assertNotEquals(Dict.of(Locale.ENGLISH, "a").with(Locale.ITALIAN, "b"), Dict.of(Locale.ITALIAN, "b").with("a"));
     }
     
     

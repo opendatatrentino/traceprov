@@ -97,7 +97,7 @@ public final class Dict {
         return ret;
     }
 
-    private Dict(Builder dictBuilder) {       
+    private Dict(Builder dictBuilder) {
         this._strings = dictBuilder.stringsBuilder.build();
     }
 
@@ -108,7 +108,7 @@ public final class Dict {
      * @return the strings in the given locale if present. If no string is
      * present an empty list is returned.
      *
-     * @see #string(java.util.Locale) 
+     * @see #string(java.util.Locale)
      */
     public ImmutableList<String> strings(Locale locale) {
         Preconditions.checkNotNull(locale);
@@ -238,6 +238,54 @@ public final class Dict {
     }
 
     /**
+     *
+     * Returns a new dictionary with provided array of strings with the same
+     * locale.
+     *
+     * @param locale the locale of the strings
+     * @param strings the strings in the given locale
+     *
+     */
+    public Dict with(Locale locale, String... strings) {
+        return Dict.builder().putAll(this).putAll(locale, strings).build();
+    }
+    
+    /**
+     *
+     * Returns a new dictionary with provided array of strings with the same
+     * locale unknown locale {@link Locale#ROOT}.
+     *
+     * @param strings the strings in the given locale
+     *
+     */
+    public Dict with(String... strings) {
+        return Dict.builder().putAll(this).putAll(Locale.ROOT, strings).build();
+    }    
+
+    /**
+     *
+     * Returns a new dictionary with provided array of strings with the same
+     * locale.
+     *
+     * @param locale the locale of the strings
+     * @param strings the strings in the given locale
+     *
+     */
+    public Dict with(Locale locale, Iterable<String> strings) {
+        return Dict.builder().putAll(this).putAll(locale, strings).build();
+    }
+    
+    /**
+     *
+     * Returns a new dictionary which is the result of merging this dictionary with the provided one..
+     * New locales and strings follow any existing locales and strings.
+     * 
+     */
+    public Dict with(Dict dict) {
+        return Dict.builder().putAll(this).putAll(dict).build();
+    }    
+
+    /**
      * Returns a string with msg padded with white spaces from the left until
      * maxLength is reached
      *
@@ -273,7 +321,8 @@ public final class Dict {
         private ImmutableListMultimap.Builder<Locale, String> stringsBuilder = ImmutableListMultimap.<Locale, String>builder();
 
         /**
-         * Stores an array of values with the same locale in the built multimap.
+         * Stores an array of values with the same locale in the built
+         * dictionary.
          *
          * @param locale the locale of the string
          * @param strings the string in the given locale
@@ -312,8 +361,8 @@ public final class Dict {
         }
 
         /**
-         * Stores another dictionary's entries in the built dictionary. New keys
-         * and values follow any existing keys and values.
+         * Stores another dictionary's entries in the built dictionary. New
+         * locales and strings follow any existing locales and strings.
          */
         public Builder putAll(Dict dict) {
             stringsBuilder.putAll(dict._strings);
