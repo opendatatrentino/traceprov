@@ -7,8 +7,8 @@
 
 target/
 
-/src/test/resources/META-INF/
-!/src/test/resources/META-INF/README.txt
+/src/test/resources/META-INF/*
+!src/test/resources/META-INF/README.txt
 
 ##### INTELLIJ
 
