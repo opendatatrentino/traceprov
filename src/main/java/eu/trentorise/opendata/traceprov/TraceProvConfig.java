@@ -26,7 +26,7 @@ public class TraceProvConfig extends OdtConfig {
     private static TraceProvConfig INSTANCE = new TraceProvConfig();
 
     private TraceProvConfig(){
-        super();
+        super();        
     }
     
     public static TraceProvConfig of() {

@@ -31,6 +31,7 @@ abstract class AbstractColumnRef {
      * Column index starting from zero
      */
     @Value.Default
+    @Value.Parameter
     public int getIndex() {
         return 0;
     }

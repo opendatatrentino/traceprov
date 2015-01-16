@@ -239,7 +239,7 @@
                 </includes>
                 <filtering>true</filtering>
             </resource>
-        </resources>                          
+        </resources>    
     </build>
 
     <scm>

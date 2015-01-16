@@ -35,6 +35,19 @@ public class DictTest {
     public static void setUpClass() {        
         TraceProvConfig.of().loadLogConfig();
     }    
+
+    @Test
+    public void testDict_0() {
+        Dict dict = Dict.of();
+        assertTrue(dict.locales().isEmpty());        
+    }
+    
+    
+      @Test
+    public void testDict_1() {        
+        Dict dict = Dict.of("a");
+        assertEquals(dict.string(Locale.ROOT), "a");        
+    }
     
     @Test
     public void testDict() {

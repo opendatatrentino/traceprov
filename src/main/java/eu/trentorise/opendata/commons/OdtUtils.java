@@ -30,10 +30,7 @@ import java.util.logging.Logger;
 public class OdtUtils {
 
     private static final Logger logger = Logger.getLogger(OdtUtils.class.getName());
-
-    // todo put better url
-    public static final String TRACEPROV_PREFIX = "https://github.com/opendatatrentino/traceprov#";
-
+   
     public static final String BUILD_PROPERTIES_PATH = "META-INF/odt-commons-build.properties";
 
     /**

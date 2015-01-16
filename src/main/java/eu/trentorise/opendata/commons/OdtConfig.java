@@ -17,6 +17,7 @@ package eu.trentorise.opendata.commons;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -33,19 +34,19 @@ public abstract class OdtConfig {
 
     public static String BUILD_PROPERTIES_PATH = "META-INF/odt-commons-build.properties";
     
-    private Logger logger;
+    protected Logger logger;
 
-    private boolean isLoggerInitialized = false;
+    protected boolean loggingConfigured;
 
     @Nullable
     private BuildInfo buildInfo;
 
     protected OdtConfig() {
+        loggingConfigured = false;
         logger = Logger.getLogger(this.getClass().getName());    
     }
 
-    
-    
+        
     /**
      * Returns build information. In case it is not available, returns
      * {@link BuildInfo#of()}.
@@ -70,21 +71,29 @@ public abstract class OdtConfig {
      * API instead.
      */
     public void loadLogConfig() {
-        if (isLoggerInitialized) {
-            logger.info("Trying to reload twice logger properties!");
+        if (loggingConfigured) {
+            logger.finest("Trying to reload twice logger properties!");
         } else {
             System.out.println(this.getClass().getSimpleName() + ": Going to initialize logging...");
-            final InputStream inputStream = this.getClass().getResourceAsStream("/" + LOG_PROPERTIES_PATH);
+            
+            URL url = getClass().getResource("/" + LOG_PROPERTIES_PATH);
+                        
             try {
-                if (inputStream == null) {
+                if (url == null){                                                        
                     throw new IOException("ERROR! COULDN'T FIND LOG CONFIGURATION FILE: " + LOG_PROPERTIES_PATH + ". To see debug logging messages during testing copy src/test/resources/META-INF-TEMPLATE content into src/test/resources/META-INF");
                 }
+                String path = url.toURI().getPath();         
+                InputStream inputStream = this.getClass().getResourceAsStream("/" + LOG_PROPERTIES_PATH);
                 LogManager.getLogManager().readConfiguration(inputStream);
-
-                logger.info("Configured logger with file: " + LOG_PROPERTIES_PATH);
-                isLoggerInitialized = true;
-            }
-            catch (Exception e) {
+                
+                // IMPORTANT!!!! Due to a JDK bug, we need to create another useless logger to refresh actually ALL loggers (sic) . See https://www.java.net/forum/topic/jdk/java-se-snapshots-project-feedback/jdk-70-doesnt-refresh-handler-specific-logger                
+                Logger loggerWorkaround  = Logger.getLogger(this.getClass().getName() + ".workaround"); 
+                
+                loggingConfigured = true;
+                
+                logger.log(Level.INFO, "Configured logging with file: {0}", path);              
+                
+            } catch (Exception e) {
                 logger.log(Level.SEVERE, "ERROR - COULDN'T LOAD LOGGING PROPERTIES!", e);
             }
         }

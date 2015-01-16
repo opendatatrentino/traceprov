@@ -34,6 +34,7 @@ abstract class AbstractDcatRef {
      * {@link AbstractDcatDataset#CLASS_URI})
      */
     @Value.Default
+    @Value.Parameter
     public String getClassUri() {
         return "";
     }
@@ -44,6 +45,7 @@ abstract class AbstractDcatRef {
      * Dublin core vocabulary attribute
      */
     @Value.Default
+    @Value.Parameter
     public String getPropertyUri() {
         return "";
     }
