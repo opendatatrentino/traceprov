@@ -8,7 +8,8 @@
 target/
 
 /conf/*
-!conf/README.txt
+!/conf/README.txt
+
 
 ##### INTELLIJ
 
