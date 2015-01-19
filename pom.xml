@@ -22,7 +22,7 @@
 
     <groupId>eu.trentorise.opendata</groupId>
     <artifactId>traceprov</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>TraceProv</name>
@@ -49,7 +49,7 @@
     </licenses>
 
     <properties>
-        <scmUrl>https://github.com/opendatatrentino/traceprov/traceprov</scmUrl>
+        <scmUrl>https://github.com/opendatatrentino/traceprov</scmUrl>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
