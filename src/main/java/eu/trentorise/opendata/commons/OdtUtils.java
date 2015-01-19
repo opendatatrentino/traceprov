@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class OdtUtils {
 
-    private static final Logger logger = Logger.getLogger(OdtUtils.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(OdtUtils.class.getName());
    
     public static final String BUILD_PROPERTIES_PATH = "odt.commons.build.properties";
 
@@ -72,7 +72,7 @@ public class OdtUtils {
     public static Locale languageTagToLocale(String str) {
 
         if (str == null) {
-            logger.warning("Found null locale, returning Locale.ROOT");
+            LOGGER.warning("Found null locale, returning Locale.ROOT");
             return Locale.ROOT;
         }
         int len = str.length();
@@ -116,7 +116,7 @@ public class OdtUtils {
      */
     public static String localeToLanguageTag(Locale locale) {
         if (locale == null) {
-            logger.warning("Found null locale, returning empty string (which corresponds to Locale.ROOT)");
+            LOGGER.warning("Found null locale, returning empty string (which corresponds to Locale.ROOT)");
             return "";
         }
         return locale.getLanguage();

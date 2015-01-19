@@ -31,15 +31,15 @@ import javax.annotation.Nullable;
  */
 public abstract class OdtConfig {
 
-    public static String LOG_PROPERTIES_PATH = "odt.commons.logging.properties";
+    public static final String LOG_PROPERTIES_PATH = "odt.commons.logging.properties";
 
-    public static String LOG_PROPERTIES_CONF_PATH = "conf/" + LOG_PROPERTIES_PATH;
+    public static final String LOG_PROPERTIES_CONF_PATH = "conf/" + LOG_PROPERTIES_PATH;
 
-    public static String BUILD_PROPERTIES_PATH = "odt.commons.build.properties";
+    public static final String BUILD_PROPERTIES_PATH = "odt.commons.build.properties";
 
-    protected Logger logger;
+    private Logger logger;
 
-    protected boolean loggingConfigured;
+    private boolean loggingConfigured;
 
     @Nullable
     private BuildInfo buildInfo;
@@ -102,7 +102,7 @@ public abstract class OdtConfig {
                     }                    
                     inputStream = this.getClass().getResourceAsStream("/" + LOG_PROPERTIES_PATH);
                     path = url.toURI().getPath();
-                    configured = this.getClass().getSimpleName() + ": configured with " + path;
+                    configured = this.getClass().getSimpleName() + ": configured logging with " + path;
                     
                 }
                 LogManager.getLogManager().readConfiguration(inputStream);
@@ -110,7 +110,7 @@ public abstract class OdtConfig {
                 // IMPORTANT!!!! Due to a JDK bug, we need to create another useless logger to refresh actually ALL loggers (sic) . See https://www.java.net/forum/topic/jdk/java-se-snapshots-project-feedback/jdk-70-doesnt-refresh-handler-specific-logger                
                 Logger loggerWorkaround = Logger.getLogger(this.getClass().getName() + ".workaround");
 
-                loggingConfigured = true;
+                setLoggingConfigured(true);
 
                 System.out.println(configured);
 
@@ -121,6 +121,20 @@ public abstract class OdtConfig {
 
         }
     }
+
+    public boolean isLoggingConfigured() {
+        return loggingConfigured;
+    }
+
+    protected void setLoggingConfigured(boolean loggingConfigured) {
+        this.loggingConfigured = loggingConfigured;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+    
+    
 }
 
 

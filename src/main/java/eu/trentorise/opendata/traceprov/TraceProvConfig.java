@@ -21,9 +21,9 @@ import eu.trentorise.opendata.commons.OdtConfig;
  *
  * @author David Leoni
  */
-public class TraceProvConfig extends OdtConfig {
+public final class TraceProvConfig extends OdtConfig {
 
-    private static TraceProvConfig INSTANCE = new TraceProvConfig();
+    private static final TraceProvConfig INSTANCE = new TraceProvConfig();
 
     private TraceProvConfig(){
         super();        

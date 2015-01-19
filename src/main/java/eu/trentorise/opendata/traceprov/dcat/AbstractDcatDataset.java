@@ -19,7 +19,6 @@ import com.google.common.base.Optional;
 import eu.trentorise.opendata.commons.BuilderStyle;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
