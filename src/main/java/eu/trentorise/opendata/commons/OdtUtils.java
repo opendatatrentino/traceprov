@@ -31,7 +31,7 @@ public class OdtUtils {
 
     private static final Logger logger = Logger.getLogger(OdtUtils.class.getName());
    
-    public static final String BUILD_PROPERTIES_PATH = "META-INF/odt-commons-build.properties";
+    public static final String BUILD_PROPERTIES_PATH = "odt.commons.build.properties";
 
     /**
      * Java 7 has Locale.forLanguageTag(format), this is the substitute for Java
@@ -189,13 +189,13 @@ public class OdtUtils {
         InputStream stream = clazz.getResourceAsStream("/" + BUILD_PROPERTIES_PATH);
         Properties props = new Properties();
         if (stream == null) {
-            throw new NotFoundException("Couldn't find " + BUILD_PROPERTIES_PATH + " file in package containing class " + clazz.getSimpleName() + "  !!");
+            throw new NotFoundException("Couldn't find " + BUILD_PROPERTIES_PATH + " file in resources of package containing class " + clazz.getSimpleName() + "  !!");
         } else {
             try {
                 props.load(stream);
             }
             catch (IOException ex) {
-                throw new TraceProvException("Couldn't load " + BUILD_PROPERTIES_PATH + " file in package containing class " + clazz.getSimpleName() + "  !!", ex);
+                throw new TraceProvException("Couldn't load " + BUILD_PROPERTIES_PATH + " file in resources of package containing class " + clazz.getSimpleName() + "  !!", ex);
             }
         }
         return BuildInfo.builder()
