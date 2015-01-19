@@ -40,10 +40,10 @@ public final class Dict {
 
     private static final Dict INSTANCE = new Dict();
 
-    private ImmutableListMultimap<Locale, String> _strings;
+    private ImmutableListMultimap<Locale, String> strings;
 
     private Dict() {
-        _strings = ImmutableListMultimap.of();
+        strings = ImmutableListMultimap.of();
     }
 
     /**
@@ -61,7 +61,7 @@ public final class Dict {
      */
     public static Dict of(Locale locale, String... strings) {
         Dict ret = new Dict();
-        ret._strings = ImmutableListMultimap.<Locale, String>builder().putAll(locale, strings).build();
+        ret.strings = ImmutableListMultimap.<Locale, String>builder().putAll(locale, strings).build();
         return ret;
     }
 
@@ -93,12 +93,12 @@ public final class Dict {
      */
     public static Dict of(Locale locale, List<String> strings) {
         Dict ret = new Dict();
-        ret._strings = ImmutableListMultimap.<Locale, String>builder().putAll(locale, strings).build();
+        ret.strings = ImmutableListMultimap.<Locale, String>builder().putAll(locale, strings).build();
         return ret;
     }
 
     private Dict(Builder dictBuilder) {
-        this._strings = dictBuilder.stringsBuilder.build();
+        this.strings = dictBuilder.stringsBuilder.build();
     }
 
     /**
@@ -112,8 +112,8 @@ public final class Dict {
      */
     public ImmutableList<String> strings(Locale locale) {
         Preconditions.checkNotNull(locale);
-        if (_strings.containsKey(locale)) {
-            return _strings.get(locale);
+        if (strings.containsKey(locale)) {
+            return strings.get(locale);
         } else {
             return ImmutableList.of();
         }
@@ -155,7 +155,7 @@ public final class Dict {
      * @return the available locales
      */
     public ImmutableSet<Locale> locales() {
-        return _strings.keySet();
+        return strings.keySet();
     }
 
     /**
@@ -171,7 +171,7 @@ public final class Dict {
         Preconditions.checkNotNull(text);
         for (Locale loc : locales()) {
             String lowText = text.toLowerCase(loc);
-            for (String t : _strings.get(loc)) {
+            for (String t : strings.get(loc)) {
                 if (t.toLowerCase(loc).contains(lowText)) {
                     return true;
                 }
@@ -186,13 +186,13 @@ public final class Dict {
      */
     public String nonEmptyString(Locale locale) {
         Preconditions.checkNotNull(locale);
-        if (_strings.containsKey(locale)) {
+        if (strings.containsKey(locale)) {
             List<String> as = strings(locale);
 
             if (as.isEmpty()) {
                 return "";
             } else {
-                for (String s : _strings.get(locale)) {
+                for (String s : strings.get(locale)) {
                     if (!s.isEmpty()) {
                         return s;
                     }
@@ -365,7 +365,7 @@ public final class Dict {
          * locales and strings follow any existing locales and strings.
          */
         public Builder putAll(Dict dict) {
-            stringsBuilder.putAll(dict._strings);
+            stringsBuilder.putAll(dict.strings);
             return this;
         }
     }
@@ -373,7 +373,7 @@ public final class Dict {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + (this._strings != null ? this._strings.hashCode() : 0);
+        hash = 53 * hash + (this.strings != null ? this.strings.hashCode() : 0);
         return hash;
     }
 
@@ -386,7 +386,7 @@ public final class Dict {
             return false;
         }
         final Dict other = (Dict) obj;
-        if (this._strings != other._strings && (this._strings == null || !this._strings.equals(other._strings))) {
+        if (this.strings != other.strings && (this.strings == null || !this.strings.equals(other.strings))) {
             return false;
         }
         return true;
@@ -409,11 +409,11 @@ public final class Dict {
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
         sb.append("{\n");
-        for (Locale loc : _strings.keySet()) {
+        for (Locale loc : strings.keySet()) {
             sb.append(padLeft(loc.toString(), 10))
                     .append(": [");
             boolean first = true;
-            for (String t : _strings.get(loc)) {
+            for (String t : strings.get(loc)) {
                 if (first) {
                     first = false;
                 } else {
