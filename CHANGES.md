@@ -1,8 +1,8 @@
 
 
-*** 0.2.0  -  19 January 2015
+##### 0.2.0  -  19 January 2015
 
-Implementated :
+Implemented :
 - DCAT classes
 - provenance references
 - odt commons (logging, config, Dict, ...)
