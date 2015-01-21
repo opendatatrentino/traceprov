@@ -15,12 +15,14 @@
  */
 package eu.trentorise.opendata.commons;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import eu.trentorise.opendata.traceprov.TraceProvException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Logger;
+import javax.annotation.Nullable;
 
 /**
  * Utility funtions shared by Open Data in Trentino projects.
@@ -30,7 +32,7 @@ import java.util.logging.Logger;
 public class OdtUtils {
 
     private static final Logger LOGGER = Logger.getLogger(OdtUtils.class.getName());
-   
+
     public static final String BUILD_PROPERTIES_PATH = "odt.commons.build.properties";
 
     /**
@@ -150,17 +152,34 @@ public class OdtUtils {
     }
 
     /**
+     *
      * Checks if provided string is non null and non empty . If not, throws
-     * IllegalArgumentException
+     * NullPointerException or IllegalArgumentException
+     *
+     * @param errorMessage the exception message to use if the check fails; will
+     * be converted to a string using String.valueOf(Object)
+     */
+    public static void checkNotEmpty(String string, @Nullable String errorMessage) {
+        checkNotNull(string, errorMessage);
+        if (string.length() == 0) {
+            throw new IllegalArgumentException(String.valueOf(errorMessage));
+        }
+    }
+
+    /**
+     * @deprecated use {@link #checkNotEmpty} instead Checks if provided string
+     * is non null and non empty . If not, throws IllegalArgumentException
      */
     public static void checkNonEmpty(String string, String stringName) {
-        checkNonNull(string, stringName);
+        checkNotNull(string);
         if (string.length() == 0) {
             throw new IllegalArgumentException("Parameter " + stringName + " has zero length!");
         }
     }
 
     /**
+     * @deprecated Use
+     *  com.​google.​common.​base.​Preconditions#checkNotNull instead
      * Checks if provided object is non null. If not, throws
      * IllegalArgumentException
      */
@@ -172,6 +191,15 @@ public class OdtUtils {
 
     /**
      * Checks if provided string is non null and non empty .
+     */
+    public static boolean isNotEmpty(String string) {
+        return string == null
+                || string.length() == 0;
+    }
+
+    /**
+     * @deprecated use {@link #isNotEmpty(java.lang.String) } instead. Checks if
+     * provided string is non null and non empty .
      */
     public static boolean isNonEmpty(String string) {
         return string == null

@@ -40,9 +40,9 @@ public class UtilsTest {
     @Test
     public void testChecker(){
         try {
-            OdtUtils.checkNonEmpty(null, "my string");
+            OdtUtils.checkNotEmpty(null, "my string");
             Assert.fail();
-        } catch (IllegalArgumentException ex){
+        } catch (NullPointerException ex){
             
         }
         try {
@@ -52,14 +52,6 @@ public class UtilsTest {
             
         }
                 
-        OdtUtils.checkNonNull("", "my obj");
-        
-        try {
-            OdtUtils.checkNonNull(null, "my obj");
-            Assert.fail();
-        } catch (IllegalArgumentException ex){
-            
-        }
     }
     
     @Test
