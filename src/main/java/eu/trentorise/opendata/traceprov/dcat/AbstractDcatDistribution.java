@@ -127,10 +127,10 @@ public abstract class AbstractDcatDistribution {
 
     /**
      * Date of formal issuance (e.g., publication) of the distribution. This
-     * property should be set using the first known date of issuance.
-     *
-     * Note DCAT standard requires dates in string format to be
-     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+ property should be set using the first known date of issuance.
+
+ Note DCAT standard requires dates in string format to be
+ <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
      * @see #getModified()
@@ -203,7 +203,7 @@ public abstract class AbstractDcatDistribution {
      * modified.
      *
      * Note Dcat standard requires dates in string format to be
-     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+ <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
      * @see AbstractDcatDataset#getModified()

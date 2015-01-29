@@ -73,10 +73,10 @@ public abstract class AbstractDcatCatalogRecord {
      * The date of listing the corresponding dataset in the catalog, as
      * specified by <a href="http://purl.org/dc/terms/issued">dct:issued</a>.
      * This indicates the date of listing the dataset in the catalog and not the
-     * publication date of the dataset itself.
-     *
-     * Note DCAT standard requires dates in string format to be
-     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+ publication date of the dataset itself.
+
+ Note DCAT standard requires dates in string format to be
+ <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
      * @see AbstractDcatDataset#getIssued()

@@ -65,9 +65,9 @@ public abstract class AbstractDcatCatalog {
     /**
      * Date of formal issuance (e.g., publication) of the catalog, as specified
      * by <a href="http://purl.org/dc/terms/issued">dct:issued</a>
-     *
-     * Note DCAT standard requires dates in string format to be
-     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+
+ Note DCAT standard requires dates in string format to be
+ <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
      * @see AbstractDcatDataset#getIssued()
@@ -110,7 +110,7 @@ public abstract class AbstractDcatCatalog {
      * Must be in a
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11" . Specified by
-     * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
+ <a href="http://purl.org/dc/terms/modified">dct:modified</a>
      */
     public abstract Optional<DateTime> getModified();
 

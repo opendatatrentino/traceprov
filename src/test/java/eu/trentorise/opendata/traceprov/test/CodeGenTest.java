@@ -41,7 +41,7 @@ public class CodeGenTest {
 
         assertEquals("", dataset.getUri());
 
-        assertEquals("a", DcatDataset.builder().setUri("a").build().getUri());
+        assertEquals("a", DcatDataset.builder().withUri("a").build().getUri());
 
         assertEquals("b", dataset.withUri("b").getUri());
         
@@ -51,8 +51,8 @@ public class CodeGenTest {
     public void dcataDatasetUsageExample() {
         DcatDataset dataset = DcatDataset
                 .builder()                
-                .setTitle(Dict.of(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013"))
-                .setLandingPage("http://dati.trentino.it/dataset/impianti-di-risalita-vivifiemme-2013")
+                .withTitle(Dict.of(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013"))
+                .withLandingPage("http://dati.trentino.it/dataset/impianti-di-risalita-vivifiemme-2013")
                 .build();
     }
 

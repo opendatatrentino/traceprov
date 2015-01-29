@@ -22,11 +22,11 @@ package eu.trentorise.opendata.traceprov;
 public class TraceProvException extends RuntimeException {
 
     public TraceProvException(String msg) {
-        super("TraceProv: " + msg);
+        super( msg);
     }
 
     public TraceProvException(String msg, Throwable ex) {
-        super("TraceProv: " + msg, ex);
+        super(msg, ex);
     }
 
 }

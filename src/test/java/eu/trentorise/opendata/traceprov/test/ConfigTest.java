@@ -19,9 +19,6 @@ package eu.trentorise.opendata.traceprov.test;
 import eu.trentorise.opendata.commons.BuildInfo;
 import eu.trentorise.opendata.commons.OdtUtils;
 import eu.trentorise.opendata.traceprov.TraceProvConfig;
-import java.util.Locale;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,40 +27,17 @@ import org.junit.Test;
  *
  * @author David Leoni
  */
-public class UtilsTest {
+public class ConfigTest {
     
     @BeforeClass
     public static void setUpClass() {        
         TraceProvConfig.of().loadLogConfig();
     }    
     
-    @Test
-    public void testChecker(){
-        try {
-            OdtUtils.checkNotEmpty(null, "my string");
-            Assert.fail();
-        } catch (NullPointerException ex){
-            
-        }
-        try {
-            OdtUtils.checkNonEmpty("", "my string");
-            Assert.fail();
-        } catch (IllegalArgumentException ex){
-            
-        }
-                
-    }
-    
-    @Test
-    public void testLanguageTag(){
-        // we want gracious null handling
-        assertEquals(Locale.ROOT, OdtUtils.languageTagToLocale(null));
-        assertEquals("", OdtUtils.localeToLanguageTag(null));
-    }
     
     @Test
     public void testBuildInfo(){
-        BuildInfo buildInfo = OdtUtils.readBuildInfo(OdtUtils.class);
+        BuildInfo buildInfo = OdtUtils.readBuildInfo(TraceProvConfig.class);
         assertTrue(buildInfo.getScmUrl().length() > 0);
         assertTrue(buildInfo.getVersion().length() > 0);
     }
