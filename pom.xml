@@ -283,8 +283,8 @@
     <dependencies>
         
         <dependency>
-            <groupId>eu.trentorise.opendata</groupId>
-            <artifactId>commons</artifactId>
+            <groupId>eu.trentorise.opendata.commons</groupId>
+            <artifactId>odt-commons</artifactId>
             <version>0.3.0-SNAPSHOT</version>
         </dependency>  
         
