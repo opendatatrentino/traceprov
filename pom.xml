@@ -46,6 +46,7 @@
     </licenses>
 
     <properties>
+        <scmUrl>https://github.com/opendatatrentino/traceprov</scmUrl>        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -166,7 +167,7 @@
                     <configuration>
                         <mavenExecutorId>forked-path</mavenExecutorId>
                         <useReleaseProfile>false</useReleaseProfile>
-                        <arguments>${arguments} -Psonatype-oss-release</arguments>
+                        <arguments>${arguments} -Psonatype-oss-release -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true</arguments>                        
                     </configuration>
                 </plugin>
             </plugins>
@@ -175,15 +176,16 @@
     </build>
 
     <scm>
-        <url>git@github.com:opendatatrentino/traceprov.git</url>
-        <connection>scm:git:git@github.com:opendatatrentino/traceprov.git</connection>
-        <developerConnection>scm:git:git@github.com:opendatatrentino/traceprov.git</developerConnection>
+        <url>${scmUrl}</url>
+        <connection>scm:git:${scmUrl}.git</connection>
+        <developerConnection>scm:git:${scmUrl}.git</developerConnection>        
+        <tag>HEAD</tag>
     </scm>
     
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/opendatatrentino/traceprov/issues</url>
-    </issueManagement>    
+        <url>${scmUrl}/issues</url>
+    </issueManagement>      
     
     <description>Java library to record provenance of datasets </description>
 
