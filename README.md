@@ -11,7 +11,7 @@ Java library for provenance management.
 
 **Project status**: Released v0.2.0 on Maven Central
 
-**Usage**: See [project website](http://opendatatrentino.github.io/odt-commons/)
+**Usage**: See [project website](http://opendatatrentino.github.io/traceprov/)
 
 **Roadmap**: Developing 0.3.0, see [project milestones](../../milestones)
 
