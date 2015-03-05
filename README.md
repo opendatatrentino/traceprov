@@ -15,12 +15,12 @@ Java library for provenance management:
 
 **Contributing**: See [the wiki](../../wiki)
 
-#### Projects using this API
+**Projects using this API**
 
 * [Jackan](https://github.com/opendatatrentino/jackan): client for accessing opendata catalogs
 * [OpenDataRise](https://github.com/opendatatrentino/OpenDataRise): power tool to cleanse and semantify open data, based on OpenRefine
 
-#### Credits
+**Credits**
 
 * David Leoni - DISI at University of Trento - david.leoni@unitn.it
 * Moaz Reyad - DISI at University of Trento - moaz.reyad@unitn.it
