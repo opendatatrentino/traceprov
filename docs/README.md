@@ -14,11 +14,11 @@ TraceProv is available on Maven Central. To use it, put this in the dependencies
 </dependency>   
 ```
 
-In case updates are available, version numbers follow [semantic versioning](http://semver.org/) rules.
+In case updates are available, version numbers follow <a href="http://semver.org/" target="_blank">semantic versioning</a> rules.
 
 #### The API
 
-Most objects in TraceProv are immutable, and make heavy use of <a href="https://code.google.com/p/guava-libraries/wiki/ImmutableCollectionsExplained" target="_blank"> Guava immutable collections </a>. In TraceProv, wherever you see a class called 'AbstractSomething', there will always be an immutable class 'Something' implementing it. 
+Most objects in TraceProv are immutable, and make heavy use of <a href="https://code.google.com/p/guava-libraries/wiki/ImmutableCollectionsExplained" target="_blank"> Guava immutable collections </a>. In TraceProv, wherever you see a class called `AbstractSomething`, there will always be an immutable class `Something` implementing it. 
 
 ##### Building objects
 
