@@ -1,8 +1,4 @@
-### Introduction
-
-TraceProv is a Java library to model provenance of data from DCAT catalogs, which are represented using <a href="http://www.w3.org/TR/vocab-dcat/" target="_blank">DCAT W3C vocabulary</a>. At present also allows to reference data in sources having table-like formats such as CSV. 
-
-### Usage
+# Usage
 
 TraceProv is available on Maven Central. To use it, put this in the dependencies section of your _pom.xml_:
 
