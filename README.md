@@ -7,7 +7,7 @@ Java interface for provenance management.
 
 **Roadmap**: Developing 0.3.0, see [project issues](https://github.com/opendatatrentino/traceprov/issues)
 
-**Usage**: see [the wiki](https://github.com/opendatatrentino/traceprov/wiki)
+**Usage**: Project is not published yet, so [usage docs](docs) are subject to change. 
 
 **License**: business-friendly [Apache License v2.0](https://github.com/opendatatrentino/traceprov/blob/master/LICENSE.txt)
 
