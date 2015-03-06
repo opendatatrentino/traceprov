@@ -7,7 +7,7 @@ Java library for provenance management:
  * Allows references to dataset elements such as cells, columns, etc
  * All classes are immutable
 
-**Usage**: See [project website](http://opendatatrentino.github.io/traceprov/)
+**Usage**: See [docs](docs)
 
 **Roadmap**: See [project milestones](../../milestones)
 
@@ -15,9 +15,11 @@ Java library for provenance management:
 
 **Contributing**: See [the wiki](../../wiki)
 
+<br/>
+
 **Projects using this API**
 
-* [Jackan](https://github.com/opendatatrentino/jackan): client for accessing opendata catalogs
+* [Jackan](https://opendatatrentino.github.com/jackan): client for accessing opendata catalogs
 * [OpenDataRise](https://github.com/opendatatrentino/OpenDataRise): power tool to cleanse and semantify open data, based on OpenRefine
 
 **Credits**

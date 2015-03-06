@@ -1,3 +1,7 @@
+<p class="jedoc-to-strip">
+WARNING: WORK IN PROGRESS - THIS IS ONLY A TEMPLATE FOR THE DOCUMENTATION. <br/>
+RELEASE DOCS ARE ON THE <a href="http://opendatatrentino.github.io/traceprov/" target="_blank">PROJECT WEBSITE</a>
+</p>
 
 ### Maven
 
