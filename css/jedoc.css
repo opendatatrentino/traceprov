@@ -7,9 +7,10 @@ body {
     background-position: center;            
     background-attachment: fixed;
     background-size: cover;
+    font-family: Arial, Georgia, Serif;
 }
 
-#jadoc-wrapper {
+#jedoc-wrapper {
     margin: 0 auto 0 auto;
     width:851px;
     min-height:100%;
@@ -17,7 +18,7 @@ body {
     background-color:transparent;
 }
 
-#jadoc-header {
+#jedoc-header {
     position: fixed;
     width: 851px; 
     height: 100px;
@@ -27,7 +28,7 @@ body {
 }
 
 
-#jadoc-content {
+#jedoc-content {
     position:absolute;
     top:100px;
     margin-left:151px;
@@ -37,11 +38,11 @@ body {
     min-height:100%;
 }
 
-#jadoc-internal-content{
+#jedoc-internal-content{
     padding: 10px;
 }
 
-#jadoc-sidebar {
+#jedoc-sidebar {
     position: fixed;
     top:100px;
     width: 151px;
@@ -52,15 +53,15 @@ body {
     //opacity:0.9;
 }                     
 
-#jadoc-internal-sidebar{
+#jedoc-internal-sidebar{
     padding: 10px;
 }
 
-#jadoc-internal-sidebar div {
+#jedoc-internal-sidebar div {
     margin-top: 10px;
 }            
 
-#jadoc-nav-header {
+#jedoc-nav-header {
     display: inline; 
     position: absolute; 
     bottom: 5px; 
@@ -68,7 +69,7 @@ body {
     min-width:100%;
 }
 
-#jadoc-nav-header a {
+#jedoc-nav-header a {
     text-decoration: none;
     background-color:#fff;
     border-color:lightgray;
@@ -85,7 +86,7 @@ body {
     display:inline;
 }
 
-#jadoc-nav-header a:hover{
+#jedoc-nav-header a:hover{
     background-color:#eee;
     border-color:lightgray;
     // border-top-style: solid;
@@ -101,25 +102,26 @@ body {
     display:inline;
 }    
 
-#jadoc-repo-link {
+#jedoc-repo-link {
     position:absolute; 
-    margin-left:5px; 
-    top:30px; 
+    margin-left:15px; 
+    top:15px; 
     font-size:24px;
     text-decoration: none;
+    color:black;
 }
 
-#jadoc-program-logo {
+#jedoc-program-logo {
     padding:10px; 
     width:80px; 
     height:80px                
 }
 
-.jadoc-image-link {
+.jedoc-image-link {
 
 }
 
-.jadoc-tag-selected {
+.jedoc-tag-selected {
     background-color:#ffeec1 !important;
 }
 
@@ -130,7 +132,7 @@ pre {
     border-width: 1px;
 }
 
-a[href^="http"]:not(.jadoc-image-link):after {
+a[href^="http"]:not(.jedoc-image-link):after {
     content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=);
 }            
 
@@ -138,7 +140,7 @@ a[href^="http"]:not(.jadoc-image-link):after {
 
 // *****************      Fixes to markdown      *************************
 
-.jadoc-to-strip {
+.jedoc-to-strip {
     color:red;
 }
 

@@ -4,54 +4,54 @@
         <title>TraceProv</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link id="jadoc-stylesheet" rel="stylesheet" type="text/css" href="../css/jadoc.css">
-        <link rel="stylesheet" type="text/css" href="website-template/css/jadoc.css"> 
+        <link id="jedoc-stylesheet" rel="stylesheet" type="text/css" href="../css/jedoc.css">
+        <link rel="stylesheet" type="text/css" href="website-template/css/jedoc.css"> 
     </head>
     <body>
-        <div id="jadoc-wrapper">
-            <div id="jadoc-header">
+        <div id="jedoc-wrapper">
+            <div id="jedoc-header">
 
                 <div style="position:absolute;  min-height:100px; min-width:100%; ">
-                    <a id="jadoc-program-logo-link" href="index.html" style="display:none;">
-                        <img id="jadoc-program-logo" src="../img/jadoc-logo-200px.png" alt="program logo">    
+                    <a id="jedoc-program-logo-link" href="index.html" style="display:none;">
+                        <img id="jedoc-program-logo" src="../img/jedoc-logo-200px.png" alt="program logo">    
                     </a>
 
-                    <a id="jadoc-repo-link" href="../index.html">TraceProv</a>
+                    <a id="jedoc-repo-link" href="../index.html">TraceProv</a>
                     
 
-                    <a class="jadoc-image-link" href="http://dati.trentino.it/en/" target="_blank">
-                        <img style="float:right; padding:10px; width:80px" src="../img/odt-logo.png" alt="jadoc logo">                        
+                    <a class="jedoc-image-link" href="http://dati.trentino.it/en/" target="_blank">
+                        <img style="float:right; padding:10px; width:80px" src="../img/odt-logo.png" alt="jedoc logo">                        
                     </a>
 
-                    <div id="jadoc-nav-header">
-                        <a id="jadoc-home" href="../index.html">Home</a>                        
-                        <span id="jadoc-usage" style="margin-left:15px">Usage:                        
+                    <div id="jedoc-nav-header">
+                        <a id="jedoc-home" href="../index.html">Home</a>                        
+                        <span id="jedoc-usage" style="margin-left:15px">Usage:                        
                             
                             
-                        <a class="jadoc-version-tab-header jadoc-tag-selected" href="../0.3/index.html">0.3</a></span>
+                        <a class="jedoc-version-tab-header jedoc-tag-selected" href="../0.2/index.html">0.2</a></span>
                         <span style="margin-left:35px">
-                            <a id="jadoc-project" href="https://github.com/opendatatrentino/jadoc" target="_blank">Repo</a>
-                            <a id="jadoc-wiki" href="https://github.com/opendatatrentino/traceprov/wiki" target="_blank">Wiki</a> 
+                            <a id="jedoc-project" href="https://github.com/opendatatrentino/traceprov" target="_blank">Repo</a>
+                            <a id="jedoc-wiki" href="https://github.com/opendatatrentino/traceprov/wiki" target="_blank">Wiki</a> 
                         </span>
                     </div>
                 </div>                
 
             </div>
 
-            <div id="jadoc-sidebar">
-                <div id="jadoc-internal-sidebar"><div> <a href="#maven">Maven</a></div> 
+            <div id="jedoc-sidebar">
+                <div id="jedoc-internal-sidebar"><div> <a href="#maven">Maven</a></div> 
 <div> <a href="#building-objects">Building objects</a></div> 
 <div> <a href="#logging">Logging</a></div> 
 </div>
 
             </div>
 
-            <div id="jadoc-content">
-                <div id="jadoc-internal-content"><h3><a href="#maven" name="maven">Maven</a></h3><p>TraceProv is available on Maven Central. To use it, put this in the dependencies section of your <em>pom.xml</em>:</p>
+            <div id="jedoc-content">
+                <div id="jedoc-internal-content"><h3><a href="#maven" name="maven">Maven</a></h3><p>TraceProv is available on Maven Central. To use it, put this in the dependencies section of your <em>pom.xml</em>:</p>
 <pre><code>&lt;dependency&gt;
     &lt;groupId&gt;eu.trentorise.opendata&lt;/groupId&gt;
     &lt;artifactId&gt;traceprov&lt;/artifactId&gt;
-    &lt;version&gt;0.3.0&lt;/version&gt;            
+    &lt;version&gt;0.2.0&lt;/version&gt;            
 &lt;/dependency&gt;   
 </code></pre><p>In case updates are available, version numbers follow <a href="http://semver.org/" target="_blank">semantic versioning</a> rules.</p><h3><a href="#building-objects" name="building-objects">Building objects</a></h3><p>Most objects in TraceProv are immutable, and make heavy use of <a href="https://code.google.com/p/guava-libraries/wiki/ImmutableCollectionsExplained" target="_blank"> Guava immutable collections </a>. In TraceProv, wherever you see a class called <code>AbstractSomething</code>, there will always be an immutable class <code>Something</code> implementing it. </p><p>Immutable classes don't have public constructors, they only have factory methods called <em>of()</em>. So for example, to create a <em>CellRef</em> referring to a cell at row 1 and column 2 you would call:</p>
 <pre><code>CellRef cellRef = CellRef.of(1,2);
