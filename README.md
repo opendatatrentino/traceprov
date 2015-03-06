@@ -1,24 +1,28 @@
-TraceProv API
-====
 
-Java interface for provenance management. 
+**About**
 
-**Project status**: Developing v0.2. Currently holds Java models for  <a href="http://www.w3.org/TR/vocab-dcat/" target="_blank"> DCAT catalog vocabulary </a>  and references to dataset elements.
+Java library for provenance management:
 
-**Roadmap**: see [project issues](https://github.com/opendatatrentino/traceprov/issues)
+ * Holds fully documented Java models for  <a href="http://www.w3.org/TR/vocab-dcat/" target="_blank"> DCAT catalog vocabulary </a>
+ * Allows references to dataset elements such as cells, columns, etc
+ * All classes are immutable
 
-**Usage**: see [the wiki](https://github.com/opendatatrentino/traceprov/wiki)
+**Usage**: See [docs](docs)
 
-**License**: business-friendly [Apache License v2.0](https://github.com/opendatatrentino/traceprov/blob/master/LICENSE.txt)
+**Roadmap**: See [project milestones](../../milestones)
 
+**License**: business-friendly [Apache License v2.0](LICENSE.txt)
 
-#### Projects using this API
+**Contributing**: See [the wiki](../../wiki)
 
-* [Jackan](https://github.com/opendatatrentino/jackan): client for accessing opendata catalogs
-* [OpenDataRise](https://github.com/opendatatrentino/OpenDataRise): power tool to cleanse and semantify open data, based on Refine
+<br/>
 
+**Projects using this API**
 
-#### Credits:
+* [Jackan](https://opendatatrentino.github.com/jackan): client for accessing opendata catalogs
+* [OpenDataRise](https://github.com/opendatatrentino/OpenDataRise): power tool to cleanse and semantify open data, based on OpenRefine
+
+**Credits**
 
 * David Leoni - DISI at University of Trento - david.leoni@unitn.it
 * Moaz Reyad - DISI at University of Trento - moaz.reyad@unitn.it
