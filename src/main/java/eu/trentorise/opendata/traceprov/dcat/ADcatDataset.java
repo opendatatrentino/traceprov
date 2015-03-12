@@ -30,14 +30,14 @@ import org.joda.time.DateTime;
  * This class represents the actual dataset as published by the dataset
  * publisher. In cases where a distinction between the actual dataset and its
  * entry in the catalog is necessary (because metadata such as modification date
- * and maintainer might differ), the {@link AbstractDcatCatalogRecord} class can be
+ * and maintainer might differ), the {@link ADcatCatalogRecord} class can be
  * used for the latter.
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStyle
-public abstract class AbstractDcatDataset {
+public abstract class ADcatDataset {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#dataset";
     
@@ -76,7 +76,7 @@ public abstract class AbstractDcatDataset {
     /**
      * Returns the distributions belonging to this dataset.
      */
-    public abstract List<AbstractDcatDistribution> getDistributions();
+    public abstract List<ADcatDistribution> getDistributions();
 
     /*
      A unique identifier of the dataset, defined by
@@ -115,8 +115,8 @@ public abstract class AbstractDcatDataset {
      * duplicated as accessURL on a distribution. 
      * 
      * For relation with
-     * {@link AbstractDcatDistribution#getAccessURL()} and
-     * {@link AbstractDcatDistribution#getDownloadURL()} see
+     * {@link ADcatDistribution#getAccessURL()} and
+     * {@link ADcatDistribution#getDownloadURL()} see
      * <a href="http://www.w3.org/TR/vocab-dcat/#example-landing-page">
      * official dcat documentation </a>
      */
@@ -135,7 +135,7 @@ public abstract class AbstractDcatDataset {
      * specific language of each distribution (i.e. the dataset will have
      * multiple language values from {@link #getLanguages()} and each
      * distribution will have one of these languages as value of its
-     * {@link AbstractDcatDistribution#getLanguage()} property).
+     * {@link ADcatDistribution#getLanguage()} property).
      *
      * Java Locale should be created out of Language codes defined by the
      * Library of Congress
@@ -168,12 +168,12 @@ public abstract class AbstractDcatDataset {
      *
      * Default value is {@link FoafAgent#of()}
      *
-     * @see AbstractFoafAgent
-     * @see AbstractFoafPerson
-     * @see AbstractFoafOrganization
+     * @see AFoafAgent
+     * @see AFoafPerson
+     * @see AFoafOrganization
      */
     @Value.Default
-    public AbstractFoafAgent getPublisher() {
+    public AFoafAgent getPublisher() {
         return FoafAgent.of();
     }
     
@@ -202,9 +202,9 @@ public abstract class AbstractDcatDataset {
 
     /**
      * The main category of the dataset. A dataset can belong to multiple
-     * categories. The set of {@link AbstractSkosConcept}s used to categorize the
-     * datasets are organized in the {@link AbstractSkosConceptScheme} returned by
-     * {@link AbstractDcatCatalog#getCategories()}. Notice that 'theme' is also used as
+     * categories. The set of {@link ASkosConcept}s used to categorize the
+     * datasets are organized in the {@link ASkosConceptScheme} returned by
+     * {@link ADcatCatalog#getCategories()}. Notice that 'theme' is also used as
      * synonym of 'category' in dcat specs.
      */
     public abstract List<SkosConcept> getCategories();

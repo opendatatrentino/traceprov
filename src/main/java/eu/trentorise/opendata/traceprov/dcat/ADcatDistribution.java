@@ -30,7 +30,7 @@ import org.joda.time.DateTime;
  */
 @Value.Immutable
 @BuilderStyle
-public abstract class AbstractDcatDistribution {
+public abstract class ADcatDistribution {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#distribution";
     
@@ -43,12 +43,12 @@ public abstract class AbstractDcatDistribution {
      * you are not sure whether it is. If the distribution(s) are accessible
      * only through a landing page (i.e. direct download URLs are not known),
      * then the link returned by containing dataset
-     * {@link AbstractDcatDataset#getLandingPage()} should be returned by this
+     * {@link ADcatDataset#getLandingPage()} should be returned by this
      * method, too.
      *
      * This field is specified by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:accessURL</a>.
-     * For relation with {@link AbstractDcatDataset#getLandingPage()} see
+     * For relation with {@link ADcatDataset#getLandingPage()} see
      * <a href="http://www.w3.org/TR/vocab-dcat/#example-landing-page">
      * official dcat documentation </a>
      *
@@ -74,7 +74,7 @@ public abstract class AbstractDcatDistribution {
 
     /**
      * Property not in Dcat standard, added for convenience. Result must be the
-     * same as containing dataset {@link AbstractDcatDataset#getUri()}
+     * same as containing dataset {@link ADcatDataset#getUri()}
      */
     @Value.Default
     public String getDatasetUri() {
@@ -105,7 +105,7 @@ public abstract class AbstractDcatDistribution {
      * locations.
      *
      * i.e. dcat:downloadURL <http://www.example.org/files/001.csv> ; For
-     * relation with {@link AbstractDcatDataset#getLandingPage()} see
+     * relation with {@link ADcatDataset#getLandingPage()} see
      * <a href="http://www.w3.org/TR/vocab-dcat/#a-dataset-available-only-behind-some-web-page">
      * official dcat documentation </a>
      */
@@ -141,13 +141,13 @@ public abstract class AbstractDcatDistribution {
      * The language of the distribution. Note that this does not explicitly
      * appear in the Distribution description in W3C Recommendation of 16
      * January 2014., but it's existence is indeed cited in the Dataset
-     * description (see {@link AbstractDcatDataset#getLanguages()}). So we made
+     * description (see {@link ADcatDataset#getLanguages()}). So we made
      * up the property and the description below to fill the gap.
      *
      * This overrides the value of the dataset and catalog language in case of
      * conflict. The returned language should be also in the list of languages
      * returned by the containing dataset
-     * {@link AbstractDcatDataset#getLanguages()} method.
+     * {@link ADcatDataset#getLanguages()} method.
      *
      * Java Locale should be created out of language codes as defined by the
      * Library of Congress
@@ -174,7 +174,7 @@ public abstract class AbstractDcatDistribution {
      * dct:license</a>
      *
      * @see #getRights()
-     * @see AbstractDcatCatalog#getLicense()
+     * @see ADcatCatalog#getLicense()
      */
     @Value.Default
     public String getLicense() {
@@ -206,7 +206,7 @@ public abstract class AbstractDcatDistribution {
  <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
-     * @see AbstractDcatDataset#getModified()
+     * @see ADcatDataset#getModified()
      */
     public abstract Optional<DateTime> getModified();
 
@@ -222,8 +222,8 @@ public abstract class AbstractDcatDistribution {
      * well as other information that supplements the licence such as
      * attribution.
      *
-     * @see AbstractDcatDistribution#getLicense()
-     * @see AbstractDcatCatalog#getRights()
+     * @see ADcatDistribution#getLicense()
+     * @see ADcatCatalog#getRights()
      */
     @Value.Default
     public String getRights() {

@@ -38,7 +38,7 @@ import org.joda.time.DateTime;
  */
 @Value.Immutable
 @BuilderStyle
-public abstract class AbstractDcatCatalog {
+public abstract class ADcatCatalog {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#Catalog";
     
@@ -70,9 +70,9 @@ public abstract class AbstractDcatCatalog {
  <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
-     * @see AbstractDcatDataset#getIssued()
-     * @see AbstractDcatDistribution#getIssued()
-     * @see AbstractDcatCatalogRecord#getIssued()
+     * @see ADcatDataset#getIssued()
+     * @see ADcatDistribution#getIssued()
+     * @see ADcatCatalogRecord#getIssued()
      */
     public abstract Optional<DateTime> getIssued();
 
@@ -90,7 +90,7 @@ public abstract class AbstractDcatCatalog {
      * corresponding IRI should be used; if no ISO 639-1 code is defined, then
      * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
      *
-     * @see AbstractDcatDataset#getLanguages()
+     * @see ADcatDataset#getLanguages()
      */
     public abstract List<Locale> getLanguages();
 
@@ -119,12 +119,12 @@ public abstract class AbstractDcatCatalog {
      *
      * Default value is {@link FoafAgent#of()}.
      *
-     * @see AbstractFoafAgent
-     * @see AbstractFoafPerson
-     * @see AbstractFoafOrganization
+     * @see AFoafAgent
+     * @see AFoafPerson
+     * @see AFoafOrganization
      */
     @Value.Default
-    public AbstractFoafAgent getPublisher() {
+    public AFoafAgent getPublisher() {
         return FoafAgent.of();
     }
 
@@ -136,7 +136,7 @@ public abstract class AbstractDcatCatalog {
      * <a href="http://purl.org/dc/terms/rights">dct:rights</a>.
      *
      * @see #getLicense()
-     * @see AbstractDcatDistribution#getRights()
+     * @see ADcatDistribution#getRights()
      */
     @Value.Default
     public String getRights() {
@@ -162,10 +162,10 @@ public abstract class AbstractDcatCatalog {
      *
      * When field is not available {@link SkosConceptScheme#of()} is returned.
      *
-     * @see AbstractDcatDataset#getCategories()
+     * @see ADcatDataset#getCategories()
      */
     @Value.Default
-    public AbstractSkosConceptScheme getCategories() {
+    public ASkosConceptScheme getCategories() {
         return SkosConceptScheme.of();
     }
 

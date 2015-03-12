@@ -13,17 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.traceprov.ref;
 
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.SimpleStyle;
 import org.immutables.value.Value;
 
+
+
 /**
- * Models a <a href="http://xmlns.com/foaf/0.1/Person"> foaf:Person </a>
+ * Represents a reference to a cell in a dataset in tabular format
+ *
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class AbstractFoafPerson extends AbstractFoafAgent {
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Person";
+@SimpleStyle
+abstract class ACellRef {
+
+    /**
+     * Returns the index of column the cell belongs to.
+     */
+    @Value.Default
+    @Value.Parameter
+    public int getRowIndex() {
+        return 0;
+    }
+
+    /**
+     * Returns the index of row the cell belongs to.
+     */       
+    @Value.Default
+    @Value.Parameter
+    public int getColumnIndex() {
+        return 0;
+    }        
+
 }

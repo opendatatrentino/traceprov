@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.ref;
+package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
- * Represents a reference to a column in a tabular dataset.
- *
+ * Models a <a href="http://xmlns.com/foaf/0.1/Person"> foaf:Person </a>
  * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
-abstract class AbstractColumnRef {
-
-    /**
-     * Column index starting from zero
-     */
-    @Value.Default
-    @Value.Parameter
-    public int getIndex() {
-        return 0;
-    }
-
+@BuilderStyle
+public abstract class AFoafPerson extends AFoafAgent {
+    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Person";
 }

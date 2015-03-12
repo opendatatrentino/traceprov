@@ -19,11 +19,29 @@ import eu.trentorise.opendata.commons.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
- * Models a <a href="http://xmlns.com/foaf/0.1/Organization"> foaf:Organization </a>
+ * Models a
+ * <a href="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme">SKOS
+ * ConceptScheme</a>
+ *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStyle
-public abstract class AbstractFoafOrganization extends AbstractFoafAgent {
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Organization";
+public abstract class ASkosConceptScheme {
+
+    public static final String CLASS_URI="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme";
+    
+    /**
+     * skos:prefLabel i.e. "A set of domains to classify documents"
+     */
+    @Value.Default
+    public String getPrefLabel() {
+        return "";
+    }
+
+    @Value.Default
+    public String getUri() {
+        return "";
+    }
+
 }

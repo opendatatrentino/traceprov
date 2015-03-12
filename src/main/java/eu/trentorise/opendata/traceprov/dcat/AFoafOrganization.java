@@ -15,48 +15,15 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
- * Models a
- * <a href="http://www.w3.org/2009/08/skos-reference/skos.html#Concept">
- * SkosConcept </a>
- *
- *
+ * Models a <a href="http://xmlns.com/foaf/0.1/Organization"> foaf:Organization </a>
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStyle
-public abstract class AbstractSkosConcept {
-    
-    public static final String CLASS_URI="http://www.w3.org/2004/02/skos/core#Concept";
-    
-
-    /**
-     * skos:inScheme Default value is the empty concept scheme
-     * {@link SkosConceptScheme#of()}
-     */
-    @Value.Default
-    @Value.Parameter
-    public AbstractSkosConceptScheme getInScheme() {
-        return SkosConceptScheme.of();
-    }
-
-    /**
-     * skos:prefLabel i.e. "Accountability"
-     */
-    @Value.Parameter
-    @Value.Default
-    public Dict getPrefLabel(){
-        return Dict.of();
-    };
-
-    @Value.Default
-    @Value.Parameter
-    public String getUri() {
-        return "";
-    }
-
+public abstract class AFoafOrganization extends AFoafAgent {
+    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Organization";
 }

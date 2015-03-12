@@ -55,7 +55,7 @@ import org.joda.time.DateTime;
  */
 @Value.Immutable
 @BuilderStyle
-public abstract class AbstractDcatCatalogRecord {
+public abstract class ADcatCatalogRecord {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#record";
     
@@ -79,7 +79,7 @@ public abstract class AbstractDcatCatalogRecord {
  <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
-     * @see AbstractDcatDataset#getIssued()
+     * @see ADcatDataset#getIssued()
      */
     public abstract Optional<DateTime> getIssued();
 
@@ -94,7 +94,7 @@ public abstract class AbstractDcatCatalogRecord {
      * Specified by
      * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
      *
-     * @see AbstractDcatDataset#getModified()
+     * @see ADcatDataset#getModified()
      */
     public abstract Optional<DateTime> getModified();
 
@@ -105,7 +105,7 @@ public abstract class AbstractDcatCatalogRecord {
      * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic">
      * foaf:primaryTopic </a>
      */
-    public abstract Optional<AbstractDcatDataset> getPrimaryTopic();
+    public abstract Optional<ADcatDataset> getPrimaryTopic();
 
     /**
      * A name given to the record, as specified by

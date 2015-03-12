@@ -19,7 +19,7 @@ In case updates are available, version numbers follow <a href="http://semver.org
 
 ### Building objects
 
-Most objects in TraceProv are immutable, and make heavy use of <a href="https://code.google.com/p/guava-libraries/wiki/ImmutableCollectionsExplained" target="_blank"> Guava immutable collections </a>. In TraceProv, wherever you see a class called `AbstractSomething`, there will always be an immutable class `Something` implementing it. 
+Most objects in TraceProv are immutable, and make heavy use of <a href="https://code.google.com/p/guava-libraries/wiki/ImmutableCollectionsExplained" target="_blank"> Guava immutable collections </a>. In TraceProv, wherever you see a class called `ASomething`, there will always be an immutable class `Something` implementing it. 
 
 
 

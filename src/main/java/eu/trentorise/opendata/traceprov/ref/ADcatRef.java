@@ -18,33 +18,35 @@ package eu.trentorise.opendata.traceprov.ref;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import org.immutables.value.Value;
 
-
-
 /**
- * Represents a reference to a cell in a dataset in tabular format
+ * Represent a reference to an element of a dcat dataset, like for example the
+ * title
  *
  * @author David Leoni
  */
 @Value.Immutable
 @SimpleStyle
-abstract class AbstractCellRef {
+abstract class ADcatRef {
 
     /**
-     * Returns the index of column the cell belongs to.
+     * Returns the URI of the class containing the referenced element (i.e.
+     * {@link ADcatDataset#CLASS_URI})
      */
     @Value.Default
     @Value.Parameter
-    public int getRowIndex() {
-        return 0;
+    public String getClassUri() {
+        return "";
     }
 
     /**
-     * Returns the index of row the cell belongs to.
-     */       
+     * Let's say we are referring to a title of a dcat dataset, then we would
+     * return "http://purl.org/dc/terms/title", as DCAT expresses title with a
+     * Dublin core vocabulary attribute
+     */
     @Value.Default
     @Value.Parameter
-    public int getColumnIndex() {
-        return 0;
-    }        
+    public String getPropertyUri() {
+        return "";
+    }
 
 }

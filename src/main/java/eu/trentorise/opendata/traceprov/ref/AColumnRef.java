@@ -13,49 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.traceprov.ref;
 
-import eu.trentorise.opendata.commons.Dict;
-
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.SimpleStyle;
 import org.immutables.value.Value;
 
 /**
- * Models a minimal FOAF Agent: http://xmlns.com/foaf/spec/
+ * Represents a reference to a column in a tabular dataset.
  *
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class AbstractFoafAgent {
-
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";
-    
-    
-    /**
-     * Returns the uri of the agent.
-     */
-    @Value.Default
-    public String getUri() {
-        return "";
-    }
+@SimpleStyle
+abstract class AColumnRef {
 
     /**
-     * http://xmlns.com/foaf/0.1/name
-     */
-    @Value.Parameter
-    @Value.Default
-    public Dict getName(){
-        return Dict.of();
-    };
-
-    /**
-     * Returns the mail box http://xmlns.com/foaf/0.1/mbox
+     * Column index starting from zero
      */
     @Value.Default
     @Value.Parameter
-    public String getMbox() {
-        return "";
+    public int getIndex() {
+        return 0;
     }
 
 }

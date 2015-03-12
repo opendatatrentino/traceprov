@@ -13,39 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.ref;
+package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.commons.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
- * Represent a reference to an element of a dcat dataset, like for example the
- * title
+ * Models a
+ * <a href="http://www.w3.org/2009/08/skos-reference/skos.html#Concept">
+ * SkosConcept </a>
+ *
  *
  * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
-abstract class AbstractDcatRef {
+@BuilderStyle
+public abstract class ASkosConcept {
+    
+    public static final String CLASS_URI="http://www.w3.org/2004/02/skos/core#Concept";
+    
 
     /**
-     * Returns the URI of the class containing the referenced element (i.e.
-     * {@link AbstractDcatDataset#CLASS_URI})
+     * skos:inScheme Default value is the empty concept scheme
+     * {@link SkosConceptScheme#of()}
      */
     @Value.Default
     @Value.Parameter
-    public String getClassUri() {
-        return "";
+    public ASkosConceptScheme getInScheme() {
+        return SkosConceptScheme.of();
     }
 
     /**
-     * Let's say we are referring to a title of a dcat dataset, then we would
-     * return "http://purl.org/dc/terms/title", as DCAT expresses title with a
-     * Dublin core vocabulary attribute
+     * skos:prefLabel i.e. "Accountability"
      */
+    @Value.Parameter
+    @Value.Default
+    public Dict getPrefLabel(){
+        return Dict.of();
+    };
+
     @Value.Default
     @Value.Parameter
-    public String getPropertyUri() {
+    public String getUri() {
         return "";
     }
 

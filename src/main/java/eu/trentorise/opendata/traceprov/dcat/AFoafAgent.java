@@ -15,32 +15,46 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import eu.trentorise.opendata.commons.Dict;
+
 import eu.trentorise.opendata.commons.BuilderStyle;
 import org.immutables.value.Value;
 
 /**
- * Models a
- * <a href="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme">SKOS
- * ConceptScheme</a>
+ * Models a minimal FOAF Agent: http://xmlns.com/foaf/spec/
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStyle
-public abstract class AbstractSkosConceptScheme {
+public abstract class AFoafAgent {
 
-    public static final String CLASS_URI="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme";
+    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";
+    
     
     /**
-     * skos:prefLabel i.e. "A set of domains to classify documents"
+     * Returns the uri of the agent.
      */
     @Value.Default
-    public String getPrefLabel() {
+    public String getUri() {
         return "";
     }
 
+    /**
+     * http://xmlns.com/foaf/0.1/name
+     */
+    @Value.Parameter
     @Value.Default
-    public String getUri() {
+    public Dict getName(){
+        return Dict.of();
+    };
+
+    /**
+     * Returns the mail box http://xmlns.com/foaf/0.1/mbox
+     */
+    @Value.Default
+    @Value.Parameter
+    public String getMbox() {
         return "";
     }
 
