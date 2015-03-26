@@ -16,7 +16,7 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.traceprov.TraceProvConfig;
+import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.ref.CellRef;
 import java.util.Locale;
@@ -32,7 +32,7 @@ public class CodeGenTest {
     
     @BeforeClass
     public static void setUpClass() {        
-        TraceProvConfig.of().loadLogConfig();
+        OdtConfig.init(CodeGenTest.class);
     }
 
     @Test
