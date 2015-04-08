@@ -40,8 +40,8 @@ abstract class ADcatRef {
 
     /**
      * Let's say we are referring to a title of a dcat dataset, then we would
-     * return "http://purl.org/dc/terms/title", as DCAT expresses title with a
-     * Dublin core vocabulary attribute
+     * return {@link DcatRefs#DUBLIC_CORE_TERMS_TITLE}, as DCAT expresses
+     * dataset title with a Dublin core vocabulary attribute
      */
     @Value.Default
     @Value.Parameter
