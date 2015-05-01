@@ -1,5 +1,5 @@
 
-##### 0.2.1  -  todo in progress
+##### 0.2.1
 
  - improved docs according to Jedoc workflow
 
