@@ -22,7 +22,7 @@
 
     <groupId>eu.trentorise.opendata</groupId>
     <artifactId>traceprov</artifactId>
-    <version>0.2.3-SNAPSHOT</version>
+    <version>0.2.3</version>
     <packaging>jar</packaging>
 
     <name>TraceProv</name>
@@ -245,7 +245,7 @@
         <url>${scmUrl}</url>
         <connection>scm:git:${scmUrl}.git</connection>
         <developerConnection>scm:git:${scmUrl}.git</developerConnection>        
-      <tag>HEAD</tag>
+      <tag>traceprov-0.2.3</tag>
   </scm>
     
     <issueManagement>
