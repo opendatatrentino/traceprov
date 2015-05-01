@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat; import eu.trentorise.opendata.commons.Dict;
+package eu.trentorise.opendata.traceprov.dcat; 
 
+import eu.trentorise.opendata.commons.Dict;
 import com.google.common.base.Optional;
 import eu.trentorise.opendata.commons.BuilderStyle;
 import java.util.List;

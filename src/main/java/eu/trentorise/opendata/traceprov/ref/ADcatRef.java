@@ -30,7 +30,7 @@ abstract class ADcatRef {
 
     /**
      * Returns the URI of the class containing the referenced element (i.e.
-     * {@link ADcatDataset#CLASS_URI})
+     * {@link eu.trentorise.opendata.traceprov.dcat.ADcatDataset#CLASS_URI})
      */
     @Value.Default
     @Value.Parameter
