@@ -15,11 +15,11 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
-import com.google.common.base.Optional;
 import eu.trentorise.opendata.commons.BuilderStyle;
 import eu.trentorise.opendata.commons.Dict;
 import java.util.List;
 import java.util.Locale;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
@@ -74,7 +74,7 @@ public abstract class ADcatCatalog {
      * @see ADcatDistribution#getIssued()
      * @see ADcatCatalogRecord#getIssued()
      */
-    public abstract Optional<DateTime> getIssued();
+    public abstract @Nullable DateTime getIssued();
 
     /**
      * The languages of the catalog. This refers to the language used in the
@@ -112,7 +112,7 @@ public abstract class ADcatCatalog {
      * compliant</a> string format i.e. "2011-12-11" . Specified by
  <a href="http://purl.org/dc/terms/modified">dct:modified</a>
      */
-    public abstract Optional<DateTime> getModified();
+    public abstract @Nullable DateTime getModified();
 
     /**
      * The entity responsible for making the catalog online.
@@ -153,19 +153,18 @@ public abstract class ADcatCatalog {
     }
 
     /**
-     * The taxonomy of categories used to classify catalog's datasets, as
+     * The taxonomy of themes used to classify catalog's datasets, as
      * specified by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:catalog_themes">
-     * dcat:themeTaxonomy </a>. Note the property name in the specs is 'themes'
-     * but 'categories' is also used as synonim in other places of the specs and
-     * seems more natural.
-     *
+     * dcat:themeTaxonomy </a>. 
+     * Notice that 'category' is also used as synonym of 'themes' in dcat specs.
+     * 
      * When field is not available {@link SkosConceptScheme#of()} is returned.
      *
-     * @see ADcatDataset#getCategories()
+     * @see ADcatDataset#getThemes()
      */
     @Value.Default
-    public ASkosConceptScheme getCategories() {
+    public ASkosConceptScheme getThemes() {
         return SkosConceptScheme.of();
     }
 

@@ -17,8 +17,8 @@ package eu.trentorise.opendata.traceprov.dcat;
 
 import eu.trentorise.opendata.commons.Dict;
 
-import com.google.common.base.Optional;
 import eu.trentorise.opendata.commons.BuilderStyle;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
@@ -80,8 +80,8 @@ public abstract class ADcatCatalogRecord {
      * compliant</a> string format i.e. "2011-12-11".
      *
      * @see ADcatDataset#getIssued()
-     */
-    public abstract Optional<DateTime> getIssued();
+     */        
+    public abstract @Nullable DateTime getIssued();
 
     /**
      * Most recent date on which the catalog entry was changed, updated or
@@ -96,7 +96,7 @@ public abstract class ADcatCatalogRecord {
      *
      * @see ADcatDataset#getModified()
      */
-    public abstract Optional<DateTime> getModified();
+    public abstract @Nullable DateTime getModified();
 
     /**
      * Links the catalog record to the dcat:Dataset resource described in the
@@ -105,7 +105,7 @@ public abstract class ADcatCatalogRecord {
      * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic">
      * foaf:primaryTopic </a>
      */
-    public abstract Optional<ADcatDataset> getPrimaryTopic();
+    public abstract @Nullable ADcatDataset getPrimaryTopic();
 
     /**
      * A name given to the record, as specified by

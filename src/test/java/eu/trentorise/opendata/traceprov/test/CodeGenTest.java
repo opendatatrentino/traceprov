@@ -18,6 +18,7 @@ package eu.trentorise.opendata.traceprov.test;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
+import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.ref.CellRef;
 import java.util.Locale;
 import org.junit.Test;
@@ -46,14 +47,17 @@ public class CodeGenTest {
         assertEquals("b", dataset.withUri("b").getUri());
         
         DcatDataset.builder().addAllDistributions(DcatDataset.of().getDistributions());                
+        FoafAgent.builder();
     }
-
+    
+    @Test
     public void dcataDatasetUsageExample() {
         DcatDataset dataset = DcatDataset
                 .builder()                
                 .setTitle(Dict.of(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013"))
                 .setLandingPage("http://dati.trentino.it/dataset/impianti-di-risalita-vivifiemme-2013")
                 .build();
+        assertEquals(null, dataset.getModified());
     }
 
     @Test

@@ -16,10 +16,10 @@
 package eu.trentorise.opendata.traceprov.dcat; 
 
 import eu.trentorise.opendata.commons.Dict;
-import com.google.common.base.Optional;
 import eu.trentorise.opendata.commons.BuilderStyle;
 import java.util.List;
 import java.util.Locale;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
 
@@ -98,7 +98,7 @@ public abstract class ADcatDataset {
      * compliant</a> string format i.e. "2011-12-11".
      * 
      */
-    public abstract Optional<DateTime> getIssued();
+    public abstract @Nullable DateTime getIssued();
 
     /**
      * A set of keywords or tags describing the dataset, as specified by
@@ -162,7 +162,7 @@ public abstract class ADcatDataset {
      *
      * @see #getAccrualPeriodicity()
      */
-    public abstract Optional<DateTime> getModified();
+    public abstract @Nullable DateTime getModified();
 
     /**
      * An entity responsible for making the dataset available.
@@ -202,13 +202,13 @@ public abstract class ADcatDataset {
     };
 
     /**
-     * The main category of the dataset. A dataset can belong to multiple
-     * categories. The set of {@link ASkosConcept}s used to categorize the
+     * The main themes  of the dataset. A dataset can belong to multiple
+     * themes. The set of {@link ASkosConcept}s used to categorize the
      * datasets are organized in the {@link ASkosConceptScheme} returned by
-     * {@link ADcatCatalog#getCategories()}. Notice that 'theme' is also used as
-     * synonym of 'category' in dcat specs.
+     * {@link ADcatCatalog#getThemes()}. Notice that 'category' is also used as
+     * synonym of 'themes' in dcat specs.
      */
-    public abstract List<SkosConcept> getCategories();
+    public abstract List<SkosConcept> getThemes();
 
     /**
      * A name given to the dataset as specified by

@@ -1,5 +1,5 @@
-/* 
- * Copyright 2015 Trento Rise  (trentorise.eu) 
+/*
+ * Copyright 2015 Trento Rise.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,15 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
-
 /**
- * Models a <a href="http://xmlns.com/foaf/0.1/Person" target="_blank"> foaf:Person </a>
+ * Only used to generate a FoafAgent with builder.
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class AFoafPerson extends AFoafAgent {
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Person";
-
+@BuilderStylePublic
+class AbstractFoafAgent extends AFoafAgent {
+    
 }

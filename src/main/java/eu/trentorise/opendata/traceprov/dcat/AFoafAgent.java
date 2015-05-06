@@ -16,23 +16,18 @@
 package eu.trentorise.opendata.traceprov.dcat;
 
 import eu.trentorise.opendata.commons.Dict;
-
-import eu.trentorise.opendata.commons.BuilderStyle;
 import org.immutables.value.Value;
 
+
 /**
- * Models a minimal FOAF Agent: http://xmlns.com/foaf/spec/
+ * Models <a href="http://xmlns.com/foaf/spec/" target="_blank">a minimal FOAF Agent</a>
  *
  * @author David Leoni
  */
-@Value.Immutable
-@BuilderStyle
 public abstract class AFoafAgent {
+    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";    
 
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";
-    
-    
-    /**
+ /**
      * Returns the uri of the agent.
      */
     @Value.Default
@@ -41,7 +36,7 @@ public abstract class AFoafAgent {
     }
 
     /**
-     * http://xmlns.com/foaf/0.1/name
+     * Returns <a href="http://xmlns.com/foaf/0.1/name" target="_blank">the agent name </a>
      */
     @Value.Parameter
     @Value.Default
@@ -50,12 +45,12 @@ public abstract class AFoafAgent {
     };
 
     /**
-     * Returns the mail box http://xmlns.com/foaf/0.1/mbox
+     * Returns <a href="http://xmlns.com/foaf/0.1/mbox" target="_blank">the mail box </a>
      */
     @Value.Default
     @Value.Parameter
     public String getMbox() {
         return "";
-    }
-
+    }    
+       
 }
