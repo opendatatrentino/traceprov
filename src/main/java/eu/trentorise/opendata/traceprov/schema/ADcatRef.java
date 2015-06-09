@@ -27,7 +27,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @BuilderStylePublic
 abstract class ADcatRef extends Ref {
-
+    private static final long serialVersionUID = 1L;
     /**
      * Returns the URI of the class containing the referenced element (i.e.
      * {@link eu.trentorise.opendata.traceprov.dcat.ADcatDataset#CLASS_URI})

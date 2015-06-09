@@ -20,34 +20,40 @@ import org.immutables.value.Value;
 
 /**
  * A reference to an element of a dataset or its metadata.
+ *
  * @author David Leoni
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public class Ref {
+
+    private static final long serialVersionUID = 1L;
     
     private static final Ref INSTANCE = new Ref();
-    
+
     private String documentId;
-    
-    Ref(){
+
+    Ref() {
         this.documentId = "";
     }
-    
+
     @Value.Default
     public String getDocumentId() {
         return "";
-    }            
-    
-    /** Silly workaround for immutables giving 
-     \Users\david_2\Da\prj\trentorise\traceprov\prj\target\generated-sources\annotations\eu\trentorise\opendata\traceprov\schema\CellRef.java:[168,41] error: cannot find symbol*/
-    public String documentId(){
+    }
+
+    /**
+     * Silly workaround for immutables giving
+     * \Users\david_2\Da\prj\trentorise\traceprov\prj\target\generated-sources\annotations\eu\trentorise\opendata\traceprov\schema\CellRef.java:[168,41]
+     * error: cannot find symbol
+     */
+    public String documentId() {
         return documentId;
     }
-    
+
     /**
      * Returns a missing ref.
      */
-    public static Ref of(){
+    public static Ref of() {
         return INSTANCE;
     }
 
@@ -77,6 +83,5 @@ public class Ref {
         }
         return true;
     }
-    
-    
+
 }

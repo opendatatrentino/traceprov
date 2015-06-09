@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
+import eu.trentorise.opendata.traceprov.schema.CellRef;
 import java.util.logging.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,8 +42,8 @@ public class JacksonTest {
     @Test
     public void testCellRef(){
         ObjectMapper om = new ObjectMapper();        
-        OdtCommonsModule.registerModulesInto(om);
+        OdtCommonsModule.registerModulesInto(om);                
         
-        // OdtJacksonTester.testJsonConv(om, LOG, CellRef.of(2,3));
+        OdtJacksonTester.testJsonConv(om, LOG, CellRef.of(2,3));
     }
 }

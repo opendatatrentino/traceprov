@@ -35,6 +35,8 @@ abstract class ASkosConceptScheme {
 
     public static final String CLASS_URI="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme";
     
+    private static final long serialVersionUID = 1L;
+    
     /**
      * skos:prefLabel i.e. "A set of domains to classify documents"
      */

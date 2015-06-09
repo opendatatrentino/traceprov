@@ -46,6 +46,8 @@ abstract  class ADcatCatalog {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#Catalog";
     
+    private static final long serialVersionUID = 1L;
+    
     /**
      * A free-text account of the catalog, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>

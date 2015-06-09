@@ -46,6 +46,8 @@ abstract  class ADcatDataset {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#dataset";
     
+    private static final long serialVersionUID = 1L;
+        
     /**
      * Returns the frequency at which dataset is published, as defined by
      * <a href="http://purl.org/dc/terms/accrualPeriodicity">

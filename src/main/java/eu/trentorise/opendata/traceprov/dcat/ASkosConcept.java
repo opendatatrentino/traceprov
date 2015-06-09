@@ -37,6 +37,7 @@ import org.immutables.value.Value;
     
     public static final String CLASS_URI="http://www.w3.org/2004/02/skos/core#Concept";
     
+    private static final long serialVersionUID = 1L;
 
     /**
      * skos:inScheme Default value is the empty concept scheme

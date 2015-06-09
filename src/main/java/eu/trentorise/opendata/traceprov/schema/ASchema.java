@@ -25,5 +25,5 @@ import org.immutables.value.Value;
 @Value.Immutable
 @BuilderStylePublic
 abstract  class ASchema {
-    
+        private static final long serialVersionUID = 1L;
 }

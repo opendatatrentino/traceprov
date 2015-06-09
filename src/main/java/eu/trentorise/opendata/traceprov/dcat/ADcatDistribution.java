@@ -39,6 +39,7 @@ import org.joda.time.DateTime;
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#distribution";
     
+    private static final long serialVersionUID = 1L;
     
     /**
      *

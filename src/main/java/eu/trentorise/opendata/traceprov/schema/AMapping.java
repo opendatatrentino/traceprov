@@ -25,7 +25,8 @@ import org.immutables.value.Value;
 @Value.Immutable
 @BuilderStylePublic
 abstract  class AMapping {
-    
+        private static final long serialVersionUID = 1L;
+        
     @Value.Default
     @Value.Parameter    
     public Ref getSourceRef(){

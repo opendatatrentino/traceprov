@@ -28,7 +28,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @BuilderStylePublic
 abstract  class ASchemaRef extends Ref {
-
+    private static final long serialVersionUID = 1L;
     /**
      * Returns a path of property ids in a reference schema
      */

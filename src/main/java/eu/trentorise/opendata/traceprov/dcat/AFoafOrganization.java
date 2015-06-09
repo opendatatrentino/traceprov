@@ -21,13 +21,18 @@ import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
 /**
- * Models a <a href="http://xmlns.com/foaf/0.1/Organization"> foaf:Organization </a>
+ * Models a <a href="http://xmlns.com/foaf/0.1/Organization"> foaf:Organization
+ * </a>
+ *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=FoafOrganization.class)
-@JsonDeserialize(as=FoafOrganization.class)
- abstract  class AFoafOrganization extends AFoafAgent {
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Organization";
+@JsonSerialize(as = FoafOrganization.class)
+@JsonDeserialize(as = FoafOrganization.class)
+abstract class AFoafOrganization extends AFoafAgent {
+
+    public static final String CLASS_URI = "http://xmlns.com/foaf/0.1/Organization";
+
+    private static final long serialVersionUID = 1L;
 }

@@ -23,5 +23,5 @@ package eu.trentorise.opendata.traceprov.schema;
 public final class DcatRefs {
     
     public static final String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
-    
+        private static final long serialVersionUID = 1L;
 }

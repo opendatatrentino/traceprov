@@ -27,7 +27,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 
 abstract class AColumnRef extends Ref {
-
+    private static final long serialVersionUID = 1L;
     /**
      * Column index starting from zero
      */

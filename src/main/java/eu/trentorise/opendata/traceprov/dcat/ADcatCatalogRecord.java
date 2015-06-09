@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat; 
+package eu.trentorise.opendata.traceprov.dcat;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -57,35 +57,37 @@ import org.joda.time.DateTime;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=DcatCatalogRecord.class)
-@JsonDeserialize(as=DcatCatalogRecord.class)
- abstract  class ADcatCatalogRecord {
+@JsonSerialize(as = DcatCatalogRecord.class)
+@JsonDeserialize(as = DcatCatalogRecord.class)
+abstract class ADcatCatalogRecord {
 
-    public static final String CLASS_URI="http://www.w3.org/ns/dcat#record";
-    
+    public static final String CLASS_URI = "http://www.w3.org/ns/dcat#record";
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * free-text account of the record, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>
      */
     @Value.Default
-    public Dict getDescription(){
+    public Dict getDescription() {
         return Dict.of();
     }
-            
 
     /**
      * The date of listing the corresponding dataset in the catalog, as
      * specified by <a href="http://purl.org/dc/terms/issued">dct:issued</a>.
      * This indicates the date of listing the dataset in the catalog and not the
- publication date of the dataset itself.
-
- Note DCAT standard requires dates in string format to be
- <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+     * publication date of the dataset itself.
+     *
+     * Note DCAT standard requires dates in string format to be
+     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
      * @see ADcatDataset#getIssued()
-     */        
-    public abstract  @Nullable DateTime getIssued();
+     */
+    public abstract @Nullable
+    DateTime getIssued();
 
     /**
      * Most recent date on which the catalog entry was changed, updated or
@@ -100,7 +102,8 @@ import org.joda.time.DateTime;
      *
      * @see ADcatDataset#getModified()
      */
-    public abstract  @Nullable DateTime getModified();
+    public abstract @Nullable
+    DateTime getModified();
 
     /**
      * Links the catalog record to the dcat:Dataset resource described in the
@@ -109,23 +112,27 @@ import org.joda.time.DateTime;
      * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic">
      * foaf:primaryTopic </a>
      */
-    public abstract  @Nullable ADcatDataset getPrimaryTopic();
+    public abstract @Nullable
+    ADcatDataset getPrimaryTopic();
 
     /**
      * A name given to the record, as specified by
      * <a href="http://purl.org/dc/terms/title">dct:title</a>
      */
     @Value.Default
-    public  Dict getTitle(){
+    public Dict getTitle() {
         return Dict.of();
-    };
+    }
+
+    ;
 
     /**
      * Property not in DCAT spec. This should uniquely identify the record.
      */
     @Value.Default
-    public String getUri(){
+    public String getUri() {
         return "";
-    };
+    }
+;
 
 }

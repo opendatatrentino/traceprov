@@ -31,6 +31,8 @@ import org.immutables.value.Value;
 abstract  class AFoafAgent {
     public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";    
 
+    private static final long serialVersionUID = 1L;
+    
  /**
      * Returns the uri of the agent.
      */

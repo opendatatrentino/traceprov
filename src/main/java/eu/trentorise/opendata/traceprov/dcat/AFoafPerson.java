@@ -31,5 +31,7 @@ import org.immutables.value.Value;
 @JsonDeserialize(as=FoafPerson.class)
  abstract class AFoafPerson extends AFoafAgent {
     public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Person";
+    
+    private static final long serialVersionUID = 1L;
 
 }

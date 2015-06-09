@@ -33,7 +33,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @BuilderStylePublic
 public class ATreeRef extends Ref {
-    
+        private static final long serialVersionUID = 1L;
     @Value.Default
     @Value.Parameter    
     public String getJsonPath(){

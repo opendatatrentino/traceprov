@@ -29,5 +29,5 @@ import org.immutables.value.Value;
 @JsonSerialize(as=FoafAgent.class)
 @JsonDeserialize(as=FoafAgent.class)
 abstract class AbstractFoafAgent extends AFoafAgent {
-    
+     private static final long serialVersionUID = 1L;   
 }
