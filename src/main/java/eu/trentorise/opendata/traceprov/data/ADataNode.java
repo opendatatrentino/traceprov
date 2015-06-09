@@ -13,15 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.ref;
+package eu.trentorise.opendata.traceprov.data;
+
+import eu.trentorise.opendata.traceprov.schema.Ref;
+import org.immutables.value.Value;
 
 /**
- * Hold urls related to dcat.
- * 
+ *
  * @author David Leoni
  */
-public final class DcatRefs {
+abstract  class ADataNode {
+
+    private static final long serialVersionUID = 1L;
     
-    public static final String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
+    ADataNode(){}
     
+    @Value.Default
+    @Value.Parameter
+    public Ref getProvenance() {
+        return Ref.of();
+    }
+
 }

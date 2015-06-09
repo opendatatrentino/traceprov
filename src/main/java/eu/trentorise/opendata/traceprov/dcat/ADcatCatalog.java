@@ -15,7 +15,9 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.commons.BuilderStyle;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
 import java.util.List;
 import java.util.Locale;
@@ -37,8 +39,10 @@ import org.joda.time.DateTime;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class ADcatCatalog {
+@BuilderStylePublic
+@JsonSerialize(as=DcatCatalog.class)
+@JsonDeserialize(as=DcatCatalog.class)
+abstract  class ADcatCatalog {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#Catalog";
     
@@ -47,7 +51,7 @@ public abstract class ADcatCatalog {
      * <a href="http://purl.org/dc/terms/description">dct:description </a>
      */
     @Value.Default
-    public Dict getDescription(){
+    public Dict getDescription(){        
         return Dict.of();
     };
 
@@ -74,7 +78,8 @@ public abstract class ADcatCatalog {
      * @see ADcatDistribution#getIssued()
      * @see ADcatCatalogRecord#getIssued()
      */
-    public abstract @Nullable DateTime getIssued();
+    @Nullable
+    public abstract DateTime getIssued();
 
     /**
      * The languages of the catalog. This refers to the language used in the
@@ -92,7 +97,7 @@ public abstract class ADcatCatalog {
      *
      * @see ADcatDataset#getLanguages()
      */
-    public abstract List<Locale> getLanguages();
+    public abstract  List<Locale> getLanguages();
 
     /**
      * This links to the license document under which the <b>catalog</b> is made
@@ -112,7 +117,7 @@ public abstract class ADcatCatalog {
      * compliant</a> string format i.e. "2011-12-11" . Specified by
  <a href="http://purl.org/dc/terms/modified">dct:modified</a>
      */
-    public abstract @Nullable DateTime getModified();
+    public abstract  @Nullable DateTime getModified();
 
     /**
      * The entity responsible for making the catalog online.

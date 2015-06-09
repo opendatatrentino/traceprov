@@ -1,5 +1,5 @@
-/* 
- * Copyright 2015 Trento Rise  (trentorise.eu) 
+/*
+ * Copyright 2015 Trento Rise.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,41 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.traceprov.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.traceprov.schema.Mapping;
+import eu.trentorise.opendata.traceprov.schema.Schema;
 import org.immutables.value.Value;
 
 /**
- * Models a
- * <a href="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme">SKOS
- * ConceptScheme</a>
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=SkosConceptScheme.class)
-@JsonDeserialize(as=SkosConceptScheme.class)
-abstract class ASkosConceptScheme {
+@JsonSerialize(as=ProvFile.class)
+@JsonDeserialize(as=ProvFile.class)
+abstract class AProvFile {
 
-    public static final String CLASS_URI="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme";
+    private static final long serialVersionUID = 1L;
     
-    /**
-     * skos:prefLabel i.e. "A set of domains to classify documents"
-     */
-    @Value.Default
-    @Value.Parameter
-    public String getPrefLabel() {
-        return "";
+    @Value.Default    
+    public DcatMetadata getDcatMetadata() {
+        return DcatMetadata.of();
+    }          
+    
+    @Value.Default    
+    public Schema getDataSchema() {
+        return Schema.of();
     }
-
+        
+    public abstract ImmutableList<Mapping> getSchemaMappings();
+        
     @Value.Default
-    @Value.Parameter
-    public String getUri() {
+    public String getTargetEtypeId(){
         return "";
+    };
+   
+    /**
+     * Returns a map of the nodes. The iteration order is the same of insertion.     
+     */    
+    @Value.Default
+    public ADataNode getData() {
+        return NodeMap.of();
     }
 
 }

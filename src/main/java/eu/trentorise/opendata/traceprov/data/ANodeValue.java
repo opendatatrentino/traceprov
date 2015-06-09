@@ -1,5 +1,5 @@
-/* 
- * Copyright 2015 Trento Rise  (trentorise.eu) 
+/*
+ * Copyright 2015 Trento Rise.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.traceprov.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.traceprov.schema.Ref;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
-
 /**
- * Models a <a href="http://xmlns.com/foaf/0.1/Person" target="_blank"> foaf:Person </a>
+ *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=FoafPerson.class)
-@JsonDeserialize(as=FoafPerson.class)
- abstract class AFoafPerson extends AFoafAgent {
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Person";
+@JsonSerialize(as=NodeValue.class)
+@JsonDeserialize(as=NodeValue.class)
+abstract  class ANodeValue extends ADataNode {
 
+    private static final long serialVersionUID = 1L;
+    
+    @Value.Default
+    @Value.Parameter
+    @Override
+    public Ref getProvenance(){
+        return Ref.of();
+    };           
+            
+    @Nullable
+    public abstract Object getValue();
 }
+

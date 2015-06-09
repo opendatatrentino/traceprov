@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -21,15 +21,34 @@ import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
 
+
 /**
- * Models a <a href="http://xmlns.com/foaf/0.1/Person" target="_blank"> foaf:Person </a>
+ * Represents a reference to a cell in a dataset in tabular format
+ *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=FoafPerson.class)
-@JsonDeserialize(as=FoafPerson.class)
- abstract class AFoafPerson extends AFoafAgent {
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Person";
+@JsonSerialize(as=CellRef.class)
+@JsonDeserialize(as=CellRef.class)
+abstract class ACellRef extends Ref {
 
+    /**
+     * Returns the index of column the cell belongs to, starting from 0.
+     */
+    @Value.Default
+    @Value.Parameter
+    public int getRowIndex() {
+        return 0;
+    }
+
+    /**
+     * Returns the index of row the cell belongs to, starting from 0.
+     */       
+    @Value.Default
+    @Value.Parameter
+    public int getColumnIndex() {
+        return 0;
+    }        
+    
 }

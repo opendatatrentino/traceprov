@@ -1,5 +1,5 @@
-/* 
- * Copyright 2015 Trento Rise  (trentorise.eu) 
+/*
+ * Copyright 2015 Trento Rise.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.ref;
+package eu.trentorise.opendata.traceprov.schema;
 
-import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
 /**
- * Represents a reference to a column in a tabular dataset.
+ * Selector for elements inside a json tree, according to
+ * <a href="https://github.com/jayway/JsonPath" target="_blank">JSONPath
+ * syntax</a>
+ *
+ *
+ * See
+ * <a href="https://groups.google.com/forum/#!topic/jsonpath/5G3bf2wx4zM" target="_blank">
+ * this link for regexes </a>
  *
  * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
-abstract class AColumnRef {
-
-    /**
-     * Column index starting from zero
-     */
+@BuilderStylePublic
+public class ATreeRef extends Ref {
+    
     @Value.Default
-    @Value.Parameter
-    public int getIndex() {
-        return 0;
-    }
-
+    @Value.Parameter    
+    public String getJsonPath(){
+        return "";
+    };   
 }

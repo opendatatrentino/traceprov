@@ -15,8 +15,10 @@
  */
 package eu.trentorise.opendata.traceprov.dcat; 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.Nullable;
@@ -37,8 +39,10 @@ import org.joda.time.DateTime;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class ADcatDataset {
+@BuilderStylePublic
+@JsonSerialize(as=DcatDataset.class)
+@JsonDeserialize(as=DcatDataset.class)
+abstract  class ADcatDataset {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#dataset";
     
@@ -77,7 +81,7 @@ public abstract class ADcatDataset {
     /**
      * Returns the distributions belonging to this dataset.
      */
-    public abstract List<ADcatDistribution> getDistributions();
+    public abstract  List<ADcatDistribution> getDistributions();
 
     /*
      A unique identifier of the dataset, defined by
@@ -98,7 +102,7 @@ public abstract class ADcatDataset {
      * compliant</a> string format i.e. "2011-12-11".
      * 
      */
-    public abstract @Nullable DateTime getIssued();
+    public abstract  @Nullable DateTime getIssued();
 
     /**
      * A set of keywords or tags describing the dataset, as specified by
@@ -106,7 +110,7 @@ public abstract class ADcatDataset {
      * dcat:keyword </a>
      * For example: "accountability","transparency" ,"payments"
      */
-    public abstract List<String> getKeywords();
+    public abstract  List<String> getKeywords();
 
     /**
      * A Web page that can be navigated to in a Web browser to gain access to
@@ -146,7 +150,7 @@ public abstract class ADcatDataset {
      * corresponding IRI should be used; if no ISO 639-1 code is defined, then
      * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
      */
-    public abstract List<Locale> getLanguages();
+    public abstract  List<Locale> getLanguages();
 
     /**
      * Most recent date on which the dataset was changed, updated or modified.
@@ -162,7 +166,7 @@ public abstract class ADcatDataset {
      *
      * @see #getAccrualPeriodicity()
      */
-    public abstract @Nullable DateTime getModified();
+    public abstract  @Nullable DateTime getModified();
 
     /**
      * An entity responsible for making the dataset available.
@@ -207,8 +211,8 @@ public abstract class ADcatDataset {
      * datasets are organized in the {@link ASkosConceptScheme} returned by
      * {@link ADcatCatalog#getThemes()}. Notice that 'category' is also used as
      * synonym of 'themes' in dcat specs.
-     */
-    public abstract List<SkosConcept> getThemes();
+     */    
+    public abstract  List<SkosConcept> getThemes();
 
     /**
      * A name given to the dataset as specified by

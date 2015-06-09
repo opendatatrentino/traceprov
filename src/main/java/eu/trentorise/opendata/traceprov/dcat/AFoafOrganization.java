@@ -15,7 +15,9 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
-import eu.trentorise.opendata.commons.BuilderStyle;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
 /**
@@ -23,7 +25,9 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class AFoafOrganization extends AFoafAgent {
+@BuilderStylePublic
+@JsonSerialize(as=FoafOrganization.class)
+@JsonDeserialize(as=FoafOrganization.class)
+ abstract  class AFoafOrganization extends AFoafAgent {
     public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Organization";
 }

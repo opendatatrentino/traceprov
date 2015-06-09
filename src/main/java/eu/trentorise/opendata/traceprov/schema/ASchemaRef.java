@@ -1,5 +1,5 @@
-/* 
- * Copyright 2015 Trento Rise  (trentorise.eu) 
+/*
+ * Copyright 2015 Trento Rise.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
+package eu.trentorise.opendata.traceprov.schema;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.ImmutableList;
+import static eu.trentorise.opendata.commons.OdtUtils.checkNotEmpty;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
-
 /**
- * Models a <a href="http://xmlns.com/foaf/0.1/Person" target="_blank"> foaf:Person </a>
+ * Reference to a simple a/b/c property ids path 
+ *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=FoafPerson.class)
-@JsonDeserialize(as=FoafPerson.class)
- abstract class AFoafPerson extends AFoafAgent {
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Person";
+abstract  class ASchemaRef extends Ref {
+
+    /**
+     * Returns a path of property ids in a reference schema
+     */
+    public abstract ImmutableList<String> getPropertyIds();
+
+    @Value.Check
+    protected void check() {
+        for (String item : getPropertyIds()) {            
+            checkNotEmpty(item, "Invalid item in schema path " + getPropertyIds());
+        }
+    }
+
 
 }

@@ -13,21 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
-import org.immutables.value.Value;
+package eu.trentorise.opendata.traceprov.schema;
 
 /**
- * Only used to generate a FoafAgent with builder.
+ * Hold urls related to dcat.
+ * 
  * @author David Leoni
  */
-@Value.Immutable
-@BuilderStylePublic
-@JsonSerialize(as=FoafAgent.class)
-@JsonDeserialize(as=FoafAgent.class)
-abstract class AbstractFoafAgent extends AFoafAgent {
+public final class DcatRefs {
+    
+    public static final String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
     
 }

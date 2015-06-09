@@ -15,6 +15,8 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
 import org.immutables.value.Value;
 
@@ -24,22 +26,25 @@ import org.immutables.value.Value;
  *
  * @author David Leoni
  */
-public abstract class AFoafAgent {
+@JsonSerialize(as=FoafAgent.class)
+@JsonDeserialize(as=FoafAgent.class)
+abstract  class AFoafAgent {
     public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";    
 
  /**
      * Returns the uri of the agent.
      */
     @Value.Default
+    @Value.Parameter
     public String getUri() {
         return "";
     }
 
     /**
      * Returns <a href="http://xmlns.com/foaf/0.1/name" target="_blank">the agent name </a>
-     */
-    @Value.Parameter
+     */    
     @Value.Default
+    @Value.Parameter
     public Dict getName(){
         return Dict.of();
     };

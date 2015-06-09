@@ -15,9 +15,11 @@
  */
 package eu.trentorise.opendata.traceprov.dcat; 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
 
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
@@ -54,8 +56,10 @@ import org.joda.time.DateTime;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class ADcatCatalogRecord {
+@BuilderStylePublic
+@JsonSerialize(as=DcatCatalogRecord.class)
+@JsonDeserialize(as=DcatCatalogRecord.class)
+ abstract  class ADcatCatalogRecord {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#record";
     
@@ -81,7 +85,7 @@ public abstract class ADcatCatalogRecord {
      *
      * @see ADcatDataset#getIssued()
      */        
-    public abstract @Nullable DateTime getIssued();
+    public abstract  @Nullable DateTime getIssued();
 
     /**
      * Most recent date on which the catalog entry was changed, updated or
@@ -96,7 +100,7 @@ public abstract class ADcatCatalogRecord {
      *
      * @see ADcatDataset#getModified()
      */
-    public abstract @Nullable DateTime getModified();
+    public abstract  @Nullable DateTime getModified();
 
     /**
      * Links the catalog record to the dcat:Dataset resource described in the
@@ -105,7 +109,7 @@ public abstract class ADcatCatalogRecord {
      * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic">
      * foaf:primaryTopic </a>
      */
-    public abstract @Nullable ADcatDataset getPrimaryTopic();
+    public abstract  @Nullable ADcatDataset getPrimaryTopic();
 
     /**
      * A name given to the record, as specified by

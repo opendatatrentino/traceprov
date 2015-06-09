@@ -13,38 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.ref;
+package eu.trentorise.opendata.traceprov.schema;
 
-import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
-
-
 /**
- * Represents a reference to a cell in a dataset in tabular format
+ * Represent a reference to an element of a dcat dataset, like for example the
+ * title
  *
  * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
-abstract class ACellRef {
+@BuilderStylePublic
+abstract class ADcatRef extends Ref {
 
     /**
-     * Returns the index of column the cell belongs to.
+     * Returns the URI of the class containing the referenced element (i.e.
+     * {@link eu.trentorise.opendata.traceprov.dcat.ADcatDataset#CLASS_URI})
      */
     @Value.Default
     @Value.Parameter
-    public int getRowIndex() {
-        return 0;
+    public String getClassUri() {
+        return "";
     }
 
     /**
-     * Returns the index of row the cell belongs to.
-     */       
+     * Let's say we are referring to a title of a dcat dataset, then we would
+     * return {@link DcatRefs#DUBLIC_CORE_TERMS_TITLE}, as DCAT expresses
+     * dataset title with a Dublin core vocabulary attribute
+     */
     @Value.Default
     @Value.Parameter
-    public int getColumnIndex() {
-        return 0;
-    }        
+    public String getPropertyUri() {
+        return "";
+    }
+    
 
 }

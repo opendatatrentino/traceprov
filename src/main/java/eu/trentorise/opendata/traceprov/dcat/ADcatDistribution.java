@@ -15,9 +15,11 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
 import com.google.common.base.Optional;
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
@@ -30,8 +32,10 @@ import org.joda.time.DateTime;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class ADcatDistribution {
+@BuilderStylePublic
+@JsonSerialize(as=DcatDistribution.class)
+@JsonDeserialize(as=DcatDistribution.class)
+ abstract  class ADcatDistribution {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#distribution";
     
@@ -136,7 +140,7 @@ public abstract class ADcatDistribution {
      *
      * @see #getModified()
      */
-    public abstract @Nullable DateTime getIssued();
+    public abstract  @Nullable DateTime getIssued();
 
     /**
      * The language of the distribution. Note that this does not explicitly
@@ -209,7 +213,7 @@ public abstract class ADcatDistribution {
      *
      * @see ADcatDataset#getModified()
      */
-    public abstract @Nullable DateTime getModified();
+    public abstract  @Nullable DateTime getModified();
 
     /**
      * Information about rights held in and over the distribution, as specified

@@ -19,7 +19,7 @@ import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
-import eu.trentorise.opendata.traceprov.ref.CellRef;
+import eu.trentorise.opendata.traceprov.schema.CellRef;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -62,8 +62,10 @@ public class CodeGenTest {
 
     @Test
     public void testRefCodeGen() {
-
+/*
         assertEquals(CellRef.of(), CellRef.of(0, 0));
+        assertEquals(CellRef.of().withDocumentId("a"), CellRef.of(0, 0).withDocumentId("a"));
+        */
         assertEquals(1, CellRef.of(1, 0).getRowIndex());        
 
     }

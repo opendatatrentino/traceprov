@@ -15,8 +15,10 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
 /**
@@ -28,8 +30,10 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStyle
-public abstract class ASkosConcept {
+@BuilderStylePublic
+@JsonSerialize(as=SkosConcept.class)
+@JsonDeserialize(as=SkosConcept.class)
+ abstract  class ASkosConcept {
     
     public static final String CLASS_URI="http://www.w3.org/2004/02/skos/core#Concept";
     
