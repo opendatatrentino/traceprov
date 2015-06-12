@@ -17,7 +17,8 @@ package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.SimpleStyle;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 
@@ -28,10 +29,10 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStylePublic
+@SimpleStyle
 @JsonSerialize(as=CellRef.class)
 @JsonDeserialize(as=CellRef.class)
-abstract class ACellRef extends Ref {
+abstract class ACellRef extends Ref implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * Returns the index of column the cell belongs to, starting from 0.

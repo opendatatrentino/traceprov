@@ -18,6 +18,7 @@ package eu.trentorise.opendata.traceprov.dcat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -31,7 +32,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as=SkosConceptScheme.class)
 @JsonDeserialize(as=SkosConceptScheme.class)
-abstract class ASkosConceptScheme {
+abstract class ASkosConceptScheme implements Serializable {
 
     public static final String CLASS_URI="http://www.w3.org/2009/08/skos-reference/skos.html#ConceptScheme";
     

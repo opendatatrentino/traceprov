@@ -16,6 +16,9 @@
 package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -24,7 +27,9 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
-public class Ref {
+@JsonSerialize(as=Ref.class)
+@JsonDeserialize(as=Ref.class)
+public class Ref implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

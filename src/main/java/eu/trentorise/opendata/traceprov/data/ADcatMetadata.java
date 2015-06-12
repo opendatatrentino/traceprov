@@ -17,10 +17,11 @@ package eu.trentorise.opendata.traceprov.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.SimpleStyle;
 import eu.trentorise.opendata.traceprov.dcat.DcatCatalog;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.DcatDistribution;
+import java.io.Serializable;
 import org.immutables.value.Value;  
 
 /**
@@ -29,10 +30,10 @@ import org.immutables.value.Value;
  * @author David Leoni <david.leoni@unitn.it>
  */
 @Value.Immutable
-@BuilderStylePublic
+@SimpleStyle
 @JsonSerialize(as=DcatMetadata.class)
 @JsonDeserialize(as=DcatMetadata.class)
-abstract class ADcatMetadata {
+abstract class ADcatMetadata implements Serializable {
     
     private static final long serialVersionUID = 1L;
     

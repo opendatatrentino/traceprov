@@ -18,6 +18,7 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.SimpleStyle;
 import eu.trentorise.opendata.traceprov.schema.Ref;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
@@ -27,7 +28,7 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStylePublic
+@SimpleStyle
 @JsonSerialize(as=NodeValue.class)
 @JsonDeserialize(as=NodeValue.class)
 abstract  class ANodeValue extends ADataNode {

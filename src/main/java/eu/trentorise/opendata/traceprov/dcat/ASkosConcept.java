@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -33,7 +34,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as=SkosConcept.class)
 @JsonDeserialize(as=SkosConcept.class)
- abstract  class ASkosConcept {
+ abstract  class ASkosConcept implements Serializable  {
     
     public static final String CLASS_URI="http://www.w3.org/2004/02/skos/core#Concept";
     

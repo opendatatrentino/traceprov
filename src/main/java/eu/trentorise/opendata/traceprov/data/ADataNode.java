@@ -16,15 +16,14 @@
 package eu.trentorise.opendata.traceprov.data;
 
 import eu.trentorise.opendata.traceprov.schema.Ref;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
  *
  * @author David Leoni
  */
-abstract  class ADataNode {
-
-    private static final long serialVersionUID = 1L;
+abstract class ADataNode implements Serializable  {   
     
     ADataNode(){}
     

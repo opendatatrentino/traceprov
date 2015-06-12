@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
 
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import java.io.Serializable;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
@@ -59,7 +60,7 @@ import org.joda.time.DateTime;
 @BuilderStylePublic
 @JsonSerialize(as = DcatCatalogRecord.class)
 @JsonDeserialize(as = DcatCatalogRecord.class)
-abstract class ADcatCatalogRecord {
+abstract class ADcatCatalogRecord implements Serializable {
 
     public static final String CLASS_URI = "http://www.w3.org/ns/dcat#record";
 

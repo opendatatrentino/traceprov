@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.traceprov.schema.Mapping;
 import eu.trentorise.opendata.traceprov.schema.Schema;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -31,7 +32,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as=ProvFile.class)
 @JsonDeserialize(as=ProvFile.class)
-abstract class AProvFile {
+abstract class AProvFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

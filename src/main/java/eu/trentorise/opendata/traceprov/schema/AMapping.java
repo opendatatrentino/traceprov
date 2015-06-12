@@ -15,7 +15,10 @@
  */
 package eu.trentorise.opendata.traceprov.schema;
 
-import eu.trentorise.opendata.commons.BuilderStylePublic;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.trentorise.opendata.commons.SimpleStyle;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -23,8 +26,10 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStylePublic
-abstract  class AMapping {
+@SimpleStyle
+@JsonSerialize(as=Mapping.class)
+@JsonDeserialize(as=Mapping.class)
+abstract  class AMapping implements Serializable {
         private static final long serialVersionUID = 1L;
         
     @Value.Default

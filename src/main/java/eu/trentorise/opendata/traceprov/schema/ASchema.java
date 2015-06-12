@@ -15,7 +15,10 @@
  */
 package eu.trentorise.opendata.traceprov.schema;
 
-import eu.trentorise.opendata.commons.BuilderStylePublic;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.trentorise.opendata.commons.SimpleStyle;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -23,7 +26,9 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStylePublic
-abstract  class ASchema {
+@SimpleStyle
+@JsonSerialize(as=Schema.class)
+@JsonDeserialize(as=Schema.class)
+abstract  class ASchema implements Serializable {
         private static final long serialVersionUID = 1L;
 }

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.Nullable;
@@ -42,7 +43,7 @@ import org.joda.time.DateTime;
 @BuilderStylePublic
 @JsonSerialize(as=DcatCatalog.class)
 @JsonDeserialize(as=DcatCatalog.class)
-abstract  class ADcatCatalog {
+abstract  class ADcatCatalog implements Serializable  {
 
     public static final String CLASS_URI="http://www.w3.org/ns/dcat#Catalog";
     

@@ -18,7 +18,8 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.SimpleStyle;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -26,10 +27,10 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStylePublic
+@SimpleStyle
 @JsonSerialize(as=TableData.class)
 @JsonDeserialize(as=TableData.class)
-abstract class ATableData {
+abstract class ATableData implements Serializable {
     
     private static final long serialVersionUID = 1L;
     

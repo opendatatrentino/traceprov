@@ -18,8 +18,8 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.SimpleStyle;
 import eu.trentorise.opendata.traceprov.schema.Ref;
-import java.util.List;
 import java.util.Map;
 import javax.swing.tree.TreeNode;
 import org.immutables.value.Value;
@@ -29,7 +29,7 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStylePublic
+@SimpleStyle
 @JsonSerialize(as=NodeMap.class)
 @JsonDeserialize(as=NodeMap.class)
 abstract  class ANodeMap extends ADataNode {
@@ -43,5 +43,5 @@ abstract  class ANodeMap extends ADataNode {
         return Ref.of();
     };           
         
-    public abstract  List<Map.Entry<String, TreeNode>> getElements();
+    public abstract  Map<String, TreeNode> getElements();
 }

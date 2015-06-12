@@ -15,9 +15,12 @@
  */
 package eu.trentorise.opendata.traceprov.schema;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import static eu.trentorise.opendata.commons.OdtUtils.checkNotEmpty;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.SimpleStyle;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -26,8 +29,10 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@BuilderStylePublic
-abstract  class ASchemaRef extends Ref {
+@SimpleStyle
+@JsonSerialize(as=SchemaRef.class)
+@JsonDeserialize(as=SchemaRef.class)
+abstract  class ASchemaRef extends Ref implements Serializable  {
     private static final long serialVersionUID = 1L;
     /**
      * Returns a path of property ids in a reference schema
