@@ -17,22 +17,21 @@ package eu.trentorise.opendata.traceprov.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
+import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import eu.trentorise.opendata.traceprov.schema.Ref;
 import java.util.Map;
-import javax.swing.tree.TreeNode;
 import org.immutables.value.Value;
 
-/**
- *
- * @author David Leoni
- */
+/** 
+ * {@link ProvFile} body node containing a map of fields to other nodes.
+ * @author David Leoni 
+*/
 @Value.Immutable
 @SimpleStyle
 @JsonSerialize(as=NodeMap.class)
 @JsonDeserialize(as=NodeMap.class)
-abstract  class ANodeMap extends ADataNode {
+abstract class ANodeMap extends ANode {
 
     private static final long serialVersionUID = 1L;
     
@@ -41,7 +40,13 @@ abstract  class ANodeMap extends ADataNode {
     @Override
     public Ref getProvenance(){
         return Ref.of();
-    };           
-        
-    public abstract  Map<String, TreeNode> getElements();
+    };
+    
+    /**
+     * Returns the elements of the map.
+     */
+    @Value.Parameter
+    public Map<String, ? extends ANode> getElements(){
+        return ImmutableMap.of();
+    };
 }

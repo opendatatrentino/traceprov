@@ -15,33 +15,25 @@
  */
 package eu.trentorise.opendata.traceprov.data;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.SimpleStyle;
 import eu.trentorise.opendata.traceprov.schema.Ref;
-import javax.annotation.Nullable;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
- * {@link ProvFile} body node containing a ground value, like null, number, string.
+ * A node of the tree representation of the {@link eu.trentorise.opendata.traceprov.data.ProvFile} body
  * @author David Leoni
  */
-@Value.Immutable
-@SimpleStyle
-@JsonSerialize(as=NodeValue.class)
-@JsonDeserialize(as=NodeValue.class)
-abstract class ANodeValue extends ANode {
-
-    private static final long serialVersionUID = 1L;
+public abstract class ANode implements Serializable  {   
     
+    ANode(){}
+    
+    /**
+     * Returns a reference to position in the original file from which this node comes from.
+     */
     @Value.Default
     @Value.Parameter
-    @Override
-    public Ref getProvenance(){
+    public Ref getProvenance() {
         return Ref.of();
-    };           
-            
-    @Nullable
-    public abstract Object getValue();
-}
+    }
 
+}

@@ -15,11 +15,17 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
+import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.traceprov.data.NodeMap;
+import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.schema.CellRef;
+import eu.trentorise.opendata.traceprov.schema.Mapping;
+import eu.trentorise.opendata.traceprov.schema.Ref;
+import eu.trentorise.opendata.traceprov.schema.SchemaRef;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -37,7 +43,7 @@ public class CodeGenTest {
     }
 
     @Test
-    public void testDcatCodeGen() {
+    public void testDcat() {
         DcatDataset dataset = DcatDataset.of();
 
         assertEquals("", dataset.getUri());
@@ -61,13 +67,25 @@ public class CodeGenTest {
     }
 
     @Test
-    public void testRefCodeGen() {
-/*
+    public void testRef() {
+
         assertEquals(CellRef.of(), CellRef.of(0, 0));
-        assertEquals(CellRef.of().withDocumentId("a"), CellRef.of(0, 0).withDocumentId("a"));
-        */
+        assertEquals(CellRef.of().withDocumentId("a"), CellRef.of(0, 0).withDocumentId("a"));        
         assertEquals(1, CellRef.of(1, 0).getRowIndex());        
 
     }
+    
+    
+    @Test
+    public void testDataModel() {        
+        assertEquals(ProvFile.of().getData(), NodeMap.of());
+        assertEquals(ProvFile.of().getSchemaMappings(), ImmutableList.of());    
+        
+        ProvFile.builder().addSchemaMappings(
+                Mapping.of( Ref.of(), 
+                            SchemaRef.of(ImmutableList.of("a","b"))));
+    }
 
+    
+    
 }

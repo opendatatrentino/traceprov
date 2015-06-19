@@ -77,7 +77,7 @@ import org.joda.time.DateTime;
         return 0;
     }
 
-    ;
+    
 
     /**
      * Property not in Dcat standard, added for convenience. Result must be the
@@ -188,7 +188,7 @@ import org.joda.time.DateTime;
         return "";
     }
 
-    ;
+    
 
     /**
      * The media type of the distribution as defined by

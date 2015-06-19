@@ -13,39 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.schema;
+package eu.trentorise.opendata.traceprov.validation;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableList;
-import static eu.trentorise.opendata.commons.OdtUtils.checkNotEmpty;
+import eu.trentorise.opendata.commons.LocalizedString;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import java.io.Serializable;
-import java.util.List;
+import eu.trentorise.opendata.traceprov.schema.Ref;
 import org.immutables.value.Value;
+import org.immutables.value.Value.Default;
+import org.immutables.value.Value.Parameter;
 
 /**
- * Reference to a simple a/b/c property ids path 
- *
- * @author David Leoni
+ * Represent a generic error in a {@link eu.trentorise.opendata.traceprov.data.ProvFile}
+ * @author David Leoni 
  */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as=SchemaRef.class)
-@JsonDeserialize(as=SchemaRef.class)
-abstract  class ASchemaRef extends Ref implements Serializable  {
-    private static final long serialVersionUID = 1L;
-    /**
-     * Returns a path of property ids in a reference schema
-     */    
-    @Value.Parameter
-    public abstract List<String> getPropertyIds();
-
-    @Value.Check
-    protected void check() {
-        for (String item : getPropertyIds()) {            
-            checkNotEmpty(item, "Invalid item in schema path " + getPropertyIds());
-        }
-    }
-
+@JsonSerialize(as=GenericError.class)
+@JsonDeserialize(as=GenericError.class)
+abstract class AGenericError extends Error {
+    
+    @Default
+    @Parameter
+    @Override
+    public Ref getRef(){
+        return Ref.of();
+    };
+    
+    @Default
+    @Parameter
+    @Override
+    public LocalizedString getReason(){
+        return LocalizedString.of();
+    };
 }

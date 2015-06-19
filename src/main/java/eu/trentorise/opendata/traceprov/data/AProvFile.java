@@ -22,43 +22,49 @@ import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.traceprov.schema.Mapping;
 import eu.trentorise.opendata.traceprov.schema.Schema;
 import java.io.Serializable;
+import java.util.List;
 import org.immutables.value.Value;
 
 /**
+ * Tree-like generic data model to represent a file and tracking from where data
+ * comes from. Also holds validation errors.
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=ProvFile.class)
-@JsonDeserialize(as=ProvFile.class)
+@JsonSerialize(as = ProvFile.class)
+@JsonDeserialize(as = ProvFile.class)
 abstract class AProvFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    @Value.Default    
+
+    @Value.Default
     public DcatMetadata getDcatMetadata() {
         return DcatMetadata.of();
-    }          
-    
-    @Value.Default    
+    }
+
+    @Value.Default
     public Schema getDataSchema() {
         return Schema.of();
     }
-        
+
     public abstract ImmutableList<Mapping> getSchemaMappings();
-        
+
     @Value.Default
-    public String getTargetEtypeId(){
+    public String getTargetEtypeId() {
         return "";
-    };
+    }
+
    
     /**
-     * Returns a map of the nodes. The iteration order is the same of insertion.     
+     * Returns the data content of the file as a hierarchical tree
      */    
     @Value.Default
-    public ADataNode getData() {
+    public ANode getData() {
         return NodeMap.of();
     }
+
+    public abstract List<Error> getErrors();
 
 }

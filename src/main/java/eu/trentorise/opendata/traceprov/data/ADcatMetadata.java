@@ -47,7 +47,7 @@ abstract class ADcatMetadata implements Serializable {
     }
     
     /**
-     
+     * 
      */
     @Value.Default
     @Value.Parameter
@@ -57,7 +57,7 @@ abstract class ADcatMetadata implements Serializable {
     
     
     /**
-     
+     *  
      */
     @Value.Default
     @Value.Parameter

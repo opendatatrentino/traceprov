@@ -17,17 +17,22 @@ package eu.trentorise.opendata.traceprov.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import eu.trentorise.opendata.traceprov.schema.Ref;
 import java.util.List;
-import javax.swing.tree.TreeNode;
 import org.immutables.value.Value;
 
+
+/**
+ * {@link ProvFile} body node containing an array of other nodes.
+ * @author David Leoni 
+ */
 @Value.Immutable
 @SimpleStyle
 @JsonSerialize(as=NodeArray.class)
 @JsonDeserialize(as=NodeArray.class)
-abstract class ANodeArray extends ADataNode {
+public abstract class ANodeArray extends ANode {
 
     private static final long serialVersionUID = 1L;
     
@@ -38,6 +43,11 @@ abstract class ANodeArray extends ADataNode {
         return Ref.of();
     };           
     
-    @Value.Parameter
-    public abstract  List<TreeNode> getElements();
+    /**
+     * Returns the elements of the array
+     */
+    @Value.Parameter    
+    public List<? extends ANode> getElements(){
+        return ImmutableList.of();
+    };
 }
