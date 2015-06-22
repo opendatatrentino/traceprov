@@ -18,29 +18,49 @@ package eu.trentorise.opendata.traceprov.schema;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import java.io.Serializable;
 import org.immutables.value.Value;
 
+
 /**
- * A mapping from an element in a source file to a target schema attribute path.
+ * Definition of a property that can be found in a json-ld file.
+ *
  * @author David Leoni
  */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as=Mapping.class)
-@JsonDeserialize(as=Mapping.class)
-abstract class AMapping implements Serializable {
-        private static final long serialVersionUID = 1L;
-        
+@JsonSerialize(as = PropertyDef.class)
+@JsonDeserialize(as = PropertyDef.class)
+abstract class APropertyDef {
+
+    /**
+     * Identifier (possibly a complete IRI), i.e.
+     * <a href="http://schema.org/name" target="_blank">http://schema.org/name</a>
+     */
     @Value.Default
-    @Value.Parameter    
-    public Ref getSourceRef(){
-        return Ref.of();
-    };
-    
+    @Value.Parameter
+    public String getId() {
+        return "";
+    }
+
+    /**
+     * Human readable property name as found in json files.
+     */
     @Value.Default
-    @Value.Parameter    
-    public SchemaRef getTargetRef(){
-        return SchemaRef.of();
-    };
+    @Value.Parameter
+    public String getName() {
+        return "";
+    }
+
+    /**
+     * Although Json-ld always allow inserting multiple values (because of the
+     * open world assumption), we demand multiple values must be explicitly
+     * declared. todo review this
+     *
+     */
+    @Value.Default
+    @Value.Parameter
+    public boolean isList() {
+        return false;
+    }
+
 }

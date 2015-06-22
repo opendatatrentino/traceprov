@@ -39,32 +39,51 @@ abstract class AProvFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The Dcat metadata associated to the original file. If no metadata was
+     * found, {@link DcatMetadata#of()} is returned.
+     */
     @Value.Default
     public DcatMetadata getDcatMetadata() {
         return DcatMetadata.of();
     }
 
+    /**
+     * The schema of the original file. If no schema was found,
+     * {@link Schema#of()} is returned.
+     */
     @Value.Default
     public Schema getDataSchema() {
         return Schema.of();
     }
 
+    /**
+     * The high-level mappings from source file elements (columns, schema node
+     * paths, ...) to the target schema property paths.
+     */
     public abstract ImmutableList<Mapping> getSchemaMappings();
 
+    /**
+     * The target schema identifier. If no identifier was associated, an empty
+     * string is returned.
+     */
     @Value.Default
-    public String getTargetEtypeId() {
+    public String getTargetSchemaId() {
         return "";
     }
 
-   
     /**
-     * Returns the data content of the file as a hierarchical tree
-     */    
+     * Returns the data content of the file as a hierarchical tree. If no data
+     * was found, {@link NodeMap#of()} is returned.
+     */
     @Value.Default
     public ANode getData() {
         return NodeMap.of();
     }
 
+    /**
+     * Returns the validation errors found in the original file.
+     */
     public abstract List<Error> getErrors();
 
 }

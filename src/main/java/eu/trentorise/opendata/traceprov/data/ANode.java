@@ -28,7 +28,7 @@ public abstract class ANode implements Serializable  {
     ANode(){}
     
     /**
-     * Returns a reference to position in the original file from which this node comes from.
+     * A reference to position in the original file from which this node comes from.
      */
     @Value.Default
     @Value.Parameter

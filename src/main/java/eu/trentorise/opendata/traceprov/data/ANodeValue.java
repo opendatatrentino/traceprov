@@ -23,25 +23,29 @@ import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**
- * {@link ProvFile} body node containing a ground value, like null, number, string.
+ * {@link ProvFile} body node containing a ground json-compatible value, like
+ * null, number, string.
+ *
  * @author David Leoni
  */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as=NodeValue.class)
-@JsonDeserialize(as=NodeValue.class)
+@JsonSerialize(as = NodeValue.class)
+@JsonDeserialize(as = NodeValue.class)
 abstract class ANodeValue extends ANode {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Value.Default
     @Value.Parameter
     @Override
-    public Ref getProvenance(){
+    public Ref getProvenance() {
         return Ref.of();
-    };           
+    }            
             
+    /**
+     * A ground json-compatible value, like null, number, string.     
+     */
     @Nullable
     public abstract Object getValue();
 }
-

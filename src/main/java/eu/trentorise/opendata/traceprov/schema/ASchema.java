@@ -17,18 +17,46 @@ package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.io.Serializable;
+import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * TODO fill this class in some way...
+ * A Schema of a tree-like file, loosely modeled after what you can express with
+ * a jsonld context.
+ *
  * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
-@JsonSerialize(as=Schema.class)
-@JsonDeserialize(as=Schema.class)
-abstract  class ASchema implements Serializable {
-        private static final long serialVersionUID = 1L;
+@BuilderStylePublic
+@JsonSerialize(as = Schema.class)
+@JsonDeserialize(as = Schema.class)
+abstract class ASchema implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * The id of the type, which may be an IRI like i.e.
+     * https://schema.org/Person
+     */
+    @Value.Default
+    @Value.Parameter
+    public String getId() {
+        return "";
+    }
+
+    /**
+     * Name of the type preferably in English and camelcased, i.e. CreativeWork,
+     * BroadcastService
+     */
+    @Value.Default
+    @Value.Parameter
+    public String getName() {
+        return "";
+    }
+
+    @Value.Parameter
+    public abstract List<PropertyDef> getPropertyDefs();
+
 }

@@ -23,5 +23,14 @@ package eu.trentorise.opendata.traceprov.schema;
 public final class DcatRefs {
     
     public static final String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
-        private static final long serialVersionUID = 1L;
+    
+    public static final String DUBLIC_CORE_TERMS_SPATIAL = "http://purl.org/dc/terms/spatial";
+    
+    public static final String DUBLIC_CORE_TERMS_TEMPORAL = "http://purl.org/dc/terms/temporal";
+    
+    public static final String DUBLIC_CORE_TERMS_PUBLISHER = "http://purl.org/dc/terms/publisher";
+    
+    public static final String DUBLIC_CORE_TERMS_LICENSE = "http://purl.org/dc/terms/license";
+    
+    private static final long serialVersionUID = 1L;
 }

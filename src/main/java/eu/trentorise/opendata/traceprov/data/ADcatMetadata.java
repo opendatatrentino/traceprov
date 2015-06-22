@@ -22,46 +22,47 @@ import eu.trentorise.opendata.traceprov.dcat.DcatCatalog;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.DcatDistribution;
 import java.io.Serializable;
-import org.immutables.value.Value;  
+import org.immutables.value.Value;
 
 /**
- * 
- * The context of a distribution coming from a dcat catalog. Superceeds {@link IResourceContext}
+ * The context of a distribution coming from a dcat catalog. Superceeds
+ * open entity <a href="https://github.com/opendatatrentino/openentity-api/blob/feb2015-demo/src/main/java/eu/trentorise/opendata/semantics/model/knowledge/IResourceContext.java" target="_blank"> IResourceContext</a>
+ *
  * @author David Leoni <david.leoni@unitn.it>
  */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as=DcatMetadata.class)
-@JsonDeserialize(as=DcatMetadata.class)
+@JsonSerialize(as = DcatMetadata.class)
+@JsonDeserialize(as = DcatMetadata.class)
 abstract class ADcatMetadata implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /**
-     
+     * The catalog of provenance. If no catalog was associated,
+     * {@link DcatCatalog#of()} is returned.
      */
     @Value.Default
-    @Value.Parameter    
-    public DcatCatalog getCatalog(){
+    @Value.Parameter
+    public DcatCatalog getCatalog() {
         return DcatCatalog.of();
     }
-    
+
     /**
-     * 
+     * The dataset metadata in dcat format
      */
     @Value.Default
     @Value.Parameter
-    public DcatDataset getDataset(){
+    public DcatDataset getDataset() {
         return DcatDataset.of();
-    }    
-    
-    
+    }
+
     /**
-     *  
+     * The distribution metadata in dcat format
      */
     @Value.Default
     @Value.Parameter
-    public DcatDistribution getDistribution(){
+    public DcatDistribution getDistribution() {
         return DcatDistribution.of();
-    }    
+    }
 }
