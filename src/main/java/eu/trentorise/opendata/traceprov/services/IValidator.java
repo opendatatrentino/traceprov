@@ -39,4 +39,11 @@ public interface IValidator {
      * output object instead of throwing an exception.
      */
     ProvFile validate(InputStream stream, Schema schema, String mimetype);
+    
+    /**
+     * Validates 
+     * @param stream
+     * @return 
+     */
+    Schema validateSchema(InputStream stream);
 }

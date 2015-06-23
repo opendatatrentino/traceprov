@@ -16,6 +16,7 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import eu.trentorise.opendata.traceprov.data.ProvFile;
+import eu.trentorise.opendata.traceprov.schema.Schema;
 import eu.trentorise.opendata.traceprov.services.IValidator;
 import java.io.InputStream;
 
@@ -31,7 +32,12 @@ public class ValidatorTest {
 class CsvValidator implements IValidator {
 
     @Override
-    public ProvFile validate(InputStream stream, String mimetype) {
+    public ProvFile validate(InputStream stream, Schema schema, String mimetype) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Schema validateSchema(InputStream stream) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

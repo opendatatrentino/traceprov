@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.traceprov.schema.Mapping;
 import eu.trentorise.opendata.traceprov.schema.Schema;
+import eu.trentorise.opendata.traceprov.services.ValidationError;
 import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
@@ -84,6 +85,6 @@ abstract class AProvFile implements Serializable {
     /**
      * Returns the validation errors found in the original file.
      */
-    public abstract List<Error> getErrors();
+    public abstract List<ValidationError> getErrors();
 
 }

@@ -43,19 +43,13 @@ public class Ref implements Serializable {
         this.documentId = "";
     }
 
+    
     @Value.Default
     public String getDocumentId() {
         return "";
     }
 
-    /**
-     * Silly workaround for immutables giving
-     * \Users\david_2\Da\prj\trentorise\traceprov\prj\target\generated-sources\annotations\eu\trentorise\opendata\traceprov\schema\CellRef.java:[168,41]
-     * error: cannot find symbol
-     */
-    public String documentId() {
-        return documentId;
-    }
+   
 
     /**
      * Returns a missing ref.
