@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.io.Serializable;
 import org.immutables.value.Value;
 
@@ -34,7 +34,7 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
+@BuilderStylePublic
 @JsonSerialize(as=TreeRef.class)
 @JsonDeserialize(as=TreeRef.class)
 public class ATreeRef extends Ref implements Serializable {

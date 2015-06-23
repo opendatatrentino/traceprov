@@ -36,9 +36,9 @@ import org.junit.BeforeClass;
  * @author David Leoni
  */
 public class CodeGenTest {
-    
+
     @BeforeClass
-    public static void setUpClass() {        
+    public static void setUpClass() {
         OdtConfig.init(CodeGenTest.class);
     }
 
@@ -51,15 +51,15 @@ public class CodeGenTest {
         assertEquals("a", DcatDataset.builder().setUri("a").build().getUri());
 
         assertEquals("b", dataset.withUri("b").getUri());
-        
-        DcatDataset.builder().addAllDistributions(DcatDataset.of().getDistributions());                
+
+        DcatDataset.builder().addAllDistributions(DcatDataset.of().getDistributions());
         FoafAgent.builder();
     }
-    
+
     @Test
     public void dcataDatasetUsageExample() {
         DcatDataset dataset = DcatDataset
-                .builder()                
+                .builder()
                 .setTitle(Dict.of(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013"))
                 .setLandingPage("http://dati.trentino.it/dataset/impianti-di-risalita-vivifiemme-2013")
                 .build();
@@ -70,22 +70,28 @@ public class CodeGenTest {
     public void testRef() {
 
         assertEquals(CellRef.of(), CellRef.of(0, 0));
-        assertEquals(CellRef.of().withDocumentId("a"), CellRef.of(0, 0).withDocumentId("a"));        
-        assertEquals(1, CellRef.of(1, 0).getRowIndex());        
+        assertEquals(CellRef.of().withDocumentId("a"), CellRef.of(0, 0).withDocumentId("a"));
+        assertEquals(1, CellRef.of(1, 0).getRowIndex());
 
     }
-    
-    
+
     @Test
-    public void testDataModel() {        
+    public void testDataModel() {
         assertEquals(ProvFile.of().getData(), NodeMap.of());
-        assertEquals(ProvFile.of().getSchemaMappings(), ImmutableList.of());    
-        
+        assertEquals(ProvFile.of().getSchemaMappings(), ImmutableList.of());
+
         ProvFile.builder().addSchemaMappings(
-                Mapping.of( Ref.of(), 
-                            SchemaRef.of(ImmutableList.of("a","b"))));
+                Mapping.of(Ref.of(),
+                        SchemaRef.of(ImmutableList.of("a", "b"))
+                ));
+
+        SchemaRef schemaRef
+                = SchemaRef.builder()
+                .setDocumentId("http://mysite/res.csv")
+                .setPhysicalColumn(3)
+                .setPhysicalRow(2)
+                .addPropertyIds("a", "b")
+                .build();
     }
 
-    
-    
 }
