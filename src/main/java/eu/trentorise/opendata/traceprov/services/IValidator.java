@@ -16,6 +16,7 @@
 package eu.trentorise.opendata.traceprov.services;
 
 import eu.trentorise.opendata.traceprov.data.ProvFile;
+import eu.trentorise.opendata.traceprov.data.ProvSchema;
 import eu.trentorise.opendata.traceprov.schema.Schema;
 import java.io.InputStream;
 
@@ -27,7 +28,7 @@ import java.io.InputStream;
 public interface IValidator {
 
     /**
-     * Validates the input stream and produces a common tree format. Output file may still have errors. 
+     * Validates the input stream and returns the resulting a common tree format (which may still have errors). 
      *
      * @param stream the stream to validate
      * @param mimetype the mimetype of the stream, i.e. text/csv,
@@ -41,9 +42,8 @@ public interface IValidator {
     ProvFile validate(InputStream stream, Schema schema, String mimetype);
     
     /**
-     * Validates 
-     * @param stream
-     * @return 
+     * Validates the schema present in the input stream and returns the parsed reult (which may still have errors). 
+     * @param stream  the stream to validate     
      */
-    Schema validateSchema(InputStream stream);
+    ProvSchema validateSchema(InputStream stream);
 }

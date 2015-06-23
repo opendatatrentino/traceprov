@@ -17,9 +17,7 @@ package eu.trentorise.opendata.traceprov.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.traceprov.schema.Mapping;
 import eu.trentorise.opendata.traceprov.schema.Schema;
 import eu.trentorise.opendata.traceprov.services.ValidationError;
 import java.io.Serializable;
@@ -34,49 +32,26 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = ProvFile.class)
-@JsonDeserialize(as = ProvFile.class)
-abstract class AProvFile implements Serializable {
+@JsonSerialize(as = ProvSchema.class)
+@JsonDeserialize(as = ProvSchema.class)
+public abstract class AProvSchema implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+        
     /**
-     * The Dcat metadata associated to the original file. If no metadata was
-     * found, {@link DcatMetadata#of()} is returned.
+     * The schema of the original file. If no schema was found,
+     * {@link Schema#of()} is returned.
      */
     @Value.Default
-    public DcatMetadata getDcatMetadata() {
-        return DcatMetadata.of();
+    public Schema getSchema() {
+        return Schema.of();
     }
-
+        
     /**
-     * The schema of the original file along with possible validation errors. If no schema was present or it was invalid,
-     * {@link ProvSchema#of()} is returned.
+     * Returns the validation errors found in the original schema file.
+     * todo what is the type of the refs? only SchemaRef?
      */
-    @Value.Default
-    public ProvSchema getProvSchema() {
-        return ProvSchema.of();
-    }
-
-    /**
-     * The high-level mappings from source file elements (columns, schema node
-     * paths, ...) to the target schema property paths.
-     */
-    public abstract ImmutableList<Mapping> getSchemaMappings();
-
-
-    /**
-     * Returns the data content of the file as a hierarchical tree. If no data
-     * was found, {@link NodeMap#of()} is returned.
-     */
-    @Value.Default
-    public ANode getData() {
-        return NodeMap.of();
-    }
-
-    /**
-     * Returns the validation errors found in the original file.
-     */
-    public abstract List<ValidationError> getErrors();
-
+    public abstract List<ValidationError> getErrors(); 
+    
+    
 }
