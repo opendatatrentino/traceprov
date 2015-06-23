@@ -17,9 +17,9 @@ package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.io.Serializable;
-import java.util.List;
 import org.immutables.value.Value;
 
 /**
@@ -56,7 +56,10 @@ abstract class ASchema implements Serializable {
         return "";
     }
 
+    /**
+     * The property definitions of the schema
+     */
     @Value.Parameter
-    public abstract List<PropertyDef> getPropertyDefs();
+    public abstract ImmutableList<PropertyDef> getPropertyDefs();
 
 }
