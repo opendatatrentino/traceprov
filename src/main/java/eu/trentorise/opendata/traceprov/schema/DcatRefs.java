@@ -31,6 +31,5 @@ public final class DcatRefs {
     public static final String DUBLIC_CORE_TERMS_PUBLISHER = "http://purl.org/dc/terms/publisher";
     
     public static final String DUBLIC_CORE_TERMS_LICENSE = "http://purl.org/dc/terms/license";
-    
-    private static final long serialVersionUID = 1L;
+        
 }

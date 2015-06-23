@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.Serializable;
+import javax.annotation.concurrent.Immutable;
 import org.immutables.value.Value;
 
 /**
@@ -29,6 +30,7 @@ import org.immutables.value.Value;
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 @JsonSerialize(as=Ref.class)
 @JsonDeserialize(as=Ref.class)
+@Immutable
 public class Ref implements Serializable {
 
     private static final long serialVersionUID = 1L;
