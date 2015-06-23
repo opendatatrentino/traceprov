@@ -27,7 +27,11 @@ import java.util.Objects;
  * @author David Leoni
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
-public abstract class ValidationError implements Serializable {        
+public class ValidationError implements Serializable {        
+    
+    private static final long serialVersionUID = 1L;
+    
+    private final static ValidationError INSTANCE = new ValidationError(Ref.of(), LocalizedString.of());
     
     private Ref ref;
     private LocalizedString reason;  
@@ -79,5 +83,11 @@ public abstract class ValidationError implements Serializable {
         return true;
     }
     
+    /**
+     * Returns an generic error     
+     */
+    public static ValidationError of(){
+        return  INSTANCE;
+    }
     
 }
