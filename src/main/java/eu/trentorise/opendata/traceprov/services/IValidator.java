@@ -20,17 +20,21 @@ import java.io.InputStream;
 
 /**
  * Interface to validate a given file to produces a common tree format.
+ *
  * @author David Leoni
  */
 public interface IValidator {
-    
+
     /**
-     * Validates the input stream and produces a common tree format.
+     * Validates the input stream and produces a common tree format. Output file may still have errors. 
+     *
      * @param stream the stream to validate
-     * @param mimetype the mimetype of the stream, i.e. text/csv, application/json, ...
-     * @throws eu.trentorise.opendata.traceprov.LoadException if some error occurs while loading stream. 
+     * @param mimetype the mimetype of the stream, i.e. text/csv,
+     * application/json, ...
+     * @throws eu.trentorise.opendata.traceprov.LoadException if some error
+     * occurs while physically loading stream. In case
+     * format errors are found in the original file, they should be reported within the
+     * output object instead of throwing an exception.
      */
-    ProvFile validate(InputStream stream, String mimetype);    
+    ProvFile validate(InputStream stream, String mimetype);
 }
-
-
