@@ -33,7 +33,7 @@ import org.immutables.value.Value;
 abstract class APropertyDef {
 
     /**
-     * Identifier (possibly a complete IRI), i.e.
+     * The id of the property, which may be an IRI to a well-known property like i.e.     
      * <a href="http://schema.org/name" target="_blank">http://schema.org/name</a>
      */
     @Value.Default

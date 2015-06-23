@@ -13,24 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.validation;
+package eu.trentorise.opendata.traceprov.services;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import eu.trentorise.opendata.commons.LocalizedString;
 import eu.trentorise.opendata.traceprov.schema.Ref;
 
 /**
- * Represents an error in a {@link eu.trentorise.opendata.traceprov.data.ProvFile}
- * @author David Leoni
+ * Represent a generic validation error in a {@link eu.trentorise.opendata.traceprov.data.ProvFile}
+ * @author David Leoni 
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
-abstract class Error {
+public class GenericError extends ValidationError {
+
+    private static final long serialVersionUID = 1L;
+    
+    private final static GenericError INSTANCE = new GenericError(Ref.of(), LocalizedString.of());
+    
+    private GenericError(Ref ref, LocalizedString reason) {
+        super(ref, reason);
+    }
+    
+    public static GenericError of(Ref ref, LocalizedString reason){
+        return new  GenericError(ref, reason);
+    }
+    
     /**
-     * Returns a reference to an element with errors in a {@link eu.trentorise.opendata.traceprov.data.ProvFile}
+     * Returns an empty generic error     
      */
-    public abstract Ref getRef();
-    /**
-     * Human readable error reason
-     */
-    public abstract LocalizedString getReason();
+    public static GenericError of(){
+        return  INSTANCE;
+    }
 }

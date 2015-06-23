@@ -37,7 +37,7 @@ abstract class ASchema implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The id of the type, which may be an IRI like i.e.
+     * The id of the type, which may be an IRI to a well-known type like i.e.
      * https://schema.org/Person
      */
     @Value.Default

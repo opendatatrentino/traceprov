@@ -17,8 +17,10 @@ package eu.trentorise.opendata.traceprov.dcat;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Preconditions;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
@@ -189,11 +191,19 @@ abstract  class ADcatDataset implements Serializable {
      * Spatial coverage of the dataset, as specified by
      * <a href="http://purl.org/dc/terms/spatial">dct:spatial</a>
      * i.e. dct:spatial <http://www.geonames.org/6695072> ;
+     * 
+     * The returned string may be either:
+     * <ul>
+     * <li> a natural language name of the location </li>
+     * <li> a url to an identifier of the location, i.e. http://www.geonames.org/6695072 </li>
+     * <li> a GeoJSON object {@link eu.trentorise.opendata.traceprov.geojson.GeoJson} </li>     
+     * </ul>     
+     * 
      */
     @Value.Default
-    public String getSpatial(){
+    public Object getSpatial(){
         return "";
-    };
+    }
 
     /**
      * The temporal period that the dataset covers, that is, an interval of time
@@ -204,9 +214,9 @@ abstract  class ADcatDataset implements Serializable {
      * <http://reference.data.gov.uk/id/quarter/2006-Q1> ;
      */
     @Value.Default
-    public  String getTemporal(){
+    public String getTemporal(){
         return "";
-    };
+    }
 
     /**
      * The main themes  of the dataset. A dataset can belong to multiple
@@ -225,7 +235,7 @@ abstract  class ADcatDataset implements Serializable {
     @Value.Default
     public Dict getTitle(){
         return Dict.of();
-    };
+    }
 
     /**
      * Returns the URI of the dataset. Not present in the dcat specs.
@@ -235,6 +245,12 @@ abstract  class ADcatDataset implements Serializable {
     @Value.Default
     public String getUri(){
         return "";
-    };
+    }
 
+    @Value.Check
+     protected void check() {
+       Preconditions.checkState(getSpatial() instanceof String || getSpatial() instanceof GeoJson,
+           "spatial validity attribute should be instance of String or GeoJson, found instead %s ", getSpatial());
+     }    
+    
 }

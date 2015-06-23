@@ -13,38 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.schema;
+package eu.trentorise.opendata.traceprov.geojson;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableList;
-import eu.trentorise.opendata.commons.SimpleStyle;
-import java.io.Serializable;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import org.immutables.value.Value;
 
 /**
- *
+ * TODO fill this class
  * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
-@JsonSerialize(as=Mappings.class)
-@JsonDeserialize(as=Mappings.class)
-abstract  class AMappings implements Serializable  {
+@BuilderStylePublic
+@JsonSerialize(as=GeoJson.class)
+@JsonDeserialize(as=GeoJson.class)
+abstract class AGeoJson {
     
-    private static final long serialVersionUID = 1L;
-    
-    @Value.Default
-    @Value.Parameter       
-    public String getTargetEtypeId(){
-        return "";
-    }
-    
-    @Value.Default
-    @Value.Parameter       
-    public String getSourceId(){
-        return "";
-    }
-        
-    public abstract ImmutableList<Mapping> getMappings();
 }
