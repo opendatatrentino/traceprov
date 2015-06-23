@@ -16,6 +16,7 @@
 package eu.trentorise.opendata.traceprov.services;
 
 import eu.trentorise.opendata.traceprov.data.ProvFile;
+import eu.trentorise.opendata.traceprov.schema.Schema;
 import java.io.InputStream;
 
 /**
@@ -30,11 +31,12 @@ public interface IValidator {
      *
      * @param stream the stream to validate
      * @param mimetype the mimetype of the stream, i.e. text/csv,
+     * @param schema the expected schema of the file. If unknown, pass {@link Schema#of()}
      * application/json, ...
      * @throws eu.trentorise.opendata.traceprov.LoadException if some error
      * occurs while physically loading stream. In case
      * format errors are found in the original file, they should be reported within the
      * output object instead of throwing an exception.
      */
-    ProvFile validate(InputStream stream, String mimetype);
+    ProvFile validate(InputStream stream, Schema schema, String mimetype);
 }
