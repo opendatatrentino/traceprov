@@ -35,9 +35,7 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = ARef.class)
 @Immutable
 public abstract class ARef implements Serializable {
-
-    private static final long serialVersionUID = 1L;    
-
+    
     private String documentId;    
     private int physicalRow;
     private int physicalColumn;

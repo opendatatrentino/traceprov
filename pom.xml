@@ -166,8 +166,7 @@
         
         <dependency>
             <groupId>eu.trentorise.opendata.commons</groupId>
-            <artifactId>odt-commons-jackson</artifactId>        
-            <version>1.0.2</version>
+            <artifactId>odt-commons-jackson</artifactId>                    
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

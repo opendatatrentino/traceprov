@@ -50,8 +50,7 @@ abstract class AProvSchema implements Serializable {
     /**
      * Returns the validation errors found in the original schema file.
      * todo what is the type of the refs? only SchemaRef?
-     */
-       
+     */       
     public abstract List<ValidationError> getErrors(); 
     
     

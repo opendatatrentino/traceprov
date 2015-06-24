@@ -32,12 +32,18 @@ import org.immutables.value.Value;
 abstract class AMapping implements Serializable {
         private static final long serialVersionUID = 1L;
         
+    /**
+     * A reference to an element in the source file
+     */
     @Value.Default
     @Value.Parameter    
     public ARef getSourceRef(){
         return DocRef.of();
     };
-    
+
+    /**
+     * A reference to a target schema attribute path
+     */    
     @Value.Default
     @Value.Parameter    
     public SchemaRef getTargetRef(){

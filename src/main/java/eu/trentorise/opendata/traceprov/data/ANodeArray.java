@@ -37,18 +37,17 @@ public abstract class ANodeArray extends ANode {
 
     private static final long serialVersionUID = 1L;
     
-    @Value.Default
-    @Value.Parameter
+    @Value.Default    
     @Override
     public ARef getProvenance(){
         return DocRef.of();
-    };           
+    }           
     
     /**
      * Returns the elements of the array
-     */
-    @Value.Parameter    
-    public List<? extends ANode> getElements(){
+     */    
+    @Value.Default
+    public  List<? extends ANode> getElements(){
         return ImmutableList.of();
-    };
+    }
 }

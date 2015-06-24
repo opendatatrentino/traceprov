@@ -20,11 +20,13 @@ import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
+import eu.trentorise.opendata.traceprov.data.ProvSchema;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.schema.CellRef;
 import eu.trentorise.opendata.traceprov.schema.Mapping;
 import eu.trentorise.opendata.traceprov.schema.DocRef;
+import eu.trentorise.opendata.traceprov.schema.Schema;
 import eu.trentorise.opendata.traceprov.schema.SchemaRef;
 import java.util.Locale;
 import org.junit.Test;
@@ -91,6 +93,10 @@ public class CodeGenTest {
                 .setPhysicalRow(2)
                 .addPropertyIds("a", "b")
                 .build();
+        
+        ProvSchema ps = ProvSchema.builder().setSchema(Schema.of()).build();
+        assertEquals(ImmutableList.of(), ps.getErrors());
+        
     }
 
 }

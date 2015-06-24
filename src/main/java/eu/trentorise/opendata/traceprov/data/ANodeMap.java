@@ -37,17 +37,16 @@ abstract class ANodeMap extends ANode {
     private static final long serialVersionUID = 1L;
     
     @Value.Default
-    @Value.Parameter
     @Override
     public ARef getProvenance(){
         return DocRef.of();
-    };
+    }
     
     /**
      * Returns the elements of the map.
      */
-    @Value.Parameter
+    @Value.Default
     public Map<String, ? extends ANode> getElements(){
         return ImmutableMap.of();
-    };
+    }
 }

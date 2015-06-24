@@ -38,7 +38,6 @@ abstract class ANodeValue extends ANode {
     private static final long serialVersionUID = 1L;
 
     @Value.Default
-    @Value.Parameter
     @Override
     public ARef getProvenance() {
         return DocRef.of();
@@ -46,7 +45,7 @@ abstract class ANodeValue extends ANode {
             
     /**
      * A ground json-compatible value, like null, number, string.     
-     */
+     */    
     @Nullable
     public abstract Object getValue();
 }
