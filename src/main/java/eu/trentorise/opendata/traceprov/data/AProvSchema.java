@@ -34,7 +34,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = ProvSchema.class)
 @JsonDeserialize(as = ProvSchema.class)
-public abstract class AProvSchema implements Serializable {
+abstract class AProvSchema implements Serializable {
 
     private static final long serialVersionUID = 1L;
         
@@ -42,15 +42,16 @@ public abstract class AProvSchema implements Serializable {
      * The schema of the original file. If no schema was found,
      * {@link Schema#of()} is returned.
      */
-    @Value.Default
+    @Value.Default    
     public Schema getSchema() {
         return Schema.of();
     }
-        
+    
     /**
      * Returns the validation errors found in the original schema file.
      * todo what is the type of the refs? only SchemaRef?
      */
+       
     public abstract List<ValidationError> getErrors(); 
     
     

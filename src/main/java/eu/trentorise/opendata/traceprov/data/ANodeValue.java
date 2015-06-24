@@ -18,7 +18,8 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import eu.trentorise.opendata.traceprov.schema.Ref;
+import eu.trentorise.opendata.traceprov.schema.DocRef;
+import eu.trentorise.opendata.traceprov.schema.ARef;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
@@ -39,8 +40,8 @@ abstract class ANodeValue extends ANode {
     @Value.Default
     @Value.Parameter
     @Override
-    public Ref getProvenance() {
-        return Ref.of();
+    public ARef getProvenance() {
+        return DocRef.of();
     }            
             
     /**

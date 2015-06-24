@@ -24,7 +24,7 @@ import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.schema.CellRef;
 import eu.trentorise.opendata.traceprov.schema.Mapping;
-import eu.trentorise.opendata.traceprov.schema.Ref;
+import eu.trentorise.opendata.traceprov.schema.DocRef;
 import eu.trentorise.opendata.traceprov.schema.SchemaRef;
 import java.util.Locale;
 import org.junit.Test;
@@ -80,8 +80,7 @@ public class CodeGenTest {
         assertEquals(ProvFile.of().getData(), NodeMap.of());
         assertEquals(ProvFile.of().getSchemaMappings(), ImmutableList.of());
 
-        ProvFile.builder().addSchemaMappings(
-                Mapping.of(Ref.of(),
+        ProvFile.builder().addSchemaMappings(Mapping.of(DocRef.of(),
                         SchemaRef.of(ImmutableList.of("a", "b"))
                 ));
 

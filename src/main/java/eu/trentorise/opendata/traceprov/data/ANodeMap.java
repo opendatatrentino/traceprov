@@ -19,7 +19,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import eu.trentorise.opendata.traceprov.schema.Ref;
+import eu.trentorise.opendata.traceprov.schema.ARef;
+import eu.trentorise.opendata.traceprov.schema.DocRef;
 import java.util.Map;
 import org.immutables.value.Value;
 
@@ -38,8 +39,8 @@ abstract class ANodeMap extends ANode {
     @Value.Default
     @Value.Parameter
     @Override
-    public Ref getProvenance(){
-        return Ref.of();
+    public ARef getProvenance(){
+        return DocRef.of();
     };
     
     /**

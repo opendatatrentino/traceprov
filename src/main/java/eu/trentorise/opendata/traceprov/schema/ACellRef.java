@@ -32,7 +32,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as=CellRef.class)
 @JsonDeserialize(as=CellRef.class)
-abstract class ACellRef extends Ref implements Serializable {
+abstract class ACellRef extends ARef implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * Returns the index of column the cell belongs to, starting from 0.

@@ -31,7 +31,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as=ColumnRef.class)
 @JsonDeserialize(as=ColumnRef.class)
-abstract class AColumnRef extends Ref implements Serializable {
+abstract class AColumnRef extends ARef implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * Column index starting from zero

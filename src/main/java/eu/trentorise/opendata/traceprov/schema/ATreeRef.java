@@ -37,8 +37,10 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as=TreeRef.class)
 @JsonDeserialize(as=TreeRef.class)
-public class ATreeRef extends Ref implements Serializable {
-        private static final long serialVersionUID = 1L;
+public class ATreeRef extends ARef implements Serializable {
+    
+     private static final long serialVersionUID = 1L;
+        
     @Value.Default
     @Value.Parameter    
     public String getJsonPath(){

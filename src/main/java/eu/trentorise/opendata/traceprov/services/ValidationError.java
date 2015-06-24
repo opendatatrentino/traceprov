@@ -18,7 +18,8 @@ package eu.trentorise.opendata.traceprov.services;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import static com.google.common.base.Preconditions.checkNotNull;
 import eu.trentorise.opendata.commons.LocalizedString;
-import eu.trentorise.opendata.traceprov.schema.Ref;
+import eu.trentorise.opendata.traceprov.schema.DocRef;
+import eu.trentorise.opendata.traceprov.schema.ARef;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -31,12 +32,12 @@ public class ValidationError implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    private final static ValidationError INSTANCE = new ValidationError(Ref.of(), LocalizedString.of());
+    private final static ValidationError INSTANCE = new ValidationError(DocRef.of(), LocalizedString.of());
     
-    private Ref ref;
+    private ARef ref;
     private LocalizedString reason;  
     
-    ValidationError(Ref ref, LocalizedString reason){
+    ValidationError(ARef ref, LocalizedString reason){
         checkNotNull(ref);
         checkNotNull(reason);
         this.ref = ref;
@@ -46,7 +47,7 @@ public class ValidationError implements Serializable {
     /**
      * A reference to an element with errors in a {@link eu.trentorise.opendata.traceprov.data.ProvFile}
      */
-    public Ref getRef(){
+    public ARef getRef(){
         return ref;
     }
     

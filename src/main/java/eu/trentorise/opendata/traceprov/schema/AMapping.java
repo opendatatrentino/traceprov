@@ -34,8 +34,8 @@ abstract class AMapping implements Serializable {
         
     @Value.Default
     @Value.Parameter    
-    public Ref getSourceRef(){
-        return Ref.of();
+    public ARef getSourceRef(){
+        return DocRef.of();
     };
     
     @Value.Default

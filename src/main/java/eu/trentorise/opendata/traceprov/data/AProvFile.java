@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.traceprov.schema.Mapping;
-import eu.trentorise.opendata.traceprov.schema.Schema;
 import eu.trentorise.opendata.traceprov.services.ValidationError;
 import java.io.Serializable;
 import java.util.List;

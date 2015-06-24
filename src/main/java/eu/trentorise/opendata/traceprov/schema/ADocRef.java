@@ -15,36 +15,30 @@
  */
 package eu.trentorise.opendata.traceprov.schema;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import static eu.trentorise.opendata.commons.OdtUtils.checkNotEmpty;
-import java.io.Serializable;
-import java.util.List;
 import org.immutables.value.Value;
 
-/**
- * Reference to a simple a/b/c property ids path 
- *
- * @author David Leoni
- */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=SchemaRef.class)
-@JsonDeserialize(as=SchemaRef.class)
-abstract  class ASchemaRef extends ARef implements Serializable  {
-    private static final long serialVersionUID = 1L;
-    /**
-     * Returns a path of property ids in a reference schema
-     */    
-    @Value.Parameter
-    public abstract List<String> getPropertyIds();
+@JsonSerialize(as = DocRef.class)
+@JsonDeserialize(as = DocRef.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
+class ADocRef extends ARef {
 
-    @Value.Check
-    protected void check() {
-        for (String item : getPropertyIds()) {            
-            checkNotEmpty(item, "Invalid item in schema path " + getPropertyIds());
-        }
+    /**
+     * Creates a reference to a document. 
+     * 
+     * @param documentId an Identifier of a document (which may be an IRI)
+     * @param physicalRow a row index in a text file, starting from 0. If unknown, use -1
+     * @param physicalRow a column index in a text file, starting from 0. If unknown, use -1
+     */
+    public DocRef of(String documentId, int physicalRow, int physicalColumn) {
+        return DocRef.builder().setDocumentId(documentId)
+                .setPhysicalRow(physicalRow)
+                .setPhysicalColumn(physicalColumn).build();
     }
 
 }

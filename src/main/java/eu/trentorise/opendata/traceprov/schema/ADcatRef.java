@@ -31,7 +31,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as=DcatRef.class)
 @JsonDeserialize(as=DcatRef.class)
-abstract class ADcatRef extends Ref implements Serializable {
+abstract class ADcatRef extends ARef implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * Returns the URI of the class containing the referenced element (i.e.
