@@ -17,36 +17,62 @@ package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.trentorise.opendata.commons.OdtUtils;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
  * A mapping from an element in a source file to a target schema attribute path.
+ *
  * @author David Leoni
  */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as=Mapping.class)
-@JsonDeserialize(as=Mapping.class)
-abstract class AMapping implements Serializable {
-        private static final long serialVersionUID = 1L;
-        
+@JsonSerialize(as = RefMapping.class)
+@JsonDeserialize(as = RefMapping.class)
+abstract class ARefMapping implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * A reference to an element in the source file
      */
     @Value.Default
-    @Value.Parameter    
-    public ARef getSourceRef(){
+    public ARef getSourceRef() {
         return DocRef.of();
-    };
+    }
 
     /**
      * A reference to a target schema attribute path
-     */    
+     */
     @Value.Default
-    @Value.Parameter    
-    public SchemaRef getTargetRef(){
+    public SchemaRef getTargetRef() {
         return SchemaRef.of();
-    };
+    }
+
+    /**
+     * The optional confidence for the mapping in the range [0,1]. By default
+     * it's 1.0
+     */
+    @Value.Default
+    public double getScore() {
+        return 1.0;
+    }
+
+    @Value.Check
+    protected void check() {
+        OdtUtils.checkScore(getScore(), "Invalid score!");
+    }
+
+  /**
+   * Returns new immutable {@code RefMapping}, with score 1.0
+   * 
+   * @param sourceRef A reference to an element in the source file
+   * @param targetRef A reference to a target schema attribute path   
+   */
+  public static RefMapping of(ARef sourceRef, SchemaRef targetRef) {
+        return RefMapping.of(sourceRef, targetRef, 1.0);
+  }    
+    
 }

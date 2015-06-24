@@ -24,8 +24,8 @@ import eu.trentorise.opendata.traceprov.data.ProvSchema;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.schema.CellRef;
-import eu.trentorise.opendata.traceprov.schema.Mapping;
 import eu.trentorise.opendata.traceprov.schema.DocRef;
+import eu.trentorise.opendata.traceprov.schema.RefMapping;
 import eu.trentorise.opendata.traceprov.schema.Schema;
 import eu.trentorise.opendata.traceprov.schema.SchemaRef;
 import java.util.Locale;
@@ -80,11 +80,10 @@ public class CodeGenTest {
     @Test
     public void testDataModel() {
         assertEquals(ProvFile.of().getData(), NodeMap.of());
-        assertEquals(ProvFile.of().getSchemaMappings(), ImmutableList.of());
+        assertEquals(ProvFile.of().getRefMappings(), ImmutableList.of());
 
-        ProvFile.builder().addSchemaMappings(Mapping.of(DocRef.of(),
-                        SchemaRef.of(ImmutableList.of("a", "b"))
-                ));
+        ProvFile.builder().addRefMappings(RefMapping.of(DocRef.of(),
+                                                        SchemaRef.of(ImmutableList.of("a", "b"))));
 
         SchemaRef schemaRef
                 = SchemaRef.builder()

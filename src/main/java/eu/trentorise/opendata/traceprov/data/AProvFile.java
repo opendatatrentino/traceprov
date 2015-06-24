@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.traceprov.schema.Mapping;
+import eu.trentorise.opendata.traceprov.schema.RefMapping;
 import eu.trentorise.opendata.traceprov.services.ValidationError;
 import java.io.Serializable;
 import java.util.List;
@@ -61,7 +61,7 @@ abstract class AProvFile implements Serializable {
      * The high-level mappings from source file elements (columns, schema node
      * paths, ...) to the target schema property paths.
      */
-    public abstract ImmutableList<Mapping> getSchemaMappings();
+    public abstract ImmutableList<RefMapping> getRefMappings();
 
 
     /**
