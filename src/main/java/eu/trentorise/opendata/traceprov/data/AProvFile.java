@@ -69,7 +69,7 @@ abstract class AProvFile implements Serializable {
      * was found, {@link NodeMap#of()} is returned.
      */
     @Value.Default
-    public ANode getData() {
+    public INode getData() {
         return NodeMap.of();
     }
 

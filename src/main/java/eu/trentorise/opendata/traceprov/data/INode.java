@@ -17,28 +17,20 @@ package eu.trentorise.opendata.traceprov.data;
 
 import eu.trentorise.opendata.traceprov.schema.DocRef;
 import eu.trentorise.opendata.traceprov.schema.ARef;
-import java.io.Serializable;
-import org.immutables.value.Value;
 
 /**
- * A node of the tree representation of the
- * {@link eu.trentorise.opendata.traceprov.data.ProvFile} body
+ * A node of the common tree format representation. It also holds a provenance
+ * reference.
  *
  * @author David Leoni
  */
-public abstract class ANode implements Serializable {
+public interface INode  {
 
-    ANode() {
-    }
 
     /**
      * A reference to position in the original file from which this node comes
      * from. If unknown, {@link DocRef#of()} is returned.
      */
-    @Value.Default
-    @Value.Parameter
-    public ARef getProvenance() {
-        return DocRef.of();
-    }
+    public ARef getProvenance();
 
 }

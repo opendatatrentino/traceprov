@@ -24,8 +24,8 @@ import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**
- * {@link ProvFile} body node containing a ground json-compatible value, like
- * null, number, string.
+ * Node containing a ground json-compatible value, like
+ * null, number or String.
  *
  * @author David Leoni
  */
@@ -33,7 +33,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = NodeValue.class)
 @JsonDeserialize(as = NodeValue.class)
-abstract class ANodeValue extends ANode {
+abstract class ANodeValue implements INode {
 
     private static final long serialVersionUID = 1L;
 
