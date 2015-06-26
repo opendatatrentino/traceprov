@@ -16,9 +16,12 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
+import eu.trentorise.opendata.traceprov.data.NodeValue;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvSchema;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
@@ -96,6 +99,8 @@ public class CodeGenTest {
         ProvSchema ps = ProvSchema.builder().setSchema(Schema.of()).build();
         assertEquals(ImmutableList.of(), ps.getErrors());
         
+        NodeMap.of(DocRef.of(), ImmutableMap.of("a", 
+                NodeList.of(NodeValue.of(DocRef.of(), 3))));
     }
 
 }

@@ -17,6 +17,7 @@ package eu.trentorise.opendata.traceprov.data;
 
 import eu.trentorise.opendata.traceprov.schema.DocRef;
 import eu.trentorise.opendata.traceprov.schema.ARef;
+import java.io.Serializable;
 
 /**
  * A node of the common tree format representation. It also holds a provenance
@@ -24,7 +25,7 @@ import eu.trentorise.opendata.traceprov.schema.ARef;
  *
  * @author David Leoni
  */
-public interface INode  {
+public interface INode  extends Serializable {
 
 
     /**
@@ -32,5 +33,6 @@ public interface INode  {
      * from. If unknown, {@link DocRef#of()} is returned.
      */
     public ARef getProvenance();
+
 
 }

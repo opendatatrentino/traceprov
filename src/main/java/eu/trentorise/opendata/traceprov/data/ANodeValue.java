@@ -17,7 +17,9 @@ package eu.trentorise.opendata.traceprov.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Preconditions;
 import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.schema.DocRef;
 import eu.trentorise.opendata.traceprov.schema.ARef;
 import javax.annotation.Nullable;
@@ -48,4 +50,9 @@ abstract class ANodeValue implements INode {
      */    
     @Nullable
     public abstract Object getValue();
+    
+        @Value.Check
+     protected void check() {
+       Preconditions.checkState(getValue() == null || getValue() instanceof Number || getValue() instanceof String);
+     }   
 }

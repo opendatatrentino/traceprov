@@ -20,6 +20,7 @@ import eu.trentorise.opendata.traceprov.schema.ARef;
 import eu.trentorise.opendata.traceprov.schema.DocRef;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 /** 
@@ -32,37 +33,68 @@ public class NodeMap implements INode  {
     private static final NodeMap INSTANCE = new NodeMap();
     
     private static final long serialVersionUID = 1L;
-    private Map<String, INode> values;
+    private Map<String,? extends INode> nodes;
     private ARef provenance;
     
     private NodeMap(){
-        this.values = new HashMap();
+        this.nodes = new HashMap();
         this.provenance = DocRef.of();
     }
 
-    public NodeMap(ARef provenance, Map<String, INode> values) {        
+    public NodeMap(ARef provenance, Map<String, ? extends INode> nodes) {
         checkNotNull(provenance);
-        checkNotNull(values);        
+        checkNotNull(nodes);        
         this.provenance = provenance;
-        this.values = values;
+        this.nodes = nodes;
     }
-    
-         
-    
+                 
     public static NodeMap of(){
         return INSTANCE;
     }
     
-    public static NodeMap of(ARef provenance, Map<String, INode> values){
-       return new NodeMap(provenance, values);
+    public static NodeMap of(ARef provenance, Map<String, ? extends  INode> nodes){
+       return new NodeMap(provenance, nodes);
     }
     
-    Map<String, INode> getValues(){
-        return values;
+    public Map<String, ? extends INode> getValues(){
+        return nodes;
     }
 
     @Override
     public ARef getProvenance() {
         return provenance;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.nodes);
+        hash = 37 * hash + Objects.hashCode(this.provenance);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final NodeMap other = (NodeMap) obj;
+        if (!Objects.equals(this.nodes, other.nodes)) {
+            return false;
+        }
+        if (!Objects.equals(this.provenance, other.provenance)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "NodeMap{" + "nodes=" + nodes + ", provenance=" + provenance + '}';
+    }
+    
+    
 }
