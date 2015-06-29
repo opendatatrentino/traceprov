@@ -105,7 +105,30 @@ public class NodeList implements INode, Iterable<INode> {
     public String toString() {
         return "NodeList{" + "nodes=" + nodes + ", provenance=" + provenance + '}';
     }
-    
-    
+
+   
+
+    @Override
+    public void accept(INodeVisitor visitor, INode parent, String field, int pos) {
+        int i = 0;
+        Iterator<INode> iter = nodes.iterator();
+        
+        while (iter.hasNext()){
+            INode node = iter.next();
+            node.accept(visitor, this, field, i);
+            i++;
+        }
+        
+        visitor.visit((NodeList) this, parent, field, pos);
+
+    }
+
+    @Override
+    public Object asSimpleType() {
+        SimpleMapTransformer tran = new SimpleMapTransformer();        
+        accept(tran, NodeValue.of(), "",0);        
+        return tran.getResult();
+    }
+       
     
 }

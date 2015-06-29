@@ -95,6 +95,21 @@ public class NodeMap implements INode  {
     public String toString() {
         return "NodeMap{" + "nodes=" + nodes + ", provenance=" + provenance + '}';
     }
+
+        
+    @Override
+    public void accept(INodeVisitor visitor, INode parent, String field, int pos){
+        for (Map.Entry<String, ? extends INode> entry : nodes.entrySet()){
+            entry.getValue().accept(visitor, this, entry.getKey(), 0);
+        }
+        visitor.visit(this, parent, field, pos);
+    };    
     
     
+    @Override
+    public Object asSimpleType() {
+        SimpleMapTransformer tran = new SimpleMapTransformer();        
+        accept(tran, NodeValue.of(), "",0);        
+        return tran.getResult();
+    }
 }
