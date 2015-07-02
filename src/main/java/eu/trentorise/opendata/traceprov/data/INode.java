@@ -15,13 +15,9 @@
  */
 package eu.trentorise.opendata.traceprov.data;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import eu.trentorise.opendata.traceprov.schema.DocRef;
-import eu.trentorise.opendata.traceprov.schema.ARef;
+import eu.trentorise.opendata.commons.validation.IRef;
+import eu.trentorise.opendata.commons.validation.Ref;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * A node of the common tree format representation. It also holds a provenance
@@ -33,9 +29,9 @@ public interface INode extends Serializable {
 
     /**
      * A reference to position in the original file from which this node comes
-     * from. If unknown, {@link DocRef#of()} is returned.
+     * from. If unknown, {@link Ref#of()} is returned.
      */
-    ARef getProvenance();
+    IRef getProvenance();
     
     
     /**

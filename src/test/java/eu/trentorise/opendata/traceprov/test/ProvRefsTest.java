@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.schema;
+package eu.trentorise.opendata.traceprov.test;
+
+import eu.trentorise.opendata.traceprov.data.DcatMetadata;
+import static eu.trentorise.opendata.traceprov.schema.ProvRefs.propertyRef;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
- * Hold urls related to dcat.
- * 
+ *
  * @author David Leoni
  */
-public final class DcatRefs {
+public class ProvRefsTest {
     
-    public static final String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
-    
-    public static final String DUBLIC_CORE_TERMS_SPATIAL = "http://purl.org/dc/terms/spatial";
-    
-    public static final String DUBLIC_CORE_TERMS_TEMPORAL = "http://purl.org/dc/terms/temporal";
-    
-    public static final String DUBLIC_CORE_TERMS_PUBLISHER = "http://purl.org/dc/terms/publisher";
-    
-    public static final String DUBLIC_CORE_TERMS_LICENSE = "http://purl.org/dc/terms/license";
-        
+    @Test
+    public void test(){
+        assertEquals("catalog", propertyRef(DcatMetadata.class, "catalog"));
+    }
 }

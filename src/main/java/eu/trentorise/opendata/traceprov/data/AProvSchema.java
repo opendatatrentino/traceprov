@@ -18,15 +18,14 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.validation.ValidationError;
 import eu.trentorise.opendata.traceprov.schema.Schema;
-import eu.trentorise.opendata.traceprov.services.ValidationError;
 import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * Tree-like generic data model to represent a file and tracking from where data
- * comes from. Also holds validation errors.
+ * Schema and validation errors.
  *
  * @author David Leoni
  */

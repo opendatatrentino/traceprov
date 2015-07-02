@@ -17,10 +17,10 @@ package eu.trentorise.opendata.traceprov.test;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
 import eu.trentorise.opendata.traceprov.data.NodeValue;
-import eu.trentorise.opendata.traceprov.schema.DocRef;
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -47,7 +47,7 @@ public class DataTest {
         
         assertEquals(new HashMap(), NodeMap.of().asSimpleType());
         
-        Object res = NodeMap.of(DocRef.of(), 
+        Object res = NodeMap.of(Ref.of(), 
                                 ImmutableMap.of("a", NodeValue.of("b"),
                                                 "c", NodeValue.of("d"))).asSimpleType();
         

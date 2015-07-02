@@ -42,8 +42,8 @@ public interface IValidator {
     ProvFile validate(InputStream stream, Schema schema, String mimetype);
     
     /**
-     * Validates the schema present in the input stream and returns the parsed reult (which may still have errors). 
-     * @param stream  the stream to validate     
+     * Validates the schema present in the input stream and returns the parsed result (which may still have errors). 
+     * @param stream the stream to validate     
      */
     ProvSchema validateSchema(InputStream stream);
 }

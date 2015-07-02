@@ -19,7 +19,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.OdtUtils;
 import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.validation.IRef;
+import eu.trentorise.opendata.commons.validation.Ref;
 import java.io.Serializable;
+import java.util.List;
 import org.immutables.value.Value;
 
 /**
@@ -39,17 +42,16 @@ abstract class ARefMapping implements Serializable {
      * A reference to an element in the source file
      */
     @Value.Default
-    public ARef getSourceRef() {
-        return DocRef.of();
+    public IRef getSourceRef() {
+        return Ref.of();
     }
 
     /**
-     * A reference to a target schema attribute path
+     * A reference to a target schema attribute id path, like ["workplaces","address","zip"] <br/>
      */
-    @Value.Default
-    public SchemaRef getTargetRef() {
-        return SchemaRef.of();
-    }
+    
+    public abstract List<String> getTargetPath();
+    
 
     /**
      * The optional confidence for the mapping in the range [0,1]. By default
@@ -60,19 +62,19 @@ abstract class ARefMapping implements Serializable {
         return 1.0;
     }
 
-    @Value.Check
-    protected void check() {
-        OdtUtils.checkScore(getScore(), "Invalid score!");
+    /**
+     * Returns new immutable {@code RefMapping}, with score 1.0
+     *
+     * @param sourceRef A reference to an element in the source file
+     * @param targetRef A reference to a target schema attribute path
+     */
+    public static RefMapping of(IRef sourceRef, Iterable<String> targetPath) {
+        return RefMapping.of(sourceRef, targetPath, 1.0);
     }
 
-  /**
-   * Returns new immutable {@code RefMapping}, with score 1.0
-   * 
-   * @param sourceRef A reference to an element in the source file
-   * @param targetRef A reference to a target schema attribute path   
-   */
-  public static RefMapping of(ARef sourceRef, SchemaRef targetRef) {
-        return RefMapping.of(sourceRef, targetRef, 1.0);
-  }    
-    
+    @Value.Check
+    protected void check() {
+        OdtUtils.checkScore(getScore(), "Invalid score!");        
+    }
+
 }

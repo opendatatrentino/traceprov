@@ -16,9 +16,9 @@
 package eu.trentorise.opendata.traceprov.data;
 
 import com.google.common.collect.ImmutableList;
-import eu.trentorise.opendata.traceprov.schema.DocRef;
-import eu.trentorise.opendata.traceprov.schema.ARef;
 import static com.google.common.base.Preconditions.checkNotNull;
+import eu.trentorise.opendata.commons.validation.IRef;
+import eu.trentorise.opendata.commons.validation.Ref;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -33,24 +33,26 @@ public class NodeList implements INode, Iterable<INode> {
     private static final NodeList INSTANCE = new NodeList();
 
     private Iterable<INode> nodes;
-    private ARef provenance;
+    private IRef provenance;
 
     private NodeList() {
         this.nodes = ImmutableList.<INode>of();
-        this.provenance = DocRef.of();
+        this.provenance = Ref.of();
     }
 
-    private NodeList(ARef provenance, Iterable<? extends INode> nodes) {
+    private NodeList(IRef provenance, Iterable<? extends INode> nodes) {
         checkNotNull(provenance);
         checkNotNull(nodes);
         this.provenance = provenance;
         this.nodes = (Iterable<INode>) nodes;
     }
 
-    public ARef getProvenance() {
+    @Override
+    public IRef getProvenance() {
         return provenance;
     }
 
+    @Override
     public Iterator<INode> iterator() {
         return nodes.iterator();
     }
@@ -60,18 +62,18 @@ public class NodeList implements INode, Iterable<INode> {
     }
 
     public static NodeList of(Iterable<? extends INode> nodes) {
-        return of(DocRef.of(), nodes);
+        return of(Ref.of(), nodes);
     }
 
     public static NodeList of(INode... nodes) {
-        return new NodeList(DocRef.of(), ImmutableList.copyOf(nodes));
+        return new NodeList(Ref.of(), ImmutableList.copyOf(nodes));
     }
 
-    public static NodeList of(ARef provenance, Iterable<? extends INode> nodes) {
+    public static NodeList of(IRef provenance, Iterable<? extends INode> nodes) {
         return new NodeList(provenance, nodes);
     }
 
-    public static NodeList of(ARef provenance, INode... nodes) {
+    public static NodeList of(IRef provenance, INode... nodes) {
         return new NodeList(provenance, ImmutableList.copyOf(nodes));
     }
 
@@ -106,29 +108,26 @@ public class NodeList implements INode, Iterable<INode> {
         return "NodeList{" + "nodes=" + nodes + ", provenance=" + provenance + '}';
     }
 
-   
-
     @Override
     public void accept(INodeVisitor visitor, INode parent, String field, int pos) {
         int i = 0;
         Iterator<INode> iter = nodes.iterator();
-        
-        while (iter.hasNext()){
+
+        while (iter.hasNext()) {
             INode node = iter.next();
             node.accept(visitor, this, field, i);
             i++;
         }
-        
+
         visitor.visit((NodeList) this, parent, field, pos);
 
     }
 
     @Override
     public Object asSimpleType() {
-        SimpleMapTransformer tran = new SimpleMapTransformer();        
-        accept(tran, NodeValue.of(), "",0);        
+        SimpleMapTransformer tran = new SimpleMapTransformer();
+        accept(tran, NodeValue.of(), "", 0);
         return tran.getResult();
     }
-       
-    
+
 }

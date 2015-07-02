@@ -17,8 +17,8 @@ package eu.trentorise.opendata.traceprov.data;
 
 import com.google.common.base.Preconditions;
 import static com.google.common.base.Preconditions.checkNotNull;
-import eu.trentorise.opendata.traceprov.schema.DocRef;
-import eu.trentorise.opendata.traceprov.schema.ARef;
+import eu.trentorise.opendata.commons.validation.IRef;
+import eu.trentorise.opendata.commons.validation.Ref;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
@@ -32,15 +32,15 @@ public class NodeValue implements INode {
     private static final long serialVersionUID = 1L;
     private static final NodeValue INSTANCE = new NodeValue();
 
-    private ARef provenance;
+    private IRef provenance;
     private Object value;
     
     private NodeValue(){
-        this.provenance = DocRef.of();
+        this.provenance = Ref.of();
         this.value = null;
     }
     
-    private NodeValue(ARef provenance, @Nullable Object value){
+    private NodeValue(IRef provenance, @Nullable Object value){
         checkNotNull(provenance);
         Preconditions.checkArgument(value == null || value instanceof Number || value instanceof String);
         this.provenance = provenance;
@@ -49,7 +49,7 @@ public class NodeValue implements INode {
     
     
     @Override
-    public ARef getProvenance() {
+    public IRef getProvenance() {
         return provenance;
     }
 
@@ -81,7 +81,7 @@ public class NodeValue implements INode {
      * @param value a String, a Number or a null
      */
     public static NodeValue of(@Nullable Object value) {
-        return new NodeValue(DocRef.of(), value);
+        return new NodeValue(Ref.of(), value);
     }
     
     /**
@@ -90,8 +90,8 @@ public class NodeValue implements INode {
      * @param value a String, a Number or a null
      * @param provenance a reference to the provenance. If unknown, use {@link DocRef#of()}
      */
-    public static NodeValue of(ARef provenance, @Nullable Object value) {
-        return new NodeValue(DocRef.of(), value);
+    public static NodeValue of(IRef provenance, @Nullable Object value) {
+        return new NodeValue(Ref.of(), value);
     }    
     
     /**

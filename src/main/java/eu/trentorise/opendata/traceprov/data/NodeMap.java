@@ -16,8 +16,8 @@
 package eu.trentorise.opendata.traceprov.data;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import eu.trentorise.opendata.traceprov.schema.ARef;
-import eu.trentorise.opendata.traceprov.schema.DocRef;
+import eu.trentorise.opendata.commons.validation.IRef;
+import eu.trentorise.opendata.commons.validation.Ref;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,14 +34,14 @@ public class NodeMap implements INode  {
     
     private static final long serialVersionUID = 1L;
     private Map<String,? extends INode> nodes;
-    private ARef provenance;
+    private IRef provenance;
     
     private NodeMap(){
         this.nodes = new HashMap();
-        this.provenance = DocRef.of();
+        this.provenance = Ref.of();
     }
 
-    public NodeMap(ARef provenance, Map<String, ? extends INode> nodes) {
+    public NodeMap(IRef provenance, Map<String, ? extends INode> nodes) {
         checkNotNull(provenance);
         checkNotNull(nodes);        
         this.provenance = provenance;
@@ -52,7 +52,7 @@ public class NodeMap implements INode  {
         return INSTANCE;
     }
     
-    public static NodeMap of(ARef provenance, Map<String, ? extends  INode> nodes){
+    public static NodeMap of(IRef provenance, Map<String, ? extends  INode> nodes){
        return new NodeMap(provenance, nodes);
     }
     
@@ -61,7 +61,7 @@ public class NodeMap implements INode  {
     }
 
     @Override
-    public ARef getProvenance() {
+    public IRef getProvenance() {
         return provenance;
     }
 

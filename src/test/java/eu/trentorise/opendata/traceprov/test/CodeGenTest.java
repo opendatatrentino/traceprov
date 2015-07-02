@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
 import eu.trentorise.opendata.traceprov.data.NodeValue;
@@ -26,11 +27,9 @@ import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvSchema;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
-import eu.trentorise.opendata.traceprov.schema.CellRef;
-import eu.trentorise.opendata.traceprov.schema.DocRef;
+import eu.trentorise.opendata.traceprov.schema.ProvRefs;
 import eu.trentorise.opendata.traceprov.schema.RefMapping;
 import eu.trentorise.opendata.traceprov.schema.Schema;
-import eu.trentorise.opendata.traceprov.schema.SchemaRef;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -74,33 +73,28 @@ public class CodeGenTest {
     @Test
     public void testRef() {
 
-        assertEquals(CellRef.of(), CellRef.of(0, 0));
-        assertEquals(CellRef.of().withDocumentId("a"), CellRef.of(0, 0).withDocumentId("a"));
-        assertEquals(1, CellRef.of(1, 0).getRowIndex());
+        assertEquals("0.0", ProvRefs.tablePath(0, 0));        
+        assertEquals("*.1", ProvRefs.tablePath(-1, 1));  
+        assertEquals("1.*", ProvRefs.tablePath(1, -1));          
+        assertEquals("*", ProvRefs.tablePath(-1, -1));  
 
     }
 
     @Test
     public void testDataModel() {
         assertEquals(ProvFile.of().getData(), NodeMap.of());
-        assertEquals(ProvFile.of().getRefMappings(), ImmutableList.of());
+        assertEquals(ProvFile.of().getMappings(), ImmutableList.of());
 
-        ProvFile.builder().addRefMappings(RefMapping.of(DocRef.of(),
-                                                        SchemaRef.of(ImmutableList.of("a", "b"))));
-
-        SchemaRef schemaRef
-                = SchemaRef.builder()
-                .setDocumentId("http://mysite/res.csv")
-                .setPhysicalColumn(3)
-                .setPhysicalRow(2)
-                .addPropertyIds("a", "b")
-                .build();
+        
+        
+        ProvFile.builder().addMappings(RefMapping.of(Ref.of(),
+                                                        ImmutableList.of("a")));
         
         ProvSchema ps = ProvSchema.builder().setSchema(Schema.of()).build();
         assertEquals(ImmutableList.of(), ps.getErrors());
         
-        NodeMap.of(DocRef.of(), ImmutableMap.of("a", 
-                NodeList.of(NodeValue.of(DocRef.of(), 3))));
+        NodeMap.of(Ref.of(), ImmutableMap.of("a", 
+                NodeList.of(NodeValue.of(Ref.of(), 3))));
     }
 
 }
