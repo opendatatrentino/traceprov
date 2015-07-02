@@ -17,6 +17,7 @@ package eu.trentorise.opendata.traceprov.test;
 
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import static eu.trentorise.opendata.traceprov.schema.ProvRefs.propertyRef;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -25,9 +26,35 @@ import org.junit.Test;
  * @author David Leoni
  */
 public class ProvRefsTest {
-    
+
     @Test
-    public void test(){
+    public void test() {
         assertEquals("catalog", propertyRef(DcatMetadata.class, "catalog"));
+
+        try {
+            propertyRef(DcatMetadata.class, "bla");
+            Assert.fail();
+        }
+        catch (IllegalArgumentException ex) {
+
+        }
+
+        try {
+            propertyRef(DcatMetadata.class);
+        }
+        catch (IllegalArgumentException ex) {
+
+        }
+
+        try {
+            propertyRef(DcatMetadata.class, " ", "publisher");
+        }
+        catch (IllegalArgumentException ex) {
+
+        }
+
+        assertEquals("catalog.publisher", propertyRef(DcatMetadata.class, "catalog", "publisher"));
+
+        assertEquals("dataset.themes[*].uri", propertyRef(DcatMetadata.class, "dataset", "themes", "uri"));
     }
 }

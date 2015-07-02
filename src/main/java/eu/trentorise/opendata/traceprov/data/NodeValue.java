@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.data;
 
 import com.google.common.base.Preconditions;
 import static com.google.common.base.Preconditions.checkNotNull;
-import eu.trentorise.opendata.commons.validation.IRef;
+
 import eu.trentorise.opendata.commons.validation.Ref;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -32,7 +32,7 @@ public class NodeValue implements INode {
     private static final long serialVersionUID = 1L;
     private static final NodeValue INSTANCE = new NodeValue();
 
-    private IRef provenance;
+    private Ref provenance;
     private Object value;
     
     private NodeValue(){
@@ -40,7 +40,7 @@ public class NodeValue implements INode {
         this.value = null;
     }
     
-    private NodeValue(IRef provenance, @Nullable Object value){
+    private NodeValue(Ref provenance, @Nullable Object value){
         checkNotNull(provenance);
         Preconditions.checkArgument(value == null || value instanceof Number || value instanceof String);
         this.provenance = provenance;
@@ -49,7 +49,7 @@ public class NodeValue implements INode {
     
     
     @Override
-    public IRef getProvenance() {
+    public Ref getProvenance() {
         return provenance;
     }
 
@@ -90,7 +90,7 @@ public class NodeValue implements INode {
      * @param value a String, a Number or a null
      * @param provenance a reference to the provenance. If unknown, use {@link DocRef#of()}
      */
-    public static NodeValue of(IRef provenance, @Nullable Object value) {
+    public static NodeValue of(Ref provenance, @Nullable Object value) {
         return new NodeValue(Ref.of(), value);
     }    
     

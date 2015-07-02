@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.OdtUtils;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import eu.trentorise.opendata.commons.validation.IRef;
+
 import eu.trentorise.opendata.commons.validation.Ref;
 import java.io.Serializable;
 import java.util.List;
@@ -42,7 +42,7 @@ abstract class ARefMapping implements Serializable {
      * A reference to an element in the source file
      */
     @Value.Default
-    public IRef getSourceRef() {
+    public Ref getSourceRef() {
         return Ref.of();
     }
 
@@ -68,7 +68,7 @@ abstract class ARefMapping implements Serializable {
      * @param sourceRef A reference to an element in the source file
      * @param targetRef A reference to a target schema attribute path
      */
-    public static RefMapping of(IRef sourceRef, Iterable<String> targetPath) {
+    public static RefMapping of(Ref sourceRef, Iterable<String> targetPath) {
         return RefMapping.of(sourceRef, targetPath, 1.0);
     }
 

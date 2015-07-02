@@ -15,7 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.data;
 
-import eu.trentorise.opendata.commons.validation.IRef;
+
 import eu.trentorise.opendata.commons.validation.Ref;
 import java.io.Serializable;
 
@@ -31,7 +31,7 @@ public interface INode extends Serializable {
      * A reference to position in the original file from which this node comes
      * from. If unknown, {@link Ref#of()} is returned.
      */
-    IRef getProvenance();
+    Ref getProvenance();
     
     
     /**

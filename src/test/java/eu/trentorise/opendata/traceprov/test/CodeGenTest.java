@@ -72,12 +72,10 @@ public class CodeGenTest {
 
     @Test
     public void testRef() {
-
         assertEquals("0.0", ProvRefs.tablePath(0, 0));        
         assertEquals("*.1", ProvRefs.tablePath(-1, 1));  
         assertEquals("1.*", ProvRefs.tablePath(1, -1));          
-        assertEquals("*", ProvRefs.tablePath(-1, -1));  
-
+        assertEquals("*", ProvRefs.tablePath(-1, -1));
     }
 
     @Test

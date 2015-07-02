@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.data;
 
 import com.google.common.collect.ImmutableList;
 import static com.google.common.base.Preconditions.checkNotNull;
-import eu.trentorise.opendata.commons.validation.IRef;
+
 import eu.trentorise.opendata.commons.validation.Ref;
 import java.util.Iterator;
 import java.util.Objects;
@@ -33,14 +33,14 @@ public class NodeList implements INode, Iterable<INode> {
     private static final NodeList INSTANCE = new NodeList();
 
     private Iterable<INode> nodes;
-    private IRef provenance;
+    private Ref provenance;
 
     private NodeList() {
         this.nodes = ImmutableList.<INode>of();
         this.provenance = Ref.of();
     }
 
-    private NodeList(IRef provenance, Iterable<? extends INode> nodes) {
+    private NodeList(Ref provenance, Iterable<? extends INode> nodes) {
         checkNotNull(provenance);
         checkNotNull(nodes);
         this.provenance = provenance;
@@ -48,7 +48,7 @@ public class NodeList implements INode, Iterable<INode> {
     }
 
     @Override
-    public IRef getProvenance() {
+    public Ref getProvenance() {
         return provenance;
     }
 
@@ -69,11 +69,11 @@ public class NodeList implements INode, Iterable<INode> {
         return new NodeList(Ref.of(), ImmutableList.copyOf(nodes));
     }
 
-    public static NodeList of(IRef provenance, Iterable<? extends INode> nodes) {
+    public static NodeList of(Ref provenance, Iterable<? extends INode> nodes) {
         return new NodeList(provenance, nodes);
     }
 
-    public static NodeList of(IRef provenance, INode... nodes) {
+    public static NodeList of(Ref provenance, INode... nodes) {
         return new NodeList(provenance, ImmutableList.copyOf(nodes));
     }
 

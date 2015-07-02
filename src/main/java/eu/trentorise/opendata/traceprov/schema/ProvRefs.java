@@ -25,10 +25,12 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +40,8 @@ import java.util.logging.Logger;
  * @author David Leoni
  */
 public final class ProvRefs {
+
+    private static final Logger LOG = Logger.getLogger(ProvRefs.class.getName());
 
     public static final String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
 
@@ -85,18 +89,41 @@ public final class ProvRefs {
     }
 
     /**
+     * Stupid Java
+     */
+    private static Class getCollectionType(Method method) {
+
+        Type[] genericParameterTypes = method.getGenericParameterTypes();
+
+        for (Type genericParameterType : genericParameterTypes) {
+            if (genericParameterType instanceof ParameterizedType) {
+                ParameterizedType aType = (ParameterizedType) genericParameterType;
+                Type[] parameterArgTypes = aType.getActualTypeArguments();
+                for (Type parameterArgType : parameterArgTypes) {
+                    Class parameterArgClass = (Class) parameterArgType;
+                    return parameterArgClass;
+                }
+            }
+        }
+        throw new RuntimeException("Couldn't find generic type argument in method " + method);
+    }
+
+    /**
      * Returns the json path for a field and subfields starting from a given
-     * {@code rootClass}. todo specify better
+     * {@code rootClass}. Wildcards for multiplicities are automatically
+     * inserted in the result.
      *
-     * @param propertyPath a path of property names like
-     * "catalog","publisher","name"
+     * @param propertyPath a path of property names like dataset, themes, uri
+     * @return a json path with appropriate wildcards for cardinalities, i.e. "dataset.themes[*].uri"
      */
     public static String propertyRef(Class rootClass, String... propertyPath) {
 
         checkNotNull(rootClass);
-
+        StringBuilder ret = new StringBuilder();
         Class curClass = rootClass;
-        for (String property : propertyPath) {
+
+        for (int i = 0; i < propertyPath.length; i++) {
+            String property = propertyPath[i];
             try {
                 BeanInfo info = Introspector.getBeanInfo(curClass);
                 PropertyDescriptor[] pds = info.getPropertyDescriptors();
@@ -107,16 +134,28 @@ public final class ProvRefs {
                     if (pd.getName().equals(property)) {
                         foundProperty = true;
                         Class candidateClass = pd.getReadMethod().getReturnType();
+                        if (i > 0) {
+                            ret.append(".");
+
+                        }
+                        ret.append(property);
                         if (Collection.class.isAssignableFrom(candidateClass)) {
-                            TypeVariable[] typeParameters = curClass.getTypeParameters();
-                            Type[] bounds = typeParameters[0].getBounds();
-                            if (bounds.length == 1) {
-                                curClass = (Class) bounds[0];
+                            ret.append("[*]");
+                            try {
+                                curClass = getCollectionType(pd.getReadMethod());
                                 break;
+                            }
+                            catch (Exception ex) {
+                                
+                                for (int j = i + 1; j < propertyPath.length; j++) {
+                                    ret.append(".");
+                                    ret.append(propertyPath[j]);
+                                }                                
+                                LOG.log(Level.WARNING, "Error while parsing method types, accepting path as it is " + ret.toString(), ex); 
+                                return ret.toString();
                             }
                         }
                         curClass = candidateClass;
-
                         break;
                     }
                 }
@@ -129,7 +168,7 @@ public final class ProvRefs {
             }
 
         }
-        return Joiner.on(".").join(propertyPath);
+        return ret.toString();
     }
 
     /**
