@@ -26,7 +26,7 @@ import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * A mapping from an element in a source file to a target schema attribute path.
+ * A mapping from an element in a source file to a target schema property path.
  *
  * @author David Leoni
  */
@@ -47,11 +47,10 @@ abstract class ARefMapping implements Serializable {
     }
 
     /**
-     * A reference to a target schema attribute id path, like ["workplaces","address","zip"] <br/>
+     * A reference to a target schema property id path, like
+     * ["workplaces","address","zip"] <br/>
      */
-    
     public abstract List<String> getTargetPath();
-    
 
     /**
      * The optional confidence for the mapping in the range [0,1]. By default
@@ -74,7 +73,7 @@ abstract class ARefMapping implements Serializable {
 
     @Value.Check
     protected void check() {
-        OdtUtils.checkScore(getScore(), "Invalid score!");        
+        OdtUtils.checkScore(getScore(), "Invalid score!");
     }
 
 }

@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.ValidationError;
 import eu.trentorise.opendata.traceprov.schema.RefMapping;
+import eu.trentorise.opendata.traceprov.schema.Schema;
 import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
@@ -49,20 +50,24 @@ abstract class AProvFile implements Serializable {
     }
 
     /**
-     * The schema of the original file along with possible validation errors. If no schema was present or it was invalid,
+     * The schema of the original file. If no schema was present or it was invalid,
      * {@link ProvSchema#of()} is returned.
      */
     @Value.Default
-    public ProvSchema getProvSchema() {
-        return ProvSchema.of();
+    public Schema getSchema() {
+        return Schema.of();
     }
 
+    /**
+     * Returns the validation errors found in the original file.
+     */
+    public abstract List<ValidationError> getSchemaErrors();
+        
     /**
      * The high-level mappings from source file elements (columns, schema node
      * paths, ...) to the target schema property paths.
      */
     public abstract ImmutableList<RefMapping> getMappings();
-
 
     /**
      * Returns the data content of the file as a hierarchical tree. If no data
@@ -76,6 +81,6 @@ abstract class AProvFile implements Serializable {
     /**
      * Returns the validation errors found in the original file.
      */
-    public abstract List<ValidationError> getErrors();
+    public abstract List<ValidationError> getDataErrors();
 
 }

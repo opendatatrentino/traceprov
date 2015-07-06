@@ -21,8 +21,10 @@ import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
 import eu.trentorise.opendata.traceprov.data.NodeValue;
+import java.util.ArrayList;
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -41,6 +43,17 @@ public class DataTest {
         assertEquals(Lists.newArrayList("a"), NodeList.of(NodeValue.of("a")).asSimpleType());
         assertEquals(Lists.newArrayList("a"), NodeList.of(NodeValue.of("a")).asSimpleType());        
     }
+    
+    @Test
+    public void testNodeListToString(){
+        ArrayList list = new ArrayList();
+        for (int i = 0; i <10000; i++){
+            list.add(NodeValue.of(3));
+        }
+        NodeList nodes = NodeList.of(list);
+        assertTrue(nodes.toString().contains("..."));
+        assertFalse(NodeList.of(NodeValue.of()).toString().contains("..."));
+    }    
     
     @Test
     public void testWalker(){                                  

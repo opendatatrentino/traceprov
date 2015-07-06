@@ -15,11 +15,11 @@
  */
 package eu.trentorise.opendata.traceprov.schema;
 
-import com.google.common.base.Joiner;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import static eu.trentorise.opendata.commons.OdtUtils.checkNotEmpty;
-import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -27,15 +27,13 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Hold urls related to dcat.
+ * Hold methods to create references and json paths.
  *
  * @author David Leoni
  */
@@ -89,8 +87,12 @@ public final class ProvRefs {
     }
 
     /**
-     * Stupid Java
+     * Looks in the return type of provided method and gives back the type of a
+     * collection, liske String in List&lt;String&gt;
+     * 
+     * @throws IllegalArgumentException if method doesn't return generids
      */
+    
     private static Class getCollectionType(Method method) {
 
         Type[] genericParameterTypes = method.getGenericParameterTypes();
@@ -105,7 +107,14 @@ public final class ProvRefs {
                 }
             }
         }
-        throw new RuntimeException("Couldn't find generic type argument in method " + method);
+        throw new IllegalArgumentException("Couldn't find generic type argument in method " + method);
+    }
+
+    /**
+     * See {@link #propertyRef(java.lang.Class, java.lang.Iterable) }
+     */
+    public static String propertyRef(Class rootClass, String... propertyPath) {
+        return propertyRef(rootClass, ImmutableList.copyOf(propertyPath));
     }
 
     /**
@@ -114,16 +123,23 @@ public final class ProvRefs {
      * inserted in the result.
      *
      * @param propertyPath a path of property names like dataset, themes, uri
-     * @return a json path with appropriate wildcards for cardinalities, i.e. "dataset.themes[*].uri"
+     * @return a json path with appropriate wildcards for cardinalities, i.e.
+     * "dataset.themes[*].uri"
+     * @throws IllegalArgumentException if path does not correspond to fields in
+     * the java objects.
      */
-    public static String propertyRef(Class rootClass, String... propertyPath) {
+    public static String propertyRef(Class rootClass, Iterable<String> propertyPath) {
 
         checkNotNull(rootClass);
         StringBuilder ret = new StringBuilder();
         Class curClass = rootClass;
 
-        for (int i = 0; i < propertyPath.length; i++) {
-            String property = propertyPath[i];
+        Iterator<String> iter = propertyPath.iterator();
+
+        int i = 0;
+        while (iter.hasNext()) {
+
+            String property = iter.next();
             try {
                 BeanInfo info = Introspector.getBeanInfo(curClass);
                 PropertyDescriptor[] pds = info.getPropertyDescriptors();
@@ -146,12 +162,12 @@ public final class ProvRefs {
                                 break;
                             }
                             catch (Exception ex) {
-                                
-                                for (int j = i + 1; j < propertyPath.length; j++) {
+
+                                while (iter.hasNext()) {
                                     ret.append(".");
-                                    ret.append(propertyPath[j]);
-                                }                                
-                                LOG.log(Level.WARNING, "Error while parsing method types, accepting path as it is " + ret.toString(), ex); 
+                                    ret.append(iter.next());
+                                }
+                                LOG.log(Level.WARNING, "Error while parsing method types, accepting path as it is " + ret.toString(), ex);
                                 return ret.toString();
                             }
                         }
@@ -160,51 +176,15 @@ public final class ProvRefs {
                     }
                 }
                 if (!foundProperty) {
-                    throw new IllegalArgumentException("Couldn't find property " + property + " in property path " + Arrays.toString(propertyPath));
+                    throw new IllegalArgumentException("Couldn't find property " + property + " in property path " + Iterables.toString(propertyPath));
                 }
             }
             catch (IntrospectionException ex) {
                 throw new RuntimeException("Couldn't read bean properties from class " + curClass, ex);
             }
-
+            i++;
         }
         return ret.toString();
-    }
-
-    /**
-     * Returns the json path for a field in a
-     * {@link eu.trentorise.opendata.traceprov.data.DcatMetadata} metadata
-     * object.
-     *
-     * @param propertyPath a path of propertY names like
-     * "catalog","publisher","name"
-     */
-    public static String dcatRef(String... propertyPath) {
-        Class curClass = DcatMetadata.class;
-        for (String property : propertyPath) {
-            try {
-                BeanInfo info = Introspector.getBeanInfo(curClass);
-                PropertyDescriptor[] pds = info.getPropertyDescriptors();
-
-                boolean foundProperty = false;
-                for (PropertyDescriptor pd : pds) {
-
-                    if (pd.getName().equals(property)) {
-                        foundProperty = true;
-                        curClass = pd.getReadMethod().getReturnType();
-                        break;
-                    }
-                }
-                if (!foundProperty) {
-                    throw new IllegalArgumentException("Couldn't find property " + property + " in property path " + Arrays.toString(propertyPath));
-                }
-            }
-            catch (IntrospectionException ex) {
-                throw new RuntimeException("Couldn't read bean properties from class " + curClass, ex);
-            }
-
-        }
-        return Joiner.on(".").join(propertyPath);
     }
 
 }

@@ -41,7 +41,7 @@ public class NodeMap implements INode  {
         this.provenance = Ref.of();
     }
 
-    public NodeMap(Ref provenance, Map<String, ? extends INode> nodes) {
+    private NodeMap(Ref provenance, Map<String, ? extends INode> nodes) {
         checkNotNull(provenance);
         checkNotNull(nodes);        
         this.provenance = provenance;

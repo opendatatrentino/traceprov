@@ -31,6 +31,7 @@ public class NodeList implements INode, Iterable<INode> {
 
     private static final long serialVersionUID = 1L;
     private static final NodeList INSTANCE = new NodeList();
+    private static final int MAX_PRINTED_NODES = 10;
 
     private Iterable<INode> nodes;
     private Ref provenance;
@@ -103,9 +104,26 @@ public class NodeList implements INode, Iterable<INode> {
         return true;
     }
 
+    
+    
     @Override
     public String toString() {
-        return "NodeList{" + "nodes=" + nodes + ", provenance=" + provenance + '}';
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for (INode n : nodes){
+            if (i > 0){
+                sb.append(", ");
+            }            
+            if (i < MAX_PRINTED_NODES){
+                sb.append(n.toString());
+            } else {
+                sb.append("...");
+                break;                
+            }
+            i++;
+        }
+        sb.append("]");
+        return "NodeList{" + "nodes=" + sb.toString() + ", provenance=" + provenance + '}';
     }
 
     @Override

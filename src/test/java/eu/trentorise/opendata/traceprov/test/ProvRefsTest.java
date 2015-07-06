@@ -15,6 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
+import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import static eu.trentorise.opendata.traceprov.schema.ProvRefs.propertyRef;
 import org.junit.Assert;
@@ -40,7 +41,7 @@ public class ProvRefsTest {
         }
 
         try {
-            propertyRef(DcatMetadata.class);
+            propertyRef(DcatMetadata.class, ImmutableList.<String>of());
         }
         catch (IllegalArgumentException ex) {
 
