@@ -28,7 +28,7 @@ import eu.trentorise.opendata.traceprov.data.ProvSchema;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.schema.ProvRefs;
-import eu.trentorise.opendata.traceprov.schema.RefMapping;
+import eu.trentorise.opendata.traceprov.schema.PropertyMapping;
 import eu.trentorise.opendata.traceprov.schema.Schema;
 import java.util.Locale;
 import org.junit.Test;
@@ -85,7 +85,7 @@ public class CodeGenTest {
 
         
         
-        ProvFile.builder().addMappings(RefMapping.of(Ref.of(),
+        ProvFile.builder().addMappings(PropertyMapping.of(Ref.of(),
                                                         ImmutableList.of("a")));
         
         ProvSchema ps = ProvSchema.builder().setSchema(Schema.of()).build();

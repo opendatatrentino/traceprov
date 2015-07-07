@@ -24,6 +24,12 @@ import org.immutables.value.Value;
 /**
  * Definition of a property that can be found in a json-ld file.
  *
+ *  !! TODO !!  WHAT ABOUT THE TYPE? 
+ * CAN IT BE A STRUCTURE? (i.e. opening hour)
+ * CAN IT BE AN URL POINTING TO SOME TYPE? (that is, a relational type)
+ * CAN IT BE A UNION TYPE? i.e.   Number | null
+ * REGEX SUPPORT? i.e. for dates
+ * 
  * @author David Leoni
  */
 @Value.Immutable
@@ -31,7 +37,7 @@ import org.immutables.value.Value;
 @JsonSerialize(as = PropertyDef.class)
 @JsonDeserialize(as = PropertyDef.class)
 abstract class APropertyDef {
-
+        
     /**
      * The id of the property, which may be an IRI to a well-known property like i.e.     
      * <a href="http://schema.org/name" target="_blank">http://schema.org/name</a>

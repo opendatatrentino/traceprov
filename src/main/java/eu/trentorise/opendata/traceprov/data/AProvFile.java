@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.ValidationError;
-import eu.trentorise.opendata.traceprov.schema.RefMapping;
+import eu.trentorise.opendata.traceprov.schema.PropertyMapping;
 import eu.trentorise.opendata.traceprov.schema.Schema;
 import java.io.Serializable;
 import java.util.List;
@@ -50,8 +50,8 @@ abstract class AProvFile implements Serializable {
     }
 
     /**
-     * The schema of the original file. If no schema was present or it was invalid,
-     * {@link ProvSchema#of()} is returned.
+     * The schema of the original file. If no schema was present or it was
+     * invalid, {@link ProvSchema#of()} is returned.
      */
     @Value.Default
     public Schema getSchema() {
@@ -62,12 +62,15 @@ abstract class AProvFile implements Serializable {
      * Returns the validation errors found in the original file.
      */
     public abstract List<ValidationError> getSchemaErrors();
-        
+
     /**
      * The high-level mappings from source file elements (columns, schema node
      * paths, ...) to the target schema property paths.
+     *
+     * !! TODO !! if conversion is totally automatic we don't need mappings with
+     * scores. We need to decide it.
      */
-    public abstract ImmutableList<RefMapping> getMappings();
+    public abstract ImmutableList<PropertyMapping> getMappings();
 
     /**
      * Returns the data content of the file as a hierarchical tree. If no data

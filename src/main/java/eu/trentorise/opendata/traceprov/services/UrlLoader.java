@@ -20,8 +20,10 @@ import static eu.trentorise.opendata.commons.OdtUtils.checkNotEmpty;
 import java.io.OutputStream;
 
 /**
- *
+ * Loads a file from a URL
  * @author David Leoni
+ * 
+ * 
  */
 public class UrlLoader implements ILoader {
 

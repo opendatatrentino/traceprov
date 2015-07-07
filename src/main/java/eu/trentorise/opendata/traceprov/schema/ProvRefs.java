@@ -33,7 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Hold methods to create references and json paths.
+ * Methods to create references and json paths.
  *
  * @author David Leoni
  */
@@ -41,6 +41,8 @@ public final class ProvRefs {
 
     private static final Logger LOG = Logger.getLogger(ProvRefs.class.getName());
 
+    
+    // todo this dublic core stuff is probably not needed.
     public static final String DUBLIC_CORE_TERMS_TITLE = "http://purl.org/dc/terms/title";
 
     public static final String DUBLIC_CORE_TERMS_SPATIAL = "http://purl.org/dc/terms/spatial";
@@ -52,7 +54,9 @@ public final class ProvRefs {
     public static final String DUBLIC_CORE_TERMS_LICENSE = "http://purl.org/dc/terms/license";
 
     /**
-     * Returns the json path for cells in a table without headers.
+     * Returns the json path for cells in a table without headers. See
+     * {@link eu.trentorise.opendata.traceprov.services.CsvLoader} for examples
+     * of tabular models.
      *
      * @param rowIndex the row index, starting from 0. To select all rows, use
      * -1
@@ -70,7 +74,9 @@ public final class ProvRefs {
     }
 
     /**
-     * Returns the json path for cells in a table with headers.
+     * Returns the json path for cells in a table with headers. See
+     * {@link eu.trentorise.opendata.traceprov.services.CsvLoader} for examples
+     * of tabular models.
      *
      * @param rowIndex the row index, starting from 0. To select all rows, use
      * -1
@@ -84,30 +90,6 @@ public final class ProvRefs {
         } else {
             return (rowIndex == -1 ? "*" : rowIndex) + "." + header;
         }
-    }
-
-    /**
-     * Looks in the return type of provided method and gives back the type of a
-     * collection, liske String in List&lt;String&gt;
-     * 
-     * @throws IllegalArgumentException if method doesn't return generids
-     */
-    
-    private static Class getCollectionType(Method method) {
-
-        Type[] genericParameterTypes = method.getGenericParameterTypes();
-
-        for (Type genericParameterType : genericParameterTypes) {
-            if (genericParameterType instanceof ParameterizedType) {
-                ParameterizedType aType = (ParameterizedType) genericParameterType;
-                Type[] parameterArgTypes = aType.getActualTypeArguments();
-                for (Type parameterArgType : parameterArgTypes) {
-                    Class parameterArgClass = (Class) parameterArgType;
-                    return parameterArgClass;
-                }
-            }
-        }
-        throw new IllegalArgumentException("Couldn't find generic type argument in method " + method);
     }
 
     /**
@@ -125,8 +107,8 @@ public final class ProvRefs {
      * @param propertyPath a path of property names like dataset, themes, uri
      * @return a json path with appropriate wildcards for cardinalities, i.e.
      * "dataset.themes[*].uri"
-     * @throws IllegalArgumentException if path does not correspond to fields in
-     * the java objects.
+     * @throws IllegalArgumentException if path does not correspond to actual
+     * fields in the java classes.
      */
     public static String propertyRef(Class rootClass, Iterable<String> propertyPath) {
 
@@ -185,6 +167,29 @@ public final class ProvRefs {
             i++;
         }
         return ret.toString();
+    }
+
+    /**
+     * Looks in the return type of provided method and gives back the type of a
+     * collection, like String in List&lt;String&gt;
+     *
+     * @throws IllegalArgumentException if method doesn't return generids
+     */
+    private static Class getCollectionType(Method method) {
+
+        Type[] genericParameterTypes = method.getGenericParameterTypes();
+
+        for (Type genericParameterType : genericParameterTypes) {
+            if (genericParameterType instanceof ParameterizedType) {
+                ParameterizedType aType = (ParameterizedType) genericParameterType;
+                Type[] parameterArgTypes = aType.getActualTypeArguments();
+                for (Type parameterArgType : parameterArgTypes) {
+                    Class parameterArgClass = (Class) parameterArgType;
+                    return parameterArgClass;
+                }
+            }
+        }
+        throw new IllegalArgumentException("Couldn't find generic type argument in method " + method);
     }
 
 }

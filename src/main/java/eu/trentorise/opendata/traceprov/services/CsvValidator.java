@@ -15,7 +15,10 @@
  */
 package eu.trentorise.opendata.traceprov.services;
 
-import java.io.OutputStream;
+import eu.trentorise.opendata.traceprov.data.ProvFile;
+import eu.trentorise.opendata.traceprov.data.ProvSchema;
+import eu.trentorise.opendata.traceprov.schema.Schema;
+import java.io.InputStream;
 
 /**
  * <h3>Example</h3>
@@ -60,12 +63,18 @@ import java.io.OutputStream;
  *
  * @author David Leoni
  */
-// todo implement
-public class CsvLoader implements ILoader {
+// todo Do we keep CSV validator in TraceProv? 
+public class CsvValidator implements IValidator {
 
     @Override
-    public void load(String url, OutputStream output, Object... args) {
+    public ProvFile validate(InputStream stream, Schema schema, String mimetype) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public ProvSchema validateSchema(InputStream stream) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 }

@@ -32,9 +32,9 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as = RefMapping.class)
-@JsonDeserialize(as = RefMapping.class)
-abstract class ARefMapping implements Serializable {
+@JsonSerialize(as = PropertyMapping.class)
+@JsonDeserialize(as = PropertyMapping.class)
+abstract class APropertyMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,13 +62,13 @@ abstract class ARefMapping implements Serializable {
     }
 
     /**
-     * Returns new immutable {@code RefMapping}, with score 1.0
+     * Returns new immutable {@code PropertyMapping}, with score 1.0
      *
      * @param sourceRef A reference to an element in the source file
      * @param targetRef A reference to a target schema attribute path
      */
-    public static RefMapping of(Ref sourceRef, Iterable<String> targetPath) {
-        return RefMapping.of(sourceRef, targetPath, 1.0);
+    public static PropertyMapping of(Ref sourceRef, Iterable<String> targetPath) {
+        return PropertyMapping.of(sourceRef, targetPath, 1.0);
     }
 
     @Value.Check
