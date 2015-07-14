@@ -17,19 +17,17 @@ package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import org.immutables.value.Value;
-
 
 /**
  * Definition of a property that can be found in a json-ld file.
  *
- *  !! TODO !!  WHAT ABOUT THE TYPE? 
- * CAN IT BE A STRUCTURE? (i.e. opening hour)
- * CAN IT BE AN URL POINTING TO SOME TYPE? (that is, a relational type)
- * CAN IT BE A UNION TYPE? i.e.   Number | null
- * REGEX SUPPORT? i.e. for dates
- * 
+ * !! TODO !! WHAT ABOUT THE TYPE? CAN IT BE A STRUCTURE? (i.e. opening hour)
+ * CAN IT BE AN URL POINTING TO SOME TYPE? (that is, a relational type) CAN IT
+ * BE A UNION TYPE? i.e. Number | null REGEX SUPPORT? i.e. for dates
+ *
  * @author David Leoni
  */
 @Value.Immutable
@@ -37,36 +35,33 @@ import org.immutables.value.Value;
 @JsonSerialize(as = PropertyDef.class)
 @JsonDeserialize(as = PropertyDef.class)
 abstract class APropertyDef {
-        
+
     /**
-     * The id of the property, which may be an IRI to a well-known property like i.e.     
+     * The id of the property, which may be an IRI to a well-known property like
+     * i.e.
      * <a href="http://schema.org/name" target="_blank">http://schema.org/name</a>
      */
     @Value.Default
-    @Value.Parameter
     public String getId() {
         return "";
-    }
+    }   
 
     /**
      * Human readable property name as found in json files.
      */
     @Value.Default
-    @Value.Parameter
-    public String getName() {
-        return "";
+    public Dict getName() {
+        return Dict.of();
     }
-
+    
     /**
-     * Although Json-ld always allow inserting multiple values (because of the
-     * open world assumption), we demand multiple values must be explicitly
-     * declared. todo review this
+     * The high-level concept describing the property. If unknown,
+     * {@link Concept#of()} will be used.
      *
      */
     @Value.Default
-    @Value.Parameter
-    public boolean isList() {
-        return false;
-    }
+    public Concept getConcept() {
+        return Concept.of();
+    }    
 
 }

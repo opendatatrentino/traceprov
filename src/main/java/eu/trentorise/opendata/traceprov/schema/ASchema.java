@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.io.Serializable;
+import java.util.List;
 import org.immutables.value.Value;
 
 /**
@@ -41,17 +42,25 @@ abstract class ASchema implements Serializable {
      * https://schema.org/Person
      */
     @Value.Default
-    @Value.Parameter
     public String getId() {
         return "";
     }
 
+   /**
+     * The high-level concept describing the schema. If unknown,
+     * {@link Concept#of()} will be used.
+     *
+     */
+    @Value.Default
+    public Concept getConcept() {
+        return Concept.of();
+    }
+    
     /**
      * Name of the type preferably in English and camelcased, i.e. CreativeWork,
      * BroadcastService
      */
     @Value.Default
-    @Value.Parameter
     public String getName() {
         return "";
     }
@@ -59,7 +68,15 @@ abstract class ASchema implements Serializable {
     /**
      * The property definitions of the schema
      */
-    @Value.Parameter
     public abstract ImmutableList<PropertyDef> getPropertyDefs();
+
+    /**
+     * The unique indexes tht may constrain sets of schema values to be unique
+     * in the array they are in.
+     *
+     */
+    public abstract List<UniqueIndex> getUniqueIndexes();
+
+ 
 
 }

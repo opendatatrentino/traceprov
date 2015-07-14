@@ -13,26 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.services;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static eu.trentorise.opendata.commons.OdtUtils.checkNotEmpty;
-import java.io.OutputStream;
+package eu.trentorise.opendata.traceprov;
 
 /**
- * Loads a file from a URL
+ * Utilities for TraceProv library
  * @author David Leoni
- * 
- * 
  */
-public class UrlLoader implements ILoader {
-
-    @Override
-    public void load(String url, OutputStream output, Object... args) {
-        checkNotEmpty(url, "invalid url!");
-        checkNotNull(output);        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
+public class TraceProvs {
+    public static final String TRACEPROV_IRI = "http://opendatatrentino.github.io/traceprov/#";
+    public static final String TRACEPROV_PREFIX = "traceprov:";
 }

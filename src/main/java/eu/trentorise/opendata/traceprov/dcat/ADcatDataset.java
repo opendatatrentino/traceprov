@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.dcat; 
+package eu.trentorise.opendata.traceprov.dcat;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -27,6 +27,8 @@ import java.util.Locale;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.Period;
 
 /**
  * A collection of data, published or curated by a single agent, and available
@@ -43,35 +45,33 @@ import org.joda.time.DateTime;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=DcatDataset.class)
-@JsonDeserialize(as=DcatDataset.class)
-abstract  class ADcatDataset implements Serializable {
+@JsonSerialize(as = DcatDataset.class)
+@JsonDeserialize(as = DcatDataset.class)
+abstract class ADcatDataset implements Serializable {
 
-    public static final String CLASS_URI="http://www.w3.org/ns/dcat#dataset";
-    
+    public static final String CLASS_URI = "http://www.w3.org/ns/dcat#dataset";
+
     private static final long serialVersionUID = 1L;
-        
+
     /**
      * Returns the frequency at which dataset is published, as defined by
      * <a href="http://purl.org/dc/terms/accrualPeriodicity">
      * dct:accrualPeriodicity </a>
-     */
-    @Value.Default
-    public String getAccrualPeriodicity() {
-        return "";
-    }
+     */    
+    @Nullable
+    public abstract Period getAccrualPeriodicity();
 
     /**
-     * Link a dataset to relevant contact information which is provided using
+     * Links a dataset to relevant contact information which is provided using
      * VCard, as defined by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:dataset_contactPoint">
      * dcat:contactPoint </a>
      *
      * i.e. dcat:contactPoint <http://example.org/transparency-office/contact>
-     */
+     */    
     @Value.Default
-    public String getContactPoint() {
-        return "";
+    public VCard getContactPoint() {
+        return VCard.of();
     }
 
     /**
@@ -79,14 +79,14 @@ abstract  class ADcatDataset implements Serializable {
      * <a href="http://purl.org/dc/terms/description">dct:description</a>
      */
     @Value.Default
-    public Dict getDescription(){
+    public Dict getDescription() {
         return Dict.of();
-    };
+    }  
 
     /**
      * Returns the distributions belonging to this dataset.
      */
-    public abstract  List<ADcatDistribution> getDistributions();
+    public abstract List<ADcatDistribution> getDistributions();
 
     /*
      A unique identifier of the dataset, defined by
@@ -98,16 +98,17 @@ abstract  class ADcatDataset implements Serializable {
     public String getIdentifier() {
         return "";
     }
-    
+
     /**
      * Date of formal issuance (e.g., publication) of the dataset.
      *
      * Note Dcat standard requires dates in string format to be
- <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
-     * 
+     *
      */
-    public abstract  @Nullable DateTime getIssued();
+    @Nullable
+    public abstract DateTime getIssued();
 
     /**
      * A set of keywords or tags describing the dataset, as specified by
@@ -115,17 +116,16 @@ abstract  class ADcatDataset implements Serializable {
      * dcat:keyword </a>
      * For example: "accountability","transparency" ,"payments"
      */
-    public abstract  List<String> getKeywords();
+    public abstract List<String> getKeywords();
 
     /**
      * A Web page that can be navigated to in a Web browser to gain access to
      * the dataset, its distributions and/or additional information. If the
      * distribution(s) are accessible only through a landing page (i.e. direct
      * download URLs are not known), then the landing page link SHOULD be
-     * duplicated as accessURL on a distribution. 
-     * 
-     * For relation with
-     * {@link ADcatDistribution#getAccessURL()} and
+     * duplicated as accessURL on a distribution.
+     *
+     * For relation with {@link ADcatDistribution#getAccessURL()} and
      * {@link ADcatDistribution#getDownloadURL()} see
      * <a href="http://www.w3.org/TR/vocab-dcat/#example-landing-page">
      * official dcat documentation </a>
@@ -155,23 +155,24 @@ abstract  class ADcatDataset implements Serializable {
      * corresponding IRI should be used; if no ISO 639-1 code is defined, then
      * IRI corresponding to the ISO 639-2 (three-letter) code should be used.
      */
-    public abstract  List<Locale> getLanguages();
+    public abstract List<Locale> getLanguages();
 
     /**
      * Most recent date on which the dataset was changed, updated or modified.
      * The value of this property indicates a change to the actual dataset, not
- a change to the catalog record. An absent value may indicate that the
- dataset has never changed after its initial publication, or that the date
- of last modification is not known, or that the dataset is continuously
- updated.
-
- Note Dcat standard requires dates in string format to be
- <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+     * a change to the catalog record. An absent value may indicate that the
+     * dataset has never changed after its initial publication, or that the date
+     * of last modification is not known, or that the dataset is continuously
+     * updated.
+     *
+     * Note Dcat standard requires dates in string format to be
+     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
      *
      * @see #getAccrualPeriodicity()
      */
-    public abstract  @Nullable DateTime getModified();
+    @Nullable
+    public abstract DateTime getModified();
 
     /**
      * An entity responsible for making the dataset available.
@@ -186,22 +187,25 @@ abstract  class ADcatDataset implements Serializable {
     public AFoafAgent getPublisher() {
         return FoafAgent.of();
     }
-    
+
     /**
      * Spatial coverage of the dataset, as specified by
      * <a href="http://purl.org/dc/terms/spatial">dct:spatial</a>
      * i.e. dct:spatial <http://www.geonames.org/6695072> ;
-     * 
-     * The returned string may be either:
+     *
+     * The returned object may be either:
      * <ul>
      * <li> a natural language name of the location </li>
-     * <li> a url to an identifier of the location, i.e. http://www.geonames.org/6695072 </li>
-     * <li> a GeoJSON object {@link eu.trentorise.opendata.traceprov.geojson.GeoJson} </li>     
-     * </ul>     
-     * 
+     * <li> a url to an identifier of the location, i.e.
+     * http://www.geonames.org/6695072 </li>
+     * <li> a GeoJSON object
+     * {@link eu.trentorise.opendata.traceprov.geojson.GeoJson} </li>
+     * <li> if spatial value is unknwon the empty string is returned. </li>
+     * </ul>
+     *
      */
     @Value.Default
-    public Object getSpatial(){
+    public Object getSpatial() {
         return "";
     }
 
@@ -212,20 +216,28 @@ abstract  class ADcatDataset implements Serializable {
      *
      * i.e. dct:temporal
      * <http://reference.data.gov.uk/id/quarter/2006-Q1> ;
-     */
-    @Value.Default
-    public String getTemporal(){
-        return "";
-    }
+     * 
+     * Allowed values: 
+     * <ul>
+      * <li>
+     * </ul>
+     
+     * 
+     * https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+     * 
+     * 
+     */    
+    @Nullable
+    public abstract Interval getTemporal();
 
     /**
-     * The main themes  of the dataset. A dataset can belong to multiple
-     * themes. The set of {@link ASkosConcept}s used to categorize the
-     * datasets are organized in the {@link ASkosConceptScheme} returned by
+     * The main themes of the dataset. A dataset can belong to multiple themes.
+     * The set of {@link ASkosConcept}s used to categorize the datasets are
+     * organized in the {@link ASkosConceptScheme} returned by
      * {@link ADcatCatalog#getThemes()}. Notice that 'category' is also used as
      * synonym of 'themes' in dcat specs.
-     */    
-    public abstract  List<SkosConcept> getThemes();
+     */
+    public abstract List<SkosConcept> getThemes();
 
     /**
      * A name given to the dataset as specified by
@@ -233,7 +245,7 @@ abstract  class ADcatDataset implements Serializable {
      * i.e. "Apple Production Statistics".
      */
     @Value.Default
-    public Dict getTitle(){
+    public Dict getTitle() {
         return Dict.of();
     }
 
@@ -243,14 +255,14 @@ abstract  class ADcatDataset implements Serializable {
      * @see #getIdentifier()
      */
     @Value.Default
-    public String getUri(){
+    public String getUri() {
         return "";
     }
 
     @Value.Check
-     protected void check() {
-       Preconditions.checkState(getSpatial() instanceof String || getSpatial() instanceof GeoJson,
-           "spatial validity attribute should be instance of String or GeoJson, found instead %s ", getSpatial());
-     }    
-    
+    protected void check() {
+        Preconditions.checkState(getSpatial() instanceof String || getSpatial() instanceof GeoJson,
+                "spatial validity attribute should be instance of String or GeoJson, found instead %s ", getSpatial());
+    }
+
 }

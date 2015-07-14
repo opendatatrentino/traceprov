@@ -32,7 +32,7 @@ public interface INodeVisitor {
      * @param pos If the parent node is a {@link NodeList}, pos is the position
      * in such list. Otherwise it is zero.
      */
-    void visit(NodeMap node, INode parent, String field, int pos);
+    void visit(NodeMap node, ANode parent, String field, int pos);
 
     /**
      * Visits a node list
@@ -44,7 +44,7 @@ public interface INodeVisitor {
      * @param pos If the parent node is a {@link NodeList}, pos is the position
      * in such list. Otherwise it is unspecified.
      */    
-    void visit(NodeList node, INode parent, String field, int pos);
+    void visit(NodeList node, ANode parent, String field, int pos);
 
     /**
      * Visits a node value
@@ -56,5 +56,5 @@ public interface INodeVisitor {
      * @param pos If the parent node is a {@link NodeList}, pos is the position
      * in such list. Otherwise it is unspecified.
      */    
-    void visit(NodeValue node, INode parent, String field, int pos);
+    void visit(NodeValue node, ANode parent, String field, int pos);
 }

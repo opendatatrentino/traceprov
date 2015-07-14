@@ -13,36 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.data;
+package eu.trentorise.opendata.traceprov.schema;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableList;
+import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
+ * A high level concept. Examples could be Dublin core terms or WordNet synsets.
  *
  * @author David Leoni
  */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as=TableData.class)
-@JsonDeserialize(as=TableData.class)
-abstract class ATableData implements Serializable {
-    
-    private static final long serialVersionUID = 1L;
-    
-    /**     
-     * Returns the table headers as strings.
-     */
-    @Value.Parameter
-    abstract public ImmutableList<String> getHeaders();
-        
+@JsonSerialize(as = Concept.class)
+@JsonDeserialize(as = Concept.class)
+abstract class AConcept {
+
     /**
-     * Returns the row bodies. Each row is a list of strings. 
+     * The id of the concept, which could possibly be an IRI. 
      */
-    @Value.Parameter
-    abstract public ImmutableList<ImmutableList<String>> getRows();
+    @Value.Default
+    public String getId() {
+        return "";
+    }
+    
+    /**
+     * The name of the concept, or {@link dict.of()} if unknown.
+     */
+    @Value.Default
+    public Dict getName() {
+        return Dict.of();
+    }
+
+    /**
+     * Gets the description of the concept, or {@link dict.of()} if unknown.
+     *
+     */
+    @Value.Default
+    public Dict getDescription() {
+        return Dict.of();
+    }
 }

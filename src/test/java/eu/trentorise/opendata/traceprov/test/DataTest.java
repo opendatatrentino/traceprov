@@ -17,6 +17,7 @@ package eu.trentorise.opendata.traceprov.test;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -34,6 +36,10 @@ import org.junit.Test;
  */
 public class DataTest {
     
+    @BeforeClass
+    public static void setUpClass() {
+        OdtConfig.init(DataTest.class);
+    }
     
     @Test
     public void testWalkerValue(){                                          

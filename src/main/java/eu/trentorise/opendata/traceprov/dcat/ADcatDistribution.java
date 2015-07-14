@@ -18,7 +18,6 @@ package eu.trentorise.opendata.traceprov.dcat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
-import com.google.common.base.Optional;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.io.Serializable;
 import java.util.Locale;
@@ -97,7 +96,7 @@ import org.joda.time.DateTime;
         return Dict.of();
     }
 
-    ;
+    
 
     /**
      * A file that contains the distribution of the dataset in a given format
@@ -142,7 +141,8 @@ import org.joda.time.DateTime;
      *
      * @see #getModified()
      */
-    public abstract  @Nullable DateTime getIssued();
+    @Nullable
+    public abstract DateTime getIssued();
 
     /**
      * The language of the distribution. Note that this does not explicitly
@@ -215,7 +215,8 @@ import org.joda.time.DateTime;
      *
      * @see ADcatDataset#getModified()
      */
-    public abstract  @Nullable DateTime getModified();
+    @Nullable
+    public abstract DateTime getModified();
 
     /**
      * Information about rights held in and over the distribution, as specified
@@ -246,9 +247,7 @@ import org.joda.time.DateTime;
     @Value.Default
     public Dict getTitle() {
         return Dict.of();
-    }
-
-    ;
+    }   
 
     /**
      * Returns the uri of the distribution (which is not the uri of the file

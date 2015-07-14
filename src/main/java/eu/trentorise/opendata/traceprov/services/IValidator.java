@@ -15,6 +15,8 @@
  */
 package eu.trentorise.opendata.traceprov.services;
 
+import com.google.common.collect.ImmutableList;
+import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvSchema;
 import eu.trentorise.opendata.traceprov.schema.Schema;
@@ -34,16 +36,28 @@ public interface IValidator {
      * @param mimetype the mimetype of the stream, i.e. text/csv,
      * @param schema the expected schema of the file. If unknown, pass {@link Schema#of()}
      * application/json, ...
+     * 
      * @throws eu.trentorise.opendata.traceprov.LoadException if some error
      * occurs while physically loading stream. In case
      * format errors are found in the original file, they should be reported within the
      * output object instead of throwing an exception.
      */
-    ProvFile validate(InputStream stream, Schema schema, String mimetype);
+    ProvFile validate(InputStream stream, Schema schema, DcatMetadata dcatMetadata);
     
     /**
      * Validates the schema present in the input stream and returns the parsed result (which may still have errors). 
-     * @param stream the stream to validate     
+     * 
+     * @param stream the stream to validate          
+     * 
+     * @throws eu.trentorise.opendata.traceprov.LoadException if some error
+     * occurs while physically loading stream. In case
+     * format errors are found in the original file, they should be reported within the
+     * output object instead of throwing an exception.
      */
     ProvSchema validateSchema(InputStream stream);
+    
+    /**
+     * Returns a list of the mimetypes this validator can parse.
+     */
+    ImmutableList<String> getSupportedMimetypes();
 }

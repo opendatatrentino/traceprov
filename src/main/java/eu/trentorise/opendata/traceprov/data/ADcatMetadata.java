@@ -43,7 +43,6 @@ abstract class ADcatMetadata implements Serializable {
      * {@link DcatCatalog#of()} is returned.
      */
     @Value.Default
-    @Value.Parameter
     public DcatCatalog getCatalog() {
         return DcatCatalog.of();
     }
@@ -52,7 +51,6 @@ abstract class ADcatMetadata implements Serializable {
      * The dataset metadata in dcat format
      */
     @Value.Default
-    @Value.Parameter
     public DcatDataset getDataset() {
         return DcatDataset.of();
     }
@@ -61,7 +59,6 @@ abstract class ADcatMetadata implements Serializable {
      * The distribution metadata in dcat format
      */
     @Value.Default
-    @Value.Parameter
     public DcatDistribution getDistribution() {
         return DcatDistribution.of();
     }

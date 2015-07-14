@@ -87,8 +87,8 @@ abstract class ADcatCatalogRecord implements Serializable {
      *
      * @see ADcatDataset#getIssued()
      */
-    public abstract @Nullable
-    DateTime getIssued();
+    @Nullable
+    public abstract DateTime getIssued();
 
     /**
      * Most recent date on which the catalog entry was changed, updated or
@@ -103,8 +103,8 @@ abstract class ADcatCatalogRecord implements Serializable {
      *
      * @see ADcatDataset#getModified()
      */
-    public abstract @Nullable
-    DateTime getModified();
+    @Nullable
+    public abstract DateTime getModified();
 
     /**
      * Links the catalog record to the dcat:Dataset resource described in the
@@ -125,8 +125,6 @@ abstract class ADcatCatalogRecord implements Serializable {
         return Dict.of();
     }
 
-    ;
-
     /**
      * Property not in DCAT spec. This should uniquely identify the record.
      */
@@ -134,6 +132,5 @@ abstract class ADcatCatalogRecord implements Serializable {
     public String getUri() {
         return "";
     }
-;
 
 }

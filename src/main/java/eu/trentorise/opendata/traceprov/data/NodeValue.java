@@ -27,43 +27,34 @@ import javax.annotation.Nullable;
  *
  * @author David Leoni
  */
-public class NodeValue implements INode {
+public class NodeValue extends ANode {
 
     private static final long serialVersionUID = 1L;
     private static final NodeValue INSTANCE = new NodeValue();
-
-    private Ref provenance;
-    private Object value;
     
     private NodeValue(){
-        this.provenance = Ref.of();
-        this.value = null;
+        super();
     }
     
-    private NodeValue(Ref provenance, @Nullable Object value){
-        checkNotNull(provenance);
+    private NodeValue(Ref ref, NodeMetadata nodeMetadata, @Nullable Object value){
+        super(ref, nodeMetadata, value);
         Preconditions.checkArgument(value == null || value instanceof Number || value instanceof String);
-        this.provenance = provenance;
-        this.value = value;
     }
     
     
-    @Override
-    public Ref getProvenance() {
-        return provenance;
-    }
 
     /**
      * A ground json-compatible value, like null, number, string.
      */
     @Nullable
-    public Object getValue(){
-        return value;
+    @Override
+    public Object getData(){
+        return super.getData();
     }
 
     
     @Override
-    public void accept(INodeVisitor visitor, INode parent, String field, int pos) {
+    public void accept(INodeVisitor visitor, ANode parent, String field, int pos) {
         visitor.visit((NodeValue) this, parent, field, pos);
     }
 
@@ -75,13 +66,12 @@ public class NodeValue implements INode {
     }
 
     /**
-     * Construct new immutable {@code NodeValue} instance using defualt
-     * provenance {@link DocRef#of()}
+     * Construct new immutable {@code NodeValue} instance.
      *
-     * @param value a String, a Number or a null
+     * @param value a String, a Number or null
      */
     public static NodeValue of(@Nullable Object value) {
-        return new NodeValue(Ref.of(), value);
+        return new NodeValue(Ref.of(), NodeMetadata.of(), value);
     }
     
     /**
@@ -90,8 +80,8 @@ public class NodeValue implements INode {
      * @param value a String, a Number or a null
      * @param provenance a reference to the provenance. If unknown, use {@link DocRef#of()}
      */
-    public static NodeValue of(Ref provenance, @Nullable Object value) {
-        return new NodeValue(Ref.of(), value);
+    public static NodeValue of(Ref provenance, NodeMetadata metadata, @Nullable Object value) {
+        return new NodeValue(Ref.of(), metadata, value);
     }    
     
     /**
@@ -101,37 +91,10 @@ public class NodeValue implements INode {
     public static NodeValue of() {
         return INSTANCE;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.provenance);
-        hash = 37 * hash + Objects.hashCode(this.value);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final NodeValue other = (NodeValue) obj;
-        if (!Objects.equals(this.provenance, other.provenance)) {
-            return false;
-        }
-        if (!Objects.equals(this.value, other.value)) {
-            return false;
-        }
-        return true;
-    }
-
+   
     @Override
     public String toString() {
-        return "NodeValue{" + "provenance=" + provenance + ", value=" + value + '}';
+        return "NodeValue{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getData() + '}';
     }
-    
     
 }

@@ -15,7 +15,8 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
-import eu.trentorise.opendata.traceprov.services.UrlLoader;
+import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.traceprov.test.services.UrlLoader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,8 +24,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertEquals;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -34,12 +37,17 @@ import org.junit.Test;
  */
 public class LoaderTest {
     
+    @BeforeClass
+    public static void setUpClass() {
+        OdtConfig.init(LoaderTest.class);
+    }
+    
     @Test
     @Ignore
     public void loadFromUrlTest() throws FileNotFoundException, IOException {
         File tempFile = File.createTempFile("traceprov-temp-", "");
         try (OutputStream output = new FileOutputStream(tempFile)) {
-            new UrlLoader().load("file://src/test/resources/test-1.csv", output);
+            new UrlLoader().loadData(new URL("file://src/test/resources/test-1.csv"), output);
         }
         
         InputStream input = new FileInputStream(tempFile);

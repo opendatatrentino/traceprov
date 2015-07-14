@@ -15,25 +15,44 @@
  */
 package eu.trentorise.opendata.traceprov.services;
 
+import com.google.common.collect.ImmutableList;
+import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import java.io.OutputStream;
+import java.net.URL;
+import java.util.List;
 
 /**
- * Interfacce to load a fils from a source, like a url, a db, etc...
+ * Interface to load a file from a source, like a url, a db, etc...
+ *
+ * Implementations are intended to be Java beans and their setters will ba
+ * called to set parameters for loader methods (i.e. auth token)
+ *
+ * Implementations need not be thread-safe
+ *
  * @author David Leoni
  */
 public interface ILoader {
-    
+
     /**
-     * Loads a resource from an url into provided output streams. 
-     * @param url   Resource location
-     * @param output    The output stream where the file will be loaded
-     * @param args  optional arguments for the loader
-     * @throws eu.trentorise.opendata.traceprov.LoadException if some error occurs. 
+     * Loads from a given url a resource into output stream.
+     *
+     * @param url Resource location
+     * @param output The output stream where the file will be loaded     
+     *
+     * @throws eu.trentorise.opendata.traceprov.LoadException if some error
+     * occurs.
      */
-    void load(String url, OutputStream output, Object... args);
-    
+    void loadData(URL url, OutputStream output);
+
+    /**
+     * Loads and returns a metadata for a resource at given url. If loading of
+     * some metadata fails method will return
+     * {@link eu.trentorise.opendata.traceprov.data.DcatMetadata#of()} in the
+     * corresponding position of the result list.
+     *
+     * @param url the url of the distribution, see
+     * {@link eu.trentorise.opendata.traceprov.dcat.DcatDistribution#getUri()}
+     */
+    public ImmutableList<DcatMetadata> loadMetadata(Iterable<URL> url);
+
 }
-
-
-
-

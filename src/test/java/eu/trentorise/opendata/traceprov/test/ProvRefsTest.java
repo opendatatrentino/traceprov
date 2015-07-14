@@ -16,10 +16,12 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import com.google.common.collect.ImmutableList;
+import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import static eu.trentorise.opendata.traceprov.schema.ProvRefs.propertyRef;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -28,6 +30,11 @@ import org.junit.Test;
  */
 public class ProvRefsTest {
 
+    @BeforeClass
+    public static void setUpClass() {
+        OdtConfig.init(ProvRefsTest.class);
+    }
+    
     @Test
     public void test() {
         assertEquals("catalog", propertyRef(DcatMetadata.class, "catalog"));

@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import eu.trentorise.opendata.commons.validation.Ref;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
 
 
 /** 
@@ -28,78 +28,39 @@ import java.util.Objects;
  * @author David Leoni 
 */
 
-public class NodeMap implements INode  {
+public class NodeMap extends ANode  {
 
     private static final NodeMap INSTANCE = new NodeMap();
     
-    private static final long serialVersionUID = 1L;
-    private Map<String,? extends INode> nodes;
-    private Ref provenance;
+    private static final long serialVersionUID = 1L;    
     
     private NodeMap(){
-        this.nodes = new HashMap();
-        this.provenance = Ref.of();
+        super(Ref.of(), NodeMetadata.of(), new HashMap());
+        
     }
 
-    private NodeMap(Ref provenance, Map<String, ? extends INode> nodes) {
-        checkNotNull(provenance);
-        checkNotNull(nodes);        
-        this.provenance = provenance;
-        this.nodes = nodes;
+    private NodeMap(Ref ref, NodeMetadata metadata,  Map<String, ? extends ANode> nodes) {
+        super(ref, metadata, nodes);
+        checkNotNull(nodes);                
     }
                  
     public static NodeMap of(){
         return INSTANCE;
     }
     
-    public static NodeMap of(Ref provenance, Map<String, ? extends  INode> nodes){
-       return new NodeMap(provenance, nodes);
+    public static NodeMap of(Ref ref, NodeMetadata metadata, Map<String, ? extends  ANode> nodes){
+       return new NodeMap(ref, metadata, nodes);
     }
     
-    public Map<String, ? extends INode> getValues(){
-        return nodes;
-    }
-
     @Override
-    public Ref getProvenance() {
-        return provenance;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.nodes);
-        hash = 37 * hash + Objects.hashCode(this.provenance);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final NodeMap other = (NodeMap) obj;
-        if (!Objects.equals(this.nodes, other.nodes)) {
-            return false;
-        }
-        if (!Objects.equals(this.provenance, other.provenance)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "NodeMap{" + "nodes=" + nodes + ", provenance=" + provenance + '}';
+    public Map<String, ? extends ANode> getData(){
+        return (Map<String, ? extends ANode>) super.getData();
     }
 
         
     @Override
-    public void accept(INodeVisitor visitor, INode parent, String field, int pos){
-        for (Map.Entry<String, ? extends INode> entry : nodes.entrySet()){
+    public void accept(INodeVisitor visitor, ANode parent, String field, int pos){
+        for (Map.Entry<String, ? extends ANode> entry : getData().entrySet()){
             entry.getValue().accept(visitor, this, entry.getKey(), 0);
         }
         visitor.visit(this, parent, field, pos);
@@ -112,4 +73,6 @@ public class NodeMap implements INode  {
         accept(tran, NodeValue.of(), "",0);        
         return tran.getResult();
     }
+
+           
 }

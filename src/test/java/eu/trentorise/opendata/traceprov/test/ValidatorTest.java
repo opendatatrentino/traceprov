@@ -15,11 +15,10 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
-import eu.trentorise.opendata.traceprov.data.ProvFile;
-import eu.trentorise.opendata.traceprov.data.ProvSchema;
-import eu.trentorise.opendata.traceprov.schema.Schema;
-import eu.trentorise.opendata.traceprov.services.IValidator;
-import java.io.InputStream;
+import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.traceprov.test.services.CsvValidator;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *
@@ -27,20 +26,16 @@ import java.io.InputStream;
  */
 public class ValidatorTest {
 
-}
-
-
-class CsvValidator implements IValidator {
-
-    @Override
-    public ProvFile validate(InputStream stream, Schema schema, String mimetype) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @BeforeClass
+    public static void setUpClass() {
+        OdtConfig.init(ValidatorTest.class);
     }
-
-    @Override
-    public ProvSchema validateSchema(InputStream stream) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     
+    @Test
+    public void testCsvValidator() {
+        CsvValidator val = new CsvValidator();
+        
+        
+    }
+
 }

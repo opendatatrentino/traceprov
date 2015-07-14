@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.OdtUtils;
 import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.validation.Preconditions;
 
 import eu.trentorise.opendata.commons.validation.Ref;
 import java.io.Serializable;
@@ -73,7 +74,7 @@ abstract class APropertyMapping implements Serializable {
 
     @Value.Check
     protected void check() {
-        OdtUtils.checkScore(getScore(), "Invalid score!");
+        Preconditions.checkScore(getScore(), "Invalid score!");
     }
 
 }

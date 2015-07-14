@@ -27,10 +27,10 @@ import java.util.Map;
 
 
 /**
- * Produces a simple HashMap/ArrayList version of an INode tree
+ * Produces a simple HashMap/ArrayList version of an ANode tree
  * @author David Leoni 
  */
-class SimpleMapTransformer implements INodeVisitor {
+final class SimpleMapTransformer implements INodeVisitor {
     private LinkedList<Map.Entry> stack;    
 
     public SimpleMapTransformer() {
@@ -39,11 +39,11 @@ class SimpleMapTransformer implements INodeVisitor {
         
     
     @Override
-    public void visit(NodeMap nodeMap, INode parent, String key, int pos) {
+    public void visit(NodeMap nodeMap, ANode parent, String key, int pos) {
         
         Map map = new HashMap();
         
-        for (int i = 0; i < nodeMap.getValues().size(); i++){
+        for (int i = 0; i < nodeMap.getData().size(); i++){
             Map.Entry entry = stack.removeFirst();
             map.put(entry.getKey(), entry.getValue());
         }
@@ -51,7 +51,7 @@ class SimpleMapTransformer implements INodeVisitor {
     }
 
     @Override
-    public void visit(NodeList nodeList, INode parent, String key, int pos) {
+    public void visit(NodeList nodeList, ANode parent, String key, int pos) {
         List ret = new ArrayList();
         
         for (int i = 0; i < Iterables.size(nodeList); i++){
@@ -64,8 +64,8 @@ class SimpleMapTransformer implements INodeVisitor {
     }
 
     @Override
-    public void visit(NodeValue nodeValue, INode parent, String key, int pos) {
-        stack.addFirst(Maps.immutableEntry(key, nodeValue.getValue()));
+    public void visit(NodeValue nodeValue, ANode parent, String key, int pos) {
+        stack.addFirst(Maps.immutableEntry(key, nodeValue.getData()));
     }
     
     public Object getResult(){

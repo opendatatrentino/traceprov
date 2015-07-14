@@ -19,98 +19,72 @@ import com.google.common.collect.ImmutableList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import eu.trentorise.opendata.commons.validation.Ref;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
 
 /**
  * {@link ProvFile} body node containing an array of other nodes.
  *
  * @author David Leoni
  */
-public class NodeList implements INode, Iterable<INode> {
+public class NodeList extends ANode implements  Iterable<ANode> {
 
     private static final long serialVersionUID = 1L;
     private static final NodeList INSTANCE = new NodeList();
     private static final int MAX_PRINTED_NODES = 10;
 
-    private Iterable<INode> nodes;
-    private Ref provenance;
+    private Iterable<ANode> nodes;
 
     private NodeList() {
-        this.nodes = ImmutableList.<INode>of();
-        this.provenance = Ref.of();
+        super();
+        this.nodes = new ArrayList();
     }
 
-    private NodeList(Ref provenance, Iterable<? extends INode> nodes) {
-        checkNotNull(provenance);
-        checkNotNull(nodes);
-        this.provenance = provenance;
-        this.nodes = (Iterable<INode>) nodes;
-    }
-
-    @Override
-    public Ref getProvenance() {
-        return provenance;
+    private NodeList(Ref ref, NodeMetadata metadata,  Iterable<? extends ANode> nodes) {
+        super(ref, metadata, nodes);
+        checkNotNull(nodes);        
     }
 
     @Override
-    public Iterator<INode> iterator() {
+    public Iterator<ANode> iterator() {
         return nodes.iterator();
     }
 
+    /**
+     * Returns the list of sub nodes.
+     */
+    @Override
+    public Iterable<ANode> getData(){
+        return (Iterable<ANode>) super.getData();
+    }    
+    
     public static NodeList of() {
         return INSTANCE;
     }
 
-    public static NodeList of(Iterable<? extends INode> nodes) {
-        return of(Ref.of(), nodes);
+    public static NodeList of(Iterable<? extends ANode> nodes) {
+        return of(Ref.of(), NodeMetadata.of(), nodes);
     }
 
-    public static NodeList of(INode... nodes) {
-        return new NodeList(Ref.of(), ImmutableList.copyOf(nodes));
+    public static NodeList of(ANode... nodes) {
+        return new NodeList(Ref.of(), NodeMetadata.of(), ImmutableList.copyOf(nodes));
     }
 
-    public static NodeList of(Ref provenance, Iterable<? extends INode> nodes) {
-        return new NodeList(provenance, nodes);
+    public static NodeList of(Ref ref, NodeMetadata metadata, Iterable<? extends ANode> nodes) {
+        return new NodeList(ref, metadata, nodes);
+    }
+        
+    public static NodeList of(Ref ref, ANode... nodes) {
+        return new NodeList(ref, NodeMetadata.of(), Arrays.asList(nodes));
     }
 
-    public static NodeList of(Ref provenance, INode... nodes) {
-        return new NodeList(provenance, ImmutableList.copyOf(nodes));
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 53 * hash + Objects.hashCode(this.nodes);
-        hash = 53 * hash + Objects.hashCode(this.provenance);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final NodeList other = (NodeList) obj;
-        if (!Objects.equals(this.nodes, other.nodes)) {
-            return false;
-        }
-        if (!Objects.equals(this.provenance, other.provenance)) {
-            return false;
-        }
-        return true;
-    }
-
-    
     
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        for (INode n : nodes){
+        for (ANode n : nodes){
             if (i > 0){
                 sb.append(", ");
             }            
@@ -123,16 +97,17 @@ public class NodeList implements INode, Iterable<INode> {
             i++;
         }
         sb.append("]");
-        return "NodeList{" + "nodes=" + sb.toString() + ", provenance=" + provenance + '}';
+        return "NodeList{ref=" + getRef() +  ", metadata=" + getMetadata() + ", data=" + sb.toString()  + '}';
     }
-
+   
+    
     @Override
-    public void accept(INodeVisitor visitor, INode parent, String field, int pos) {
+    public void accept(INodeVisitor visitor, ANode parent, String field, int pos) {
         int i = 0;
-        Iterator<INode> iter = nodes.iterator();
+        Iterator<ANode> iter = nodes.iterator();
 
         while (iter.hasNext()) {
-            INode node = iter.next();
+            ANode node = iter.next();
             node.accept(visitor, this, field, i);
             i++;
         }
@@ -148,4 +123,7 @@ public class NodeList implements INode, Iterable<INode> {
         return tran.getResult();
     }
 
+
+    
+    
 }
