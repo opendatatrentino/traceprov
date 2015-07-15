@@ -18,11 +18,10 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.traceprov.schema.TypeSig;
+import eu.trentorise.opendata.traceprov.types.TypeSig;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
-import org.joda.time.Interval;
 
 /**
  *
@@ -57,9 +56,21 @@ abstract class ANodeMetadata {
      *
      * i.e. dct:temporal
      * <http://reference.data.gov.uk/id/quarter/2006-Q1> ;
+     * 
+     * Allowed values:
+     * <ul>
+     * <li>A string formatted following
+     * <a href="https://en.wikipedia.org/wiki/ISO_8601#Time_intervals">ISO 8601
+     * Date and Time interval</a> string format i.e.
+     * "2007-03-01T13:00:00Z/2008-05-11T15:30:00Z". </li>
+     * <li>A String in natural language, i.e. Summer of 2014</li>
+     * <li>An empty string if the interval is unknown</li>
+     * </ul>
      */
-    @Nullable
-    public abstract Interval getTemporal();
+    @Value.Default
+    public String getTemporal(){
+        return "";
+    };
 
     /**
      * Spatial coverage of the dataset.

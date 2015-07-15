@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
-import org.joda.time.DateTime;
 
 /**
  * Models a
@@ -138,11 +137,14 @@ import org.joda.time.DateTime;
  Note DCAT standard requires dates in string format to be
  <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
+     * If date is unknown the empty string is used.
      *
      * @see #getModified()
      */
-    @Nullable
-    public abstract DateTime getIssued();
+    @Value.Default
+    public String getIssued(){
+        return "";
+    };
 
     /**
      * The language of the distribution. Note that this does not explicitly
@@ -212,11 +214,13 @@ import org.joda.time.DateTime;
      * Note Dcat standard requires dates in string format to be
  <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
+     * If date is unknown the empty string is used.
      *
      * @see ADcatDataset#getModified()
-     */
-    @Nullable
-    public abstract DateTime getModified();
+     */    
+    public String getModified(){
+        return "";
+    };
 
     /**
      * Information about rights held in and over the distribution, as specified

@@ -1,8 +1,5 @@
-package eu.trentorise.opendata.traceprov.schema;
+package eu.trentorise.opendata.traceprov.types;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
 import static eu.trentorise.opendata.traceprov.TraceProvs.TRACEPROV_PREFIX;
 import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
@@ -12,7 +9,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import org.immutables.value.Value;
 
 /**
  * Class to model data types. <br/>
@@ -20,17 +16,18 @@ import org.immutables.value.Value;
  * Primitive datatypes are a subset of <a
  * target="_blank" href="http://www.w3.org/TR/2004/REC-rdf-mt-20040210/">
  * RDF Semantics, XSD datatypes section</a>. Complex types such as
+ * todo
  * <i>oe:structure</i>
  * and <i>oe:entity</i> are newly defined. <br/>
  * <br/>
  * Datatypes are mapped to Java objects according to the following scheme: <br/>
  * <br/>
  * STRING : {@link java.lang.String} <br/>
- * BOOLEAN : {@link java.lang.Boolean} <br/>
- * DATE : {@link java.util.Date} <br/>
- * INTEGER : {@link java.lang.Integer} <br/>
- * LONG : {@link java.lang.Long} <br/>
- * FLOAT : {@link java.lang.Float} <br/>
+ * XSD_BOOLEAN : {@link java.lang.Boolean} <br/>
+ * XSD_DATETIME : {@link java.lang.String} <br/>
+ * XSD_INT : {@link java.lang.Integer} <br/>
+ * XSD_LONG : {@link java.lang.Long} <br/>
+ * XSD_FLOAT : {@link java.lang.Float} <br/>
  * DOUBLE : {@link java.lang.Double} <br/>
  * ARRAY : {@link NodeList} <br/>
  * MAP : {@link NodeMap} <br/>
@@ -44,12 +41,13 @@ public final class Datatypes {
 
     public static final String XSD_PREFIX = "xsd:";
 
-    public static final String STRING = XSD_PREFIX + "string";
-    public static final String BOOLEAN = XSD_PREFIX + "boolean";
-    public static final String DATE = XSD_PREFIX + "dateTime";
-    public static final String INTEGER = XSD_PREFIX + "int";
-    public static final String FLOAT = XSD_PREFIX + "float";
-    public static final String LONG = XSD_PREFIX + "long";
+    public static final String XSD_STRING = XSD_PREFIX + "string";
+    public static final String XSD_BOOLEAN = XSD_PREFIX + "boolean";
+    public static final String XSD_DATETIME = XSD_PREFIX + "dateTime";
+    public static final String XSD_INT = XSD_PREFIX + "int";
+    public static final String XSD_FLOAT = XSD_PREFIX + "float";
+    public static final String XSD_DOUBLE = XSD_PREFIX + "double";
+    public static final String XSD_LONG = XSD_PREFIX + "long";
     public static final String LIST = TRACEPROV_PREFIX + "list";
     public static final String MAP = TRACEPROV_PREFIX + "map";
 
@@ -60,32 +58,35 @@ public final class Datatypes {
 
     static {
 
-        DATATYPE_PRETTY_NAMES_EN.put(STRING, "String");
-        DATATYPE_PRETTY_NAMES_EN.put(BOOLEAN, "Boolean");
-        DATATYPE_PRETTY_NAMES_EN.put(DATE, "Date");
-        DATATYPE_PRETTY_NAMES_EN.put(INTEGER, "Integer");
-        DATATYPE_PRETTY_NAMES_EN.put(FLOAT, "Single precision number");
-        DATATYPE_PRETTY_NAMES_EN.put(LONG, "Long integer");
+        DATATYPE_PRETTY_NAMES_EN.put(XSD_STRING, "String");
+        DATATYPE_PRETTY_NAMES_EN.put(XSD_BOOLEAN, "Boolean");
+        DATATYPE_PRETTY_NAMES_EN.put(XSD_DATETIME, "Datetime");
+        DATATYPE_PRETTY_NAMES_EN.put(XSD_INT, "Integer");
+        DATATYPE_PRETTY_NAMES_EN.put(XSD_FLOAT, "Single precision number");
+        DATATYPE_PRETTY_NAMES_EN.put(XSD_DOUBLE, "Double precision number");
+        DATATYPE_PRETTY_NAMES_EN.put(XSD_LONG, "Long integer");
         DATATYPE_PRETTY_NAMES_EN.put(LIST, "List");
         DATATYPE_PRETTY_NAMES_EN.put(MAP, "Map");
         DATATYPE_PRETTY_NAMES_MAP.put(Locale.ENGLISH, DATATYPE_PRETTY_NAMES_EN);
 
-        DATATYPE_PRETTY_NAMES_IT.put(STRING, "Stringa");
-        DATATYPE_PRETTY_NAMES_IT.put(BOOLEAN, "Booleano");
-        DATATYPE_PRETTY_NAMES_IT.put(DATE, "Data");
-        DATATYPE_PRETTY_NAMES_IT.put(INTEGER, "Intero");
-        DATATYPE_PRETTY_NAMES_IT.put(FLOAT, "Numero a precisione singola");
-        DATATYPE_PRETTY_NAMES_IT.put(LONG, "Intero grande");
+        DATATYPE_PRETTY_NAMES_IT.put(XSD_STRING, "Stringa");
+        DATATYPE_PRETTY_NAMES_IT.put(XSD_BOOLEAN, "Booleano");
+        DATATYPE_PRETTY_NAMES_IT.put(XSD_DATETIME, "Data");
+        DATATYPE_PRETTY_NAMES_IT.put(XSD_INT, "Intero");
+        DATATYPE_PRETTY_NAMES_IT.put(XSD_FLOAT, "Numero a precisione singola");
+        DATATYPE_PRETTY_NAMES_IT.put(XSD_DOUBLE, "Numero a precisione doppia");
+        DATATYPE_PRETTY_NAMES_IT.put(XSD_LONG, "Intero grande");
         DATATYPE_PRETTY_NAMES_IT.put(LIST, "Lista");
         DATATYPE_PRETTY_NAMES_IT.put(MAP, "Mappa");
         DATATYPE_PRETTY_NAMES_MAP.put(Locale.ITALIAN, DATATYPE_PRETTY_NAMES_IT);
 
-        JAVA_DATATYPES.put(STRING, String.class);
-        JAVA_DATATYPES.put(BOOLEAN, Boolean.class);
-        JAVA_DATATYPES.put(DATE, Date.class);
-        JAVA_DATATYPES.put(INTEGER, Integer.class);
-        JAVA_DATATYPES.put(FLOAT, Float.class);
-        JAVA_DATATYPES.put(LONG, Long.class);
+        JAVA_DATATYPES.put(XSD_STRING, String.class);
+        JAVA_DATATYPES.put(XSD_BOOLEAN, Boolean.class);
+        JAVA_DATATYPES.put(XSD_DATETIME, Date.class);
+        JAVA_DATATYPES.put(XSD_INT, Integer.class);
+        JAVA_DATATYPES.put(XSD_FLOAT, Float.class);
+        JAVA_DATATYPES.put(XSD_DOUBLE, Double.class);
+        JAVA_DATATYPES.put(XSD_LONG, Long.class);
         JAVA_DATATYPES.put(LIST, NodeList.class);
         JAVA_DATATYPES.put(MAP, NodeMap.class);
 
@@ -137,13 +138,3 @@ public final class Datatypes {
     
 }
 
-@Value.Immutable
-@BuilderStylePublic
-@JsonSerialize(as = TypeSig.class)
-@JsonDeserialize(as = TypeSig.class)
-
-class DatatypeContext {
-    void registerType(Type schema){
-        
-    }
-}

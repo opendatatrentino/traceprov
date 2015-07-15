@@ -20,20 +20,17 @@ import eu.trentorise.opendata.traceprov.LoadException;
 import static eu.trentorise.opendata.traceprov.TraceProvs.TRACEPROV_IRI;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
-import eu.trentorise.opendata.traceprov.data.ProvSchema;
-import eu.trentorise.opendata.traceprov.schema.Schema;
+import eu.trentorise.opendata.traceprov.data.ProvType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.services.IValidator;
-import java.io.File;
+import eu.trentorise.opendata.traceprov.types.PropertyDef;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -88,7 +85,7 @@ public class CsvValidator implements IValidator {
     private static final ImmutableList<String> MIMETYPES = ImmutableList.of("text/csv");
     
     @Override
-    public ProvFile validate(InputStream stream, Schema schema, DcatMetadata dcatMetadata) {
+    public ProvFile validate(InputStream stream, Type schema, DcatMetadata dcatMetadata) {
 
         LOG.warning("CURRENT CSV VALIDATOR IS *EXPERIMENTAL*. DON'T TRUST IT!");
         
@@ -127,11 +124,11 @@ public class CsvValidator implements IValidator {
         catch (IOException ex) {
             throw new LoadException(ex);
         }
-
+        throw new RuntimeException("todo implement me");
     }
 
     @Override
-    public ProvSchema validateSchema(InputStream stream) {
+    public ProvType validateType(InputStream stream) {
         try {
             Reader in =  new InputStreamReader(stream);
             
@@ -145,10 +142,10 @@ public class CsvValidator implements IValidator {
                     throw new LoadException("Found no headers in CSV!");
                 }
                 
-                Schema.Builder builder = Schema.builder();
+                Type.Builder builder = Type.builder();
                 builder.setName("");
                 builder.setId(TRACEPROV_IRI + "generated-schema/"+UUID.randomUUID());
-                builder.addPropertyDefs(PropertyDef.);
+                builder.addPropertyDefs(PropertyDef.of());
             } else {
                 throw new LoadException("Provided csv is empty!!!");
             }
@@ -156,7 +153,7 @@ public class CsvValidator implements IValidator {
         catch (IOException ex) {
             throw new LoadException("Error while validating schema!", ex);
         }
-
+        throw new RuntimeException("todo implement me!");
     }
 
     

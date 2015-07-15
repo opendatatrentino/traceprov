@@ -125,10 +125,6 @@
             <artifactId>value</artifactId>            
         </dependency>   
                                 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>            
-        </dependency>            
         <!-- the Jackson core, which includes Streaming API, shared low-level abstractions (but NOT data-binding) -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -151,12 +147,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-guava</artifactId>            
-        </dependency> 
-        
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
-        </dependency>          
+        </dependency>                      
                                                                                                 
         <dependency>
             <groupId>junit</groupId>

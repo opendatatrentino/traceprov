@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.test;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
-import static eu.trentorise.opendata.traceprov.schema.ProvRefs.propertyRef;
+import static eu.trentorise.opendata.traceprov.types.ProvRefs.propertyRef;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;

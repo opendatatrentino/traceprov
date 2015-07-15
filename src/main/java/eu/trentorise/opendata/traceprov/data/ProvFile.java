@@ -19,8 +19,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import eu.trentorise.opendata.commons.validation.AValidationError;
-import eu.trentorise.opendata.traceprov.schema.PropertyMapping;
-import eu.trentorise.opendata.traceprov.schema.Schema;
+import eu.trentorise.opendata.traceprov.types.PropertyMapping;
+import eu.trentorise.opendata.traceprov.types.Type;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class ProvFile implements Serializable {
     private static final ProvFile INSTANCE = new ProvFile();
 
     private DcatMetadata dcatMetadata;
-    private Schema schema;
+    private Type schema;
     private List<AValidationError> schemaErrors;
     private ANode data;
     private List<AValidationError> dataErrors;
@@ -46,7 +46,7 @@ public class ProvFile implements Serializable {
 
     ProvFile() {
         this.dcatMetadata = DcatMetadata.of();
-        this.schema = Schema.of();
+        this.schema = Type.of();
         this.schemaErrors = ImmutableList.of();
         this.data = NodeMap.of();
         this.dataErrors = ImmutableList.of();
@@ -55,7 +55,7 @@ public class ProvFile implements Serializable {
 
     ProvFile(
             DcatMetadata dcatMetadata,
-            Schema schema,
+            Type schema,
             Iterable<AValidationError> schemaErrors,
             ANode data,
             List<AValidationError> dataErrors,
@@ -85,17 +85,17 @@ public class ProvFile implements Serializable {
 
     /**
      * The schema of the original file. If no schema was present or it was
-     * invalid, {@link eu.trentorise.opendata.traceprov.schema.Schema#of()} is
+     * invalid, {@link eu.trentorise.opendata.traceprov.types.Type#of()} is
      * returned.
      */
-    public Schema getSchema() {
+    public Type getType() {
         return schema;
     }
 
     /**
      * Returns the validation errors found in the original file.
      */
-    public List<AValidationError> getSchemaErrors() {
+    public List<AValidationError> getTypeErrors() {
         return schemaErrors;
     }
 
@@ -153,7 +153,7 @@ public class ProvFile implements Serializable {
             this.provFile.dcatMetadata = dcatMetadata;
         }
 
-        public void setSchema(Schema schema) {
+        public void setType(Type schema) {
             if (doneBuilding){
                 throw new IllegalStateException("The object has already been built!");
             }            
@@ -161,7 +161,7 @@ public class ProvFile implements Serializable {
             this.provFile.schema = schema;
         }
 
-        public void setSchemaErrors(Iterable<AValidationError> schemaErrors) {
+        public void setTypeErrors(Iterable<AValidationError> schemaErrors) {
             if (doneBuilding){
                 throw new IllegalStateException("The object has already been built!");
             }            

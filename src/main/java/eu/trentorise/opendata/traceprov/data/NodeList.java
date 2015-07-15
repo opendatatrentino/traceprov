@@ -34,21 +34,20 @@ public class NodeList extends ANode implements  Iterable<ANode> {
     private static final NodeList INSTANCE = new NodeList();
     private static final int MAX_PRINTED_NODES = 10;
 
-    private Iterable<ANode> nodes;
+    
 
     private NodeList() {
-        super();
-        this.nodes = new ArrayList();
+        super(Ref.of(), NodeMetadata.of(), new ArrayList());        
     }
 
     private NodeList(Ref ref, NodeMetadata metadata,  Iterable<? extends ANode> nodes) {
         super(ref, metadata, nodes);
-        checkNotNull(nodes);        
+        checkNotNull(nodes);
     }
 
     @Override
     public Iterator<ANode> iterator() {
-        return nodes.iterator();
+        return getData().iterator();
     }
 
     /**
@@ -84,7 +83,7 @@ public class NodeList extends ANode implements  Iterable<ANode> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        for (ANode n : nodes){
+        for (ANode n : getData()){
             if (i > 0){
                 sb.append(", ");
             }            
@@ -104,7 +103,7 @@ public class NodeList extends ANode implements  Iterable<ANode> {
     @Override
     public void accept(INodeVisitor visitor, ANode parent, String field, int pos) {
         int i = 0;
-        Iterator<ANode> iter = nodes.iterator();
+        Iterator<ANode> iter = getData().iterator();
 
         while (iter.hasNext()) {
             ANode node = iter.next();

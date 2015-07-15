@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
-import org.joda.time.DateTime;
 
 /**
  * A data catalog is a curated collection of metadata about datasets, as
@@ -41,22 +40,24 @@ import org.joda.time.DateTime;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=DcatCatalog.class)
-@JsonDeserialize(as=DcatCatalog.class)
-abstract  class ADcatCatalog implements Serializable  {
+@JsonSerialize(as = DcatCatalog.class)
+@JsonDeserialize(as = DcatCatalog.class)
+abstract class ADcatCatalog implements Serializable {
 
-    public static final String CLASS_URI="http://www.w3.org/ns/dcat#Catalog";
-    
+    public static final String CLASS_URI = "http://www.w3.org/ns/dcat#Catalog";
+
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * A free-text account of the catalog, as specified by
      * <a href="http://purl.org/dc/terms/description">dct:description </a>
      */
     @Value.Default
-    public Dict getDescription(){        
+    public Dict getDescription() {
         return Dict.of();
-    };
+    }
+
+    ;
 
     /**
      * The homepage of the catalog. It should be unique and precisely identify
@@ -72,17 +73,23 @@ abstract  class ADcatCatalog implements Serializable  {
     /**
      * Date of formal issuance (e.g., publication) of the catalog, as specified
      * by <a href="http://purl.org/dc/terms/issued">dct:issued</a>
-
+     *
  Note DCAT standard requires dates in string format to be
- <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11".
+     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
+     * empty string is used.
      *
      * @see ADcatDataset#getIssued()
      * @see ADcatDistribution#getIssued()
      * @see ADcatCatalogRecord#getIssued()
+     *
      */
-    @Nullable
-    public abstract DateTime getIssued();
+    @Value.Default
+    public String getIssued() {
+        return "";
+    }
+
+    ;
 
     /**
      * The languages of the catalog. This refers to the language used in the
@@ -100,7 +107,7 @@ abstract  class ADcatCatalog implements Serializable  {
      *
      * @see ADcatDataset#getLanguages()
      */
-    public abstract  List<Locale> getLanguages();
+    public abstract List<Locale> getLanguages();
 
     /**
      * This links to the license document under which the <b>catalog</b> is made
@@ -118,9 +125,13 @@ abstract  class ADcatCatalog implements Serializable  {
      * Must be in a
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11" . Specified by
- <a href="http://purl.org/dc/terms/modified">dct:modified</a>
+     * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
+     * If date is unknown the empty string is used.
      */
-    public abstract  @Nullable DateTime getModified();
+    @Value.Default
+    public String getModified() {
+        return "";
+    }
 
     /**
      * The entity responsible for making the catalog online.
@@ -161,12 +172,12 @@ abstract  class ADcatCatalog implements Serializable  {
     }
 
     /**
-     * The taxonomy of themes used to classify catalog's datasets, as
-     * specified by
+     * The taxonomy of themes used to classify catalog's datasets, as specified
+     * by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:catalog_themes">
-     * dcat:themeTaxonomy </a>. 
-     * Notice that 'category' is also used as synonym of 'themes' in dcat specs.
-     * 
+     * dcat:themeTaxonomy </a>. Notice that 'category' is also used as synonym
+     * of 'themes' in dcat specs.
+     *
      * When field is not available {@link SkosConceptScheme#of()} is returned.
      *
      * @see ADcatDataset#getThemes()
@@ -182,9 +193,11 @@ abstract  class ADcatCatalog implements Serializable  {
      */
     // todo put example
     @Value.Default
-    public Dict getTitle(){
+    public Dict getTitle() {
         return Dict.of();
-    };
+    }
+
+    ;
 
     /**
      * Property not in DCAT spec. This should uniquely identify the catalog,

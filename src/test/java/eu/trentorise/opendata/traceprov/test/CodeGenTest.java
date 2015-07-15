@@ -22,14 +22,15 @@ import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
+import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.NodeValue;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
-import eu.trentorise.opendata.traceprov.data.ProvSchema;
+import eu.trentorise.opendata.traceprov.data.ProvType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
-import eu.trentorise.opendata.traceprov.schema.ProvRefs;
-import eu.trentorise.opendata.traceprov.schema.PropertyMapping;
-import eu.trentorise.opendata.traceprov.schema.Schema;
+import eu.trentorise.opendata.traceprov.types.ProvRefs;
+import eu.trentorise.opendata.traceprov.types.PropertyMapping;
+import eu.trentorise.opendata.traceprov.types.Type;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -67,7 +68,7 @@ public class CodeGenTest {
                 .setTitle(Dict.of(Locale.ITALIAN, "Impianti di risalita, ViviFiemme 2013"))
                 .setLandingPage("http://dati.trentino.it/dataset/impianti-di-risalita-vivifiemme-2013")
                 .build();
-        assertEquals(null, dataset.getModified());
+        assertEquals("", dataset.getModified());
     }
 
     @Test
@@ -85,14 +86,14 @@ public class CodeGenTest {
 
         
         
-        ProvFile.builder().addMappings(PropertyMapping.of(Ref.of(),
-                                                        ImmutableList.of("a")));
+        ProvFile.builder().setMappings(ImmutableList.of(PropertyMapping.of(Ref.of(),
+                                                        ImmutableList.of("a"))));
         
-        ProvSchema ps = ProvSchema.builder().setSchema(Schema.of()).build();
+        ProvType ps = ProvType.builder().setType(Type.of()).build();
         assertEquals(ImmutableList.of(), ps.getErrors());
         
-        NodeMap.of(Ref.of(), ImmutableMap.of("a", 
-                NodeList.of(NodeValue.of(Ref.of(), 3))));
+        NodeMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 
+                NodeList.of(NodeValue.of(Ref.of(), NodeMetadata.of(), 3))));
     }
 
 }

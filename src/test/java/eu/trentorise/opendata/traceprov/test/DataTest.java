@@ -21,6 +21,7 @@ import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
+import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.NodeValue;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +68,7 @@ public class DataTest {
         assertEquals(new HashMap(), NodeMap.of().asSimpleType());
         
         Object res = NodeMap.of(Ref.of(), 
+                                NodeMetadata.of(),
                                 ImmutableMap.of("a", NodeValue.of("b"),
                                                 "c", NodeValue.of("d"))).asSimpleType();
         

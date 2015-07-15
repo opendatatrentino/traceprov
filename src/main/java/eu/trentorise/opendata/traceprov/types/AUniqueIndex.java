@@ -13,44 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.data;
+package eu.trentorise.opendata.traceprov.types;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.commons.validation.ValidationError;
-import eu.trentorise.opendata.traceprov.schema.Schema;
-import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * Schema and validation errors.
+ * A unique indexe is a set of property definitions 
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = ProvSchema.class)
-@JsonDeserialize(as = ProvSchema.class)
-abstract class AProvSchema implements Serializable {
+@JsonSerialize(as = UniqueIndex.class)
+@JsonDeserialize(as = UniqueIndex.class)
+abstract class AUniqueIndex {
 
-    private static final long serialVersionUID = 1L;
-        
     /**
-     * The schema of the original file. If no schema was found,
-     * {@link Schema#of()} is returned.
+     * The name of the unique index. If unknown, it will be the empty string.
+     *
      */
-    @Value.Default    
-    public Schema getSchema() {
-        return Schema.of();
+    @Value.Default
+    public String getName() {
+        return "";
     }
-    
+
     /**
-     * Returns the validation errors found in the original schema file.
-     * todo what is the type of the refs? only SchemaRef?
-     */       
-    public abstract List<ValidationError> getErrors(); 
-    
-    
+     * The id of the unique index, which may be a url. If unknown, it will be
+     * the empty string.
+     *
+     */
+    @Value.Default
+    public String getId() {
+        return "";
+    }
+
+    /**
+     * The list of property definition ids of which the unique index is
+     * composed.
+     */
+    public abstract List<String> getPropertyDefIds();
+
 }

@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-import org.joda.time.Period;
 
 /**
  * A collection of data, published or curated by a single agent, and available
@@ -57,9 +54,21 @@ abstract class ADcatDataset implements Serializable {
      * Returns the frequency at which dataset is published, as defined by
      * <a href="http://purl.org/dc/terms/accrualPeriodicity">
      * dct:accrualPeriodicity </a>
-     */    
-    @Nullable
-    public abstract Period getAccrualPeriodicity();
+     *
+     * Returned format could be either
+     * <ul>
+     * <li>A String encoded in
+     * <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations" target="_blank">ISO
+     * 8601 Duration format</a>, like i.e. P3Y6M4DT12H30M5S</li>
+     * <li> A String in natural language, like 'Every two weeks except during
+     * summer' </li>
+     * <li>In case duration is unknown the empty string is used</li>
+     * </ul>
+     */
+    @Value.Default
+    public String getAccrualPeriodicity() {
+        return "";
+    }
 
     /**
      * Links a dataset to relevant contact information which is provided using
@@ -68,7 +77,7 @@ abstract class ADcatDataset implements Serializable {
      * dcat:contactPoint </a>
      *
      * i.e. dcat:contactPoint <http://example.org/transparency-office/contact>
-     */    
+     */
     @Value.Default
     public VCard getContactPoint() {
         return VCard.of();
@@ -81,18 +90,18 @@ abstract class ADcatDataset implements Serializable {
     @Value.Default
     public Dict getDescription() {
         return Dict.of();
-    }  
+    }
 
     /**
      * Returns the distributions belonging to this dataset.
      */
     public abstract List<ADcatDistribution> getDistributions();
 
-    /*
-     A unique identifier of the dataset, defined by
-     <a href="http://purl.org/dc/terms/identifier">dct:identifier</a>
-     The identifier might be used as part of the uri of the dataset, but still 
-     having it represented explicitly is useful.
+    /**
+     * A unique identifier of the dataset, defined by
+     * <a href="http://purl.org/dc/terms/identifier">dct:identifier</a>
+     * The identifier might be used as part of the uri of the dataset, but still
+     * having it represented explicitly is useful.
      */
     @Value.Default
     public String getIdentifier() {
@@ -104,11 +113,13 @@ abstract class ADcatDataset implements Serializable {
      *
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11".
-     *
+     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
+     * empty string is used.
      */
-    @Nullable
-    public abstract DateTime getIssued();
+    @Value.Default
+    public String getIssued() {
+        return "";
+    }
 
     /**
      * A set of keywords or tags describing the dataset, as specified by
@@ -167,12 +178,15 @@ abstract class ADcatDataset implements Serializable {
      *
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11".
+     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
+     * empty string is used.
      *
      * @see #getAccrualPeriodicity()
      */
-    @Nullable
-    public abstract DateTime getModified();
+    @Value.Default
+    public String getModified() {
+        return "";
+    }
 
     /**
      * An entity responsible for making the dataset available.
@@ -216,19 +230,21 @@ abstract class ADcatDataset implements Serializable {
      *
      * i.e. dct:temporal
      * <http://reference.data.gov.uk/id/quarter/2006-Q1> ;
-     * 
-     * Allowed values: 
+     *
+     * Allowed values:
      * <ul>
-      * <li>
+     * <li>A string formatted following
+     * <a href="https://en.wikipedia.org/wiki/ISO_8601#Time_intervals">ISO 8601
+     * Date and Time interval</a> string format i.e.
+     * "2007-03-01T13:00:00Z/2008-05-11T15:30:00Z". </li>
+     * <li>A String in natural language, i.e. Summer of 2014 </li>
+     * <li>An empty string if the interval is unknown</li>
      * </ul>
-     
-     * 
-     * https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
-     * 
-     * 
-     */    
-    @Nullable
-    public abstract Interval getTemporal();
+     */
+    @Value.Default
+    public String getTemporal() {
+        return "";
+    }
 
     /**
      * The main themes of the dataset. A dataset can belong to multiple themes.

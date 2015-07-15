@@ -23,7 +23,7 @@ import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.io.Serializable;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
-import org.joda.time.DateTime;
+
 
 /**
  * A record in a data catalog, describing a single dataset, as specified by
@@ -84,11 +84,14 @@ abstract class ADcatCatalogRecord implements Serializable {
      * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11".
+     * If date is unknown the empty string is used.
      *
      * @see ADcatDataset#getIssued()
      */
-    @Nullable
-    public abstract DateTime getIssued();
+    @Value.Default
+    public String getIssued(){
+        return "";
+    };
 
     /**
      * Most recent date on which the catalog entry was changed, updated or
@@ -100,11 +103,19 @@ abstract class ADcatCatalogRecord implements Serializable {
      *
      * Specified by
      * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
-     *
+     * If date is unknown the empty string is used.
+     * 
+     * Note DCAT standard requires dates in string format to be
+     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+     * compliant</a> string format i.e. "2011-12-11".
+     * If date is unknown the empty string is used.
+     * 
      * @see ADcatDataset#getModified()
-     */
-    @Nullable
-    public abstract DateTime getModified();
+     */    
+    @Value.Default
+    public String getModified(){
+        return "";
+    };
 
     /**
      * Links the catalog record to the dcat:Dataset resource described in the

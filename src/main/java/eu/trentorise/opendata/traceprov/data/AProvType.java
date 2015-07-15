@@ -13,48 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.schema;
+package eu.trentorise.opendata.traceprov.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.validation.ValidationError;
+import eu.trentorise.opendata.traceprov.types.Type;
+import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * A unique indexe is a set of property definitions 
+ * Type and validation errors.
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = UniqueIndex.class)
-@JsonDeserialize(as = UniqueIndex.class)
-abstract class AUniqueIndex {
+@JsonSerialize(as = ProvType.class)
+@JsonDeserialize(as = ProvType.class)
+abstract class AProvType implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+        
     /**
-     * The name of the unique index. If unknown, it will be the empty string.
-     *
+     * The schema of the original file. If no schema was found,
+     * {@link Type#of()} is returned.
      */
-    @Value.Default
-    public String getName() {
-        return "";
+    @Value.Default    
+    public Type getType() {
+        return Type.of();
     }
-
+    
     /**
-     * The id of the unique index, which may be a url. If unknown, it will be
-     * the empty string.
-     *
-     */
-    @Value.Default
-    public String getId() {
-        return "";
-    }
-
-    /**
-     * The list of property definition ids of which the unique index is
-     * composed.
-     */
-    public abstract List<String> getPropertyDefIds();
-
+     * Returns the validation errors found in the original schema file.
+     * todo what is the type of the refs? only TypeRef?
+     */       
+    public abstract List<ValidationError> getErrors(); 
+    
+    
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.schema;
+package eu.trentorise.opendata.traceprov.types;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -24,16 +24,16 @@ import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * A Schema of a tree-like file, loosely modeled after what you can express with
+ * The schema of a tree-like file, loosely modeled after what you can express with
  * a jsonld context.
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = Schema.class)
-@JsonDeserialize(as = Schema.class)
-abstract class ASchema implements Serializable {
+@JsonSerialize(as = Type.class)
+@JsonDeserialize(as = Type.class)
+abstract class AType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -68,7 +68,7 @@ abstract class ASchema implements Serializable {
     /**
      * The property definitions of the schema
      */
-    public abstract ImmutableList<PropertyDef> getPropertyDefs();
+    public abstract List<PropertyDef> getPropertyDefs();
 
     /**
      * The unique indexes tht may constrain sets of schema values to be unique
