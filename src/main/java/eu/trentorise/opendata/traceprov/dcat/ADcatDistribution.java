@@ -218,6 +218,7 @@ import org.immutables.value.Value;
      *
      * @see ADcatDataset#getModified()
      */    
+    @Value.Default
     public String getModified(){
         return "";
     };
