@@ -18,22 +18,18 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
+import static eu.trentorise.opendata.traceprov.types.Types.XSD;
 import org.immutables.value.Value;
 
-/**
- *
- * @author David Leoni
- */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as = PrimitiveType.class)
-@JsonDeserialize(as = PrimitiveType.class)
-public abstract class APrimitiveType extends AType {
+@JsonSerialize(as = BooleanType.class)
+@JsonDeserialize(as = BooleanType.class)
+abstract class ABooleanType extends AType {
     
-    APrimitiveType(){
-        super();
-    }
+    @Override
+    public String datatypeId(){
+        return XSD + "boolean";
+    }    
     
 }
-
-

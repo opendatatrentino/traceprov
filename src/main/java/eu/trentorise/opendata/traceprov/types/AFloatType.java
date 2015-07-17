@@ -18,6 +18,8 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
+import static eu.trentorise.opendata.traceprov.types.Types.XSD;
+
 import org.immutables.value.Value;
 
 @Value.Immutable
@@ -26,4 +28,8 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = FloatType.class)
 abstract class AFloatType extends AType {
     
+    @Override
+    public String datatypeId(){
+        return XSD + "float";
+    }
 }

@@ -31,4 +31,9 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = NullType.class)
 abstract class ANullType extends AType {
     
+    @Override
+    public String datatypeId(){
+        return Types.TRACEPROV_TYPES + "null";
+    }
+    
 }

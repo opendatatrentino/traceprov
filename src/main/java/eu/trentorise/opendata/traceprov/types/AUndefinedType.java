@@ -30,5 +30,9 @@ import org.immutables.value.Value;
 @JsonSerialize(as = UndefinedType.class)
 @JsonDeserialize(as = UndefinedType.class)
 abstract class AUndefinedType extends AType {
-    
+
+    @Override
+    public String datatypeId() {
+        return Types.TRACEPROV_TYPES + "undefined";
+    }
 }

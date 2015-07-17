@@ -29,4 +29,13 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = IdType.class)
 abstract class AIdType extends AType {
     
+    @Value.Default
+    public String getClassId(){
+        return "";
+    }
+    
+    @Override
+    public String datatypeId(){
+        return getClassId();
+    }
 }

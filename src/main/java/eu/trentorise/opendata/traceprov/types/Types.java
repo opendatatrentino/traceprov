@@ -1,5 +1,6 @@
 package eu.trentorise.opendata.traceprov.types;
 
+import eu.trentorise.opendata.traceprov.TraceProvs;
 import static eu.trentorise.opendata.traceprov.TraceProvs.TRACEPROV_PREFIX;
 import eu.trentorise.opendata.traceprov.data.NodeList;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
@@ -37,19 +38,14 @@ import java.util.Set;
  *
  *
  */
-public final class Datatypes {
+public final class Types {
 
+    public static final String XSD = "http://www.w3.org/2001/XMLSchema#";
+    
+    public static final String TRACEPROV_TYPES = TraceProvs.TRACEPROV_IRI + "types/";
+    
     public static final String XSD_PREFIX = "xsd:";
 
-    public static final String XSD_STRING = XSD_PREFIX + "string";
-    public static final String XSD_BOOLEAN = XSD_PREFIX + "boolean";
-    public static final String XSD_DATETIME = XSD_PREFIX + "dateTime";
-    public static final String XSD_INT = XSD_PREFIX + "int";
-    public static final String XSD_FLOAT = XSD_PREFIX + "float";
-    public static final String XSD_DOUBLE = XSD_PREFIX + "double";
-    public static final String XSD_LONG = XSD_PREFIX + "long";
-    public static final String LIST = TRACEPROV_PREFIX + "list";
-    public static final String MAP = TRACEPROV_PREFIX + "map";
 
     private static final Map<String, String> DATATYPE_PRETTY_NAMES_IT = new HashMap();
     private static final Map<String, String> DATATYPE_PRETTY_NAMES_EN = new HashMap();
@@ -57,7 +53,7 @@ public final class Datatypes {
     private static final Map JAVA_DATATYPES = new HashMap();
 
     static {
-
+/*
         DATATYPE_PRETTY_NAMES_EN.put(XSD_STRING, "String");
         DATATYPE_PRETTY_NAMES_EN.put(XSD_BOOLEAN, "Boolean");
         DATATYPE_PRETTY_NAMES_EN.put(XSD_DATETIME, "Datetime");
@@ -89,11 +85,11 @@ public final class Datatypes {
         JAVA_DATATYPES.put(XSD_LONG, Long.class);
         JAVA_DATATYPES.put(LIST, NodeList.class);
         JAVA_DATATYPES.put(MAP, NodeMap.class);
-
+*/
     }
 
     /**
-     * Provides a map of the supported datatypes. Each datatype name is mapped
+     * Provides a map of the supported types. Each type name is mapped
      * to the java class or interface that represents it.
      *
      * @return an unmodifiable map of the supported data types
@@ -130,11 +126,10 @@ public final class Datatypes {
         return Collections.unmodifiableSet(DATATYPE_PRETTY_NAMES_MAP.keySet());
     }
 
-    private Datatypes() {
+    private Types() {
 
     }
 
-    
     
 }
 

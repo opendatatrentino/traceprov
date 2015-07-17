@@ -34,8 +34,8 @@ public abstract class AType {
      * <pre>
      *      Dict -> language dict
      *      CanonicalName -> camel cased english name
-     * 
-     * PrimitiveType ->   
+     *
+     * PrimitiveType ->
      *        String  with regex
      *      | Int
      *      | Long
@@ -43,7 +43,7 @@ public abstract class AType {
      *      | Double
      *      | Date
      *
-     * AType -> 
+     * AType ->
      *        PrimitiveType
      *      | ATypeId
      *      | List<Type>
@@ -70,27 +70,31 @@ public abstract class AType {
      * declared. todo review this
      *
      */
-    
-    AType(){
-        
-    }                
+    AType() {
 
-    public  boolean isInstance(Object obj){
+    }
+
+    /**
+     * Returns the complete expanded IRI of the datatype.
+     */
+    public abstract String datatypeId();
+
+    public boolean isInstance(Object obj) {
         throw new UnsupportedOperationException("todo implement me!");
     }
-    
-    public boolean isEmpty(Object obj){
+
+    public boolean isEmpty(Object obj) {
         throw new UnsupportedOperationException("todo implement me!");
     }
-    
-    public boolean isDegenerate(Object obj){
+
+    public boolean isDegenerate(Object obj) {
         throw new UnsupportedOperationException("todo implement me!");
     }
-    
-    public boolean isDirty(Object obj){
+
+    public boolean isDirty(Object obj) {
         throw new UnsupportedOperationException("todo implement me!");
     }
-    
+
     /*
      * *
      *
