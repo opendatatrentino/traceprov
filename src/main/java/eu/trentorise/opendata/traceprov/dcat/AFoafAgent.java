@@ -29,16 +29,19 @@ import org.immutables.value.Value;
  */
 @JsonSerialize(as=FoafAgent.class)
 @JsonDeserialize(as=FoafAgent.class)
-abstract  class AFoafAgent implements Serializable  {
+public abstract class AFoafAgent implements Serializable  {
     public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";    
 
     private static final long serialVersionUID = 1L;
+    
+    AFoafAgent(){
+        
+    }
     
  /**
      * Returns the uri of the agent.
      */
     @Value.Default
-    @Value.Parameter
     public String getUri() {
         return "";
     }
@@ -47,7 +50,6 @@ abstract  class AFoafAgent implements Serializable  {
      * Returns <a href="http://xmlns.com/foaf/0.1/name" target="_blank">the agent name </a>
      */    
     @Value.Default
-    @Value.Parameter
     public Dict getName(){
         return Dict.of();
     };
@@ -56,7 +58,6 @@ abstract  class AFoafAgent implements Serializable  {
      * Returns <a href="http://xmlns.com/foaf/0.1/mbox" target="_blank">the mail box </a>
      */
     @Value.Default
-    @Value.Parameter
     public String getMbox() {
         return "";
     }    

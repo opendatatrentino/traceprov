@@ -19,8 +19,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import eu.trentorise.opendata.commons.validation.AValidationError;
+import eu.trentorise.opendata.traceprov.types.AnyType;
+import eu.trentorise.opendata.traceprov.types.ClassDef;
 import eu.trentorise.opendata.traceprov.types.PropertyMapping;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.AType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +40,18 @@ public class ProvFile implements Serializable {
     private static final ProvFile INSTANCE = new ProvFile();
 
     private DcatMetadata dcatMetadata;
-    private Type schema;
-    private List<AValidationError> schemaErrors;
+    private AType type;
+    private List<ClassDef> classDefs;
+    private List<AValidationError> typeErrors;
     private ANode data;
     private List<AValidationError> dataErrors;
     private ImmutableList<PropertyMapping> mappings;
 
     ProvFile() {
         this.dcatMetadata = DcatMetadata.of();
-        this.schema = Type.of();
-        this.schemaErrors = ImmutableList.of();
+        this.type = AnyType.of();
+        this.classDefs = ImmutableList.of();
+        this.typeErrors = ImmutableList.of();
         this.data = NodeMap.of();
         this.dataErrors = ImmutableList.of();
         this.mappings = ImmutableList.of();
@@ -55,21 +59,21 @@ public class ProvFile implements Serializable {
 
     ProvFile(
             DcatMetadata dcatMetadata,
-            Type schema,
+            AType type,
             Iterable<AValidationError> schemaErrors,
             ANode data,
             List<AValidationError> dataErrors,
             Iterable<PropertyMapping> mappings) {
         checkNotNull(dcatMetadata);
-        checkNotNull(schema);
+        checkNotNull(type);
         checkNotNull(schemaErrors);
         checkNotNull(data);
         checkNotNull(dataErrors);
         checkNotNull(mappings);
 
         this.dcatMetadata = dcatMetadata;
-        this.schema = schema;
-        this.schemaErrors = ImmutableList.copyOf(schemaErrors);
+        this.type = type;
+        this.typeErrors = ImmutableList.copyOf(schemaErrors);
         this.data = data;
         this.dataErrors = dataErrors;
         this.mappings = ImmutableList.copyOf(mappings);
@@ -84,19 +88,23 @@ public class ProvFile implements Serializable {
     }
 
     /**
-     * The schema of the original file. If no schema was present or it was
-     * invalid, {@link eu.trentorise.opendata.traceprov.types.Type#of()} is
-     * returned.
+     * The type of the tree common tree representation of the original file. If
+     * no definition was present or it was invalid,
+     * {@link eu.trentorise.opendata.traceprov.types.AnyType#of()} is returned.
      */
-    public Type getType() {
-        return schema;
+    public AType getType() {
+        return type;
     }
 
+    public List<ClassDef> getClassDefs() {
+        return classDefs;
+    }
+    
     /**
      * Returns the validation errors found in the original file.
      */
     public List<AValidationError> getTypeErrors() {
-        return schemaErrors;
+        return typeErrors;
     }
 
     /**
@@ -146,52 +154,52 @@ public class ProvFile implements Serializable {
         }
 
         public void setDcatMetadata(DcatMetadata dcatMetadata) {
-            if (doneBuilding){
+            if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
             checkNotNull(dcatMetadata);
             this.provFile.dcatMetadata = dcatMetadata;
         }
 
-        public void setType(Type schema) {
-            if (doneBuilding){
+        public void setType (AType type) {
+            if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
-            }            
-            checkNotNull(schema);
-            this.provFile.schema = schema;
+            }
+            checkNotNull(type);
+            this.provFile.type = type;
         }
 
-        public void setTypeErrors(Iterable<AValidationError> schemaErrors) {
-            if (doneBuilding){
+        public void setTypeErrors(Iterable<AValidationError> typeErrors) {
+            if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
-            }            
-            checkNotNull(schemaErrors);
-            this.provFile.schemaErrors = ImmutableList.copyOf(schemaErrors);
+            }
+            checkNotNull(typeErrors);
+            this.provFile.typeErrors = ImmutableList.copyOf(typeErrors);
         }
 
         public void setData(ANode data) {
-            if (doneBuilding){
+            if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
-            }            
+            }
             checkNotNull(data);
             this.provFile.data = data;
         }
 
         public void addAllDataErrors(Iterable<AValidationError> dataErrors) {
-            if (doneBuilding){
+            if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
-            }            
+            }
             checkNotNull(dataErrors);
             this.provFile.dataErrors = Lists.newArrayList(dataErrors);
         }
-                
+
         public void addDataError(AValidationError dataError) {
-            checkNotNull(dataError);            
+            checkNotNull(dataError);
             this.provFile.dataErrors.add(dataError);
         }
 
         public void setMappings(Iterable<PropertyMapping> mappings) {
-            if (doneBuilding){
+            if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
             checkNotNull(mappings);
@@ -233,7 +241,6 @@ public class ProvFile implements Serializable {
         public String toString() {
             return "Builder{" + "provFile=" + provFile + ", doneBuilding=" + doneBuilding + '}';
         }
-        
-        
+
     }
 }

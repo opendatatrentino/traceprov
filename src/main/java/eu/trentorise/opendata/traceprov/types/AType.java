@@ -15,68 +15,94 @@
  */
 package eu.trentorise.opendata.traceprov.types;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableList;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
-import java.io.Serializable;
-import java.util.List;
-import org.immutables.value.Value;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * The schema of a tree-like file, loosely modeled after what you can express with
- * a jsonld context.
- *
- * @author David Leoni
- */
-@Value.Immutable
-@BuilderStylePublic
-@JsonSerialize(as = Type.class)
-@JsonDeserialize(as = Type.class)
-abstract class AType implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+// todo check this Id.NAME is correct
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
+public abstract class AType {
 
     /**
-     * The id of the type, which may be an IRI to a well-known type like i.e.
-     * https://schema.org/Person
+     * <h3> Nulls </h3>
+     * In data we only support 'null', finding 'undefined' in json data would be
+     * considered an error.
+     *
+     * We postulate existance of Null datatype even if users cannot declare it
+     * as a type, (this is the same behaviour of ATypescript). This is because
+     * every object can be null (even primitive datatypes).
+     *
+     * <h3> Grammar </h3>
+     * <pre>
+     *      Dict -> language dict
+     *      CanonicalName -> camel cased english name
+     * 
+     * PrimitiveType ->   
+     *        String  with regex
+     *      | Int
+     *      | Long
+     *      | Float
+     *      | Double
+     *      | Date
+     *
+     * AType -> 
+     *        PrimitiveType
+     *      | ATypeId
+     *      | List<Type>
+     *      | Map<String | Int, AType>
+     * </pre>
      */
-    @Value.Default
-    public String getId() {
-        return "";
-    }
-
-   /**
-     * The high-level concept describing the schema. If unknown,
-     * {@link Concept#of()} will be used.
+    /**
+     * <pre>
+     *      JSON-LD CONTEXT ->
+     *             AType -> Id,
+     * Concept,
+     * CanonicalName,
+     * name : Dict,
+     * description : Dict,
+     * PropertyDef[]
+     *
+     * PropertyDef -> Id, Concept, CanonicalName, Name, AType
+     *
+     * </pre>
+     */
+    /**
+     * Although Json-ld always allow inserting multiple values (because of the
+     * open world assumption), we demand multiple values must be explicitly
+     * declared. todo review this
      *
      */
-    @Value.Default
-    public Concept getConcept() {
-        return Concept.of();
+    
+    AType(){
+        
+    }                
+
+    public  boolean isInstance(Object obj){
+        throw new UnsupportedOperationException("todo implement me!");
     }
     
-    /**
-     * Name of the type preferably in English and camelcased, i.e. CreativeWork,
-     * BroadcastService
-     */
-    @Value.Default
-    public String getName() {
-        return "";
+    public boolean isEmpty(Object obj){
+        throw new UnsupportedOperationException("todo implement me!");
     }
-
-    /**
-     * The property definitions of the schema
-     */
-    public abstract List<PropertyDef> getPropertyDefs();
-
-    /**
-     * The unique indexes tht may constrain sets of schema values to be unique
-     * in the array they are in.
+    
+    public boolean isDegenerate(Object obj){
+        throw new UnsupportedOperationException("todo implement me!");
+    }
+    
+    public boolean isDirty(Object obj){
+        throw new UnsupportedOperationException("todo implement me!");
+    }
+    
+    /*
+     * *
      *
-     */
-    public abstract List<UniqueIndex> getUniqueIndexes();
-
- 
-
+     * @param datatype a dataType as defined in
+     * {@link eu.trentorise.opendata.opendatarise.types.OdrDataTypes}.
+     * @param list
+     * @param etypeURL an entity type URL in case the dataType is either a
+     * STRUCTURE or an ENTITY. Otherwise, it must be empty.
+     * @param etypeName the name of the etype in case the data either a
+     * STRUCTURE or an ENTITY. Otherwise, it must be {@link Dict#of()}.
+     
+     public OdrType(String datatype, boolean list, String etypeURL, Dict etypeName) {
+        
+     } */
 }

@@ -1,0 +1,19 @@
+{
+    "@context" : {
+        "Person": "http://xmlns.com/foaf/0.1/Person",
+         "xsd": "http://www.w3.org/2001/XMLSchema#",
+         "image": {
+            "@id": "http://xmlns.com/foaf/0.1/img",
+            "@type": "@id"
+         },
+        "born": {
+            "@id": "http://schema.org/birthDate",
+            "@type": "xsd:dateTime"
+        },
+        "address": {
+            "@id": "Address",
+            "@type": "xsd:dateTime"
+        }
+    }
+
+}

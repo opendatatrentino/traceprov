@@ -18,9 +18,9 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.traceprov.types.TypeSig;
+import eu.trentorise.opendata.traceprov.types.AnyType;
+import eu.trentorise.opendata.traceprov.types.AType;
 import java.util.Locale;
-import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**
@@ -92,8 +92,8 @@ abstract class ANodeMetadata {
 
     
     @Value.Default
-    public TypeSig getType(){
-        return TypeSig.of();
+    public AType getType(){
+        return AnyType.of();
     }
     
 }

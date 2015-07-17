@@ -44,7 +44,7 @@ abstract class APropertyDef {
     @Value.Default
     public String getId() {
         return "";
-    }   
+    }
 
     /**
      * Human readable property name as found in json files.
@@ -53,15 +53,24 @@ abstract class APropertyDef {
     public Dict getName() {
         return Dict.of();
     }
-    
+
     /**
      * The high-level concept describing the property. If unknown,
-     * {@link Concept#of()} will be used.
+     * {@link Concept#of()} is used.
      *
      */
     @Value.Default
     public Concept getConcept() {
         return Concept.of();
-    }    
+    }
+
+    /**
+     * The type signature of the property. If unknown, {@link AnyType.of()} is
+     * used.
+     */
+    @Value.Default
+    public AType getType() {
+        return AnyType.of();
+    }
 
 }

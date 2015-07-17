@@ -19,13 +19,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.ValidationError;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.AnyType;
+import eu.trentorise.opendata.traceprov.types.ClassDef;
 import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * Type and validation errors.
+ * AType and validation errors.
  *
  * @author David Leoni
  */
@@ -38,17 +40,21 @@ abstract class AProvType implements Serializable {
     private static final long serialVersionUID = 1L;
         
     /**
-     * The schema of the original file. If no schema was found,
-     * {@link Type#of()} is returned.
+     * The schema definition of the original file. If no definition was found,
+     * {@link AnyType#of()} is returned.
      */
     @Value.Default    
-    public Type getType() {
-        return Type.of();
+    public AType getType() {
+        return AnyType.of();
     }
     
     /**
-     * Returns the validation errors found in the original schema file.
-     * todo what is the type of the refs? only TypeRef?
+     * Returns the class definitions of all class references present in the result of {#getType()}
+     */
+    public abstract List<ClassDef> getClassDefs();
+    
+    /**
+     * Returns the validation errors found in the original schema file.   
      */       
     public abstract List<ValidationError> getErrors(); 
     
