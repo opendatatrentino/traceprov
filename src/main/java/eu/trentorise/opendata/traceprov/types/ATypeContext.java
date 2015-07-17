@@ -17,27 +17,38 @@ package eu.trentorise.opendata.traceprov.types;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.SimpleStyle;
-import static eu.trentorise.opendata.traceprov.types.Types.XSD;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
+import java.util.List;
 import org.immutables.value.Value;
 
+/**
+ * A Type with a collection of all the class definitions that can recursively be
+ * found referenced in the
+ * {@link eu.trentorise.opendata.traceprov.types.IdType}s within the type
+ * itself.
+ *
+ * @author David Leoni
+ */
+// maybe we could also put type aliases
 @Value.Immutable
-@SimpleStyle
-@JsonSerialize(as = DateTimeType.class)
-@JsonDeserialize(as = DateTimeType.class)
-abstract class ADateTimeType extends AType {   
-    
-    @Override
-    public String datatypeId(){
-        return XSD + "dateTime";
-    }
-    
+@BuilderStylePublic
+@JsonSerialize(as = TypeContext.class)
+@JsonDeserialize(as = TypeContext.class)
+public abstract class ATypeContext {
+
     /**
-     * String in ISO 8601 is always ze best. 
+     *
+     * Default is {@link eu.trentorise.opendata.traceprov.types.AnyType#of()}.
      */
-    @Override
-    public Class getJavaClass(){
-        return String.class;
+    @Value.Default
+    public AType getType() {
+        return AnyType.of();
     }
 
+    public abstract List<ClassDef> getClassDefs();
+
+    @Value.Check
+    protected void check() {
+        throw new UnsupportedOperationException("todo implement me");
+    }
 }

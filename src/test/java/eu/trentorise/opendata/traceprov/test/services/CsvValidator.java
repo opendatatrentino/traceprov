@@ -22,7 +22,7 @@ import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvType;
 import eu.trentorise.opendata.traceprov.types.AType;
-import eu.trentorise.opendata.traceprov.services.IValidator;
+import eu.trentorise.opendata.traceprov.validation.IValidator;
 import eu.trentorise.opendata.traceprov.types.ClassDef;
 import eu.trentorise.opendata.traceprov.types.PropertyDef;
 import java.io.IOException;

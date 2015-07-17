@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.services;
+package eu.trentorise.opendata.traceprov.validation;
 
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;

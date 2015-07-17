@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.test.services;
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
-import eu.trentorise.opendata.traceprov.services.ILoader;
+import eu.trentorise.opendata.traceprov.validation.ILoader;
 import java.io.OutputStream;
 import java.net.URL;
 

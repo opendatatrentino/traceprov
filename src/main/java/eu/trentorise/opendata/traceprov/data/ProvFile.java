@@ -168,6 +168,13 @@ public class ProvFile implements Serializable {
             checkNotNull(type);
             this.provFile.type = type;
         }
+        
+        public void setClassDefs (Iterable<ClassDef> classDefs) {
+            if (doneBuilding) {
+                throw new IllegalStateException("The object has already been built!");
+            }
+            this.provFile.classDefs = ImmutableList.copyOf(classDefs);
+        }
 
         public void setTypeErrors(Iterable<AValidationError> typeErrors) {
             if (doneBuilding) {
@@ -207,6 +214,9 @@ public class ProvFile implements Serializable {
         }
 
         public ProvFile build() {
+            for (ClassDef classDef : this.provFile.classDefs){
+                
+            }
             doneBuilding = true;
             return provFile;
         }
