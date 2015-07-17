@@ -32,4 +32,10 @@ abstract class AFloatType extends AType {
     public String datatypeId(){
         return XSD + "float";
     }
+    
+    @Override
+    public Class getJavaClass(){
+        return Float.class;
+    }
+
 }

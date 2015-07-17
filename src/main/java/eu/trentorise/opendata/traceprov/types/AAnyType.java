@@ -38,5 +38,8 @@ abstract class AAnyType extends AType {
         return XSD + "anyType";
     }
     
-    
+    @Override
+    public Class getJavaClass(){
+        return Object.class;
+    }
 }

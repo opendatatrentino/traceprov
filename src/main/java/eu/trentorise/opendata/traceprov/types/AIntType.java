@@ -31,4 +31,9 @@ abstract class AIntType extends AType {
     public String datatypeId(){
         return XSD + "int";
     }
+    
+    @Override
+    public Class getJavaClass(){
+        return Integer.class;
+    }
 }

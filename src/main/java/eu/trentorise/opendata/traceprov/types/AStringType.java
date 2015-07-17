@@ -28,8 +28,12 @@ import org.immutables.value.Value;
 abstract class AStringType extends AType {
 
     @Override
-    public String datatypeId(){
+    public String datatypeId() {
         return XSD + "string";
     }
-}
 
+    @Override
+    public Class getJavaClass() {
+        return String.class;
+    }
+}

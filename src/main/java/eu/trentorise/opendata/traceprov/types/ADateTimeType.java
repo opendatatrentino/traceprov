@@ -31,4 +31,10 @@ abstract class ADateTimeType extends AType {
     public String datatypeId(){
         return XSD + "dateTime";
     }
+    
+    @Override
+    public Class getJavaClass(){
+        return String.class;
+    }
+
 }

@@ -36,4 +36,9 @@ abstract class ANullType extends AType {
         return Types.TRACEPROV_TYPES + "null";
     }
     
+    @Override
+    public Class getJavaClass(){
+        return Object.class;
+    }
+    
 }

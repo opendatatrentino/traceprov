@@ -32,5 +32,9 @@ abstract class ADoubleType extends AType {
         return XSD + "double";
     }
     
-    
+    @Override
+    public Class getJavaClass(){
+        return Double.class;
+    }
+
 }

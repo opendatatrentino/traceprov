@@ -79,6 +79,11 @@ public abstract class AType {
      */
     public abstract String datatypeId();
 
+    /**
+     * Returns the Java class to represent instances of the type    
+     */
+    public abstract Class getJavaClass();
+    
     public boolean isInstance(Object obj) {
         throw new UnsupportedOperationException("todo implement me!");
     }

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import static eu.trentorise.opendata.traceprov.types.Types.XSD;
+import java.util.List;
 import org.immutables.value.Value;
 
 @Value.Immutable
@@ -35,5 +36,10 @@ abstract class AListType extends AType {
     @Override
     public String datatypeId(){
         return XSD + "sequence";
+    }
+    
+        @Override
+    public Class getJavaClass(){
+        return List.class;
     }
 }

@@ -35,4 +35,9 @@ abstract class AUndefinedType extends AType {
     public String datatypeId() {
         return Types.TRACEPROV_TYPES + "undefined";
     }
+
+    @Override
+    public Class getJavaClass() {
+        return Object.class;
+    }
 }

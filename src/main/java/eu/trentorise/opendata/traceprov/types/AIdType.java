@@ -38,4 +38,14 @@ abstract class AIdType extends AType {
     public String datatypeId(){
         return getClassId();
     }
+    
+    /**
+     * 
+     * todo to be precise this could be something like Object | String 
+     */
+    @Override
+    public Class getJavaClass(){
+        return Object.class;
+    }
+
 }

@@ -32,4 +32,8 @@ abstract class ALongType extends AType {
         return XSD + "long";
     }
     
+        @Override
+    public Class getJavaClass(){
+        return Long.class;
+    }
 }

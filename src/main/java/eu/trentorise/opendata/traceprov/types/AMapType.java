@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import static eu.trentorise.opendata.traceprov.types.Types.XSD;
+import java.util.Map;
 import org.immutables.value.Value;
 
 /**
@@ -54,5 +55,8 @@ abstract class AMapType extends AType {
         return XSD + "complexType";
     }
     
-    
+        @Override
+    public Class getJavaClass(){
+        return Map.class;
+    }
 }

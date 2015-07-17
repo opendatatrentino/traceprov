@@ -32,4 +32,10 @@ abstract class ABooleanType extends AType {
         return XSD + "boolean";
     }    
     
+    @Override
+    public Class getJavaClass(){
+        return Boolean.class;
+    }
+
+    
 }
