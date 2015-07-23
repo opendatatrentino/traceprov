@@ -92,6 +92,7 @@ public abstract class ANode implements Serializable {
      * @return a tree made of the following objects:
      * HashMap/ArrayList/String/Number/null
      */
+    // todo asSimpleJavaType maybe is more descriptive
     public abstract Object asSimpleType();
 
 

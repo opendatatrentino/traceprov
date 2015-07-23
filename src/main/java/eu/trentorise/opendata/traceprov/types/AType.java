@@ -80,10 +80,11 @@ public abstract class AType {
     public abstract String datatypeId();
 
     /**
-     * Returns the Java class to represent instances of the type    
+     * Returns the canonical Java class to represent instances of the type.
+     * Other classes may be added with type converters todo define better
      */
     public abstract Class getJavaClass();
-    
+
     public boolean isInstance(Object obj) {
         throw new UnsupportedOperationException("todo implement me!");
     }

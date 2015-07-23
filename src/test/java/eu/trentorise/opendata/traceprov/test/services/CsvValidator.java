@@ -86,7 +86,7 @@ public class CsvValidator implements IValidator {
     private static final ImmutableList<String> MIMETYPES = ImmutableList.of("text/csv");
     
     @Override
-    public ProvFile validate(InputStream stream, AType type, DcatMetadata dcatMetadata) {
+    public ProvFile validate(InputStream stream, String mimeType, AType type, DcatMetadata dcatMetadata) {
 
         LOG.warning("CURRENT CSV VALIDATOR IS *EXPERIMENTAL*. DON'T TRUST IT!");
         
@@ -129,7 +129,7 @@ public class CsvValidator implements IValidator {
     }
 
     @Override
-    public ProvType validateType(InputStream stream) {
+    public ProvType validateType(InputStream stream, String mimeType) {
         try {
             Reader in =  new InputStreamReader(stream);
             

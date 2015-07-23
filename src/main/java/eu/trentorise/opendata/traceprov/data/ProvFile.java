@@ -18,7 +18,6 @@ package eu.trentorise.opendata.traceprov.data;
 import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import eu.trentorise.opendata.commons.validation.AValidationError;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ClassDef;
 import eu.trentorise.opendata.traceprov.types.PropertyMapping;
@@ -27,10 +26,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.ConstraintViolation;
 
 /**
- * Tree-like generic data model to represent a file and tracking from where data
- * comes from. Also holds validation errors.
+ * Tree-like generic data model to represent a file and mappings to track data
+ * provenance. Also holds constraint violations.
  *
  * @author David Leoni
  */
@@ -42,9 +42,9 @@ public class ProvFile implements Serializable {
     private DcatMetadata dcatMetadata;
     private AType type;
     private List<ClassDef> classDefs;
-    private List<AValidationError> typeErrors;
+    private ImmutableList<ConstraintViolation> typeErrors;
     private ANode data;
-    private List<AValidationError> dataErrors;
+    private List<ConstraintViolation> dataErrors;
     private ImmutableList<PropertyMapping> mappings;
 
     ProvFile() {
@@ -53,16 +53,16 @@ public class ProvFile implements Serializable {
         this.classDefs = ImmutableList.of();
         this.typeErrors = ImmutableList.of();
         this.data = NodeMap.of();
-        this.dataErrors = ImmutableList.of();
+        this.dataErrors = new ArrayList();
         this.mappings = ImmutableList.of();
     }
 
     ProvFile(
             DcatMetadata dcatMetadata,
             AType type,
-            Iterable<AValidationError> schemaErrors,
+            Iterable<ConstraintViolation> schemaErrors,
             ANode data,
-            List<AValidationError> dataErrors,
+            List<ConstraintViolation> dataErrors,
             Iterable<PropertyMapping> mappings) {
         checkNotNull(dcatMetadata);
         checkNotNull(type);
@@ -92,6 +92,7 @@ public class ProvFile implements Serializable {
      * no definition was present or it was invalid,
      * {@link eu.trentorise.opendata.traceprov.types.AnyType#of()} is returned.
      */
+    //  todo add validator tag for non-any type
     public AType getType() {
         return type;
     }
@@ -99,11 +100,11 @@ public class ProvFile implements Serializable {
     public List<ClassDef> getClassDefs() {
         return classDefs;
     }
-    
+
     /**
      * Returns the validation errors found in the original file.
      */
-    public List<AValidationError> getTypeErrors() {
+    public ImmutableList<ConstraintViolation> getTypeErrors() {
         return typeErrors;
     }
 
@@ -129,7 +130,7 @@ public class ProvFile implements Serializable {
     /**
      * Returns the validation errors found in the original file.
      */
-    public List<AValidationError> getDataErrors() {
+    public List<ConstraintViolation> getDataErrors() {
         return dataErrors;
     }
 
@@ -161,22 +162,22 @@ public class ProvFile implements Serializable {
             this.provFile.dcatMetadata = dcatMetadata;
         }
 
-        public void setType (AType type) {
+        public void setType(AType type) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
             checkNotNull(type);
             this.provFile.type = type;
         }
-        
-        public void setClassDefs (Iterable<ClassDef> classDefs) {
+
+        public void setClassDefs(Iterable<ClassDef> classDefs) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
             this.provFile.classDefs = ImmutableList.copyOf(classDefs);
         }
 
-        public void setTypeErrors(Iterable<AValidationError> typeErrors) {
+        public void setTypeErrors(Iterable<ConstraintViolation> typeErrors) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
@@ -192,7 +193,7 @@ public class ProvFile implements Serializable {
             this.provFile.data = data;
         }
 
-        public void addAllDataErrors(Iterable<AValidationError> dataErrors) {
+        public void addAllDataErrors(Iterable<ConstraintViolation> dataErrors) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
@@ -200,7 +201,7 @@ public class ProvFile implements Serializable {
             this.provFile.dataErrors = Lists.newArrayList(dataErrors);
         }
 
-        public void addDataError(AValidationError dataError) {
+        public void addDataError(ConstraintViolation dataError) {
             checkNotNull(dataError);
             this.provFile.dataErrors.add(dataError);
         }
@@ -214,8 +215,8 @@ public class ProvFile implements Serializable {
         }
 
         public ProvFile build() {
-            for (ClassDef classDef : this.provFile.classDefs){
-                
+            for (ClassDef classDef : this.provFile.classDefs) {
+
             }
             doneBuilding = true;
             return provFile;

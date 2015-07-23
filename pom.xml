@@ -116,6 +116,12 @@
     <dependencies>
                 
         <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.1.0.Final</version>
+        </dependency>
+        
+        <dependency>
             <groupId>eu.trentorise.opendata.commons</groupId>
             <artifactId>odt-commons-jackson</artifactId>            
         </dependency>                          
@@ -148,7 +154,15 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-guava</artifactId>            
         </dependency>                      
-                                                                                                
+                            
+        <!--  ******************    TEST DEPENDENCIES   ********************** -->                                                       
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>2.0.0</version>
+            <scope>test</scope>
+        </dependency>
+                                                                                         
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>            

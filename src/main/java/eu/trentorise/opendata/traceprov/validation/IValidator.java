@@ -34,7 +34,7 @@ public interface IValidator {
      * (which may still have errors).
      *
      * @param stream the stream to validate
-     * @param mimetype the mimetype of the stream, i.e. text/csv,
+     * @param mimetype the mimetype of the stream, i.e. text/csv
      * @param type the expected schema of the file. If unknown, pass
      * {@link AnyType#of()}.
      *
@@ -43,20 +43,21 @@ public interface IValidator {
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    ProvFile validate(InputStream stream, AType type, DcatMetadata dcatMetadata);
+    ProvFile validate(InputStream stream, String mimeType, AType type, DcatMetadata dcatMetadata);
 
     /**
      * Validates the schema present in the input stream and returns the parsed
      * result (which may still have errors).
      *
      * @param stream the stream to validate
-     *
+     * @param mimetype the mimetype of the stream, i.e. application/json+ld
+     * 
      * @throws eu.trentorise.opendata.traceprov.LoadException if some error
      * occurs while physically loading stream. In case format errors are found
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    ProvType validateType(InputStream stream);
+    ProvType validateType(InputStream stream, String mimeType);
 
     /**
      * Returns a list of the mimetypes this validator can parse.

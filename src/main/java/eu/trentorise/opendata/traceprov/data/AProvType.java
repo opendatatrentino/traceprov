@@ -38,25 +38,25 @@ import org.immutables.value.Value;
 abstract class AProvType implements Serializable {
 
     private static final long serialVersionUID = 1L;
-        
+
     /**
      * The schema definition of the original file. If no definition was found,
      * {@link AnyType#of()} is returned.
      */
-    @Value.Default    
+    @Value.Default
     public AType getType() {
         return AnyType.of();
     }
-    
+
     /**
-     * Returns the class definitions of all class references present in the result of {#getType()}
+     * Returns the class definitions of all class references present in the
+     * result of {#getType()}
      */
     public abstract List<ClassDef> getClassDefs();
-    
+
     /**
-     * Returns the validation errors found in the original schema file.   
-     */       
-    public abstract List<ValidationError> getErrors(); 
-    
-    
+     * Returns the validation errors found in the original schema file.
+     */
+    public abstract List<ValidationError> getErrors();
+
 }

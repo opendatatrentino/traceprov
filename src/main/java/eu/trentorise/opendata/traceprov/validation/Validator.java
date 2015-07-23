@@ -15,10 +15,12 @@
  */
 package eu.trentorise.opendata.traceprov.validation;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import eu.trentorise.opendata.traceprov.data.ANode;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.types.AType;
-import java.io.InputStream;
+import eu.trentorise.opendata.traceprov.types.AnyType;
 
 /**
  *
@@ -26,7 +28,17 @@ import java.io.InputStream;
  */
 public final class Validator {
     
-    AType inferType(){
+    public AType inferType(ANode node, DcatMetadata dcatMetadata){
+        throw new UnsupportedOperationException("todo implement me");
+    }
+    
+    /**
+     * Provfile MUST have a proper type.      
+     */
+    public ProvFile validate(ProvFile provFile){
+        // todo implement better check
+        checkArgument(!provFile.getType().equals(AnyType.of()), "Need a proper Type to validate against, found instead %s!", provFile.getType());
+                    
         throw new UnsupportedOperationException("todo implement me");
     }
     
@@ -35,7 +47,7 @@ public final class Validator {
      * (which may still have errors).
      *
      * @param stream the stream to validate
-     * @param mimetype the mimetype of the stream, i.e. text/csv,
+     * @param mimetype the mimetype of the stream, i.e. text/csv.
      * @param type the expected schema of the file. If unknown, pass
      * {@link AnyType#of()}.
      *
@@ -44,7 +56,7 @@ public final class Validator {
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    ProvFile validate(ProvFile provFile, AType type, DcatMetadata dcatMetadata){
+    ProvFile validate(ProvFile provFile, String mimetype, AType type, DcatMetadata dcatMetadata){
         throw new UnsupportedOperationException("todo implement me");
     }
 }

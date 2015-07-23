@@ -18,6 +18,8 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
+import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.AType;
 import java.util.Locale;
@@ -31,10 +33,12 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = NodeMetadata.class)
 @JsonDeserialize(as = NodeMetadata.class)
-abstract class ANodeMetadata {   
+abstract class ANodeMetadata {
 
     /**
-     * The language of the node. If none is specified {@Locale#ROOT} is returned
+     * The language of the node. If none is specified {
+     *
+     * @Locale#ROOT} is returned
      *
      * Java Locale should be created out of Language codes defined by the
      * Library of Congress
@@ -45,9 +49,10 @@ abstract class ANodeMetadata {
      * ISO 639-2 (three-letter) code should be used.
      */
     @Value.Default
-    public Locale getLanguage(){
+    public Locale getLanguage() {
         return Locale.ROOT;
-    };
+    }
+
 
     /**
      * The temporal period that the dataset covers, that is, an interval of time
@@ -68,9 +73,10 @@ abstract class ANodeMetadata {
      * </ul>
      */
     @Value.Default
-    public String getTemporal(){
+    public String getTemporal() {
         return "";
-    };
+    }
+
 
     /**
      * Spatial coverage of the dataset.
@@ -86,14 +92,41 @@ abstract class ANodeMetadata {
      * </ul>
      *
      */
-    public Object getSpatial(){
+    public Object getSpatial() {
         return "";
     }
 
-    
     @Value.Default
-    public AType getType(){
+    public AType getType() {
         return AnyType.of();
     }
-    
+
+    /**
+     * An entity responsible for making the data available. Specified by
+     * <a href="http://purl.org/dc/terms/publisher" target="_bank">dct:publisher</a>
+     *
+     * Default value is {@link FoafAgent#of()}
+     *
+     * @see AFoafAgent
+     * @see AFoafPerson
+     * @see AFoafOrganization
+     */
+    @Value.Default
+    public AFoafAgent getPublisher() {
+        return FoafAgent.of();
+    }
+
+    /**
+     * A link to the license document under which the value is made
+     * available. The license should be a legal document giving official
+     * permission to do something with the resource, as specified in
+     * <a href="http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#license">
+     * dct:license</a>
+     *
+     */
+    @Value.Default
+    public String getLicense() {
+        return "";
+    }
+
 }

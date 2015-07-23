@@ -22,6 +22,11 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 
+/**
+ * Todo this is much in WTF status
+ * 
+ * @author David Leoni 
+ */
 public class TypeRegistry {
 
     private Map<String, ClassDef> classes;
@@ -59,5 +64,10 @@ public class TypeRegistry {
         }
         return classDef;
 
+    }
+    
+    
+    AType guessType(Object obj){
+        throw new UnsupportedOperationException("todo implement me");    
     }
 }

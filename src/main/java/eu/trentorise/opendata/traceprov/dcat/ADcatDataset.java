@@ -189,7 +189,8 @@ abstract class ADcatDataset implements Serializable {
     }
 
     /**
-     * An entity responsible for making the dataset available.
+     * An entity responsible for making the dataset available. Specified by
+     * <a href="http://purl.org/dc/terms/publisher" target="_bank">dct:publisher</a>
      *
      * Default value is {@link FoafAgent#of()}
      *
