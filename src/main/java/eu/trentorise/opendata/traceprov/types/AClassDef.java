@@ -24,7 +24,7 @@ import org.immutables.value.Value;
 
 /**
  * The schema of a json, loosely modeled after what you can express with
- * a jsonld context and ATypescript.
+ * a jsonld context and Typescript.
  *
  * @author David Leoni
  */
@@ -37,7 +37,7 @@ abstract class AClassDef implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The id of the type, which may be an IRI to a well-known type like i.e.
+     * The id of the class, which may be an IRI to a well-known type like i.e.
      * https://schema.org/Person
      */
     @Value.Default
@@ -46,7 +46,7 @@ abstract class AClassDef implements Serializable {
     }
 
    /**
-     * The high-level concept describing the schema. If unknown,
+     * The high-level concept describing the class. If unknown,
      * {@link Concept#of()} will be used.
      *
      */
@@ -56,7 +56,7 @@ abstract class AClassDef implements Serializable {
     }
     
     /**
-     * Name of the type preferably in English and camelcased, i.e. CreativeWork,
+     * Canonical name of the class preferably in English and camelcased, i.e. CreativeWork,
      * BroadcastService
      */
     @Value.Default
@@ -65,7 +65,7 @@ abstract class AClassDef implements Serializable {
     }
 
     /**
-     * The property definitions of the schema
+     * The property definitions of the class
      */
     public abstract List<PropertyDef> getPropertyDefs();
 

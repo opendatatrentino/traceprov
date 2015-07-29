@@ -1,0 +1,43 @@
+{
+	"rootBean": {
+		"manufacturer": "",
+		"diameter": 0.0
+	},
+	"constraintDescriptor": {
+		"annotation": {
+			
+		},
+		"annotationType": "javax.validation.constraints.Min",
+		"constraintValidatorClasses": ["org.hibernate.validator.internal.constraintvalidators.MinValidatorForNumber",
+		"org.hibernate.validator.internal.constraintvalidators.MinValidatorForCharSequence"],
+		"matchingConstraintValidatorClasses": ["org.hibernate.validator.internal.constraintvalidators.MinValidatorForNumber",
+		"org.hibernate.validator.internal.constraintvalidators.MinValidatorForCharSequence"],
+		"groups": ["javax.validation.groups.Default"],
+		"attributes": {
+			"message": "{javax.validation.constraints.Min.message}",
+			"value": 5,
+			"payload": [],
+			"groups": []
+		},
+		"composingConstraints": [],
+		"elementType": "METHOD",
+		"definedOn": "DEFINED_LOCALLY",
+		"constraintType": "GENERIC",
+		"compositionType": "AND",
+		"messageTemplate": "{javax.validation.constraints.Min.message}",
+		"validationAppliesTo": null,
+		"reportAsSingleViolation": false,
+		"payload": [],
+		"composingConstraintImpls": []
+	},
+	"messageTemplate": "{javax.validation.constraints.Min.message}",
+	"rootBeanClass": "prova.Wheel",
+	"executableParameters": null,
+	"executableReturnValue": null,
+	"message": "must be greater than or equal to 5",
+	"invalidValue": 0.0,
+	"leafBean": {
+		"manufacturer": "",
+		"diameter": 0.0
+	}
+}

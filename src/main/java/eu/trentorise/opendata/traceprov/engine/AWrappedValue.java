@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.casting;
+package eu.trentorise.opendata.traceprov.engine;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ import java.util.List;
  * @author David Leoni
  */
 public abstract class AWrappedValue {
+    
     /**
      * the actual value (integer, date, …)     
      */

@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.casting;
+package eu.trentorise.opendata.traceprov.engine;
 
+import eu.trentorise.opendata.traceprov.engine.CastResult;
 import eu.trentorise.opendata.traceprov.types.AType;
 import java.util.Locale;
 
@@ -37,15 +38,20 @@ public abstract class Converter<S extends AType, T extends AType> {
      * Casts value to target type.
      * <br/>
      *
-     * @param value a value that can be contained inside a Cell
+     * @param source a value of type {@code S}
      * @param sourceLocale the locale of the source value. When {Locale#ROOT}
      * the locale inside the value will be used, if present. See
      * {@link #getLocale(java.lang.Object)}
      *
      */
-    public abstract CastResult convert(
+    public abstract CastResult cast(
             Object source,
             Locale sourceLocale);
 
-    public abstract boolean isLossy();    
+    /**
+     * 
+     */
+    public abstract boolean isLossy();
+
+    
 }

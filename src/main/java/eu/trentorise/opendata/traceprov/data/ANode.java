@@ -47,13 +47,15 @@ public abstract class ANode implements Serializable {
         this.data = data;
     }    
     
+    
+    
     /**
      * A reference to position in the original file from which this node comes
      * from. If unknown, {@link Ref#of()} is returned.
      */    
     public Ref getRef(){
         return ref;
-    };
+    }
 
     /**
      * A reference to position in the original file from which this node comes
@@ -61,7 +63,7 @@ public abstract class ANode implements Serializable {
      */        
     public NodeMetadata getMetadata(){
         return metadata;
-    };
+    }
 
     /**
      * The subnodes of the node or the terminal value.     

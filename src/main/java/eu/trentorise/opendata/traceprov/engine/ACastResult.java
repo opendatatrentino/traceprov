@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.casting;
+package eu.trentorise.opendata.traceprov.engine;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.OdtUtils;
-import eu.trentorise.opendata.traceprov.types.ClassDef;
+import eu.trentorise.opendata.traceprov.engine.CastResult;
+import eu.trentorise.opendata.traceprov.engine.WeightedResult;
 import java.util.List;
 import javax.annotation.Nullable;
-import javax.validation.ConstraintViolation;
 import org.immutables.value.Value;
 
 /**
@@ -47,14 +47,14 @@ public abstract class ACastResult {
     }
 
     /**
-     * // : boolean true if accuracy ⩾ 1.0 todo derived?
+     * 
      */
     public final boolean succeded() {
         return getAccuracy() >= 1.0 - OdtUtils.TOLERANCE;
     }
 
     /**
-     * Returns the interpolated message for the conversion result
+     * The interpolated message for the conversion result
      */
     @Value.Default
     public String getMessage(){
@@ -62,7 +62,7 @@ public abstract class ACastResult {
     }
 
     /**
-     * Returns the non-interpolated error message for this constraint violation
+     * The non-interpolated error message for this constraint violation
      */
     @Value.Default
     String getMessageTemplate(){
@@ -95,7 +95,7 @@ public abstract class ACastResult {
     public abstract List<AWeightedResult> getCandidates();
 
     // todo javadoc
-    public static CastResult of(Object value, double accuracy) {
+    public static CastResult of(@Nullable Object value, double accuracy) {
         return CastResult.builder().addCandidates(WeightedResult.of(1.0, value)).setAccuracy(accuracy).build();
     }
 }

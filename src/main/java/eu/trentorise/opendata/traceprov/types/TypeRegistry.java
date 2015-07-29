@@ -70,4 +70,8 @@ public class TypeRegistry {
     AType guessType(Object obj){
         throw new UnsupportedOperationException("todo implement me");    
     }
+    
+    public static TypeRegistry of(){
+        return new TypeRegistry();
+    }
 }

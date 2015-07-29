@@ -13,30 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.trentorise.opendata.traceprov.casting;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.SimpleStyle;
-import javax.annotation.Nullable;
-import org.immutables.value.Value;
+package eu.trentorise.opendata.traceprov.engine;
 
 /**
  *
  * @author David Leoni
  */
-// todo review, make immutable
-@Value.Immutable
-@SimpleStyle
-@JsonSerialize(as = WeightedResult.class)
-@JsonDeserialize(as = WeightedResult.class)
-public abstract class AWeightedResult{
+public class FunctionRegistry {
     
-    @Value.Default
-    public double getScore(){
-        return 0.0;
-    }
-    
-    @Nullable
-    public abstract Object getValue();
 }
