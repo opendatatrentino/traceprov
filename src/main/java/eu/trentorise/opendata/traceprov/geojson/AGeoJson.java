@@ -15,19 +15,36 @@
  */
 package eu.trentorise.opendata.traceprov.geojson;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.HashMap;
 import org.immutables.value.Value;
 
 /**
  * TODO fill this class
+ * When only name is known use {@link Feature#ofName(java.lang.String)}
  * @author David Leoni
  */
-@Value.Immutable
-@BuilderStylePublic
-@JsonSerialize(as=GeoJson.class)
-@JsonDeserialize(as=GeoJson.class)
-abstract class AGeoJson {
+// todo check this Id.NAME is correct
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+public abstract class AGeoJson {
+
+    public abstract String getType();
+    
+    @Value.Default
+    @JsonAnyGetter
+    public HashMap<String, Object> getOthers(){
+        return new HashMap();
+    }
+    
+    /**
+     * See {@link #getOthers()}
+     *     
+     */
+    @JsonAnySetter
+    public void putOthers(String name, Object value) {        
+        getOthers().put(name, value);
+    }    
     
 }

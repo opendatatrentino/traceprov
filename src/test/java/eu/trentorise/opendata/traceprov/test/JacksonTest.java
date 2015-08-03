@@ -15,23 +15,54 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
+import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
+import eu.trentorise.opendata.traceprov.geojson.Feature;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Logger;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *
  * @author David Leoni
  */
 public class JacksonTest {
-    
+
     private static final Logger LOG = Logger.getLogger(JacksonTest.class.getName());
-        
-    
+
     @BeforeClass
-    public static void setUpClass() {        
+    public static void setUpClass() {
         OdtConfig.init(JacksonTest.class);
     }
+    private ObjectMapper objectMapper;
     
+   @Before
+    public void before() {
+        objectMapper = new ObjectMapper();
+        OdtCommonsModule.registerModulesInto(objectMapper);
+    }
+
+    @After
+    public void after() {
+        objectMapper = null;
+    }    
     
+    @Test
+    public void testFeature() throws JsonProcessingException, IOException{
+        HashMap hm = new HashMap();
+        hm.put("x", "y");
+        //String json = objectMapper.writeValueAsString();
+        
+        //objectMapper.readValue(json, Feature.class);
+        
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Feature.builder().setOthers(hm).build());
+    }
+  
 }

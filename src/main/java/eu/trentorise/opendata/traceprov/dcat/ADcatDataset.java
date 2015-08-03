@@ -17,14 +17,13 @@ package eu.trentorise.opendata.traceprov.dcat;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.base.Preconditions;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.traceprov.geojson.GeoJson;
+import eu.trentorise.opendata.traceprov.geojson.AGeoJson;
+import eu.trentorise.opendata.traceprov.geojson.Feature;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
-import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**
@@ -210,18 +209,17 @@ abstract class ADcatDataset implements Serializable {
      *
      * The returned object may be either:
      * <ul>
-     * <li> a natural language name of the location </li>
+     * <li> {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofName(java.lang.String) a natural language name inside Feautre object} </li>
      * <li> a url to an identifier of the location, i.e.
-     * http://www.geonames.org/6695072 </li>
-     * <li> a GeoJSON object
-     * {@link eu.trentorise.opendata.traceprov.geojson.GeoJson} </li>
-     * <li> if spatial value is unknwon the empty string is returned. </li>
+     * http://www.geonames.org/6695072 (in this case you can use {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofId(java.lang.String)}</li>
+     * <li> {@link eu.trentorise.opendata.traceprov.geojson.AGeoJson AGeoJSON} object</li>
+     * <li> if spatial value is unknwon {@link eu.trentorise.opendata.traceprov.geojson.Feature#of() is returned. </li>
      * </ul>
      *
      */
     @Value.Default
-    public Object getSpatial() {
-        return "";
+    public AGeoJson getSpatial() {
+        return Feature.of();
     }
 
     /**
@@ -276,10 +274,5 @@ abstract class ADcatDataset implements Serializable {
         return "";
     }
 
-    @Value.Check
-    protected void check() {
-        Preconditions.checkState(getSpatial() instanceof String || getSpatial() instanceof GeoJson,
-                "spatial validity attribute should be instance of String or GeoJson, found instead %s ", getSpatial());
-    }
 
 }

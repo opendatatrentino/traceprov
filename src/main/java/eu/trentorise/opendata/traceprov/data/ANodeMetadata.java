@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
+import eu.trentorise.opendata.traceprov.geojson.AGeoJson;
+import eu.trentorise.opendata.traceprov.geojson.Feature;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.AType;
 import java.util.Locale;
@@ -78,23 +80,26 @@ abstract class ANodeMetadata {
     }
 
 
-    /**
-     * Spatial coverage of the dataset.
+  /**
+     * Spatial coverage of the value, as specified by
+     * <a href="http://purl.org/dc/terms/spatial">dct:spatial</a>
+     * i.e. dct:spatial <http://www.geonames.org/6695072> ;
      *
      * The returned object may be either:
      * <ul>
-     * <li> a natural language name of the location </li>
+     * <li> {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofName(java.lang.String) a natural language name inside Feautre object} </li>
      * <li> a url to an identifier of the location, i.e.
-     * http://www.geonames.org/6695072 </li>     
-     * <li> a GeoJSON object
-     * {@link eu.trentorise.opendata.traceprov.geojson.GeoJson} </li>     
-     * <li> if spatial value is unknwon the empty string is returned. </li>
+     * http://www.geonames.org/6695072 (in this case you can use {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofId(java.lang.String)}</li>
+     * <li> {@link eu.trentorise.opendata.traceprov.geojson.AGeoJson AGeoJSON} object</li>
+     * <li> if spatial value is unknwon {@link eu.trentorise.opendata.traceprov.geojson.Feature#of() is returned. </li>
      * </ul>
      *
      */
-    public Object getSpatial() {
-        return "";
+    @Value.Default
+    public AGeoJson getSpatial() {
+        return Feature.of();
     }
+
 
     @Value.Default
     public AType getType() {
