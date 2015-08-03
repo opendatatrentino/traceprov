@@ -18,6 +18,7 @@ package eu.trentorise.opendata.traceprov.geojson;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import org.immutables.value.Value;
 
@@ -30,13 +31,19 @@ import org.immutables.value.Value;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public abstract class AGeoJson {
 
-    public abstract String getType();
+    @Value.Derived
+    public String getType() {
+        return this.getClass().getSimpleName();
+    }
     
     @Value.Default
     @JsonAnyGetter
     public HashMap<String, Object> getOthers(){
         return new HashMap();
     }
+
+    
+ 
     
     /**
      * See {@link #getOthers()}
@@ -47,4 +54,8 @@ public abstract class AGeoJson {
         getOthers().put(name, value);
     }    
     
+   public static ImmutableList<Double> position(double lat, double lon) {
+        return ImmutableList.of(lat, lon);
+    }    
+   
 }

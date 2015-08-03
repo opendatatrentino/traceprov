@@ -15,14 +15,11 @@
  */
 package eu.trentorise.opendata.traceprov.geojson;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
@@ -33,13 +30,6 @@ import org.immutables.value.Value;
 @JsonSerialize(as = Feature.class)
 @JsonDeserialize(as = Feature.class)
 abstract class AFeature extends AGeoJson {            
-
-    
-    @Value.Derived
-    @Override
-    public String getType() {
-        return "Feature";
-    }
     
     /**
      * The id of the feature, if present. The empty string otherwise.     

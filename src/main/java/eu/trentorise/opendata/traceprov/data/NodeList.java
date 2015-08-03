@@ -32,9 +32,7 @@ public class NodeList extends ANode implements  Iterable<ANode> {
 
     private static final long serialVersionUID = 1L;
     private static final NodeList INSTANCE = new NodeList();
-    private static final int MAX_PRINTED_NODES = 10;
-
-    
+    private static final int MAX_PRINTED_NODES = 10;   
 
     private NodeList() {
         super(Ref.of(), NodeMetadata.of(), new ArrayList());        

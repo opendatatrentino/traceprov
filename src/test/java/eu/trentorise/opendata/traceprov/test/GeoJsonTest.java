@@ -15,19 +15,14 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
-import eu.trentorise.opendata.traceprov.geojson.Feature;
-import eu.trentorise.opendata.traceprov.geojson.MultiPoint;
 import eu.trentorise.opendata.traceprov.geojson.Point;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.logging.Logger;
-import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,14 +31,11 @@ import org.junit.Test;
  *
  * @author David Leoni
  */
-public class JacksonTest {
-
-    private static final Logger LOG = Logger.getLogger(JacksonTest.class.getName());
-
-    @BeforeClass
-    public static void setUpClass() {
-        OdtConfig.init(JacksonTest.class);
-    }
+public class GeoJsonTest {
+    private static final Logger LOG = Logger.getLogger(GeoJsonTest.class.getName());
+    
+    
+    
     private ObjectMapper objectMapper;
     
    @Before
@@ -51,25 +43,26 @@ public class JacksonTest {
         objectMapper = new ObjectMapper();
         OdtCommonsModule.registerModulesInto(objectMapper);
     }
-
-    @After
-    public void after() {
-        objectMapper = null;
-    }    
+    
+    
+    @BeforeClass
+    public static void setUpClass() {
+        OdtConfig.init(GeoJsonTest.class);
+    }
     
     @Test
-    public void testGeoJsonFeature() throws JsonProcessingException, IOException{
-        HashMap hm = new HashMap();
-        hm.put("x", "y");
-        //String json = objectMapper.writeValueAsString();
-        
-        //objectMapper.readValue(json, Feature.class);
-        
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, Feature.builder().setOthers(hm).build());
-        
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0,2.0));
-        
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, MultiPoint.builder().addCoordinates(ImmutableList.of(1.1,1.2)).build());
+    public void testPoint(){
+        try {
+            Point.builder().setCoordinates(ImmutableList.of(1.0)).build();
+            Assert.fail();
+        } catch (IllegalStateException ex){
+            
+        }
     }
-  
+    
+    @Test
+    public void testGeoJson(){
+        
+        
+    }
 }

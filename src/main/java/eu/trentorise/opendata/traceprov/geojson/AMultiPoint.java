@@ -15,12 +15,29 @@
  */
 package eu.trentorise.opendata.traceprov.geojson;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.traceprov.validation.Preconditions;
 import java.util.List;
+import org.immutables.value.Value;
 
 /**
+ *
  * @author David Leoni
  */
-public abstract class AGeometry extends AGeoJson {
+@Value.Immutable
+@BuilderStyle
+@JsonSerialize(as = MultiPoint.class)
+@JsonDeserialize(as = MultiPoint.class)
+public abstract class AMultiPoint extends AGeometry {
     
-    public abstract List getCoordinates();
+    @Override
+    public abstract List<List<Double>> getCoordinates();
+    
+    @Value.Check
+    protected void check() {        
+        Preconditions.checkPositions(getCoordinates(), 0, "Invalid list of positions!");
+    }
+    
 }
