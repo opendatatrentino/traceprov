@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.traceprov.validation.Preconditions;
+import java.util.List;
 import org.immutables.value.Value;
 
 /**
@@ -28,16 +28,19 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = MultiPoint.class)
-@JsonDeserialize(as = MultiPoint.class)
-abstract class AMultiPoint extends AGeometry {
-    
+@JsonSerialize(as = GeometryCollection.class)
+@JsonDeserialize(as = GeometryCollection.class)
+abstract class AGeometryCollection extends AGeometry {
+
+    /**
+     * A Geometry Collection does not have coordinates.
+     */
     @Override
-    public abstract ImmutableList<ImmutableList<Double>> getCoordinates();
+    public List getCoordinates(){
+        return ImmutableList.of();
+    }
     
-    @Value.Check
-    protected void check() {        
-        Preconditions.checkPositions(getCoordinates(), 0, "Invalid list of positions!"); // todo what is the min???
-    }        
+
+    public abstract List<AGeometry> getGeometries();
     
 }

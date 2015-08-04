@@ -28,16 +28,19 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = MultiPoint.class)
-@JsonDeserialize(as = MultiPoint.class)
-abstract class AMultiPoint extends AGeometry {
+@JsonSerialize(as = MultiLineString.class)
+@JsonDeserialize(as = MultiLineString.class)
+abstract class AMultiLineString extends AGeometry {
     
     @Override
-    public abstract ImmutableList<ImmutableList<Double>> getCoordinates();
+    public abstract ImmutableList<ImmutableList<ImmutableList<Double>>> getCoordinates();
     
     @Value.Check
-    protected void check() {        
-        Preconditions.checkPositions(getCoordinates(), 0, "Invalid list of positions!"); // todo what is the min???
-    }        
+    protected void check(){
+        for (ImmutableList<ImmutableList<Double>> lineString : getCoordinates()){
+            Preconditions.checkPositions(lineString,2, "Invalid lineString!");
+        }
+        
+    }
     
 }

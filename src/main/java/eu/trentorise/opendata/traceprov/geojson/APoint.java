@@ -18,7 +18,8 @@ package eu.trentorise.opendata.traceprov.geojson;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
-import eu.trentorise.opendata.commons.BuilderStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.traceprov.validation.Preconditions;
 import java.util.List;
 import org.immutables.value.Value;
 
@@ -27,10 +28,10 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable(singleton = false)
-@BuilderStyle
+@BuilderStylePublic
 @JsonSerialize(as = Point.class)
 @JsonDeserialize(as = Point.class)
-public abstract class APoint extends AGeometry {
+abstract class APoint extends AGeometry {
 
     
     @Override
@@ -39,9 +40,7 @@ public abstract class APoint extends AGeometry {
     
     @Value.Check
     protected void check(){        
-        if (getCoordinates().size() != 2){
-            throw new IllegalStateException("A Point needs exactly 2 coordinates, found instead " + getCoordinates().size());
-        }
+        Preconditions.checkPosition(getCoordinates(), "Invalid Point!");
     }
     
     /**

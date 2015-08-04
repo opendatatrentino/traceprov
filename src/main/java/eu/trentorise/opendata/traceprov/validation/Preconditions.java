@@ -17,6 +17,7 @@ package eu.trentorise.opendata.traceprov.validation;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -34,37 +35,54 @@ public class Preconditions {
      * prepended to more specific error messages.
      *
      * @param position a list of coordinates
-     * @throws IllegalArgumentException on invalid coordinates
-     * @return the validated coordinates
+     * @throws IllegalArgumentException on invalid coordinates     
      */
-    public static List<Double> checkPosition(List<Double> position, @Nullable Object prependedErrorMessage) {        
+    public static void checkPosition(List<Double> position, @Nullable Object prependedErrorMessage) {      
+        checkNotNull(position, String.valueOf(prependedErrorMessage) + " - " + prependedErrorMessage);
         if (position.size() < 2) {
             throw new IllegalStateException(String.valueOf(prependedErrorMessage) + "Found " + position.size() + " coordinates, required at least 2 ");
         }
         for (Double d : position){
-            checkNotNull(d, "Found null in coordintate!");
+            checkNotNull(d, String.valueOf(prependedErrorMessage) + "Found null in coordinate!");
         }
-        return position;
+   
     }
 
     /**
-     *
+     * Checks provided positions are correct
      *
      * @param prependedErrorMessage the exception message to use if the check
      * fails; will be converted to a string using String.valueOf(Object) and
      * prepended to more specific error messages.
      *
+     * @param min there must be at least {@code min} positions
      * @throws IllegalArgumentException on invalid coordinates
-     * @return the validated coordinates
      */
-    public static List<List<Double>> checkPositions(List<List<Double>> positions, int min, @Nullable Object prependedErrorMessage) {
-        checkNotNull(positions);
-        checkArgument(positions.size() >= min, "At least %s positions are required, found instead %s", min, positions.size());
+    public static void checkPositions(List<ImmutableList<Double>> positions, int min, @Nullable Object prependedErrorMessage) {
+        checkNotNull(positions, String.valueOf(prependedErrorMessage));
+        checkArgument(positions.size() >= min, String.valueOf(prependedErrorMessage) + "At least %s positions are required, found instead %s", min, positions.size());
         for (int i = 0; i < positions.size(); i++) {
             List<Double> c = positions.get(i);
-            checkPosition(c, "Wrong position at index " + i +".");            
+            checkPosition(c, String.valueOf(prependedErrorMessage) + " - Wrong position at index " + i +".");            
+        }        
+    }
+    
+    
+   /**
+     * Checks provided polygon is correct.
+     *
+     * @param prependedErrorMessage the exception message to use if the check
+     * fails; will be converted to a string using String.valueOf(Object) and
+     * prepended to more specific error messages.
+     *
+     * @param min there must be at least {@code min} positions
+     * @throws IllegalArgumentException on invalid coordinates
+     */    
+    public static void checkPolygon(List<ImmutableList<ImmutableList<Double>>> positions, @Nullable Object prependedErrorMessage){
+        checkNotNull(positions, String.valueOf(prependedErrorMessage) + " - " + prependedErrorMessage);
+        for (ImmutableList<ImmutableList<Double>> lst : positions){
+            checkPositions(lst, 4, String.valueOf(prependedErrorMessage) + " - Invalid polygon!");
         }
-        return positions;
     }
 
 }

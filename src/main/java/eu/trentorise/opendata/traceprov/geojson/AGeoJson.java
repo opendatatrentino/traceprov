@@ -20,11 +20,14 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**
- * TODO fill this class
- * When only name is known use {@link Feature#ofName(java.lang.String)}
+ * TODO fill this class When only name is known use
+ * {@link Feature#ofName(java.lang.String)}
+ *
  * @author David Leoni
  */
 // todo check this Id.NAME is correct
@@ -35,27 +38,33 @@ public abstract class AGeoJson {
     public String getType() {
         return this.getClass().getSimpleName();
     }
+
+    public abstract List<Double> getBbox();
     
+    @Nullable
+    public abstract ACrs getCrs();
+    
+    /**
+     * Although this is a hash map, DO *NOT* MODIFY IT. USE IT *ONLY* AS MAP
+     * INTERFACE.
+     */
     @Value.Default
     @JsonAnyGetter
-    public HashMap<String, Object> getOthers(){
+    public HashMap<String, Object> getOthers() {
         return new HashMap();
     }
 
-    
- 
-    
     /**
      * See {@link #getOthers()}
-     *     
+     *
      */
     @JsonAnySetter
-    public void putOthers(String name, Object value) {        
+    protected void putOthers(String name, Object value) {
         getOthers().put(name, value);
-    }    
-    
-   public static ImmutableList<Double> position(double lat, double lon) {
+    }
+
+    public static ImmutableList<Double> position(double lat, double lon) {
         return ImmutableList.of(lat, lon);
-    }    
-   
+    }
+
 }
