@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.ValidationError;
-import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ClassDef;
 import java.io.Serializable;
@@ -27,7 +27,7 @@ import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * AType and validation errors.
+ * Type and validation errors.
  *
  * @author David Leoni
  */
@@ -44,7 +44,7 @@ abstract class AProvType implements Serializable {
      * {@link AnyType#of()} is returned.
      */
     @Value.Default
-    public AType getType() {
+    public Type getType() {
         return AnyType.of();
     }
 

@@ -25,7 +25,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = BooleanType.class)
 @JsonDeserialize(as = BooleanType.class)
-abstract class ABooleanType extends AType {
+abstract class ABooleanType extends Type {
     
     @Override
     public String datatypeId(){

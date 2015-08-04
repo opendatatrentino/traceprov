@@ -67,7 +67,7 @@ public class TypeRegistry {
     }
     
     
-    AType guessType(Object obj){
+    Type guessType(Object obj){
         throw new UnsupportedOperationException("todo implement me");    
     }
     

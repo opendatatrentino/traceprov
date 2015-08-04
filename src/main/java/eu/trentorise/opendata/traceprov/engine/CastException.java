@@ -15,7 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.engine;
 
-import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import java.util.Locale;
 
 
@@ -25,17 +25,17 @@ import java.util.Locale;
  */
 public class CastException extends Exception {
 
-    private static String makeMessage(Object value, AType type, Locale locale, String reason){
+    private static String makeMessage(Object value, Type type, Locale locale, String reason){
         String javaclass = value == null ? "" : " of Java class " + value.getClass().getName();
         
         return "Couldn't cast value " + value + javaclass + "  to type " + type + " (with locale " + locale + "). \nREASON: " + reason;
     }
         
-    public CastException(Object value, AType type, Locale locale, String reason) {
+    public CastException(Object value, Type type, Locale locale, String reason) {
         super(makeMessage(value, type, locale, reason));
     }
 
-    public CastException(Object value, AType type, Locale locale, String reason, Exception ex) {
+    public CastException(Object value, Type type, Locale locale, String reason, Exception ex) {
        super(makeMessage(value, type, locale, reason), ex);
     }
     

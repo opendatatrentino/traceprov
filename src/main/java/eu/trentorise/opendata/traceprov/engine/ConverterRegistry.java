@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.engine;
 
 import eu.trentorise.opendata.commons.NotFoundException;
 import eu.trentorise.opendata.traceprov.engine.CastResult;
-import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
 import java.util.Locale;
@@ -50,7 +50,7 @@ public class ConverterRegistry {
     public CastResult cast(
             Object source,
             Locale sourceLocale,
-            AType targetType) {
+            Type targetType) {
         throw new UnsupportedOperationException("TODO implement me!");
     }
 
@@ -58,10 +58,10 @@ public class ConverterRegistry {
      * Returns true if converter from {@code S} to {@code T} has been
      * registered.
      *
-     * @see #getConverter(eu.trentorise.opendata.traceprov.types.AType,
-     * eu.trentorise.opendata.traceprov.types.AType)
+     * @see #getConverter(eu.trentorise.opendata.traceprov.types.Type,
+     * eu.trentorise.opendata.traceprov.types.Type)
      */
-    public boolean hasConverter(AType sourceType, AType targetType) {
+    public boolean hasConverter(Type sourceType, Type targetType) {
         throw new UnsupportedOperationException("TODO implement me!");
     }
 
@@ -69,10 +69,10 @@ public class ConverterRegistry {
      * The converter from type {@code S} to {@code T}, if available
      *
      * @throws NotFoundException is not available
-     * @see #hasInverse(eu.trentorise.opendata.traceprov.types.AType,
-     * eu.trentorise.opendata.traceprov.types.AType)
+     * @see #hasInverse(eu.trentorise.opendata.traceprov.types.Type,
+     * eu.trentorise.opendata.traceprov.types.Type)
      */
-    public <S extends AType, T extends AType> Converter<T, S> getConverter(S sourceType, T targetType) {
+    public <S extends Type, T extends Type> Converter<T, S> getConverter(S sourceType, T targetType) {
         throw new UnsupportedOperationException("TODO implement me!");
     }
 }

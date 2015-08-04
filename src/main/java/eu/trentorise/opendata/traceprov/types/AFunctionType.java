@@ -26,17 +26,17 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = FunctionType.class)
 @JsonDeserialize(as = FunctionType.class)
-abstract class AFunctionType extends AType {
+abstract class AFunctionType extends Type {
     
     /**
      * Todo what about empty list??
      */
-    public List<? extends AType> getSourceTypes(){
+    public List<? extends Type> getSourceTypes(){
         return ImmutableList.of(AnyType.of());
     }
     
     @Value.Default
-    public AType getTargetType(){
+    public Type getTargetType(){
         return AnyType.of();
     }
     

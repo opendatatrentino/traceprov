@@ -27,7 +27,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = IdType.class)
 @JsonDeserialize(as = IdType.class)
-abstract class AIdType extends AType {
+abstract class AIdType extends Type {
     
     @Value.Default
     public String getClassId(){

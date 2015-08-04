@@ -41,7 +41,7 @@ public abstract class ATypeContext {
      * Default is {@link eu.trentorise.opendata.traceprov.types.AnyType#of()}.
      */
     @Value.Default
-    public AType getType() {
+    public Type getType() {
         return AnyType.of();
     }
 

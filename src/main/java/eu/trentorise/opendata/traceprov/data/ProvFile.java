@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ClassDef;
 import eu.trentorise.opendata.traceprov.types.PropertyMapping;
-import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ProvFile implements Serializable {
     private static final ProvFile INSTANCE = new ProvFile();
 
     private DcatMetadata dcatMetadata;
-    private AType type;
+    private Type type;
     private List<ClassDef> classDefs;
     private ImmutableList<ConstraintViolation> typeErrors;
     private ANode data;
@@ -59,7 +59,7 @@ public class ProvFile implements Serializable {
 
     ProvFile(
             DcatMetadata dcatMetadata,
-            AType type,
+            Type type,
             Iterable<ConstraintViolation> schemaErrors,
             ANode data,
             List<ConstraintViolation> dataErrors,
@@ -93,7 +93,7 @@ public class ProvFile implements Serializable {
      * {@link eu.trentorise.opendata.traceprov.types.AnyType#of()} is returned.
      */
     //  todo add validator tag for non-any type
-    public AType getType() {
+    public Type getType() {
         return type;
     }
 
@@ -162,7 +162,7 @@ public class ProvFile implements Serializable {
             this.provFile.dcatMetadata = dcatMetadata;
         }
 
-        public void setType(AType type) {
+        public void setType(Type type) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }

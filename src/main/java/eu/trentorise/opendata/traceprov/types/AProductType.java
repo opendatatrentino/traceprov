@@ -25,9 +25,9 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = ProductType.class)
 @JsonDeserialize(as = ProductType.class)
-abstract class AProductType extends AType {
+abstract class AProductType extends Type {
     
-    public abstract List<AType> getTypes();
+    public abstract List<Type> getTypes();
 
     @Override
     public String datatypeId() {

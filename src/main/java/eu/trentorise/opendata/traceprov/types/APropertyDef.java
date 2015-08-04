@@ -69,7 +69,7 @@ abstract class APropertyDef {
      * used.
      */
     @Value.Default
-    public AType getType() {
+    public Type getType() {
         return AnyType.of();
     }
 

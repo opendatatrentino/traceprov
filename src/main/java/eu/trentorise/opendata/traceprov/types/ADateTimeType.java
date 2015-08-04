@@ -25,7 +25,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = DateTimeType.class)
 @JsonDeserialize(as = DateTimeType.class)
-abstract class ADateTimeType extends AType {   
+abstract class ADateTimeType extends Type {   
     
     @Override
     public String datatypeId(){

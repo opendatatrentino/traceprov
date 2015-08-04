@@ -26,7 +26,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = FloatType.class)
 @JsonDeserialize(as = FloatType.class)
-abstract class AFloatType extends AType {
+abstract class AFloatType extends Type {
     
     @Override
     public String datatypeId(){

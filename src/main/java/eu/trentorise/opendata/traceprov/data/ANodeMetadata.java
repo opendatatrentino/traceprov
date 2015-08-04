@@ -23,7 +23,7 @@ import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.geojson.Feature;
 import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import java.util.Locale;
 import org.immutables.value.Value;
 
@@ -102,7 +102,7 @@ abstract class ANodeMetadata {
 
 
     @Value.Default
-    public AType getType() {
+    public Type getType() {
         return AnyType.of();
     }
 

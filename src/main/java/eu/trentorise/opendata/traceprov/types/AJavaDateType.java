@@ -29,7 +29,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = JavaDateType.class)
 @JsonDeserialize(as = JavaDateType.class)
-abstract class AJavaDateType extends AType {   
+abstract class AJavaDateType extends Type {   
     
     @Override
     public String datatypeId(){

@@ -25,7 +25,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = LongType.class)
 @JsonDeserialize(as = LongType.class)
-abstract class ALongType extends AType {
+abstract class ALongType extends Type {
     
     @Override
     public String datatypeId(){

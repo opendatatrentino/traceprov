@@ -30,14 +30,14 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = MapType.class)
 @JsonDeserialize(as = MapType.class)
-abstract class AMapType extends AType {
+abstract class AMapType extends Type {
 
     /**
      * By default assumes {@link StringType#of()}, although {@link IntType#of()}
      * is also supported.
      */
     @Value.Default
-    public AType getKeyType() {
+    public Type getKeyType() {
         return StringType.of();
     }
     
@@ -45,7 +45,7 @@ abstract class AMapType extends AType {
      * By default assumes {@link AnyType#of()}.
      */
     @Value.Default
-    public AType getValueType() {
+    public Type getValueType() {
         return AnyType.of();
     }
     

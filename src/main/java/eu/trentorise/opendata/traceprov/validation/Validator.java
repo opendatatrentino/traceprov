@@ -19,7 +19,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import eu.trentorise.opendata.traceprov.data.ANode;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
-import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 
 /**
@@ -28,7 +28,7 @@ import eu.trentorise.opendata.traceprov.types.AnyType;
  */
 public final class Validator {
     
-    public AType inferType(ANode node, DcatMetadata dcatMetadata){
+    public Type inferType(ANode node, DcatMetadata dcatMetadata){
         throw new UnsupportedOperationException("todo implement me");
     }
     
@@ -56,7 +56,7 @@ public final class Validator {
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    ProvFile validate(ProvFile provFile, String mimetype, AType type, DcatMetadata dcatMetadata){
+    ProvFile validate(ProvFile provFile, String mimetype, Type type, DcatMetadata dcatMetadata){
         throw new UnsupportedOperationException("todo implement me");
     }
 }

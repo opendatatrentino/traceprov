@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvType;
-import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import java.io.InputStream;
 
 /**
@@ -43,7 +43,7 @@ public interface IValidator {
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    ProvFile validate(InputStream stream, String mimeType, AType type, DcatMetadata dcatMetadata);
+    ProvFile validate(InputStream stream, String mimeType, Type type, DcatMetadata dcatMetadata);
 
     /**
      * Validates the schema present in the input stream and returns the parsed

@@ -26,10 +26,10 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = ListType.class)
 @JsonDeserialize(as = ListType.class)
-abstract class AListType extends AType {
+abstract class AListType extends Type {
     
     @Value.Default
-    public AType getSubtype(){
+    public Type getSubtype(){
         return AnyType.of();
     }
     

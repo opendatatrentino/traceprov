@@ -21,7 +21,7 @@ import static eu.trentorise.opendata.traceprov.TraceProvs.TRACEPROV_IRI;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvType;
-import eu.trentorise.opendata.traceprov.types.AType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.validation.IValidator;
 import eu.trentorise.opendata.traceprov.types.ClassDef;
 import eu.trentorise.opendata.traceprov.types.PropertyDef;
@@ -86,7 +86,7 @@ public class CsvValidator implements IValidator {
     private static final ImmutableList<String> MIMETYPES = ImmutableList.of("text/csv");
     
     @Override
-    public ProvFile validate(InputStream stream, String mimeType, AType type, DcatMetadata dcatMetadata) {
+    public ProvFile validate(InputStream stream, String mimeType, Type type, DcatMetadata dcatMetadata) {
 
         LOG.warning("CURRENT CSV VALIDATOR IS *EXPERIMENTAL*. DON'T TRUST IT!");
         

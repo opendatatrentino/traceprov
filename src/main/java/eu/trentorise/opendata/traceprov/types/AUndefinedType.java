@@ -29,7 +29,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = UndefinedType.class)
 @JsonDeserialize(as = UndefinedType.class)
-abstract class AUndefinedType extends AType {
+abstract class AUndefinedType extends Type {
 
     @Override
     public String datatypeId() {
