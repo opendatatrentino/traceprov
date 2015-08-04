@@ -29,7 +29,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = Feature.class)
 @JsonDeserialize(as = Feature.class)
-abstract class AFeature extends AGeoJson {            
+abstract class AFeature extends GeoJson {            
     
     /**
      * The id of the feature, if present. The empty string otherwise.     

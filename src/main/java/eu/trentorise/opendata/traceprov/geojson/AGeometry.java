@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author David Leoni
  */
-public abstract class AGeometry extends AGeoJson {
+public abstract class AGeometry extends GeoJson {
     
     public abstract List getCoordinates();
 }

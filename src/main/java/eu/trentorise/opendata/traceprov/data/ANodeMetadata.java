@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
-import eu.trentorise.opendata.traceprov.geojson.AGeoJson;
+import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.geojson.Feature;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.AType;
@@ -90,13 +90,13 @@ abstract class ANodeMetadata {
      * <li> {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofName(java.lang.String) a natural language name inside Feautre object} </li>
      * <li> a url to an identifier of the location, i.e.
      * http://www.geonames.org/6695072 (in this case you can use {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofId(java.lang.String)}</li>
-     * <li> {@link eu.trentorise.opendata.traceprov.geojson.AGeoJson AGeoJSON} object</li>
+     * <li> {@link eu.trentorise.opendata.traceprov.geojson.GeoJson AGeoJSON} object</li>
      * <li> if spatial value is unknwon {@link eu.trentorise.opendata.traceprov.geojson.Feature#of() is returned. </li>
      * </ul>
      *
      */
     @Value.Default
-    public AGeoJson getSpatial() {
+    public GeoJson getSpatial() {
         return Feature.of();
     }
 

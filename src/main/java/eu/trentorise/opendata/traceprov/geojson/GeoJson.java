@@ -32,7 +32,7 @@ import org.immutables.value.Value;
  */
 // todo check this Id.NAME is correct
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-public abstract class AGeoJson {
+public abstract class GeoJson {
 
     @Value.Derived
     public String getType() {
@@ -66,5 +66,6 @@ public abstract class AGeoJson {
     public static ImmutableList<Double> position(double lat, double lon) {
         return ImmutableList.of(lat, lon);
     }
+
 
 }
