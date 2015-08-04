@@ -21,25 +21,26 @@ import eu.trentorise.opendata.commons.Dict;
 import java.io.Serializable;
 import org.immutables.value.Value;
 
-
 /**
- * Models <a href="http://xmlns.com/foaf/spec/" target="_blank">a minimal FOAF Agent</a>
+ * Models <a href="http://xmlns.com/foaf/spec/" target="_blank">a minimal FOAF
+ * Agent</a>
  *
  * @author David Leoni
  */
-@JsonSerialize(as=FoafAgent.class)
-@JsonDeserialize(as=FoafAgent.class)
-public abstract class AFoafAgent implements Serializable  {
-    public static final String CLASS_URI="http://xmlns.com/foaf/0.1/Agent";    
+@JsonSerialize(as = FoafAgent.class)
+@JsonDeserialize(as = FoafAgent.class)
+public abstract class AFoafAgent implements Serializable {
+
+    public static final String CLASS_URI = "http://xmlns.com/foaf/0.1/Agent";
 
     private static final long serialVersionUID = 1L;
-    
-    AFoafAgent(){
-        
+
+    AFoafAgent() {
+
     }
-    
- /**
-     * Returns the uri of the agent.
+
+    /**
+     * The uri of the agent.
      */
     @Value.Default
     public String getUri() {
@@ -47,12 +48,15 @@ public abstract class AFoafAgent implements Serializable  {
     }
 
     /**
-     * Returns <a href="http://xmlns.com/foaf/0.1/name" target="_blank">the agent name </a>
-     */    
+     * Returns <a href="http://xmlns.com/foaf/0.1/name" target="_blank">the
+     * agent name </a>
+     */
     @Value.Default
-    public Dict getName(){
+    public Dict getName() {
         return Dict.of();
-    };
+    }
+
+    ;
 
     /**
      * Returns <a href="http://xmlns.com/foaf/0.1/mbox" target="_blank">the mail box </a>
@@ -60,6 +64,6 @@ public abstract class AFoafAgent implements Serializable  {
     @Value.Default
     public String getMbox() {
         return "";
-    }    
-       
+    }
+
 }

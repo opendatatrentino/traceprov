@@ -15,19 +15,67 @@
  */
 package eu.trentorise.opendata.traceprov.geojson;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.collect.ImmutableMap;
+import eu.trentorise.opendata.commons.SimpleStyle;
+import java.io.Serializable;
 import java.util.Map;
-import org.immutables.value.Value.Derived;
+import org.immutables.value.Value;
 
 /**
- * * todo finish this
+ * The coordinate reference system (CRS) of a GeoJSON object 
  * @author David Leoni
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-public abstract class ACrs {
+@Value.Immutable
+@SimpleStyle
+@JsonSerialize(as = Crs.class)
+@JsonDeserialize(as = Crs.class)
+abstract class ACrs implements Serializable {
 
-    @Derived
-    public abstract String getType();
+    private static final long serialVersionUID = 1L;
     
-    public abstract Map<String, Object> getProperties();
+    @Value.Default
+    public String getType() {
+        return "name";
+    }
+
+    @Value.Default
+    public Map<String, ?> getProperties() {
+        return ImmutableMap.of("name", "urn:ogc:def:crs:OGC:1.3:CRS84");
+    }
+
+    public static Crs ofName(String name) {
+        return Crs.of("name", ImmutableMap.of("name", name));
+    }
+
+    public static Crs ofLink(String href) {
+        return Crs.of("link", ImmutableMap.of("href", href));
+    }
+
+      public static Crs ofLink(String href, String type) {
+        return Crs.of("link", ImmutableMap.of("href", href, "type", type));
+    }
+  
+    
+    @Value.Check
+    protected void check() {
+        switch (getType()) {
+            case "name":
+                checkArgument(getProperties().containsKey("name"), "properties[\"name\"] must be present for 'name' type!");
+                checkNotNull(getProperties().get("name"), "properties[\"name\"] must not be null!");
+                break;
+            case "link":
+                checkNotNull(getProperties().get("href"), "properties[\"href\"] must not be null for 'link' type!");
+                if (getProperties().containsKey("type")) {
+                    checkNotNull(getProperties().get("type"), "properties[\"type\"] must not be null for 'link' type!");
+                }
+                break;
+            case "default":
+                throw new IllegalStateException("Unrecognized type " + getType() + "!");
+        }
+
+    }
 }

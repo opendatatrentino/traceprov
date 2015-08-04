@@ -32,6 +32,8 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = LineString.class)
 abstract class ALineString extends AGeometry {
     
+    private static final long serialVersionUID = 1L;
+    
     @Override
     public abstract ImmutableList<ImmutableList<Double>> getCoordinates();
     

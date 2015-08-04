@@ -50,7 +50,7 @@ abstract class ADcatDataset implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Returns the frequency at which dataset is published, as defined by
+     * The frequency at which dataset is published, as defined by
      * <a href="http://purl.org/dc/terms/accrualPeriodicity">
      * dct:accrualPeriodicity </a>
      *
@@ -92,7 +92,7 @@ abstract class ADcatDataset implements Serializable {
     }
 
     /**
-     * Returns the distributions belonging to this dataset.
+     * The distributions belonging to this dataset.
      */
     public abstract List<ADcatDistribution> getDistributions();
 
@@ -209,10 +209,10 @@ abstract class ADcatDataset implements Serializable {
      *
      * The returned object may be either:
      * <ul>
-     * <li> {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofName(java.lang.String) a natural language name inside Feautre object} </li>
+     * <li> A {@link eu.trentorise.opendata.traceprov.geojson.GeoJson GeoJSON} object</li>
+     * <li> A natural language name inside {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofName(java.lang.String) Feature object} </li>
      * <li> a url to an identifier of the location, i.e.
-     * http://www.geonames.org/6695072 (in this case you can use {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofId(java.lang.String)}</li>
-     * <li> {@link eu.trentorise.opendata.traceprov.geojson.GeoJson AGeoJSON} object</li>
+     * http://www.geonames.org/6695072 (in this case you can use {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofId(java.lang.String) Feature.ofId}</li>
      * <li> if spatial value is unknwon {@link eu.trentorise.opendata.traceprov.geojson.Feature#of() is returned. </li>
      * </ul>
      *

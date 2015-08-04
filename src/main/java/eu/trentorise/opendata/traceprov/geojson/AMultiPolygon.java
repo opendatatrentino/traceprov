@@ -32,6 +32,8 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = MultiPolygon.class)
 abstract class AMultiPolygon extends AGeometry {
     
+    private static final long serialVersionUID = 1L;
+    
     @Override
     public abstract ImmutableList<ImmutableList<ImmutableList<ImmutableList<Double>>>> getCoordinates();
     

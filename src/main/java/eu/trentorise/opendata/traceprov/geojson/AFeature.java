@@ -31,6 +31,8 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = Feature.class)
 abstract class AFeature extends GeoJson {            
     
+    private static final long serialVersionUID = 1L;
+    
     /**
      * The id of the feature, if present. The empty string otherwise.     
      */

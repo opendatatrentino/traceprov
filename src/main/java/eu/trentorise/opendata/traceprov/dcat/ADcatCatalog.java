@@ -195,9 +195,7 @@ abstract class ADcatCatalog implements Serializable {
     @Value.Default
     public Dict getTitle() {
         return Dict.of();
-    }
-
-    ;
+    }    
 
     /**
      * Property not in DCAT spec. This should uniquely identify the catalog,

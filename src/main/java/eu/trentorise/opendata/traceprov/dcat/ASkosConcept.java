@@ -57,7 +57,7 @@ import org.immutables.value.Value;
     @Value.Default
     public Dict getPrefLabel(){
         return Dict.of();
-    };
+    }
 
     @Value.Default
     @Value.Parameter

@@ -32,6 +32,8 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = GeometryCollection.class)
 abstract class AGeometryCollection extends AGeometry {
 
+    private static final long serialVersionUID = 1L;
+    
     /**
      * A Geometry Collection does not have coordinates.
      */

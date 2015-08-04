@@ -33,6 +33,7 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = Point.class)
 abstract class APoint extends AGeometry {
 
+    private static final long serialVersionUID = 1L;
     
     @Override
     public abstract List<Double> getCoordinates();
