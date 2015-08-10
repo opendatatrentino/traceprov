@@ -21,13 +21,17 @@ import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
+import eu.trentorise.opendata.traceprov.TraceProvModule;
 import eu.trentorise.opendata.traceprov.geojson.Feature;
+import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.geojson.MultiPoint;
 import eu.trentorise.opendata.traceprov.geojson.Point;
+import eu.trentorise.opendata.traceprov.geojson.Polygon;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import org.junit.After;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -45,31 +49,49 @@ public class JacksonTest {
         OdtConfig.init(JacksonTest.class);
     }
     private ObjectMapper objectMapper;
-    
-   @Before
+
+    @Before
     public void before() {
         objectMapper = new ObjectMapper();
-        OdtCommonsModule.registerModulesInto(objectMapper);
+        TraceProvModule.registerModulesInto(objectMapper);
     }
 
     @After
     public void after() {
         objectMapper = null;
-    }    
-    
+    }
+
     @Test
-    public void testGeoJsonFeature() throws JsonProcessingException, IOException{
+    public void testGeoJsonFeature() throws JsonProcessingException, IOException {
         HashMap hm = new HashMap();
         hm.put("x", "y");
         //String json = objectMapper.writeValueAsString();
-        
+
         //objectMapper.readValue(json, Feature.class);
-        
         OdtJacksonTester.testJsonConv(objectMapper, LOG, Feature.builder().setOthers(hm).build());
+
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0));
         
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0,2.0));
-        
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, MultiPoint.builder().addCoordinates(ImmutableList.of(1.1,1.2)).build());
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0), GeoJson.class);
+
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, MultiPoint.builder().addCoordinates(ImmutableList.of(1.1, 1.2)).build());
+
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Polygon.builder().addCoordinates(
+                ImmutableList.of(
+                        ImmutableList.of(1.1, 1.2),
+                        ImmutableList.of(1.1, 1.2),
+                        ImmutableList.of(1.1, 1.2),
+                        ImmutableList.of(1.1, 1.2))).build());
     }
-  
+
+    @Test
+    public void testPolygon() throws IOException {
+        GeoJson geoJson = objectMapper.readValue("{\"type\":\"Polygon\",\"coordinates\":[[[1.1, 1.2],[2.1, 2.2], [3.1, 3.2], [1.1, 1.2]]]}", GeoJson.class);
+        
+        Polygon pol = (Polygon) geoJson;
+        Double d = pol.getCoordinates().get(0).get(0).get(0);
+        assertTrue(1.0 < d);
+        assertTrue(d < 1.2);
+    }
+
 }

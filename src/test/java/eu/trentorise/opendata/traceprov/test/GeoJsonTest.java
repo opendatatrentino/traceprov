@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
+import eu.trentorise.opendata.traceprov.TraceProvModule;
 import eu.trentorise.opendata.traceprov.geojson.Point;
 import java.util.logging.Logger;
 import org.junit.Assert;
@@ -41,7 +42,7 @@ public class GeoJsonTest {
    @Before
     public void before() {
         objectMapper = new ObjectMapper();
-        OdtCommonsModule.registerModulesInto(objectMapper);
+        TraceProvModule.registerModulesInto(objectMapper);
     }
     
     

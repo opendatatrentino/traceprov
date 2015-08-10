@@ -17,6 +17,7 @@ package eu.trentorise.opendata.traceprov.geojson;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
@@ -40,9 +41,9 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 // todo check this Id.NAME is correct
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public abstract class GeoJson implements Serializable {    
-    
+        
+    @JsonProperty
     @Value.Derived
     public String getType() {
         return this.getClass().getSimpleName();
