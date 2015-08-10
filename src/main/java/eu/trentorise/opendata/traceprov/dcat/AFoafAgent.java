@@ -40,10 +40,20 @@ public abstract class AFoafAgent implements Serializable {
     }
 
     /**
-     * The uri of the agent.
+     *  <a href="http://xmlns.com/foaf/0.1/mbox" target="_blank">the mail
+     * box </a> of the agent.
      */
     @Value.Default
-    public String getUri() {
+    public String getMbox() {
+        return "";
+    }
+
+    /**
+     * <a href="http://xmlns.com/foaf/0.1/homepage" target="_blank">the
+     * homepage </a> of the agent
+     */
+    @Value.Default
+    public String getHomepage() {
         return "";
     }
 
@@ -56,13 +66,11 @@ public abstract class AFoafAgent implements Serializable {
         return Dict.of();
     }
 
-    ;
-
     /**
-     * Returns <a href="http://xmlns.com/foaf/0.1/mbox" target="_blank">the mail box </a>
+     * The uri of the agent.
      */
     @Value.Default
-    public String getMbox() {
+    public String getUri() {
         return "";
     }
 

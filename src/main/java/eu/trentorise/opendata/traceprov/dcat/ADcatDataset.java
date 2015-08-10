@@ -61,7 +61,7 @@ abstract class ADcatDataset implements Serializable {
      * 8601 Duration format</a>, like i.e. P3Y6M4DT12H30M5S</li>
      * <li> A String in natural language, like 'Every two weeks except during
      * summer' </li>
-     * <li>In case duration is unknown the empty string is used</li>
+     * <li>the empty string, in case duration is unknown /li>
      * </ul>
      */
     @Value.Default
@@ -94,7 +94,7 @@ abstract class ADcatDataset implements Serializable {
     /**
      * The distributions belonging to this dataset.
      */
-    public abstract List<ADcatDistribution> getDistributions();
+    public abstract List<DcatDistribution> getDistributions();
 
     /**
      * A unique identifier of the dataset, defined by
@@ -209,11 +209,16 @@ abstract class ADcatDataset implements Serializable {
      *
      * The returned object may be either:
      * <ul>
-     * <li> A {@link eu.trentorise.opendata.traceprov.geojson.GeoJson GeoJSON} object</li>
-     * <li> A natural language name inside {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofName(java.lang.String) Feature object} </li>
+     * <li> A {@link eu.trentorise.opendata.traceprov.geojson.GeoJson GeoJSON}
+     * object</li>
+     * <li> A natural language name inside
+     * {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofName(java.lang.String) Feature object}
+     * </li>
      * <li> a url to an identifier of the location, i.e.
-     * http://www.geonames.org/6695072 (in this case you can use {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofId(java.lang.String) Feature.ofId}</li>
-     * <li> if spatial value is unknwon {@link eu.trentorise.opendata.traceprov.geojson.Feature#of() is returned. </li>
+     * http://www.geonames.org/6695072 (in this case you can use
+     * {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofId(java.lang.String) Feature.ofId}</li>
+     * <li> if spatial value is unknwon {@link eu.trentorise.opendata.traceprov.geojson.Feature#of() is returned.
+     * </li>
      * </ul>
      *
      */
@@ -235,7 +240,14 @@ abstract class ADcatDataset implements Serializable {
      * <li>A string formatted following
      * <a href="https://en.wikipedia.org/wiki/ISO_8601#Time_intervals">ISO 8601
      * Date and Time interval</a> string format i.e.
-     * "2007-03-01T13:00:00Z/2008-05-11T15:30:00Z". </li>
+     * "2007-03-01T13:00:00Z/2008-05-11T15:30:00Z". Note ISO 8601 only allows
+     * <i>closed intervals</i></li>
+     * <li>An open interval where one of the two dates is missing. Interval
+     * shall either begin with '/' or end with '/'. The present date string will
+     * be formatted following
+     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+     * format</a> NOTE: open intervals are <i> not <i> part of ISO 8601
+     * standard. </li>
      * <li>A String in natural language, i.e. Summer of 2014 </li>
      * <li>An empty string if the interval is unknown</li>
      * </ul>
@@ -273,6 +285,5 @@ abstract class ADcatDataset implements Serializable {
     public String getUri() {
         return "";
     }
-
 
 }

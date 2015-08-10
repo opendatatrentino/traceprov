@@ -125,7 +125,7 @@ abstract class ADcatCatalogRecord implements Serializable {
      * foaf:primaryTopic </a>
      */
     public abstract @Nullable
-    ADcatDataset getPrimaryTopic();
+    DcatDataset getPrimaryTopic();
 
     /**
      * A name given to the record, as specified by

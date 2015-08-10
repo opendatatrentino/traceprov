@@ -32,14 +32,14 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as=DcatDistribution.class)
-@JsonDeserialize(as=DcatDistribution.class)
- abstract  class ADcatDistribution implements Serializable  {
+@JsonSerialize(as = DcatDistribution.class)
+@JsonDeserialize(as = DcatDistribution.class)
+abstract class ADcatDistribution implements Serializable {
 
-    public static final String CLASS_URI="http://www.w3.org/ns/dcat#distribution";
-    
+    public static final String CLASS_URI = "http://www.w3.org/ns/dcat#distribution";
+
     private static final long serialVersionUID = 1L;
-    
+
     /**
      *
      * A landing page, feed, SPARQL endpoint or other type of resource that
@@ -48,8 +48,8 @@ import org.immutables.value.Value;
      * you are not sure whether it is. If the distribution(s) are accessible
      * only through a landing page (i.e. direct download URLs are not known),
      * then the link returned by containing dataset
-     * {@link ADcatDataset#getLandingPage()} should be returned by this
-     * method, too.
+     * {@link ADcatDataset#getLandingPage()} should be returned by this method,
+     * too.
      *
      * This field is specified by
      * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:accessURL</a>.
@@ -75,8 +75,6 @@ import org.immutables.value.Value;
         return 0;
     }
 
-    
-
     /**
      * Property not in Dcat standard, added for convenience. Result must be the
      * same as containing dataset {@link ADcatDataset#getUri()}
@@ -94,8 +92,6 @@ import org.immutables.value.Value;
     public Dict getDescription() {
         return Dict.of();
     }
-
-    
 
     /**
      * A file that contains the distribution of the dataset in a given format
@@ -132,19 +128,21 @@ import org.immutables.value.Value;
 
     /**
      * Date of formal issuance (e.g., publication) of the distribution. This
- property should be set using the first known date of issuance.
-
- Note DCAT standard requires dates in string format to be
- <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11".
-     * If date is unknown the empty string is used.
+     * property should be set using the first known date of issuance.
+     *
+     * Note DCAT standard requires dates in string format to be
+     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
+     * empty string is used.
      *
      * @see #getModified()
      */
     @Value.Default
-    public String getIssued(){
+    public String getIssued() {
         return "";
-    };
+    }
+
+    ;
 
     /**
      * The language of the distribution. Note that this does not explicitly
@@ -190,8 +188,6 @@ import org.immutables.value.Value;
         return "";
     }
 
-    
-
     /**
      * The media type of the distribution as defined by
      * <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">
@@ -212,17 +208,17 @@ import org.immutables.value.Value;
      * modified.
      *
      * Note Dcat standard requires dates in string format to be
- <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11".
-     * If date is unknown the empty string is used.
+     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
+     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
+     * empty string is used.
      *
      * @see ADcatDataset#getModified()
-     */    
+     */
     @Value.Default
-    public String getModified(){
+    public String getModified() {
         return "";
-    };
-
+    }
+    
     /**
      * Information about rights held in and over the distribution, as specified
      * by <a href="http://purl.org/dc/terms/rights"> dct:rights </a>
@@ -252,7 +248,7 @@ import org.immutables.value.Value;
     @Value.Default
     public Dict getTitle() {
         return Dict.of();
-    }   
+    }
 
     /**
      * Returns the uri of the distribution (which is not the uri of the file

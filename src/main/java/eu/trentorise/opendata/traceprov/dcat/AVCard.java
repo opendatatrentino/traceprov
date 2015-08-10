@@ -18,6 +18,7 @@ package eu.trentorise.opendata.traceprov.dcat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -33,7 +34,11 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = VCard.class)
 @JsonDeserialize(as = VCard.class)
-class AVCard {
+abstract class AVCard implements Serializable {
+
+    public static final String CLASS_URI = "http://www.w3.org/2006/vcard/ns#VCard";
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * The uri identifying of the person.

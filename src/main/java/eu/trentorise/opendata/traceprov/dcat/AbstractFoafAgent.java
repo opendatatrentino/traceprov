@@ -18,7 +18,6 @@ package eu.trentorise.opendata.traceprov.dcat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -29,6 +28,6 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as=FoafAgent.class)
 @JsonDeserialize(as=FoafAgent.class)
-abstract class AbstractFoafAgent extends AFoafAgent implements Serializable {
+abstract class AbstractFoafAgent extends AFoafAgent {
      private static final long serialVersionUID = 1L;   
 }

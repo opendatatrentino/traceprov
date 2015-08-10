@@ -46,7 +46,7 @@ import org.immutables.value.Value;
      */
     @Value.Default
     @Value.Parameter
-    public ASkosConceptScheme getInScheme() {
+    public SkosConceptScheme getInScheme() {
         return SkosConceptScheme.of();
     }
 
