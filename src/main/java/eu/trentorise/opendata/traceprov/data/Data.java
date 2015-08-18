@@ -27,18 +27,18 @@ import javax.annotation.Nullable;
  *
  * @author David Leoni
  */
-public abstract class ANode implements Serializable {
+public abstract class Data implements Serializable {
     private Ref ref;
     private NodeMetadata metadata;
     private Object data;
 
-    ANode(){
+    Data(){
         this.ref = Ref.of();
         this.metadata = NodeMetadata.of();          
         this.data = null;
     }
     
-    ANode(Ref ref, NodeMetadata metadata, @Nullable Object data) {
+    Data(Ref ref, NodeMetadata metadata, @Nullable Object data) {
         checkNotNull(ref);
         checkNotNull(metadata);
         this.ref = ref;
@@ -78,13 +78,13 @@ public abstract class ANode implements Serializable {
      *
      * @param visitor a node visitor.
      * @param parent the parent of the node. If unknown, use
-     * {@link NodeValue#of()}
+     * {@link DataValue#of()}
      * @param field The immediate field of a map under which current node is
      * stored. If unknown, use "".
      * @param pos The position of the node in the parent array. If it is not in
      * an array, use 0.
      */
-    public abstract void accept(INodeVisitor visitor, ANode parent, String field, int pos);
+    public abstract void accept(IDataVisitor visitor, Data parent, String field, int pos);
 
     /**
      * Converts the node to a simple Map/List tree suitable for JSON
@@ -114,7 +114,7 @@ public abstract class ANode implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ANode other = (ANode) obj;
+        final Data other = (Data) obj;
         if (!Objects.equals(this.ref, other.ref)) {
             return false;
         }

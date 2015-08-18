@@ -22,7 +22,7 @@ import javax.validation.Path;
 /**
  * TODO much work in progress
  */
-public abstract class PathNode implements Path.Node {
+public abstract class PathElement implements Path.Node {
 
     /**
      * From Java validation api

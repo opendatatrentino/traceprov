@@ -20,10 +20,10 @@ import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.NodeArray;
-import eu.trentorise.opendata.traceprov.data.NodeMap;
+import eu.trentorise.opendata.traceprov.data.DataArray;
+import eu.trentorise.opendata.traceprov.data.DataMap;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
-import eu.trentorise.opendata.traceprov.data.NodeValue;
+import eu.trentorise.opendata.traceprov.data.DataValue;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
@@ -81,7 +81,7 @@ public class CodeGenTest {
 
     @Test
     public void testDataModel() {
-        assertEquals(ProvFile.of().getData(), NodeMap.of());
+        assertEquals(ProvFile.of().getData(), DataMap.of());
         assertEquals(ProvFile.of().getMappings(), ImmutableList.of());
 
         
@@ -92,8 +92,8 @@ public class CodeGenTest {
         ProvType ps = ProvType.builder().setType(AnyType.of()).build();
         assertEquals(ImmutableList.of(), ps.getErrors());
         
-        NodeMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 
-                NodeArray.of(NodeValue.of(Ref.of(), NodeMetadata.of(), 3))));
+        DataMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 
+                DataArray.of(DataValue.of(Ref.of(), NodeMetadata.of(), 3))));
     }
 
 }

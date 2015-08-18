@@ -19,10 +19,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.NodeArray;
-import eu.trentorise.opendata.traceprov.data.NodeMap;
+import eu.trentorise.opendata.traceprov.data.DataArray;
+import eu.trentorise.opendata.traceprov.data.DataMap;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
-import eu.trentorise.opendata.traceprov.data.NodeValue;
+import eu.trentorise.opendata.traceprov.data.DataValue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
@@ -44,33 +44,33 @@ public class DataTest {
     
     @Test
     public void testWalkerValue(){                                          
-        assertEquals(null, NodeValue.of().asSimpleType());
-        assertEquals("a", NodeValue.of("a").asSimpleType());
-        assertEquals(Lists.newArrayList(), NodeArray.of().asSimpleType());        
-        assertEquals(Lists.newArrayList("a"), NodeArray.of(NodeValue.of("a")).asSimpleType());
-        assertEquals(Lists.newArrayList("a"), NodeArray.of(NodeValue.of("a")).asSimpleType());        
+        assertEquals(null, DataValue.of().asSimpleType());
+        assertEquals("a", DataValue.of("a").asSimpleType());
+        assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());        
+        assertEquals(Lists.newArrayList("a"), DataArray.of(DataValue.of("a")).asSimpleType());
+        assertEquals(Lists.newArrayList("a"), DataArray.of(DataValue.of("a")).asSimpleType());        
     }
     
     @Test
     public void testNodeListToString(){
         ArrayList list = new ArrayList();
         for (int i = 0; i <10000; i++){
-            list.add(NodeValue.of(3));
+            list.add(DataValue.of(3));
         }
-        NodeArray nodes = NodeArray.of(list);
+        DataArray nodes = DataArray.of(list);
         assertTrue(nodes.toString().contains("..."));
-        assertFalse(NodeArray.of(NodeValue.of()).toString().contains("..."));
+        assertFalse(DataArray.of(DataValue.of()).toString().contains("..."));
     }    
     
     @Test
     public void testWalker(){                                  
         
-        assertEquals(new HashMap(), NodeMap.of().asSimpleType());
+        assertEquals(new HashMap(), DataMap.of().asSimpleType());
         
-        Object res = NodeMap.of(Ref.of(), 
+        Object res = DataMap.of(Ref.of(), 
                                 NodeMetadata.of(),
-                                ImmutableMap.of("a", NodeValue.of("b"),
-                                                "c", NodeValue.of("d"))).asSimpleType();
+                                ImmutableMap.of("a", DataValue.of("b"),
+                                                "c", DataValue.of("d"))).asSimpleType();
         
         HashMap hm = (HashMap) res;
         

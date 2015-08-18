@@ -25,7 +25,7 @@ import org.immutables.value.Value;
  */
 
 //@Value.Immutable
-abstract class APathArray extends PathNode {
+abstract class APathArray extends PathElement {
 
     // -------------------    JSONPATH stuff 
     public static enum Operation {

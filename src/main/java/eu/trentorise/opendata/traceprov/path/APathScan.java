@@ -22,7 +22,7 @@ package eu.trentorise.opendata.traceprov.path;
  */
 //@Value.Immutable
 //@SimpleStyle
-abstract class APathScan extends PathNode {
+abstract class APathScan extends PathElement {
 
     @Override
     public boolean isTokenDefinite() {

@@ -28,39 +28,39 @@ import java.util.Map;
  * @author David Leoni 
 */
 
-public class NodeMap extends ANode  {
+public class DataMap extends Data  {
 
-    private static final NodeMap INSTANCE = new NodeMap();
+    private static final DataMap INSTANCE = new DataMap();
     
     private static final long serialVersionUID = 1L;    
     
-    private NodeMap(){
+    private DataMap(){
         super(Ref.of(), NodeMetadata.of(), new HashMap());
         
     }
 
-    private NodeMap(Ref ref, NodeMetadata metadata,  Map<String, ? extends ANode> nodes) {
+    private DataMap(Ref ref, NodeMetadata metadata,  Map<String, ? extends Data> nodes) {
         super(ref, metadata, nodes);
         checkNotNull(nodes);                
     }
                  
-    public static NodeMap of(){
+    public static DataMap of(){
         return INSTANCE;
     }
     
-    public static NodeMap of(Ref ref, NodeMetadata metadata, Map<String, ? extends  ANode> nodes){
-       return new NodeMap(ref, metadata, nodes);
+    public static DataMap of(Ref ref, NodeMetadata metadata, Map<String, ? extends  Data> nodes){
+       return new DataMap(ref, metadata, nodes);
     }
     
     @Override
-    public Map<String, ? extends ANode> getData(){
-        return (Map<String, ? extends ANode>) super.getData();
+    public Map<String, ? extends Data> getData(){
+        return (Map<String, ? extends Data>) super.getData();
     }
 
         
     @Override
-    public void accept(INodeVisitor visitor, ANode parent, String field, int pos){
-        for (Map.Entry<String, ? extends ANode> entry : getData().entrySet()){
+    public void accept(IDataVisitor visitor, Data parent, String field, int pos){
+        for (Map.Entry<String, ? extends Data> entry : getData().entrySet()){
             entry.getValue().accept(visitor, this, entry.getKey(), 0);
         }
         visitor.visit(this, parent, field, pos);
@@ -70,7 +70,7 @@ public class NodeMap extends ANode  {
     @Override
     public Object asSimpleType() {
         SimpleMapTransformer tran = new SimpleMapTransformer();        
-        accept(tran, NodeValue.of(), "",0);        
+        accept(tran, DataValue.of(), "",0);        
         return tran.getResult();
     }
 

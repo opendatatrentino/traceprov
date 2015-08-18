@@ -27,16 +27,16 @@ import javax.annotation.Nullable;
  *
  * @author David Leoni
  */
-public class NodeValue extends ANode {
+public class DataValue extends Data {
 
     private static final long serialVersionUID = 1L;
-    private static final NodeValue INSTANCE = new NodeValue();
+    private static final DataValue INSTANCE = new DataValue();
     
-    private NodeValue(){
+    private DataValue(){
         super();
     }
     
-    private NodeValue(Ref ref, NodeMetadata nodeMetadata, @Nullable Object value){
+    private DataValue(Ref ref, NodeMetadata nodeMetadata, @Nullable Object value){
         super(ref, nodeMetadata, value);
         Preconditions.checkArgument(value == null || value instanceof Number || value instanceof String);
     }
@@ -54,47 +54,47 @@ public class NodeValue extends ANode {
 
     
     @Override
-    public void accept(INodeVisitor visitor, ANode parent, String field, int pos) {
-        visitor.visit((NodeValue) this, parent, field, pos);
+    public void accept(IDataVisitor visitor, Data parent, String field, int pos) {
+        visitor.visit((DataValue) this, parent, field, pos);
     }
 
     @Override
     public Object asSimpleType() {
         SimpleMapTransformer tran = new SimpleMapTransformer();        
-        accept(tran, NodeValue.of(), "",0);        
+        accept(tran, DataValue.of(), "",0);        
         return tran.getResult();
     }
 
     /**
-     * Construct new immutable {@code NodeValue} instance.
+     * Construct new immutable {@code DataValue} instance.
      *
      * @param value a String, a Number or null
      */
-    public static NodeValue of(@Nullable Object value) {
-        return new NodeValue(Ref.of(), NodeMetadata.of(), value);
+    public static DataValue of(@Nullable Object value) {
+        return new DataValue(Ref.of(), NodeMetadata.of(), value);
     }
     
     /**
-     * Construct new immutable {@code NodeValue} instance.
+     * Construct new immutable {@code DataValue} instance.
      *
      * @param value a String, a Number or a null
      * @param provenance a reference to the provenance. If unknown, use {@link DocRef#of()}
      */
-    public static NodeValue of(Ref provenance, NodeMetadata metadata, @Nullable Object value) {
-        return new NodeValue(Ref.of(), metadata, value);
+    public static DataValue of(Ref provenance, NodeMetadata metadata, @Nullable Object value) {
+        return new DataValue(Ref.of(), metadata, value);
     }    
     
     /**
      * Returns default instance.
      *     
      */
-    public static NodeValue of() {
+    public static DataValue of() {
         return INSTANCE;
     }
    
     @Override
     public String toString() {
-        return "NodeValue{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getData() + '}';
+        return "DataValue{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getData() + '}';
     }
     
 }

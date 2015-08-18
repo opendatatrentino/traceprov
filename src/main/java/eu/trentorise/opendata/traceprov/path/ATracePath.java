@@ -43,7 +43,7 @@ abstract class ATracePath implements Path {
         return (Iterator<Node>) (Iterator<?>) getNodes().iterator();
     }
 
-    public abstract List<PathNode> getNodes();
+    public abstract List<PathElement> getNodes();
 
     // ------------  JSONPATH stuff    
     @Value.Default

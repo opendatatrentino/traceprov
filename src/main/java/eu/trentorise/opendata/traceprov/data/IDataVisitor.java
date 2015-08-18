@@ -20,41 +20,41 @@ package eu.trentorise.opendata.traceprov.data;
  *
  * @author David Leoni
  */
-public interface INodeVisitor {
+public interface IDataVisitor {
 
     /**
-     * Visits a nodeMap
+     * Visits a DataMap
      * 
      * @param node the node to visite
      * @param parent the immediate parent of the node which is being visited
-     * @param field if parent is a {@link NodeMap}, the name of the field under
+     * @param field if parent is a {@link DataMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
-     * @param pos If the parent node is a {@link NodeArray}, pos is the position
+     * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is zero.
      */
-    void visit(NodeMap node, ANode parent, String field, int pos);
+    void visit(DataMap node, Data parent, String field, int pos);
 
     /**
      * Visits a node list
      * 
      * @param node the node to visit
      * @param parent the immediate parent of the node which is being visited
-     * @param field if parent is a {@link NodeMap}, the name of the field under
+     * @param field if parent is a {@link DataMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
-     * @param pos If the parent node is a {@link NodeArray}, pos is the position
+     * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is unspecified.
      */    
-    void visit(NodeArray node, ANode parent, String field, int pos);
+    void visit(DataArray node, Data parent, String field, int pos);
 
     /**
      * Visits a node value
      * 
      * @param node the node to visit
      * @param parent the immediate parent of the node which is being visited
-     * @param field if parent is a {@link NodeMap}, the name of the field under
+     * @param field if parent is a {@link DataMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
-     * @param pos If the parent node is a {@link NodeArray}, pos is the position
+     * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is unspecified.
      */    
-    void visit(NodeValue node, ANode parent, String field, int pos);
+    void visit(DataValue node, Data parent, String field, int pos);
 }

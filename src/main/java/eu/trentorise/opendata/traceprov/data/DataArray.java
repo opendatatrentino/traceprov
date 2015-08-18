@@ -28,23 +28,23 @@ import java.util.Iterator;
  *
  * @author David Leoni
  */
-public class NodeArray extends ANode implements  Iterable<ANode> {
+public class DataArray extends Data implements  Iterable<Data> {
 
     private static final long serialVersionUID = 1L;
-    private static final NodeArray INSTANCE = new NodeArray();
+    private static final DataArray INSTANCE = new DataArray();
     private static final int MAX_PRINTED_NODES = 10;   
 
-    private NodeArray() {
+    private DataArray() {
         super(Ref.of(), NodeMetadata.of(), new ArrayList());        
     }
 
-    private NodeArray(Ref ref, NodeMetadata metadata,  Iterable<? extends ANode> nodes) {
+    private DataArray(Ref ref, NodeMetadata metadata,  Iterable<? extends Data> nodes) {
         super(ref, metadata, nodes);
         checkNotNull(nodes);
     }
 
     @Override
-    public Iterator<ANode> iterator() {
+    public Iterator<Data> iterator() {
         return getData().iterator();
     }
 
@@ -52,28 +52,28 @@ public class NodeArray extends ANode implements  Iterable<ANode> {
      * Returns the list of sub nodes.
      */
     @Override
-    public Iterable<ANode> getData(){
-        return (Iterable<ANode>) super.getData();
+    public Iterable<Data> getData(){
+        return (Iterable<Data>) super.getData();
     }    
     
-    public static NodeArray of() {
+    public static DataArray of() {
         return INSTANCE;
     }
 
-    public static NodeArray of(Iterable<? extends ANode> nodes) {
+    public static DataArray of(Iterable<? extends Data> nodes) {
         return of(Ref.of(), NodeMetadata.of(), nodes);
     }
 
-    public static NodeArray of(ANode... nodes) {
-        return new NodeArray(Ref.of(), NodeMetadata.of(), ImmutableList.copyOf(nodes));
+    public static DataArray of(Data... nodes) {
+        return new DataArray(Ref.of(), NodeMetadata.of(), ImmutableList.copyOf(nodes));
     }
 
-    public static NodeArray of(Ref ref, NodeMetadata metadata, Iterable<? extends ANode> nodes) {
-        return new NodeArray(ref, metadata, nodes);
+    public static DataArray of(Ref ref, NodeMetadata metadata, Iterable<? extends Data> nodes) {
+        return new DataArray(ref, metadata, nodes);
     }
         
-    public static NodeArray of(Ref ref, ANode... nodes) {
-        return new NodeArray(ref, NodeMetadata.of(), Arrays.asList(nodes));
+    public static DataArray of(Ref ref, Data... nodes) {
+        return new DataArray(ref, NodeMetadata.of(), Arrays.asList(nodes));
     }
 
     
@@ -81,7 +81,7 @@ public class NodeArray extends ANode implements  Iterable<ANode> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        for (ANode n : getData()){
+        for (Data n : getData()){
             if (i > 0){
                 sb.append(", ");
             }            
@@ -99,24 +99,24 @@ public class NodeArray extends ANode implements  Iterable<ANode> {
    
     
     @Override
-    public void accept(INodeVisitor visitor, ANode parent, String field, int pos) {
+    public void accept(IDataVisitor visitor, Data parent, String field, int pos) {
         int i = 0;
-        Iterator<ANode> iter = getData().iterator();
+        Iterator<Data> iter = getData().iterator();
 
         while (iter.hasNext()) {
-            ANode node = iter.next();
+            Data node = iter.next();
             node.accept(visitor, this, field, i);
             i++;
         }
 
-        visitor.visit((NodeArray) this, parent, field, pos);
+        visitor.visit((DataArray) this, parent, field, pos);
 
     }
 
     @Override
     public Object asSimpleType() {
         SimpleMapTransformer tran = new SimpleMapTransformer();
-        accept(tran, NodeValue.of(), "", 0);
+        accept(tran, DataValue.of(), "", 0);
         return tran.getResult();
     }
 

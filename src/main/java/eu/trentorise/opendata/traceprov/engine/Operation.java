@@ -16,7 +16,7 @@
 package eu.trentorise.opendata.traceprov.engine;
 
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.ANode;
+import eu.trentorise.opendata.traceprov.data.Data;
 import java.util.List;
 
 
@@ -43,7 +43,7 @@ public abstract class Operation {
      */
     public abstract String getDescriptionTemplate();
     
-    public abstract ANode apply(RefResolver resolver, Iterable<ANode> nodes);
+    public abstract Data apply(RefResolver resolver, Iterable<Data> nodes);
 }
 
 
