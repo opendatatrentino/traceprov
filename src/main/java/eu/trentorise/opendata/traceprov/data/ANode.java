@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
  * @author David Leoni
  */
 public abstract class ANode implements Serializable {
-
     private Ref ref;
     private NodeMetadata metadata;
     private Object data;

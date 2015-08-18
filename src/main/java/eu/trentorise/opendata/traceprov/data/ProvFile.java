@@ -193,7 +193,7 @@ public class ProvFile implements Serializable {
             this.provFile.data = data;
         }
 
-        public void addAllDataErrors(Iterable<ConstraintViolation> dataErrors) {
+        public void setDataErrors(Iterable<ConstraintViolation> dataErrors) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
@@ -205,7 +205,8 @@ public class ProvFile implements Serializable {
             checkNotNull(dataError);
             this.provFile.dataErrors.add(dataError);
         }
-
+   
+        
         public void setMappings(Iterable<PropertyMapping> mappings) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
