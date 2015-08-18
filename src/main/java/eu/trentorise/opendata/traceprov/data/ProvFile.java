@@ -134,8 +134,10 @@ public class ProvFile implements Serializable {
         return dataErrors;
     }
 
+    /**
+     * Default singleton    
+     */
     public static ProvFile of() {
-
         return INSTANCE;
     }
 
