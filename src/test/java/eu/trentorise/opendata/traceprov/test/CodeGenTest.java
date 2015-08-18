@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.NodeList;
+import eu.trentorise.opendata.traceprov.data.NodeArray;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.NodeValue;
@@ -93,7 +93,7 @@ public class CodeGenTest {
         assertEquals(ImmutableList.of(), ps.getErrors());
         
         NodeMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 
-                NodeList.of(NodeValue.of(Ref.of(), NodeMetadata.of(), 3))));
+                NodeArray.of(NodeValue.of(Ref.of(), NodeMetadata.of(), 3))));
     }
 
 }

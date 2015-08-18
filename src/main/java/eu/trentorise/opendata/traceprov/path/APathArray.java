@@ -16,20 +16,18 @@
 package eu.trentorise.opendata.traceprov.path;
 
 import com.google.common.base.Joiner;
-import eu.trentorise.opendata.commons.BuilderStylePublic;
-
 import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * Adapted from 
- * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/ArrayPathToken.java
  *
+ * @author David Leoni
  */
-@Value.Immutable
-@BuilderStylePublic
-abstract class AArrayPath extends APath {
 
+//@Value.Immutable
+abstract class APathArray extends PathNode {
+
+    // -------------------    JSONPATH stuff 
     public static enum Operation {
 
         CONTEXT_SIZE,

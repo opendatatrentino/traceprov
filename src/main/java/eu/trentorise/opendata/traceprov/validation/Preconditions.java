@@ -25,8 +25,10 @@ import javax.annotation.Nullable;
  *
  * @author David Leoni
  */
-public class Preconditions {
+public final class Preconditions {
 
+    private Preconditions(){}
+    
     /**
      *
      *

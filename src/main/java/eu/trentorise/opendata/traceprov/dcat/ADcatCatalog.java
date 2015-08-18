@@ -22,7 +22,6 @@ import eu.trentorise.opendata.commons.Dict;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
-import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**

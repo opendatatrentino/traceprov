@@ -124,8 +124,8 @@ abstract class ADcatCatalogRecord implements Serializable {
      * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic">
      * foaf:primaryTopic </a>
      */
-    public abstract @Nullable
-    DcatDataset getPrimaryTopic();
+    @Nullable
+    public abstract DcatDataset getPrimaryTopic();
 
     /**
      * A name given to the record, as specified by

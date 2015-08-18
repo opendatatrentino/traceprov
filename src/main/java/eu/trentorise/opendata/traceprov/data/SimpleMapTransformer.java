@@ -51,7 +51,7 @@ final class SimpleMapTransformer implements INodeVisitor {
     }
 
     @Override
-    public void visit(NodeList nodeList, ANode parent, String key, int pos) {
+    public void visit(NodeArray nodeList, ANode parent, String key, int pos) {
         List ret = new ArrayList();
         
         for (int i = 0; i < Iterables.size(nodeList); i++){

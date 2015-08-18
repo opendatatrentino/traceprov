@@ -15,28 +15,23 @@
  */
 package eu.trentorise.opendata.traceprov.path;
 
-import eu.trentorise.opendata.commons.SimpleStyle;
-import org.immutables.value.Value;
-
-
 /**
- * 
- * Adapted from 
- * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/WildcardPathToken.java
- * 
- * @author David Leoni 
+ * Adapted from
+ * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/RootPathToken.java
+ *
  */
-@Value.Immutable
-@SimpleStyle
-abstract class AWildcardPath extends APath {
-
-    @Override
-    public boolean isTokenDefinite() {
-        return false;
-    }
+//@Value.Immutable
+//@SimpleStyle
+abstract class APathRoot extends PathNode {
 
     @Override
     public String getPathFragment() {
-        return "[*]";
+        return "$";
     }
+
+    @Override
+    public boolean isTokenDefinite() {
+        return true;
+    }
+
 }

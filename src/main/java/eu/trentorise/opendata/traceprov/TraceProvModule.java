@@ -43,28 +43,7 @@ public final class TraceProvModule extends SimpleModule {
     public TraceProvModule() {
         super("traceprov-jackson", OdtCommonsModule.readJacksonVersion(TraceProvModule.class));
 
-        addDeserializer(GeoJson.class, new StdDeserializer<GeoJson>(GeoJson.class) {
-
-            @Override
-            public GeoJson deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-                ObjectMapper mapper = (ObjectMapper) jp.getCodec();
-                ObjectNode root = (ObjectNode) mapper.readTree(jp);
-                String type = root.get("type").asText();
-                String className = GeoJson.class.getPackage().getName() + "." + type;
-                Class<? extends GeoJson> clazz;
-                try {
-                    clazz = (Class<? extends GeoJson>) Class.forName(className);
-                    return mapper.convertValue(root, clazz);
-                }
-                catch (ClassNotFoundException ex) {
-                    throw new TraceProvException("Cannot resolve geojson class : " + className, ex);
-                }
-                catch (Exception ex) {
-                    throw new TraceProvException("Cannot convert json to resolved geojson class: " + className, ex);
-                }
-
-            }
-        });
+        addDeserializer(GeoJson.class, new GeoJsonDeserializer());
 
     }
 
@@ -87,6 +66,39 @@ public final class TraceProvModule extends SimpleModule {
         OdtCommonsModule.registerModulesInto(om);
         om.registerModule(new TraceProvModule());
     }
+
+    public static class GeoJsonDeserializer extends StdDeserializer<GeoJson> {
+
+        public GeoJsonDeserializer() {
+            super(GeoJson.class);
+        }
+        
+        public GeoJsonDeserializer(Class<GeoJson> vc) {
+            super(vc);
+        }
+
+        @Override
+        public GeoJson deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+            ObjectMapper mapper = (ObjectMapper) jp.getCodec();
+            ObjectNode root = (ObjectNode) mapper.readTree(jp);
+            String type = root.get("type").asText();
+            String className = GeoJson.class.getPackage().getName() + "." + type;
+            Class<? extends GeoJson> clazz;
+            try {
+                clazz = (Class<? extends GeoJson>) Class.forName(className);
+                return mapper.convertValue(root, clazz);
+            }
+            catch (ClassNotFoundException ex) {
+                throw new TraceProvException("Cannot resolve geojson class : " + className, ex);
+            }
+            catch (Exception ex) {
+                throw new TraceProvException("Cannot convert json to resolved geojson class: " + className, ex);
+            }
+
+        }
+
+    }
+
 }
 
 class TraceProvModuleException extends JsonProcessingException {

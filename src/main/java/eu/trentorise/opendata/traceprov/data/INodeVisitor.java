@@ -29,7 +29,7 @@ public interface INodeVisitor {
      * @param parent the immediate parent of the node which is being visited
      * @param field if parent is a {@link NodeMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
-     * @param pos If the parent node is a {@link NodeList}, pos is the position
+     * @param pos If the parent node is a {@link NodeArray}, pos is the position
      * in such list. Otherwise it is zero.
      */
     void visit(NodeMap node, ANode parent, String field, int pos);
@@ -41,10 +41,10 @@ public interface INodeVisitor {
      * @param parent the immediate parent of the node which is being visited
      * @param field if parent is a {@link NodeMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
-     * @param pos If the parent node is a {@link NodeList}, pos is the position
+     * @param pos If the parent node is a {@link NodeArray}, pos is the position
      * in such list. Otherwise it is unspecified.
      */    
-    void visit(NodeList node, ANode parent, String field, int pos);
+    void visit(NodeArray node, ANode parent, String field, int pos);
 
     /**
      * Visits a node value
@@ -53,7 +53,7 @@ public interface INodeVisitor {
      * @param parent the immediate parent of the node which is being visited
      * @param field if parent is a {@link NodeMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
-     * @param pos If the parent node is a {@link NodeList}, pos is the position
+     * @param pos If the parent node is a {@link NodeArray}, pos is the position
      * in such list. Otherwise it is unspecified.
      */    
     void visit(NodeValue node, ANode parent, String field, int pos);

@@ -15,28 +15,23 @@
  */
 package eu.trentorise.opendata.traceprov.path;
 
-import eu.trentorise.opendata.commons.SimpleStyle;
-import org.immutables.value.Value;
-
 /**
- * Adapted from 
- * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/RootPathToken.java
- * 
+ * Adapted from
+ * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/ScanPathToken.java
+ *
  */
-@Value.Immutable
-@SimpleStyle
-abstract class ARootPath extends APath {
-      
-               
-    @Override
-    public String getPathFragment() {
-        return "$";
-    }
+//@Value.Immutable
+//@SimpleStyle
+abstract class APathScan extends PathNode {
 
     @Override
     public boolean isTokenDefinite() {
-        return true;
+        return false;
     }
-  
-   
+
+    @Override
+    public String getPathFragment() {
+        return "..";
+    }
+
 }

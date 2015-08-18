@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.NodeList;
+import eu.trentorise.opendata.traceprov.data.NodeArray;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.NodeValue;
@@ -46,9 +46,9 @@ public class DataTest {
     public void testWalkerValue(){                                          
         assertEquals(null, NodeValue.of().asSimpleType());
         assertEquals("a", NodeValue.of("a").asSimpleType());
-        assertEquals(Lists.newArrayList(), NodeList.of().asSimpleType());        
-        assertEquals(Lists.newArrayList("a"), NodeList.of(NodeValue.of("a")).asSimpleType());
-        assertEquals(Lists.newArrayList("a"), NodeList.of(NodeValue.of("a")).asSimpleType());        
+        assertEquals(Lists.newArrayList(), NodeArray.of().asSimpleType());        
+        assertEquals(Lists.newArrayList("a"), NodeArray.of(NodeValue.of("a")).asSimpleType());
+        assertEquals(Lists.newArrayList("a"), NodeArray.of(NodeValue.of("a")).asSimpleType());        
     }
     
     @Test
@@ -57,9 +57,9 @@ public class DataTest {
         for (int i = 0; i <10000; i++){
             list.add(NodeValue.of(3));
         }
-        NodeList nodes = NodeList.of(list);
+        NodeArray nodes = NodeArray.of(list);
         assertTrue(nodes.toString().contains("..."));
-        assertFalse(NodeList.of(NodeValue.of()).toString().contains("..."));
+        assertFalse(NodeArray.of(NodeValue.of()).toString().contains("..."));
     }    
     
     @Test

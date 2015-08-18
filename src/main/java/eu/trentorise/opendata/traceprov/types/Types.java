@@ -2,7 +2,7 @@ package eu.trentorise.opendata.traceprov.types;
 
 import eu.trentorise.opendata.traceprov.TraceProvs;
 import static eu.trentorise.opendata.traceprov.TraceProvs.TRACEPROV_PREFIX;
-import eu.trentorise.opendata.traceprov.data.NodeList;
+import eu.trentorise.opendata.traceprov.data.NodeArray;
 import eu.trentorise.opendata.traceprov.data.NodeMap;
 import java.util.Collections;
 import java.util.Date;
@@ -30,7 +30,7 @@ import java.util.Set;
  * XSD_LONG : {@link java.lang.Long} <br/>
  * XSD_FLOAT : {@link java.lang.Float} <br/>
  * XSD_DOUBLE : {@link java.lang.Double} <br/>
- * LIST : {@link NodeList} <br/>
+ * LIST : {@link NodeArray} <br/>
  * MAP : {@link NodeMap} <br/>
  * <br/>
  *
@@ -83,7 +83,7 @@ public final class Types {
         JAVA_DATATYPES.put(XSD_FLOAT, Float.class);
         JAVA_DATATYPES.put(XSD_DOUBLE, Double.class);
         JAVA_DATATYPES.put(XSD_LONG, Long.class);
-        JAVA_DATATYPES.put(LIST, NodeList.class);
+        JAVA_DATATYPES.put(LIST, NodeArray.class);
         JAVA_DATATYPES.put(MAP, NodeMap.class);
 */
     }

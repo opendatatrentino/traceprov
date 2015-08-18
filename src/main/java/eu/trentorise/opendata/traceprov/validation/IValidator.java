@@ -47,7 +47,7 @@ public interface IValidator {
 
     /**
      * Validates the schema present in the input stream and returns the parsed
-     * result (which may still have errors).
+     * result (which may still have errors/warnings).
      *
      * @param stream the stream to validate
      * @param mimetype the mimetype of the stream, i.e. application/json+ld

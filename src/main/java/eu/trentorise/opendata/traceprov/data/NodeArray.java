@@ -28,17 +28,17 @@ import java.util.Iterator;
  *
  * @author David Leoni
  */
-public class NodeList extends ANode implements  Iterable<ANode> {
+public class NodeArray extends ANode implements  Iterable<ANode> {
 
     private static final long serialVersionUID = 1L;
-    private static final NodeList INSTANCE = new NodeList();
+    private static final NodeArray INSTANCE = new NodeArray();
     private static final int MAX_PRINTED_NODES = 10;   
 
-    private NodeList() {
+    private NodeArray() {
         super(Ref.of(), NodeMetadata.of(), new ArrayList());        
     }
 
-    private NodeList(Ref ref, NodeMetadata metadata,  Iterable<? extends ANode> nodes) {
+    private NodeArray(Ref ref, NodeMetadata metadata,  Iterable<? extends ANode> nodes) {
         super(ref, metadata, nodes);
         checkNotNull(nodes);
     }
@@ -56,24 +56,24 @@ public class NodeList extends ANode implements  Iterable<ANode> {
         return (Iterable<ANode>) super.getData();
     }    
     
-    public static NodeList of() {
+    public static NodeArray of() {
         return INSTANCE;
     }
 
-    public static NodeList of(Iterable<? extends ANode> nodes) {
+    public static NodeArray of(Iterable<? extends ANode> nodes) {
         return of(Ref.of(), NodeMetadata.of(), nodes);
     }
 
-    public static NodeList of(ANode... nodes) {
-        return new NodeList(Ref.of(), NodeMetadata.of(), ImmutableList.copyOf(nodes));
+    public static NodeArray of(ANode... nodes) {
+        return new NodeArray(Ref.of(), NodeMetadata.of(), ImmutableList.copyOf(nodes));
     }
 
-    public static NodeList of(Ref ref, NodeMetadata metadata, Iterable<? extends ANode> nodes) {
-        return new NodeList(ref, metadata, nodes);
+    public static NodeArray of(Ref ref, NodeMetadata metadata, Iterable<? extends ANode> nodes) {
+        return new NodeArray(ref, metadata, nodes);
     }
         
-    public static NodeList of(Ref ref, ANode... nodes) {
-        return new NodeList(ref, NodeMetadata.of(), Arrays.asList(nodes));
+    public static NodeArray of(Ref ref, ANode... nodes) {
+        return new NodeArray(ref, NodeMetadata.of(), Arrays.asList(nodes));
     }
 
     
@@ -109,7 +109,7 @@ public class NodeList extends ANode implements  Iterable<ANode> {
             i++;
         }
 
-        visitor.visit((NodeList) this, parent, field, pos);
+        visitor.visit((NodeArray) this, parent, field, pos);
 
     }
 

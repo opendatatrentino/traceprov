@@ -18,10 +18,12 @@ package eu.trentorise.opendata.traceprov.test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
 import eu.trentorise.opendata.traceprov.TraceProvModule;
+import eu.trentorise.opendata.traceprov.geojson.Crs;
 import eu.trentorise.opendata.traceprov.geojson.Feature;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.geojson.MultiPoint;
@@ -68,13 +70,15 @@ public class JacksonTest {
         //String json = objectMapper.writeValueAsString();
 
         //objectMapper.readValue(json, Feature.class);
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, Feature.builder().setOthers(hm).build());
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Feature.builder().setOthers(hm).build(), GeoJson.class);
 
         OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0));
         
         OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0), GeoJson.class);
 
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, MultiPoint.builder().addCoordinates(ImmutableList.of(1.1, 1.2)).build());
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, 
+                MultiPoint.builder().addCoordinates(ImmutableList.of(1.1, 1.2)).build()
+             , GeoJson.class);
 
         OdtJacksonTester.testJsonConv(objectMapper, LOG, Polygon.builder().addCoordinates(
                 ImmutableList.of(
@@ -82,6 +86,13 @@ public class JacksonTest {
                         ImmutableList.of(1.1, 1.2),
                         ImmutableList.of(1.1, 1.2),
                         ImmutableList.of(1.1, 1.2))).build());
+        
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Crs.ofName("a"));
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, 
+                Crs.of("name", ImmutableMap.of(
+                        "name", "hello",                                                                        
+                        "x", ImmutableMap.of("x",ImmutableList.of(1,"w")))));
+        
     }
 
     @Test

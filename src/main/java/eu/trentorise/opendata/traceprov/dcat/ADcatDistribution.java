@@ -21,7 +21,6 @@ import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import java.io.Serializable;
 import java.util.Locale;
-import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
 /**
