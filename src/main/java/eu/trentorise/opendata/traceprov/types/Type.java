@@ -18,14 +18,13 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import eu.trentorise.opendata.commons.Dict;
 import java.io.Serializable;
-import org.immutables.value.Value;
 
 /**
  * todo think about originId
  *
  * @author David Leoni
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE, property = "datatypeId")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE, property = "id")
 public abstract class Type implements Serializable {
 
     /**
@@ -87,8 +86,7 @@ public abstract class Type implements Serializable {
      * generics type information, like
      * {@code eu.trentorise.opendata.traceprov.types.MapType<String, Integer>}
      *
-     */
-    @Value.Derived
+     */    
     public String getId() {
         return this.getClass().getCanonicalName();
     }
@@ -98,8 +96,7 @@ public abstract class Type implements Serializable {
      * origin. Since this could be arbitrary it may or not be an IRI and may be
      * non human readble, i.e. http://mycompany.com/types/3867
      *
-     */
-    @Value.Derived
+     */    
     public String getOriginId() {
         return getId(); // todo check/document default
     }
@@ -116,7 +113,6 @@ public abstract class Type implements Serializable {
      * @see #getId()
      *
      */
-    @Value.Derived
     public Concept getConcept(){
         return Concept.of();
     } 
@@ -125,7 +121,6 @@ public abstract class Type implements Serializable {
      * The human readable name of the datatype (may contain spaces), i.e. 'List
      * of strings'
      */
-    @Value.Derived
     public Dict getName() {
         return Dict.of(this.getClass().getSimpleName());
     }
@@ -134,7 +129,6 @@ public abstract class Type implements Serializable {
      * The description of the datatype, i.e. 'A finite list of objects of a
      * given type'. Should basically be the same as the javadoc.
      */
-    @Value.Derived
     public Dict getDescription() {
         return Dict.of(""); // todo returning the javadoc would be nice, although not easy (reflection is not enough for this)
     }
