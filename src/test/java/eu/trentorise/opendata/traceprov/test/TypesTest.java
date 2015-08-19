@@ -30,8 +30,11 @@ import eu.trentorise.opendata.traceprov.types.Types;
 import java.io.IOException;
 import java.util.logging.Logger;
 import org.junit.After;
+import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -60,32 +63,86 @@ public class TypesTest {
         objectMapper = null;
     }
 
-    
-
     @Test
     public void testDef() {
         OdtJacksonTester.testJsonConv(objectMapper, LOG,
                 Def.builder()
-                .setCanonicalName("bla")
+                .setOriginId("bla")
                 .setDescription(Dict.of("ciao"))
                 .setType(IntType.of())
                 .build());
     }
 
     @Test
+    public void testCheckTypeId() {
+        
+        Types.checkTypeId("a", null);
+        Types.checkTypeId("a<>", null);
+        Types.checkTypeId("a<IntType>", null);
+        Types.checkTypeId("a<IntType<MapType<StringType,IntType>>>", null);
+        
+        try {
+            Types.checkTypeId("", null);
+            Assert.fail("Shouldn't arrive here!");
+        }
+        catch (Exception ex) {
+
+        }
+
+        try {
+            Types.checkTypeId("a<", null);
+            Assert.fail("Shouldn't arrive here!");
+        }
+        catch (Exception ex) {
+
+        }
+        
+    }
+    
+    /**
+     * todo...
+     */
+    @Test
+    @Ignore
+    public void testCheckTypeIdIrregularNesting(){
+        try {
+            Types.checkTypeId("a<<>", null);
+            Assert.fail("Shouldn't validate irregular nesting: a<<>");
+        }
+        catch (Exception ex) {
+
+        }
+        
+    }
+
+    @Test
+    public void testStripTypeIdGenerics() {
+
+        assertEquals("a", Types.stripGenerics("a"));
+        assertEquals("a", Types.stripGenerics("a<IntType>"));
+
+        assertEquals("a.b", Types.stripGenerics("a.b<IntType>"));
+
+        assertEquals("a.b", Types.stripGenerics("a.b<IntType, MapType<StringType, FloatType>>"));
+
+    }
+
+    @Test
+    @Ignore
     public void testRegistry() throws IOException {
-        
+
         TypeRegistry defaultRegistry = TypeRegistry.of();
-        
+
         String packagenom = Types.class.getPackage().getName();
-        
+
         final ClassLoader loader = Thread.currentThread()
                 .getContextClassLoader();
 
         ClassPath classpath = ClassPath.from(loader); // scans the class path used by classloader
         for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClasses(packagenom)) {
             if (!classInfo.getSimpleName().endsWith("Type")) {
-                defaultRegistry.getDatatype(packagenom);
+                //defaultRegistry.getDatatype(packagenom);
+                // todo
             }
         }
     }

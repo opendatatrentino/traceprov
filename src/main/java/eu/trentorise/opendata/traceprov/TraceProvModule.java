@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
+import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.Types;
 import java.io.IOException;
 
 /**
@@ -45,6 +47,7 @@ public final class TraceProvModule extends SimpleModule {
         super("traceprov-jackson", OdtCommonsModule.readJacksonVersion(TraceProvModule.class));
 
         addDeserializer(GeoJson.class, new GeoJsonDeserializer());
+        addDeserializer(Type.class, new TraceTypeDeserializer());
 
     }
 
@@ -73,7 +76,7 @@ public final class TraceProvModule extends SimpleModule {
         public GeoJsonDeserializer() {
             super(GeoJson.class);
         }
-        
+
         public GeoJsonDeserializer(Class<GeoJson> vc) {
             super(vc);
         }
@@ -94,6 +97,37 @@ public final class TraceProvModule extends SimpleModule {
             }
             catch (Exception ex) {
                 throw new TraceProvException("Cannot convert json to resolved geojson class: " + className, ex);
+            }
+
+        }
+
+    }
+
+    public static class TraceTypeDeserializer extends StdDeserializer<Type> {
+
+        public TraceTypeDeserializer() {
+            super(Type.class);
+        }
+
+        public TraceTypeDeserializer(Class<Type> vc) {
+            super(vc);
+        }
+
+        @Override
+        public Type deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+            ObjectMapper mapper = (ObjectMapper) jp.getCodec();
+            ObjectNode root = (ObjectNode) mapper.readTree(jp);
+            String className = Types.stripGenerics(root.get("id").asText());            
+            Class<? extends Type> clazz;
+            try {
+                clazz = (Class<? extends Type>) Class.forName(className);
+                return mapper.convertValue(root, clazz);
+            }
+            catch (ClassNotFoundException ex) {
+                throw new TraceProvException("Cannot resolve traceprov type class : " + className, ex);
+            }
+            catch (Exception ex) {
+                throw new TraceProvException("Cannot convert json to resolved traceprov type class: " + className, ex);
             }
 
         }

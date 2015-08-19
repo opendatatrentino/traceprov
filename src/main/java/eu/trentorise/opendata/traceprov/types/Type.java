@@ -15,6 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import eu.trentorise.opendata.commons.Dict;
 import java.io.Serializable;
@@ -25,6 +26,7 @@ import java.io.Serializable;
  * @author David Leoni
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE, property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Type implements Serializable {
 
     /**
@@ -84,7 +86,7 @@ public abstract class Type implements Serializable {
     /**
      * Returns the fully qualified java namespace of the datatype WITH the
      * generics type information, like
-     * {@code eu.trentorise.opendata.traceprov.types.MapType<String, Integer>}
+     * {@code eu.trentorise.opendata.traceprov.types.MapType<StringType, IntegerType>}
      *
      */    
     public String getId() {

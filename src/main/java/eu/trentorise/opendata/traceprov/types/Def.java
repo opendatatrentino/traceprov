@@ -39,6 +39,7 @@ public class Def<T extends Type> implements Serializable {
 
     private static final Def<AnyType> INSTANCE = new Def(
             AnyType.of().getId(),
+            AnyType.of().getOriginId(),
             AnyType.of(),
             Concept.of(),
             Dict.of(),
@@ -47,7 +48,7 @@ public class Def<T extends Type> implements Serializable {
 
     private T type;
     private String id;
-    private String canonicalName;
+    private String originId;
     private Dict name;
     private Dict description;
     private Concept concept;
@@ -55,7 +56,6 @@ public class Def<T extends Type> implements Serializable {
 
     private Def() {
         id = "";
-        canonicalName = "";
         name = Dict.of();
         description = Dict.of();
         concept = Concept.of();
@@ -65,6 +65,7 @@ public class Def<T extends Type> implements Serializable {
 
     @JsonCreator
     private Def(@JsonProperty("id") String id,
+            @JsonProperty("originId") String originId,
             @JsonProperty("type") T type,
             @JsonProperty("concept") Concept concept,
             @JsonProperty("name") Dict name,
@@ -73,9 +74,9 @@ public class Def<T extends Type> implements Serializable {
         this();
 
         this.type = type;
-        this.id = id;
-        this.concept = concept;
-        this.canonicalName = canonicalName;
+        this.id = id;      
+        this.originId = originId;
+        this.concept = concept;        
         this.name = name;
         this.description = description;
         this.ref = ref;
@@ -85,7 +86,7 @@ public class Def<T extends Type> implements Serializable {
     private void checkState() {
         checkNotNull(id);
         checkNotNull(concept);
-        checkNotNull(canonicalName);
+        checkNotNull(originId);
         checkNotNull(name);
         checkNotNull(description);
         checkNotNull(type);
@@ -97,7 +98,7 @@ public class Def<T extends Type> implements Serializable {
         int hash = 5;
         hash = 17 * hash + Objects.hashCode(this.type);
         hash = 17 * hash + Objects.hashCode(this.id);
-        hash = 17 * hash + Objects.hashCode(this.canonicalName);
+        hash = 17 * hash + Objects.hashCode(this.originId);
         hash = 17 * hash + Objects.hashCode(this.name);
         hash = 17 * hash + Objects.hashCode(this.description);
         hash = 17 * hash + Objects.hashCode(this.concept);
@@ -120,7 +121,7 @@ public class Def<T extends Type> implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.canonicalName, other.canonicalName)) {
+        if (!Objects.equals(this.originId, other.originId)) {
             return false;
         }
         if (!Objects.equals(this.name, other.name)) {
@@ -140,8 +141,10 @@ public class Def<T extends Type> implements Serializable {
 
     @Override
     public String toString() {
-        return "Def{" + "type=" + type + ", id=" + id + ", canonicalName=" + canonicalName + ", name=" + name + ", description=" + description + ", concept=" + concept + ", ref=" + ref + '}';
+        return "Def{" + "type=" + type + ", id=" + id + ", originId=" + originId + ", name=" + name + ", description=" + description + ", concept=" + concept + ", ref=" + ref + '}';
     }
+
+  
 
     public static Builder builder() {
         return new Builder();
@@ -166,7 +169,7 @@ public class Def<T extends Type> implements Serializable {
      *
      */
     public String getOriginId() {
-        return id;
+        return originId;
     }
 
     /**
@@ -257,12 +260,12 @@ public class Def<T extends Type> implements Serializable {
             return this;
         }
 
-        public Builder<W> setCanonicalName(String canonicalName) {
+        public Builder<W> setOriginId(String originId) {
             if (built) {
                 throw new IllegalStateException(ERR_SET);
             }
 
-            td.canonicalName = canonicalName;
+            td.originId = originId;
             return this;
         }
 

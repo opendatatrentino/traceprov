@@ -15,11 +15,30 @@
  */
 package eu.trentorise.opendata.traceprov;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Utilities for TraceProv library
  * @author David Leoni
  */
-public class TraceProvs {
+public final class TraceProvs {
     public static final String TRACEPROV_IRI = "http://opendatatrentino.github.io/traceprov/#";
     public static final String TRACEPROV_PREFIX = "traceprov:";
+    
+    private TraceProvs(){}
+    
+    /**
+     * Configures the provided Jackson ObjectMapper exactly as the internal
+     * JSON mapper used for reading operations. If you want to perform
+     * create/update/delete operations, use {@link  #configureObjectMapperForPosting(com.fasterxml.jackson.databind.ObjectMapper, java.lang.Class)
+     * } instead.
+     *
+     * @param om a Jackson object mapper
+     */
+    public static void configureObjectMapper(ObjectMapper om) {
+        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        TraceProvModule.registerModulesInto(om);
+    }
+
 }

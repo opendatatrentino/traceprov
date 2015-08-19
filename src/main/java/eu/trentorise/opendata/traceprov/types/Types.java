@@ -1,23 +1,25 @@
 package eu.trentorise.opendata.traceprov.types;
 
+import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 import eu.trentorise.opendata.traceprov.TraceProvs;
-import static eu.trentorise.opendata.traceprov.TraceProvs.TRACEPROV_PREFIX;
 import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 /**
  * Class to model data types. <br/>
  * <br/>
  * Primitive datatypes are a subset of <a
  * target="_blank" href="http://www.w3.org/TR/2004/REC-rdf-mt-20040210/">
- * RDF Semantics, XSD datatypes section</a>. Complex types such as
- * todo
+ * RDF Semantics, XSD datatypes section</a>. Complex types such as todo
  * <i>oe:structure</i>
  * and <i>oe:entity</i> are newly defined. <br/>
  * <br/>
@@ -39,13 +41,15 @@ import java.util.Set;
  *
  */
 public final class Types {
+    private static final Logger LOG = Logger.getLogger(Types.class.getName());
 
+    
+    
     public static final String XSD = "http://www.w3.org/2001/XMLSchema#";
-    
-    public static final String TRACEPROV_TYPES = TraceProvs.TRACEPROV_IRI + "types/";
-    
-    public static final String XSD_PREFIX = "xsd:";
 
+    public static final String TRACEPROV_TYPES = TraceProvs.TRACEPROV_IRI + "types/";
+
+    public static final String XSD_PREFIX = "xsd:";
 
     private static final Map<String, String> DATATYPE_PRETTY_NAMES_IT = new HashMap();
     private static final Map<String, String> DATATYPE_PRETTY_NAMES_EN = new HashMap();
@@ -53,44 +57,44 @@ public final class Types {
     private static final Map JAVA_DATATYPES = new HashMap();
 
     static {
-/*
-        DATATYPE_PRETTY_NAMES_EN.put(XSD_STRING, "String");
-        DATATYPE_PRETTY_NAMES_EN.put(XSD_BOOLEAN, "Boolean");
-        DATATYPE_PRETTY_NAMES_EN.put(XSD_DATETIME, "Datetime");
-        DATATYPE_PRETTY_NAMES_EN.put(XSD_INT, "Integer");
-        DATATYPE_PRETTY_NAMES_EN.put(XSD_FLOAT, "Single precision number");
-        DATATYPE_PRETTY_NAMES_EN.put(XSD_DOUBLE, "Double precision number");
-        DATATYPE_PRETTY_NAMES_EN.put(XSD_LONG, "Long integer");
-        DATATYPE_PRETTY_NAMES_EN.put(LIST, "List");
-        DATATYPE_PRETTY_NAMES_EN.put(MAP, "Map");
-        DATATYPE_PRETTY_NAMES_MAP.put(Locale.ENGLISH, DATATYPE_PRETTY_NAMES_EN);
+        /*
+         DATATYPE_PRETTY_NAMES_EN.put(XSD_STRING, "String");
+         DATATYPE_PRETTY_NAMES_EN.put(XSD_BOOLEAN, "Boolean");
+         DATATYPE_PRETTY_NAMES_EN.put(XSD_DATETIME, "Datetime");
+         DATATYPE_PRETTY_NAMES_EN.put(XSD_INT, "Integer");
+         DATATYPE_PRETTY_NAMES_EN.put(XSD_FLOAT, "Single precision number");
+         DATATYPE_PRETTY_NAMES_EN.put(XSD_DOUBLE, "Double precision number");
+         DATATYPE_PRETTY_NAMES_EN.put(XSD_LONG, "Long integer");
+         DATATYPE_PRETTY_NAMES_EN.put(LIST, "List");
+         DATATYPE_PRETTY_NAMES_EN.put(MAP, "Map");
+         DATATYPE_PRETTY_NAMES_MAP.put(Locale.ENGLISH, DATATYPE_PRETTY_NAMES_EN);
 
-        DATATYPE_PRETTY_NAMES_IT.put(XSD_STRING, "Stringa");
-        DATATYPE_PRETTY_NAMES_IT.put(XSD_BOOLEAN, "Booleano");
-        DATATYPE_PRETTY_NAMES_IT.put(XSD_DATETIME, "Data");
-        DATATYPE_PRETTY_NAMES_IT.put(XSD_INT, "Intero");
-        DATATYPE_PRETTY_NAMES_IT.put(XSD_FLOAT, "Numero a precisione singola");
-        DATATYPE_PRETTY_NAMES_IT.put(XSD_DOUBLE, "Numero a precisione doppia");
-        DATATYPE_PRETTY_NAMES_IT.put(XSD_LONG, "Intero grande");
-        DATATYPE_PRETTY_NAMES_IT.put(LIST, "Lista");
-        DATATYPE_PRETTY_NAMES_IT.put(MAP, "Mappa");
-        DATATYPE_PRETTY_NAMES_MAP.put(Locale.ITALIAN, DATATYPE_PRETTY_NAMES_IT);
+         DATATYPE_PRETTY_NAMES_IT.put(XSD_STRING, "Stringa");
+         DATATYPE_PRETTY_NAMES_IT.put(XSD_BOOLEAN, "Booleano");
+         DATATYPE_PRETTY_NAMES_IT.put(XSD_DATETIME, "Data");
+         DATATYPE_PRETTY_NAMES_IT.put(XSD_INT, "Intero");
+         DATATYPE_PRETTY_NAMES_IT.put(XSD_FLOAT, "Numero a precisione singola");
+         DATATYPE_PRETTY_NAMES_IT.put(XSD_DOUBLE, "Numero a precisione doppia");
+         DATATYPE_PRETTY_NAMES_IT.put(XSD_LONG, "Intero grande");
+         DATATYPE_PRETTY_NAMES_IT.put(LIST, "Lista");
+         DATATYPE_PRETTY_NAMES_IT.put(MAP, "Mappa");
+         DATATYPE_PRETTY_NAMES_MAP.put(Locale.ITALIAN, DATATYPE_PRETTY_NAMES_IT);
 
-        JAVA_DATATYPES.put(XSD_STRING, String.class);
-        JAVA_DATATYPES.put(XSD_BOOLEAN, Boolean.class);
-        JAVA_DATATYPES.put(XSD_DATETIME, Date.class);
-        JAVA_DATATYPES.put(XSD_INT, Integer.class);
-        JAVA_DATATYPES.put(XSD_FLOAT, Float.class);
-        JAVA_DATATYPES.put(XSD_DOUBLE, Double.class);
-        JAVA_DATATYPES.put(XSD_LONG, Long.class);
-        JAVA_DATATYPES.put(LIST, DataArray.class);
-        JAVA_DATATYPES.put(MAP, DataMap.class);
-*/
+         JAVA_DATATYPES.put(XSD_STRING, String.class);
+         JAVA_DATATYPES.put(XSD_BOOLEAN, Boolean.class);
+         JAVA_DATATYPES.put(XSD_DATETIME, Date.class);
+         JAVA_DATATYPES.put(XSD_INT, Integer.class);
+         JAVA_DATATYPES.put(XSD_FLOAT, Float.class);
+         JAVA_DATATYPES.put(XSD_DOUBLE, Double.class);
+         JAVA_DATATYPES.put(XSD_LONG, Long.class);
+         JAVA_DATATYPES.put(LIST, DataArray.class);
+         JAVA_DATATYPES.put(MAP, DataMap.class);
+         */
     }
 
     /**
-     * Provides a map of the supported types. Each type name is mapped
-     * to the java class or interface that represents it.
+     * Provides a map of the supported types. Each type name is mapped to the
+     * java class or interface that represents it.
      *
      * @return an unmodifiable map of the supported data types
      */
@@ -130,6 +134,46 @@ public final class Types {
 
     }
 
+    private static final String REGEX_TYPE_ID = "([.|\\w]+)(<(.*)>)?";
+    /**
+     * Checks the provided type id is well formed.
+     *
+     * @param prependedErrorMessage the exception message to use if the check
+     * fails; will be converted to a string using String.valueOf(Object) and
+     * prepended to more specific error messages.
+     *
+     * @throws IllegalArgumentException on invalid type id
+     * @return the validated type id
+     */
+    // todo should check for angular parens pairs...
+    public static String checkTypeId(@Nullable String typeId, @Nullable Object prependedErrorMessage) {
+        checkNotEmpty(typeId, String.valueOf(prependedErrorMessage));
+        Pattern pattern = Pattern.compile(REGEX_TYPE_ID);
+        Matcher matcher = pattern.matcher(typeId);
+        if (matcher.find() && matcher.group(0).length() == typeId.length()) {
+            return typeId;
+        } else {
+            throw new IllegalArgumentException("Found invalid type id!: " + typeId);
+        }
+    }
     
+    /**
+     * Returns typeId without the eventual generics part at the end.
+     * @param typeId i.e. {@code eu.trentorise.opendata.traceprov.types.MapType<StringType, IntegerType>} or {@code eu.trentorise.opendata.traceprov.types.MapType}
+     */
+    public static String stripGenerics(String typeId) {
+        checkTypeId(typeId, "Invalid type id!");
+        Pattern pattern = Pattern.compile(REGEX_TYPE_ID);
+        Matcher matcher = pattern.matcher(typeId);
+        // check all occurance
+        if (matcher.find()) {
+            /*LOG.log(Level.FINE, "group count: {0}", matcher.groupCount());
+            LOG.log(Level.FINE, "group 0 {0}", matcher.group(0));
+            LOG.log(Level.FINE, "group 1 {0}", );     */
+            
+            return matcher.group(1);
+        } else {
+            throw new IllegalArgumentException("Tried to strip generics from a non valid valid type id!: " + typeId);
+        }             
+    }
 }
-
