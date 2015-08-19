@@ -33,10 +33,12 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = DictType.class)
 abstract class ADictType extends Type {
 
+    private static final long serialVersionUID = 1L;
+    /*
     @Override
-    public String datatypeId() {
+    public String getDatatypeStandardId() {
         return Dict.class.getName(); // todo non-http  id
-    }
+    }*/
     
     @Override
     public Class getJavaClass(){

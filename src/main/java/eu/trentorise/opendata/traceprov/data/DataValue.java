@@ -16,10 +16,8 @@
 package eu.trentorise.opendata.traceprov.data;
 
 import com.google.common.base.Preconditions;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 import eu.trentorise.opendata.commons.validation.Ref;
-import java.util.Objects;
 import javax.annotation.Nullable;
 
 /**

@@ -18,6 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
 
@@ -34,8 +35,9 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = TypeContext.class)
 @JsonDeserialize(as = TypeContext.class)
-public abstract class ATypeContext {
+public abstract class ATypeContext implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      *
      * Default is {@link eu.trentorise.opendata.traceprov.types.AnyType#of()}.
@@ -45,7 +47,7 @@ public abstract class ATypeContext {
         return AnyType.of();
     }
 
-    public abstract List<ClassDef> getClassDefs();
+    public abstract List<Def<ClassType>> getClassDefs();
 
     @Value.Check
     protected void check() {

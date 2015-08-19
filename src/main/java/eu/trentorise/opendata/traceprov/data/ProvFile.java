@@ -19,8 +19,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.ClassDef;
-import eu.trentorise.opendata.traceprov.types.PropertyMapping;
+import eu.trentorise.opendata.traceprov.types.ClassType;
+import eu.trentorise.opendata.traceprov.types.Def;
 import eu.trentorise.opendata.traceprov.types.Type;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class ProvFile implements Serializable {
 
     private DcatMetadata dcatMetadata;
     private Type type;
-    private List<ClassDef> classDefs;
+    private List<Def<ClassType>> classDefs;
     private ImmutableList<ConstraintViolation> typeErrors;
     private Data data;
     private List<ConstraintViolation> dataErrors;
@@ -90,14 +90,14 @@ public class ProvFile implements Serializable {
     /**
      * The type of the tree common tree representation of the original file. If
      * no definition was present or it was invalid,
-     * {@link eu.trentorise.opendata.traceprov.types.AnyType#of()} is returned.
+     * {@link eu.trentorise.opendata.traceprov.types.AnyType#of() AnyType.of()} is returned.
      */
     //  todo add validator tag for non-any type
     public Type getType() {
         return type;
     }
 
-    public List<ClassDef> getClassDefs() {
+    public List<Def<ClassType>> getClassDefs() {
         return classDefs;
     }
 
@@ -172,7 +172,7 @@ public class ProvFile implements Serializable {
             this.provFile.type = type;
         }
 
-        public void setClassDefs(Iterable<ClassDef> classDefs) {
+        public void setClassDefs(Iterable<Def<ClassType>> classDefs) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
@@ -218,7 +218,7 @@ public class ProvFile implements Serializable {
         }
 
         public ProvFile build() {
-            for (ClassDef classDef : this.provFile.classDefs) {
+            for (Def<ClassType> classDef : this.provFile.classDefs) {
 
             }
             doneBuilding = true;

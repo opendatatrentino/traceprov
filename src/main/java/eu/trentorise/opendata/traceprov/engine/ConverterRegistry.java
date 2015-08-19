@@ -16,7 +16,6 @@
 package eu.trentorise.opendata.traceprov.engine;
 
 import eu.trentorise.opendata.commons.NotFoundException;
-import eu.trentorise.opendata.traceprov.engine.CastResult;
 import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 

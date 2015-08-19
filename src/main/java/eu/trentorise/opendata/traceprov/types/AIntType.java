@@ -15,6 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.types;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
@@ -27,10 +28,13 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = IntType.class)
 abstract class AIntType extends Type {
     
+    private static final long serialVersionUID = 1L;
+    /*
+    @JsonProperty("datatypeId")
     @Override
-    public String datatypeId(){
+    public String getDatatypeStandardId(){
         return XSD + "int";
-    }
+    }*/
     
     @Override
     public Class getJavaClass(){

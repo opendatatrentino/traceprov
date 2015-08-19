@@ -17,31 +17,20 @@ package eu.trentorise.opendata.traceprov.types;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import java.util.List;
 import org.immutables.value.Value;
 
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as = FunctionType.class)
-@JsonDeserialize(as = FunctionType.class)
-abstract class AFunctionType extends Type {
+@JsonSerialize(as = TupleType.class)
+@JsonDeserialize(as = TupleType.class)
+abstract class ATupleType extends Type {
     
     private static final long serialVersionUID = 1L;
     
-    /**
-     * Todo what about empty list??
-     */
-    public List<? extends Type> getSourceTypes(){
-        return ImmutableList.of(AnyType.of());
-    }
-    
-    @Value.Default
-    public Type getTargetType(){
-        return AnyType.of();
-    }
-    /*
+    public abstract List<Type> getTypes();
+/*
     @Override
     public String getDatatypeStandardId() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -51,4 +40,4 @@ abstract class AFunctionType extends Type {
     public Class getJavaClass() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-}    
+}

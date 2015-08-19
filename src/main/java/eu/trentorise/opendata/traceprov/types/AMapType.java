@@ -32,6 +32,8 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = MapType.class)
 abstract class AMapType extends Type {
 
+    private static final long serialVersionUID = 1L;
+    
     /**
      * By default assumes {@link StringType#of()}, although {@link IntType#of()}
      * is also supported.
@@ -49,11 +51,11 @@ abstract class AMapType extends Type {
         return AnyType.of();
     }
     
-    
+    /*
     @Override
-    public String datatypeId(){
+    public String getDatatypeStandardId(){
         return XSD + "complexType";
-    }
+    }*/
     
         @Override
     public Class getJavaClass(){

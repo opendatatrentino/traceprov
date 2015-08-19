@@ -16,23 +16,26 @@
 package eu.trentorise.opendata.traceprov.types;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import eu.trentorise.opendata.commons.NotFoundException;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
+import eu.trentorise.opendata.traceprov.exceptions.NotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
  * Todo this is much in WTF status
- * 
- * @author David Leoni 
+ *
+ * @author David Leoni
  */
 public class TypeRegistry {
 
-    private Map<String, ClassDef> classes;
+    private Map<String, Type> types;
+
+    private Map<String, Def<ClassType>> classDefs;
 
     private TypeRegistry() {
-        this.classes = new HashMap();
+        this.types = new HashMap();
+        this.classDefs = new HashMap();
     }
 
     /**
@@ -40,38 +43,105 @@ public class TypeRegistry {
      * mapping for key.
      */
     @Nullable
-    public ClassDef put(String id, ClassDef classDef) {
+    public Def<ClassType> put(String id, Def<ClassType> classDef) {
         checkNotEmpty(id, "Invalid classDef id!");
         checkNotNull(classDef);
-        ClassDef ret = this.classes.get(id);
-        this.classes.put(id, classDef);
+        Def<ClassType> ret = this.classDefs.get(id);
+        this.classDefs.put(id, classDef);
         return ret;
     }
 
     public boolean hasClassDef(String classDefId) {
         checkNotEmpty(classDefId, "Invalid classDef id!");
-        return !(classes.get(classDefId) == null);
+        return !(classDefs.get(classDefId) == null);
     }
 
     /**
-     * @throws eu.trentorise.opendata.commons.NotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.NotFoundException
      */
-    public ClassDef getClassDef(String classDefId) {
+    public Def<ClassType> getClassDef(String classDefId) {
         checkNotEmpty(classDefId, "Invalid classDef id!");
-        ClassDef classDef = classes.get(classDefId);
+        Def<ClassType> classDef = classDefs.get(classDefId);
         if (classDef == null) {
             throw new NotFoundException("Couldn't find classDefId " + classDefId);
         }
         return classDef;
 
     }
+
+    /**
+     * 
+     * @return The previous value associated with key, or null if there was no
+     * mapping for key.
+     */
+    @Nullable
+    public Type put(Type type) {
+        checkNotNull(type);
+        checkNotEmpty(type.getId(), "Invalid type datatype id!");
+        Type ret = this.types.get(type.getId());
+        this.types.put(type.getId(), type);
+        return ret;
+    }
+
     
-    
-    Type guessType(Object obj){
-        throw new UnsupportedOperationException("todo implement me");    
+    public boolean hasType(Type type) {
+        throw new UnsupportedOperationException("todo implement me!");
     }
     
-    public static TypeRegistry of(){
+    public boolean hasDatatype(String datatypeId) {
+        checkNotEmpty(datatypeId, "Invalid type id!");
+        return !(types.get(datatypeId) == null);
+    }
+
+    /**
+     * Returns the default instance of a given datatype id
+     * @throws eu.trentorise.opendata.traceprov.exceptions.NotFoundException
+     */
+    public Type getDatatype(String datatypeId) {
+        checkNotEmpty(datatypeId, "Invalid datatype id!");
+        Type type = types.get(datatypeId);
+        if (type == null) {
+            throw new NotFoundException("Couldn't find datatypeId " + datatypeId);
+        }
+        return type;
+    }
+
+    Type guessType(Object obj) {
+        throw new UnsupportedOperationException("todo implement me");
+    }
+
+    /**
+     * Creates new empty registry
+     */
+    public static TypeRegistry empty() {
         return new TypeRegistry();
     }
+
+    /**
+     * Creates new registry filled with default datatypes in
+     * {@link eu.trentorise.opendata.traceprov.types}
+     */
+    public static TypeRegistry of() {
+        TypeRegistry reg = new TypeRegistry();
+        reg.put(AnyType.of());
+        reg.put(BooleanType.of());
+        reg.put(ClassType.of());
+        reg.put(DateTimeType.of());
+        reg.put(DictType.of());
+        reg.put(DoubleType.of());
+        reg.put(FloatType.of());
+        reg.put(FunctionType.of());
+        reg.put(RefType.of());
+        reg.put(IntType.of());
+        reg.put(JavaDateType.of());
+        reg.put(ListType.of());
+        reg.put(LongType.of());
+        reg.put(MapType.of());
+        reg.put(NullType.of());
+        reg.put(StringType.of());
+        reg.put(TupleType.of());
+        reg.put(UndefinedType.of());
+        return reg;
+    }
+
 }

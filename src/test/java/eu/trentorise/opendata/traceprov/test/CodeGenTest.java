@@ -30,7 +30,7 @@ import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ProvRefs;
-import eu.trentorise.opendata.traceprov.types.PropertyMapping;
+import eu.trentorise.opendata.traceprov.data.PropertyMapping;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -96,4 +96,6 @@ public class CodeGenTest {
                 DataArray.of(DataValue.of(Ref.of(), NodeMetadata.of(), 3))));
     }
 
+    
+    
 }

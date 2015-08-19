@@ -27,14 +27,18 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = DateTimeType.class)
 abstract class ADateTimeType extends Type {   
     
+    private static final long serialVersionUID = 1L;
+    
+    /*
     @Override
-    public String datatypeId(){
+    public String getDatatypeStandardId(){
         return XSD + "dateTime";
-    }
+    }*/
     
     /**
      * String in ISO 8601 is always ze best. 
      */
+    
     @Override
     public Class getJavaClass(){
         return String.class;

@@ -18,24 +18,36 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import java.util.List;
 import org.immutables.value.Value;
 
+/**
+ * A reference to a type. 
+ */
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as = ProductType.class)
-@JsonDeserialize(as = ProductType.class)
-abstract class AProductType extends Type {
+@JsonSerialize(as = RefType.class)
+@JsonDeserialize(as = RefType.class)
+abstract class ARefType extends Type {
     
-    public abstract List<Type> getTypes();
-
+    private static final long serialVersionUID = 1L;
+    
+    @Value.Default
+    public String getClassId(){
+        return "";
+    }
+    /*
     @Override
-    public String datatypeId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getDatatypeStandardId(){
+        return getClassId();
+    }*/
+    
+    /**
+     * 
+     * todo to be precise this could be something like Object | String 
+     */
+    @Override
+    public Class getJavaClass(){
+        return Object.class;
     }
 
-    @Override
-    public Class getJavaClass() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

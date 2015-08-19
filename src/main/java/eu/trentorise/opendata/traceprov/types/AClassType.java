@@ -17,35 +17,48 @@ package eu.trentorise.opendata.traceprov.types;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.trentorise.opendata.commons.SimpleStyle;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
+import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * A reference to a type. 
+ * The schema of a json, loosely modeled after what you can express with
+ * a jsonld context and Typescript.
+ *
+ * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
-@JsonSerialize(as = IdType.class)
-@JsonDeserialize(as = IdType.class)
-abstract class AIdType extends Type {
-    
-    @Value.Default
-    public String getClassId(){
-        return "";
-    }
-    
-    @Override
-    public String datatypeId(){
-        return getClassId();
-    }
-    
+@BuilderStylePublic
+@JsonSerialize(as = ClassType.class)
+@JsonDeserialize(as = ClassType.class)
+abstract class AClassType extends Type {
+
+    private static final long serialVersionUID = 1L;
+   
     /**
-     * 
-     * todo to be precise this could be something like Object | String 
+     * The property definitions of the class
      */
+    public abstract List<Def> getPropertyDefs();
+
+    /**
+     * The unique indexes tht may constrain sets of schema values to be unique
+     * in the array they are in.
+     *
+     */
+    public abstract List<UniqueIndex> getUniqueIndexes();
+
     @Override
     public Class getJavaClass(){
-        return Object.class;
+        return Class.class;
     }
+/*
+    @Override
+    public String getDatatypeStandardId(){
+        return "https://schema.org/Class";
+    }*/
+    
+    
+
+ 
 
 }

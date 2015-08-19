@@ -16,15 +16,16 @@
 package eu.trentorise.opendata.traceprov.test.services;
 
 import com.google.common.collect.ImmutableList;
+import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.traceprov.LoadException;
 import static eu.trentorise.opendata.traceprov.TraceProvs.TRACEPROV_IRI;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvType;
+import eu.trentorise.opendata.traceprov.types.ClassType;
+import eu.trentorise.opendata.traceprov.types.Def;
 import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.validation.IValidator;
-import eu.trentorise.opendata.traceprov.types.ClassDef;
-import eu.trentorise.opendata.traceprov.types.PropertyDef;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -143,10 +144,11 @@ public class CsvValidator implements IValidator {
                     throw new LoadException("Found no headers in CSV!");
                 }
                 
-                ClassDef.Builder builder = ClassDef.builder();
-                builder.setName("");
-                builder.setId(TRACEPROV_IRI + "generated-schema/"+UUID.randomUUID());
-                builder.addPropertyDefs(PropertyDef.of());
+                Def.Builder<ClassType> builder = Def.builder();
+                builder.setName(Dict.of())
+                .setId(TRACEPROV_IRI + "generated-schema/"+UUID.randomUUID())
+                .setType(ClassType.builder().addPropertyDefs(Def.of())
+                .build());
             } else {
                 throw new LoadException("Provided csv is empty!!!");
             }

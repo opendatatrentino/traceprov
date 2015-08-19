@@ -21,7 +21,8 @@ import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.ValidationError;
 import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.ClassDef;
+import eu.trentorise.opendata.traceprov.types.ClassType;
+import eu.trentorise.opendata.traceprov.types.Def;
 import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
@@ -52,7 +53,7 @@ abstract class AProvType implements Serializable {
      * Returns the class definitions of all class references present in the
      * result of {#getType()}
      */
-    public abstract List<ClassDef> getClassDefs();
+    public abstract List<Def<ClassType>> getClassDefs();
 
     /**
      * Returns the validation errors found in the original schema file.

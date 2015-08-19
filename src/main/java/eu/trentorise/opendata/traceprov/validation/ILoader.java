@@ -19,7 +19,6 @@ import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.List;
 
 /**
  * Interface to load a file from a source, like a url, a db, etc...

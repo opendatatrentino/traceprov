@@ -18,11 +18,12 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import java.io.Serializable;
 import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * A unique indexe is a set of property definitions 
+ * A unique index is a set of property definitions 
  *
  * @author David Leoni
  */
@@ -30,8 +31,21 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = UniqueIndex.class)
 @JsonDeserialize(as = UniqueIndex.class)
-abstract class AUniqueIndex {
+abstract class AUniqueIndex implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
+    
+    /**
+     * The id of the unique index, which may be a url. If unknown, it will be
+     * the empty string.
+     *
+     */
+    @Value.Default
+    public String getId() {
+        return "";
+    }    
+    
     /**
      * The name of the unique index. If unknown, it will be the empty string.
      *
@@ -41,15 +55,6 @@ abstract class AUniqueIndex {
         return "";
     }
 
-    /**
-     * The id of the unique index, which may be a url. If unknown, it will be
-     * the empty string.
-     *
-     */
-    @Value.Default
-    public String getId() {
-        return "";
-    }
 
     /**
      * The list of property definition ids of which the unique index is

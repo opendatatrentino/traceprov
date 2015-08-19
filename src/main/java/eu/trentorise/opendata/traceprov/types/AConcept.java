@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.SimpleStyle;
+import java.io.Serializable;
 import org.immutables.value.Value;
 
 /**
@@ -30,8 +31,9 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = Concept.class)
 @JsonDeserialize(as = Concept.class)
-abstract class AConcept {
-
+abstract class AConcept implements Serializable{
+    
+    private static final long serialVersionUID = 1L;
     /**
      * The id of the concept, which could possibly be an IRI. 
      */

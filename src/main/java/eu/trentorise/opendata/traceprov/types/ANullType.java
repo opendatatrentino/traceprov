@@ -31,10 +31,13 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = NullType.class)
 abstract class ANullType extends Type {
     
+    private static final long serialVersionUID = 1L;
+    
+    /*
     @Override
-    public String datatypeId(){
+    public String getDatatypeStandardId(){
         return Types.TRACEPROV_TYPES + "null";
-    }
+    }*/
     
     @Override
     public Class getJavaClass(){

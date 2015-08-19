@@ -31,10 +31,12 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = JavaDateType.class)
 abstract class AJavaDateType extends Type {   
     
+    private static final long serialVersionUID = 1L;
+    /*
     @Override
-    public String datatypeId(){
+    public String getDatatypeStandardId(){
         return TRACEPROV_TYPES + "java.util.Date";
-    }
+    }*/
     
 
     @Override

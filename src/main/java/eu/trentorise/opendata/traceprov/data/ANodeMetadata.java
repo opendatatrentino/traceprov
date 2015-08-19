@@ -24,6 +24,7 @@ import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.geojson.Feature;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.Type;
+import java.io.Serializable;
 import java.util.Locale;
 import org.immutables.value.Value;
 
@@ -35,8 +36,10 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = NodeMetadata.class)
 @JsonDeserialize(as = NodeMetadata.class)
-abstract class ANodeMetadata {
+abstract class ANodeMetadata implements Serializable {
 
+    private static final long serialVersionUID = 1L;    
+    
     /**
      * The language of the node. If none is specified {
      *

@@ -27,10 +27,12 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = StringType.class)
 abstract class AStringType extends Type {
 
+    private static final long serialVersionUID = 1L;
+    /*
     @Override
-    public String datatypeId() {
+    public String getDatatypeStandardId() {
         return XSD + "string";
-    }
+    }*/
 
     @Override
     public Class getJavaClass() {

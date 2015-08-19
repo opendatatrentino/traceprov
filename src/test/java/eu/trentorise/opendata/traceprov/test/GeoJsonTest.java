@@ -15,15 +15,25 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.OdtConfig;
-import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
 import eu.trentorise.opendata.traceprov.TraceProvModule;
+import eu.trentorise.opendata.traceprov.geojson.Crs;
+import eu.trentorise.opendata.traceprov.geojson.Feature;
+import eu.trentorise.opendata.traceprov.geojson.GeoJson;
+import eu.trentorise.opendata.traceprov.geojson.MultiPoint;
 import eu.trentorise.opendata.traceprov.geojson.Point;
+import eu.trentorise.opendata.traceprov.geojson.Polygon;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Logger;
+import org.junit.After;
 import org.junit.Assert;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,37 +43,79 @@ import org.junit.Test;
  * @author David Leoni
  */
 public class GeoJsonTest {
+
     private static final Logger LOG = Logger.getLogger(GeoJsonTest.class.getName());
-    
-    
-    
+
     private ObjectMapper objectMapper;
+
+    @BeforeClass
+    public static void setUpClass() {
+        OdtConfig.init(GeoJsonTest.class);
+    }    
     
-   @Before
+    @Before
     public void before() {
         objectMapper = new ObjectMapper();
         TraceProvModule.registerModulesInto(objectMapper);
     }
-    
-    
-    @BeforeClass
-    public static void setUpClass() {
-        OdtConfig.init(GeoJsonTest.class);
+
+    @After
+    public void after() {
+        objectMapper = null;
     }
-    
+
+
+
     @Test
-    public void testPoint(){
+    public void testPoint() {
         try {
             Point.builder().setCoordinates(ImmutableList.of(1.0)).build();
             Assert.fail();
-        } catch (IllegalStateException ex){
-            
+        }
+        catch (IllegalStateException ex) {
+
         }
     }
-    
+
     @Test
-    public void testGeoJson(){
-        
-        
+    public void testJacksonGeoJsonFeature() throws JsonProcessingException, IOException {
+        HashMap hm = new HashMap();
+        hm.put("x", "y");
+        //String json = objectMapper.writeValueAsString();
+
+        //objectMapper.readValue(json, Feature.class);
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Feature.builder().setOthers(hm).build(), GeoJson.class);
+
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0));
+
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0), GeoJson.class);
+
+        OdtJacksonTester.testJsonConv(objectMapper, LOG,
+                MultiPoint.builder().addCoordinates(ImmutableList.of(1.1, 1.2)).build(), GeoJson.class);
+
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Polygon.builder().addCoordinates(
+                ImmutableList.of(
+                        ImmutableList.of(1.1, 1.2),
+                        ImmutableList.of(1.1, 1.2),
+                        ImmutableList.of(1.1, 1.2),
+                        ImmutableList.of(1.1, 1.2))).build());
+
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, Crs.ofName("a"));
+        OdtJacksonTester.testJsonConv(objectMapper, LOG,
+                Crs.of("name", ImmutableMap.of(
+                                "name", "hello",
+                                "x", ImmutableMap.of("x", ImmutableList.of(1, "w")))));
+
     }
+
+    @Test
+    public void testJacksonPolygon() throws IOException {
+        GeoJson geoJson = objectMapper.readValue("{\"type\":\"Polygon\",\"coordinates\":[[[1.1, 1.2],[2.1, 2.2], [3.1, 3.2], [1.1, 1.2]]]}", GeoJson.class);
+
+        Polygon pol = (Polygon) geoJson;
+        Double d = pol.getCoordinates().get(0).get(0).get(0);
+        assertTrue(1.0 < d);
+        assertTrue(d < 1.2);
+    }
+
 }

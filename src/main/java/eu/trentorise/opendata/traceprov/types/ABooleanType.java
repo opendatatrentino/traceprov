@@ -27,10 +27,12 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = BooleanType.class)
 abstract class ABooleanType extends Type {
     
+    private static final long serialVersionUID = 1L;
+    /*
     @Override
-    public String datatypeId(){
+    public String getDatatypeStandardId(){
         return XSD + "boolean";
-    }    
+    }   */ 
     
     @Override
     public Class getJavaClass(){

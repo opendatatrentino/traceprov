@@ -31,10 +31,12 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = UndefinedType.class)
 abstract class AUndefinedType extends Type {
 
+    private static final long serialVersionUID = 1L;
+    /*
     @Override
-    public String datatypeId() {
+    public String getDatatypeStandardId() {
         return Types.TRACEPROV_TYPES + "undefined";
-    }
+    }*/
 
     @Override
     public Class getJavaClass() {

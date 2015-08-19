@@ -27,10 +27,12 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = DoubleType.class)
 abstract class ADoubleType extends Type {
     
+    private static final long serialVersionUID = 1L;
+    /*
     @Override
-    public String datatypeId(){
+    public String getDatatypeStandardId(){
         return XSD + "double";
-    }
+    }*/
     
     @Override
     public Class getJavaClass(){

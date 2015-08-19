@@ -28,10 +28,12 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = FloatType.class)
 abstract class AFloatType extends Type {
     
+    private static final long serialVersionUID = 1L;
+    /*
     @Override
-    public String datatypeId(){
+    public String getDatatypeStandardId(){
         return XSD + "float";
-    }
+    }*/
     
     @Override
     public Class getJavaClass(){
