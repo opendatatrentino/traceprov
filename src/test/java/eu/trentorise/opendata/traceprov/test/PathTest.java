@@ -31,9 +31,9 @@ import org.junit.Test;
  *
  * @author David Leoni
  */
-public class JsonPathTest {
+public class PathTest {
 
-    private static final Logger LOG = Logger.getLogger(JsonPathTest.class.getName());
+    private static final Logger LOG = Logger.getLogger(PathTest.class.getName());
 
     /**
      * Hacky way to access JsonPath internal compiled path.

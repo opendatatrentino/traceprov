@@ -24,7 +24,11 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
-
+/**
+ * 
+ * @author David Leoni 
+ * @since 0.3
+ */
 @Value.Immutable
 @BuilderStylePublic
 @JsonSerialize(as = Feature.class)

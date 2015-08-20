@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import eu.trentorise.opendata.commons.Dict;
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * todo think about originId
@@ -90,7 +91,7 @@ public abstract class Type implements Serializable {
     /**
      * The id of the type being defined as it is identified on the system of
      * origin. Since this could be arbitrary it may or not be an IRI and may be
-     * non human readble, i.e. http://mycompany.com/types/3867
+     * non human readable, i.e. http://mycompany.com/types/3867
      *
      */
     public String getOriginId() {
@@ -114,15 +115,15 @@ public abstract class Type implements Serializable {
     }
 
     /**
-     * The human readable name of the datatype (may contain spaces), i.e. 'List
+     * The human readable name of the type (may contain spaces), i.e. 'List
      * of strings'
      */
     public Dict getName() {
-        return Dict.of(this.getClass().getSimpleName());
+        return Dict.of(Locale.ENGLISH, this.getClass().getSimpleName());
     }
 
     /**
-     * The description of the datatype, i.e. 'A finite list of objects of a
+     * The description of the type, i.e. 'A finite list of objects of a
      * given type'. Should basically be the same as the javadoc.
      */
     public Dict getDescription() {

@@ -39,6 +39,7 @@ import org.immutables.value.Value;
  * {@link Feature#ofId(java.lang.String) Feature.ofId}
  * 
  * @author David Leoni
+ * @since 0.3
  */
 // todo check this Id.NAME is correct
 public abstract class GeoJson implements Serializable {    

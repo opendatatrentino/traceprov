@@ -24,8 +24,9 @@ import java.util.List;
 import org.immutables.value.Value;
 
 /**
- *
- * @author David Leoni
+ * 
+ * @author David Leoni 
+ * @since 0.3
  */
 @Value.Immutable(singleton = false)
 @BuilderStylePublic

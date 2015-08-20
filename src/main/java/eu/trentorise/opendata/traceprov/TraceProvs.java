@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Utilities for TraceProv library
  * @author David Leoni
+ * @since 0.3
  */
 public final class TraceProvs {
     public static final String TRACEPROV_IRI = "http://opendatatrentino.github.io/traceprov/#";

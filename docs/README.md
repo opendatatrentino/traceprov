@@ -11,8 +11,8 @@ TraceProv is available on Maven Central. To use it, put this in the dependencies
 <dependency>
     <groupId>eu.trentorise.opendata</groupId>
     <artifactId>traceprov</artifactId>
-    <version>#{version}</version>            
-</dependency>   
+    <version>#{version}</version>
+</dependency>
 ```
 
 In case updates are available, version numbers follow <a href="http://semver.org/" target="_blank">semantic versioning</a> rules.
@@ -40,6 +40,159 @@ DcatDataset dataset = DcatDataset
 
 ```
 Builder is mutable, while dataset object created after build is perfectly immutable. 
+
+
+### Type system
+
+TODO total work in progress..
+
+Note: we always use fully qualified names, here for the sake of brevity we use suffix `tt`
+tt = eu.trentorise.opendata.traceprov.types
+
+Main elements are `Type`, `ClassType`, `Def` and `RefType`.
+
+#### Type
+`Type` is a type expression, which doesn't have an associated name. A type can have parameters for generics.
+
+
+
+##### Simple type example
+
+Let's consider the integer type `tt.IntType`. First, notice it is a singleton:
+
+```java
+IntType intType = IntType.of();
+```
+
+The `typeId` field is a string with the traceprov fully qualified name, suitable use in programming languages (which here happens to be the same as the Java class for `IntType`):
+```java
+intType.getTypeId() == "eu.trentorise.opendata.traceprov.types.IntType"
+```
+
+In concept we store the high-level most standard definition that most closely describes the datatype:
+```java
+intType.getConcept().getId() == "http://www.w3.org/2001/XMLSchema#int"
+intType.getConcept().getName() == "int"
+intType.getConcept().getDescription() == "int is ·derived· from long by setting the value of ·maxInclusive· to be 2147483647 and ·minInclusive· to be -2147483648.  The ·base type· of int is long."
+```
+
+
+Instances of Java Integer can hold instances of IntType:
+
+```java
+abstract class IntType extends Type {
+    @Override
+    public Class getJavaClass(){
+        return Integer.class;
+    }
+}
+```
+
+
+
+##### Parametric type example
+Let's say we a have a list of integers:
+
+```java
+ListType stringList = ListType.of(IntType.of());
+```
+
+The typeId field is a string with the java class fully qualified name, WITHOUT eventual parameters as generics:
+```java
+stringList.getTypeId() == "eu.trentorise.opendata.traceprov.types.ListType"
+```
+
+
+We said Type expressions have no assigned name, but actually they can have a name and description for the datatype they represent:
+
+```java
+abstract class ListType extends Type {
+    @Override
+    public Dict getName(){
+        return Dict.of(Locale.ENGLISH, "List of " + getSubtype().getName().str(Locale.ENGLISH);
+    }
+
+    @Override
+    public Dict getDescription(){
+        return Dict.of(Locale.ENGLISH, "Traceprov list type expression");
+    }
+
+}
+```
+
+#### ClassType
+ A `ClassType` is a complex type expression made of properties and methods associated to them.  As class model we get inspiration from Typescript. Notice a class expression doesn't have an id, name or description, as these are assigned within a definition `Def`, see next paragraph.
+
+```java
+ClassType myPersonType = ClassType.builder()
+                            .addProperty(
+                                    Def.builder()
+                                            .setName("age")
+                                            .setType(IntType.of())
+                                        .build())
+                            .addProperty(
+                                    Def.builder()
+                                            .setName("name")
+                                            .setType(StringType.of())
+                                        .build())
+                            )
+                            .addMethod(Def.builder()
+                                            .setName("live")
+                                            .setType(Function..)
+                                            .build())
+                            )
+                            .build()
+``` 
+
+The type id is always the ClassType as for simple types:
+```java
+personTypeExpr.getTypeId() == "eu.trentorise.opendata.traceprov.types.ClassType"
+```
+
+#### Definitions
+
+A definition `Def` associates  a name and other semantic info like description to a type expression.
+
+For example, the following definition associates `"com.mycompany.Person"` to class type expression:
+`ClassType{age:tt.IntType, name : tt.StringType, live() : void}`
+
+```java
+Def<ClassType> myPersonDef = Def.<ClassType>builder()
+							// id within traceprov for scripting. MUST be unique within
+                            // the space of all def ids AND types id
+							 .setId("com.mycompany.Person")
+                             .setOriginId("http://mycompany.com/types/5462") // id as provided by my company web server
+                             .setName(Dict.of(LOCALE.ENGLISH, "My company person"))
+                             .setDescription(Dict.of(LOCALE.ENGLISH, "A brilliant person of my company"))
+                             .setConcept(Concept  // hi level, loose but standard representation of our Person type
+                             				.setId("https://schema.org/Person")
+                                            .setName(Dict.of(Locale.ENGLISH, "Person")
+                                            .setDescription("A person (alive, dead, undead, or fictional).")))
+                             .setType(myPersonType)
+                             .build();
+
+```
+
+#### RefType 
+A reference to a type defined in a definition `Def`. For example, to reference the `Person` defined in the previous example, we would create a `RefType`:
+
+```java
+RefType myRef = RefType.of("com.mycompany.Person");
+
+myRef.getDefId() == "com.mycompany.Person"
+myRef.getTypeId() == "tt.RefType"
+```
+
+#### TypeContext
+
+Maybe it can just be a simple
+
+```java
+Map<String, Def> defs;
+get/has ClassType
+get/has FunctionType
+```
+
 
 ### Logging
 

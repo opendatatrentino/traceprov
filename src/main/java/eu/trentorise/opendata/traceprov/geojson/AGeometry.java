@@ -18,7 +18,9 @@ package eu.trentorise.opendata.traceprov.geojson;
 import java.util.List;
 
 /**
- * @author David Leoni
+ * 
+ * @author David Leoni 
+ * @since 0.3
  */
 public abstract class AGeometry extends GeoJson {
     

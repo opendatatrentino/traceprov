@@ -26,8 +26,10 @@ import java.util.Map;
 import org.immutables.value.Value;
 
 /**
- * The coordinate reference system (CRS) of a GeoJSON object 
+ * The coordinate reference system (CRS) of a GeoJSON object
+ *
  * @author David Leoni
+ * @since 0.3
  */
 @Value.Immutable
 @SimpleStyle
@@ -36,7 +38,7 @@ import org.immutables.value.Value;
 abstract class ACrs implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Value.Default
     public String getType() {
         return "name";
@@ -55,11 +57,10 @@ abstract class ACrs implements Serializable {
         return Crs.of("link", ImmutableMap.of("href", href));
     }
 
-      public static Crs ofLink(String href, String type) {
+    public static Crs ofLink(String href, String type) {
         return Crs.of("link", ImmutableMap.of("href", href, "type", type));
     }
-  
-    
+
     @Value.Check
     protected void check() {
         switch (getType()) {

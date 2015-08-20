@@ -23,8 +23,9 @@ import eu.trentorise.opendata.traceprov.validation.Preconditions;
 import org.immutables.value.Value;
 
 /**
- *
- * @author David Leoni
+ * 
+ * @author David Leoni 
+ * @since 0.3
  */
 @Value.Immutable
 @BuilderStylePublic
