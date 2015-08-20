@@ -83,12 +83,6 @@ public abstract class Type implements Serializable {
 
     }
 
-    /**
-     * Returns the fully qualified java namespace of the datatype WITH the
-     * generics type information, like
-     * {@code eu.trentorise.opendata.traceprov.types.MapType<StringType, IntegerType>}
-     *
-     */    
     public String getId() {
         return this.getClass().getCanonicalName();
     }
@@ -98,7 +92,7 @@ public abstract class Type implements Serializable {
      * origin. Since this could be arbitrary it may or not be an IRI and may be
      * non human readble, i.e. http://mycompany.com/types/3867
      *
-     */    
+     */
     public String getOriginId() {
         return getId(); // todo check/document default
     }
@@ -115,9 +109,9 @@ public abstract class Type implements Serializable {
      * @see #getId()
      *
      */
-    public Concept getConcept(){
+    public Concept getConcept() {
         return Concept.of();
-    } 
+    }
 
     /**
      * The human readable name of the datatype (may contain spaces), i.e. 'List
@@ -138,7 +132,7 @@ public abstract class Type implements Serializable {
     /**
      * Returns the canonical Java class to represent instances of the type.
      * Other classes may be added with type converters todo define better
-     */    
+     */
     public abstract Class getJavaClass();
 
     /**

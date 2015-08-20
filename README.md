@@ -6,10 +6,13 @@ RELEASE DOCS ARE ON THE <a href="http://opendatatrentino.github.io/traceprov/" t
 
 **About**
 
-Java library for provenance management:
+Java library for data tracking:
 
- * Holds fully documented Java models for  <a href="http://www.w3.org/TR/vocab-dcat/" target="_blank"> DCAT catalog vocabulary </a>
- * Allows references to dataset elements such as cells, columns, etc
+ * Holds fully documented Java models for  
+    - <a href="http://www.w3.org/TR/vocab-dcat/" target="_blank"> DCAT catalog vocabulary </a>
+    - <a href="http://geojson.org" target="_blank"> GeoJson </a> 
+ * Allows references to dataset elements such as cells, columns, tree nodes, etc with a variant of JsonPath
+ * Has interfaces for validation of schemas
  * All classes are immutable
 
 **Usage**: See [docs](docs)
