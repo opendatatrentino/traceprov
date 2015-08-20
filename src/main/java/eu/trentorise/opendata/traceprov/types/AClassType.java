@@ -15,30 +15,36 @@
  */
 package eu.trentorise.opendata.traceprov.types;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.traceprov.data.Data;
 import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * The schema of a json, loosely modeled after what you can express with
- * a jsonld context and Typescript.
+ * A special {@code type} to define complex ones. The class is loosely modeled
+ * after Typescript classes. Notice that, differently from other types,
+ * instances of this type all have their own id, name, description, ...etc
+ * according to the class being modeled.
  *
  * @author David Leoni
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = ClassType.class)
-@JsonDeserialize(as = ClassType.class)
+// json ser???
 abstract class AClassType extends Type {
 
     private static final long serialVersionUID = 1L;
-   
+
     /**
      * The property definitions of the class
      */
     public abstract List<Def> getPropertyDefs();
+
+    /**
+     * The method definitions of the class TODO higly fuzzy thing
+     */
+    public abstract List<Def<FunctionType>> getMethodDefs();
 
     /**
      * The unique indexes tht may constrain sets of schema values to be unique
@@ -47,18 +53,60 @@ abstract class AClassType extends Type {
      */
     public abstract List<UniqueIndex> getUniqueIndexes();
 
+    @Value.Default
     @Override
-    public Class getJavaClass(){
-        return Class.class;
+    public Class getJavaClass() {
+        return Data.class; // todo this is important I guess..
     }
-/*
-    @Override
-    public String getDatatypeStandardId(){
-        return "https://schema.org/Class";
-    }*/
-    
-    
 
- 
+    @Override
+    public boolean isDirty(Object obj) {
+        throw new UnsupportedOperationException("todo implement me!");
+    }
+
+    @Override
+    public boolean isDegenerate(Object obj) {
+        throw new UnsupportedOperationException("todo implement me!");
+    }
+
+    @Override
+    public boolean isEmpty(Object object) {
+        throw new UnsupportedOperationException("todo implement me!");
+    }
+
+    @Override
+    public boolean isInstance(Object object) {
+        throw new UnsupportedOperationException("todo implement me!");
+    }
+
+    @Value.Default
+    @Override
+    public Dict getDescription() {
+        return Dict.of();
+    }
+
+    @Value.Default
+    @Override
+    public Dict getName() {
+        return Dict.of();
+    }
+
+    @Value.Default
+    @Override
+    public Concept getConcept() {
+        return Concept.of();
+    }
+
+    @Value.Default
+    @Override
+    public String getOriginId() {
+        return "";
+    }
+
+    @Value.Default
+    @Override
+    public String getId() {
+        return "";
+    }
 
 }
