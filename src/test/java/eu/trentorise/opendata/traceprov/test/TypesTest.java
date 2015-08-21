@@ -169,12 +169,12 @@ public class TypesTest {
         }
     }
 
-    private static class TypePrinter extends TypeVisitor {
+    public static class TestPrinter extends TypeVisitor {
         List<Type> visitedNodes = new ArrayList();
         List<Class<? extends Type>> calledMethods = new ArrayList();
         
         @Override
-        public void visit(Type type) {
+        public void visitDefault(Type type) {
             LOG.log(Level.FINE, "default visit, type id is {0}", type.getId());
             visitedNodes.add(type);
             calledMethods.add(Type.class);
@@ -190,22 +190,18 @@ public class TypesTest {
 
     @Test
     public void testVisitorNoSpecificMethod() {
-        TypePrinter vis1 = new TypePrinter();        
-        vis1.visit(IntType.of());        
-        assertEquals(ImmutableList.of(IntType.of()), vis1.visitedNodes);
-        assertEquals(ImmutableList.of(Type.class), vis1.calledMethods);        
-        TypePrinter vis2 = new TypePrinter();        
-        vis2.visit(AnyType.of());        
-        assertEquals(ImmutableList.of(AnyType.of()), vis2.visitedNodes);
-        assertEquals(ImmutableList.of(AnyType.class), vis2.calledMethods);
+        TypeVisitor vis = new TestPrinter();        
+        vis.visit(IntType.of());        
+        assertEquals(ImmutableList.of(IntType.of()), ((TestPrinter) vis).visitedNodes);
+        assertEquals(ImmutableList.of(Type.class), ((TestPrinter) vis).calledMethods);        
     }
     
     @Test
     public void testVisitorWithSpecificMethod() {
-        TypePrinter vis2 = new TypePrinter();        
-        vis2.visit(AnyType.of());        
-        assertEquals(ImmutableList.of(AnyType.of()), vis2.visitedNodes);
-        assertEquals(ImmutableList.of(AnyType.class), vis2.calledMethods);
+        TypeVisitor vis = new TestPrinter();        
+        vis.visit(AnyType.of());        
+        assertEquals(ImmutableList.of(AnyType.of()), ((TestPrinter)vis).visitedNodes);
+        assertEquals(ImmutableList.of(AnyType.class), ((TestPrinter)vis).calledMethods);
     }
     
 }

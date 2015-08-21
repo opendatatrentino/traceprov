@@ -21,9 +21,9 @@ import java.lang.reflect.Method;
 
 /**
  * Visitor for {@link Type} objects. default visit method is
- * #visit(eu.trentorise.opendata.traceprov.types.Type) visit(Type)}, but you can
- * define more specific {@code visit(MyType)} methods and those will be
- * automatically picked by a reflection mechanism.
+ * {@link #visitDefault(eu.trentorise.opendata.traceprov.types.Type) visitDefault(Type)},
+ * but you can define more specific {@code visit(MyType)} methods and those will
+ * be automatically picked by a reflection mechanism.
  *
  * @author David Leoni
  */
@@ -33,11 +33,11 @@ public abstract class TypeVisitor {
      * Default visit method. Used only if no other {@code visit(MyType)} more
      * specific method has been found.
      */
-    public abstract void visit(Type type);
+    public abstract void visitDefault(Type type);
 
     /**
      * Retrieves most specific {@code visit} method. Defaults to
-     * {@link #visit(eu.trentorise.opendata.traceprov.types.Type) visit(Type)}
+     * {@link #visit(eu.trentorise.opendata.traceprov.types.Type) visitDefault(Type)}
      *
      * @throws TraceProvException on error
      */
@@ -65,23 +65,26 @@ public abstract class TypeVisitor {
         try {
             // debugMsg("Giving up");
             return getClass().getMethod("visitDefault",
-                    new Class[]{(new Object()).getClass()});
+                    new Class[]{(Type.class)});
         }
         catch (NoSuchMethodException ex) {
-            throw new TraceProvException("Internal error, looked for method " + getClass().getCanonicalName() + "'.visitDefault' but couldn't find it - and this means class is just broken! ", ex); // Can't happen
+            throw new TraceProvException("Internal error, looked for method " + getClass().getCanonicalName() + "'.visitDefault(Type)' but couldn't find it - and this means class is just broken! ", ex); // Can't happen
 
         }
     }
 
     /**
-     * Dispatches Type to most specifc method.
+     *
+     * Executes most specific {@code visit} method, defaulting to
+     * {@link #visit(eu.trentorise.opendata.traceprov.types.Type) visitDefault(Type)}
+     * if none is found.
      *
      * @throws TraceProvException on error
      */
-    protected void dispatch(Type c) {
-        Method method = getVisitMethod(c);
+    public void visit(Type type) {
+        Method method = getVisitMethod(type);
         try {
-            method.invoke(this, new Object[]{c});
+            method.invoke(this, new Object[]{type});
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             throw new TraceProvException("Internal error, tried to invoke method" + method + " but some Java oddity happened!", ex);
