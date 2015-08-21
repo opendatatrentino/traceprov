@@ -43,7 +43,7 @@ public class ProvFile implements Serializable {
     private Type type;
     private List<Def<ClassType>> classDefs;
     private ImmutableList<ConstraintViolation> typeErrors;
-    private Data data;
+    private DataNode data;
     private List<ConstraintViolation> dataErrors;
     private ImmutableList<PropertyMapping> mappings;
 
@@ -61,7 +61,7 @@ public class ProvFile implements Serializable {
             DcatMetadata dcatMetadata,
             Type type,
             Iterable<ConstraintViolation> schemaErrors,
-            Data data,
+            DataNode data,
             List<ConstraintViolation> dataErrors,
             Iterable<PropertyMapping> mappings) {
         checkNotNull(dcatMetadata);
@@ -123,7 +123,7 @@ public class ProvFile implements Serializable {
      * Returns the data content of the file as a hierarchical tree. If no data
      * was found, {@link DataMap#of()} is returned.
      */
-    public Data getData() {
+    public DataNode getData() {
         return data;
     }
 
@@ -187,7 +187,7 @@ public class ProvFile implements Serializable {
             this.provFile.typeErrors = ImmutableList.copyOf(typeErrors);
         }
 
-        public void setData(Data data) {
+        public void setData(DataNode data) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }

@@ -28,7 +28,7 @@ import java.util.Iterator;
  *
  * @author David Leoni
  */
-public class DataArray extends Data implements  Iterable<Data> {
+public class DataArray extends DataNode implements  Iterable<DataNode> {
 
     private static final long serialVersionUID = 1L;
     private static final DataArray INSTANCE = new DataArray();
@@ -38,13 +38,13 @@ public class DataArray extends Data implements  Iterable<Data> {
         super(Ref.of(), NodeMetadata.of(), new ArrayList());        
     }
 
-    private DataArray(Ref ref, NodeMetadata metadata,  Iterable<? extends Data> nodes) {
+    private DataArray(Ref ref, NodeMetadata metadata,  Iterable<? extends DataNode> nodes) {
         super(ref, metadata, nodes);
         checkNotNull(nodes);
     }
 
     @Override
-    public Iterator<Data> iterator() {
+    public Iterator<DataNode> iterator() {
         return getData().iterator();
     }
 
@@ -52,27 +52,27 @@ public class DataArray extends Data implements  Iterable<Data> {
      * Returns the list of sub nodes.
      */
     @Override
-    public Iterable<Data> getData(){
-        return (Iterable<Data>) super.getData();
+    public Iterable<DataNode> getData(){
+        return (Iterable<DataNode>) super.getData();
     }    
     
     public static DataArray of() {
         return INSTANCE;
     }
 
-    public static DataArray of(Iterable<? extends Data> nodes) {
+    public static DataArray of(Iterable<? extends DataNode> nodes) {
         return of(Ref.of(), NodeMetadata.of(), nodes);
     }
 
-    public static DataArray of(Data... nodes) {
+    public static DataArray of(DataNode... nodes) {
         return new DataArray(Ref.of(), NodeMetadata.of(), ImmutableList.copyOf(nodes));
     }
 
-    public static DataArray of(Ref ref, NodeMetadata metadata, Iterable<? extends Data> nodes) {
+    public static DataArray of(Ref ref, NodeMetadata metadata, Iterable<? extends DataNode> nodes) {
         return new DataArray(ref, metadata, nodes);
     }
         
-    public static DataArray of(Ref ref, Data... nodes) {
+    public static DataArray of(Ref ref, DataNode... nodes) {
         return new DataArray(ref, NodeMetadata.of(), Arrays.asList(nodes));
     }
 
@@ -81,7 +81,7 @@ public class DataArray extends Data implements  Iterable<Data> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        for (Data n : getData()){
+        for (DataNode n : getData()){
             if (i > 0){
                 sb.append(", ");
             }            
@@ -99,12 +99,12 @@ public class DataArray extends Data implements  Iterable<Data> {
    
     
     @Override
-    public void accept(IDataVisitor visitor, Data parent, String field, int pos) {
+    public void accept(IDataVisitor visitor, DataNode parent, String field, int pos) {
         int i = 0;
-        Iterator<Data> iter = getData().iterator();
+        Iterator<DataNode> iter = getData().iterator();
 
         while (iter.hasNext()) {
-            Data node = iter.next();
+            DataNode node = iter.next();
             node.accept(visitor, this, field, i);
             i++;
         }

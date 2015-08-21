@@ -24,6 +24,7 @@ import eu.trentorise.opendata.traceprov.data.ProvFile;
 import eu.trentorise.opendata.traceprov.data.ProvType;
 import eu.trentorise.opendata.traceprov.types.ClassType;
 import eu.trentorise.opendata.traceprov.types.Def;
+import eu.trentorise.opendata.traceprov.types.DefMetadata;
 import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.validation.IValidator;
 import java.io.IOException;
@@ -145,7 +146,7 @@ public class CsvValidator implements IValidator {
                 }
                 
                 Def.Builder<ClassType> builder = Def.builder();
-                builder.setName(Dict.of())
+                builder.setMetadata(DefMetadata.builder().setName(Dict.of()).build())
                 .setId(TRACEPROV_IRI + "generated-schema/"+UUID.randomUUID())
                 .setType(ClassType.builder().addPropertyDefs(Def.of())
                 .build());

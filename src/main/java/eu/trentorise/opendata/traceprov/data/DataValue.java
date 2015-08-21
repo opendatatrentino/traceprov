@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
  *
  * @author David Leoni
  */
-public class DataValue extends Data {
+public class DataValue extends DataNode {
 
     private static final long serialVersionUID = 1L;
     private static final DataValue INSTANCE = new DataValue();
@@ -52,7 +52,7 @@ public class DataValue extends Data {
 
     
     @Override
-    public void accept(IDataVisitor visitor, Data parent, String field, int pos) {
+    public void accept(IDataVisitor visitor, DataNode parent, String field, int pos) {
         visitor.visit((DataValue) this, parent, field, pos);
     }
 

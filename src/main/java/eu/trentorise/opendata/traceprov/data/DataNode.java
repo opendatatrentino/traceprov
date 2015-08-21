@@ -23,54 +23,54 @@ import javax.annotation.Nullable;
 
 /**
  * A node of the common tree format representation. It also holds a provenance
- * reference.
+ * reference. Use {@link IDataVisitor} and
+ * {@link #accept(eu.trentorise.opendata.traceprov.data.IDataVisitor, eu.trentorise.opendata.traceprov.data.Data, java.lang.String, int) accept}
+ * to navigate it.
  *
  * @author David Leoni
  */
-public abstract class Data implements Serializable {
+public abstract class DataNode implements Serializable {
+
     private Ref ref;
     private NodeMetadata metadata;
     private Object data;
 
-    Data(){
+    DataNode() {
         this.ref = Ref.of();
-        this.metadata = NodeMetadata.of();          
+        this.metadata = NodeMetadata.of();
         this.data = null;
     }
-    
-    Data(Ref ref, NodeMetadata metadata, @Nullable Object data) {
+
+    DataNode(Ref ref, NodeMetadata metadata, @Nullable Object data) {
         checkNotNull(ref);
         checkNotNull(metadata);
         this.ref = ref;
         this.metadata = metadata;
         this.data = data;
-    }    
-    
-    
-    
+    }
+
     /**
      * A reference to position in the original file from which this node comes
      * from. If unknown, {@link Ref#of()} is returned.
-     */    
-    public Ref getRef(){
+     */
+    public Ref getRef() {
         return ref;
     }
 
     /**
      * A reference to position in the original file from which this node comes
      * from. If unknown, {@link NodeMetadata#of()} is returned.
-     */        
-    public NodeMetadata getMetadata(){
+     */
+    public NodeMetadata getMetadata() {
         return metadata;
     }
 
     /**
-     * The subnodes of the node or the terminal value.     
-     */    
-    public Object getData(){
+     * The subnodes of the node or the terminal value.
+     */
+    public Object getData() {
         return data;
     }
-    
 
     /**
      * Calls {@code accept} on subnodes and then {@code visitor.visit} on this
@@ -84,7 +84,7 @@ public abstract class Data implements Serializable {
      * @param pos The position of the node in the parent array. If it is not in
      * an array, use 0.
      */
-    public abstract void accept(IDataVisitor visitor, Data parent, String field, int pos);
+    public abstract void accept(IDataVisitor visitor, DataNode parent, String field, int pos);
 
     /**
      * Converts the node to a simple Map/List tree suitable for JSON
@@ -95,7 +95,6 @@ public abstract class Data implements Serializable {
      */
     // todo asSimpleJavaType maybe is more descriptive
     public abstract Object asSimpleType();
-
 
     @Override
     public int hashCode() {
@@ -114,7 +113,7 @@ public abstract class Data implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Data other = (Data) obj;
+        final DataNode other = (DataNode) obj;
         if (!Objects.equals(this.ref, other.ref)) {
             return false;
         }
@@ -126,11 +125,10 @@ public abstract class Data implements Serializable {
         }
         return true;
     }
-    
-    
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getData() + '}';
     }
-    
+
 }

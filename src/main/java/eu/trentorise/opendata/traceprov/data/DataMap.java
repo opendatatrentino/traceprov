@@ -28,7 +28,7 @@ import java.util.Map;
  * @author David Leoni 
 */
 
-public class DataMap extends Data  {
+public class DataMap extends DataNode  {
 
     private static final DataMap INSTANCE = new DataMap();
     
@@ -39,7 +39,7 @@ public class DataMap extends Data  {
         
     }
 
-    private DataMap(Ref ref, NodeMetadata metadata,  Map<String, ? extends Data> nodes) {
+    private DataMap(Ref ref, NodeMetadata metadata,  Map<String, ? extends DataNode> nodes) {
         super(ref, metadata, nodes);
         checkNotNull(nodes);                
     }
@@ -48,19 +48,19 @@ public class DataMap extends Data  {
         return INSTANCE;
     }
     
-    public static DataMap of(Ref ref, NodeMetadata metadata, Map<String, ? extends  Data> nodes){
+    public static DataMap of(Ref ref, NodeMetadata metadata, Map<String, ? extends  DataNode> nodes){
        return new DataMap(ref, metadata, nodes);
     }
     
     @Override
-    public Map<String, ? extends Data> getData(){
-        return (Map<String, ? extends Data>) super.getData();
+    public Map<String, ? extends DataNode> getData(){
+        return (Map<String, ? extends DataNode>) super.getData();
     }
 
         
     @Override
-    public void accept(IDataVisitor visitor, Data parent, String field, int pos){
-        for (Map.Entry<String, ? extends Data> entry : getData().entrySet()){
+    public void accept(IDataVisitor visitor, DataNode parent, String field, int pos){
+        for (Map.Entry<String, ? extends DataNode> entry : getData().entrySet()){
             entry.getValue().accept(visitor, this, entry.getKey(), 0);
         }
         visitor.visit(this, parent, field, pos);

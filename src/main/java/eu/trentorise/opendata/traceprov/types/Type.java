@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * 
+ *
  *
  * @author David Leoni
  */
@@ -89,45 +89,20 @@ public abstract class Type implements Serializable {
     }
 
     /**
-     * The id of the type being defined as it is identified on the system of
-     * origin. Since this could be arbitrary it may or not be an IRI and may be
-     * non human readable, i.e. http://mycompany.com/types/3867
-     *
+     * Calls {@code accept} on subnodes and then {@code visitor.visit} on this
+     * node.    
+     * todo this should be abstract!
      */
-    public String getOriginId() {
-        return getId(); // todo check/document default
+    public void accept(TypeVisitor v) {
+        v.visit(this);
     }
 
-    /**
-     *
-     * The high-level most standard concept that most closely describes the
-     * datatype. For example, it could be a Dublin core class or attribute.
-     *
-     * The concept id should be the complete expanded IRI of a standard datatype
-     * that can represent faithfully this one, for example for integers it could
-     * be "http://www.w3.org/2001/XMLSchema#int"
-     *
-     * @see #getId()
-     *
-     */
-    public Concept getConcept() {
-        return Concept.of();
-    }
-
-    /**
-     * The human readable name of the type (may contain spaces), i.e. 'List
-     * of strings'
-     */
-    public Dict getName() {
-        return Dict.of(Locale.ENGLISH, this.getClass().getSimpleName());
-    }
-
-    /**
-     * The description of the type, i.e. 'A finite list of objects of a
-     * given type'. Should basically be the same as the javadoc.
-     */
-    public Dict getDescription() {
-        return Dict.of(""); // todo returning the javadoc would be nice, although not easy (reflection is not enough for this)
+    public DefMetadata getMetadata() {
+        return DefMetadata.builder()
+                .setConcept(Concept.of())
+                .setOriginId(getId())
+                .setName(Dict.of(Locale.ENGLISH, this.getClass().getSimpleName()))
+                .build();
     }
 
     /**
@@ -205,3 +180,4 @@ public abstract class Type implements Serializable {
         
      } */
 }
+

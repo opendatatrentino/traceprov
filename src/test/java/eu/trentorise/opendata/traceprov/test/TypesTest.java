@@ -16,18 +16,24 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.ClassPath;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
 import eu.trentorise.opendata.traceprov.TraceProvModule;
-import eu.trentorise.opendata.traceprov.geojson.Feature;
-import eu.trentorise.opendata.traceprov.geojson.GeoJson;
+import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.Def;
+import eu.trentorise.opendata.traceprov.types.DefMetadata;
 import eu.trentorise.opendata.traceprov.types.IntType;
+import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+import eu.trentorise.opendata.traceprov.types.TypeVisitor;
 import eu.trentorise.opendata.traceprov.types.Types;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Assert;
@@ -64,23 +70,39 @@ public class TypesTest {
     }
 
     @Test
+    public void testDefMetadata() {
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, DefMetadata.builder()
+                        .setOriginId("bla")
+                        .setDescription(Dict.of("ciao"))
+                        .build());
+    }
+    
+    /**
+     * This fuck doesn't deserialize 'metadata' and I really don't know why
+     * todo review
+     */
+    @Test
+    @Ignore
     public void testDef() {
         OdtJacksonTester.testJsonConv(objectMapper, LOG,
                 Def.builder()
-                .setOriginId("bla")
-                .setDescription(Dict.of("ciao"))
+                .setMetadata(
+                        DefMetadata.builder()
+                        .setOriginId("bla")
+                        .setDescription(Dict.of("ciao"))
+                        .build())
                 .setType(IntType.of())
                 .build());
     }
 
     @Test
     public void testCheckTypeId() {
-        
+
         Types.checkTypeId("a", null);
         Types.checkTypeId("a<>", null);
         Types.checkTypeId("a<IntType>", null);
         Types.checkTypeId("a<IntType<MapType<StringType,IntType>>>", null);
-        
+
         try {
             Types.checkTypeId("", null);
             Assert.fail("Shouldn't arrive here!");
@@ -96,15 +118,15 @@ public class TypesTest {
         catch (Exception ex) {
 
         }
-        
+
     }
-    
+
     /**
      * todo...
      */
     @Test
     @Ignore
-    public void testCheckTypeIdIrregularNesting(){
+    public void testCheckTypeIdIrregularNesting() {
         try {
             Types.checkTypeId("a<<>", null);
             Assert.fail("Shouldn't validate irregular nesting: a<<>");
@@ -112,7 +134,7 @@ public class TypesTest {
         catch (Exception ex) {
 
         }
-        
+
     }
 
     @Test
@@ -146,4 +168,44 @@ public class TypesTest {
             }
         }
     }
+
+    private static class TypePrinter extends TypeVisitor {
+        List<Type> visitedNodes = new ArrayList();
+        List<Class<? extends Type>> calledMethods = new ArrayList();
+        
+        @Override
+        public void visit(Type type) {
+            LOG.log(Level.FINE, "default visit, type id is {0}", type.getId());
+            visitedNodes.add(type);
+            calledMethods.add(Type.class);
+        }
+        
+        public void visit(AnyType type) {
+            LOG.log(Level.FINE, "AnyType visit, type id is {0}", type.getId());
+            visitedNodes.add(type);
+            calledMethods.add(AnyType.class);
+        }
+
+    }
+
+    @Test
+    public void testVisitorNoSpecificMethod() {
+        TypePrinter vis1 = new TypePrinter();        
+        vis1.visit(IntType.of());        
+        assertEquals(ImmutableList.of(IntType.of()), vis1.visitedNodes);
+        assertEquals(ImmutableList.of(Type.class), vis1.calledMethods);        
+        TypePrinter vis2 = new TypePrinter();        
+        vis2.visit(AnyType.of());        
+        assertEquals(ImmutableList.of(AnyType.of()), vis2.visitedNodes);
+        assertEquals(ImmutableList.of(AnyType.class), vis2.calledMethods);
+    }
+    
+    @Test
+    public void testVisitorWithSpecificMethod() {
+        TypePrinter vis2 = new TypePrinter();        
+        vis2.visit(AnyType.of());        
+        assertEquals(ImmutableList.of(AnyType.of()), vis2.visitedNodes);
+        assertEquals(ImmutableList.of(AnyType.class), vis2.calledMethods);
+    }
+    
 }

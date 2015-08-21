@@ -18,10 +18,9 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import static com.google.common.base.Preconditions.checkNotNull;
-import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.commons.validation.Ref;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.annotation.Nullable;
 
 
 /**
@@ -37,72 +36,43 @@ public class Def<T extends Type> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Def<AnyType> INSTANCE = new Def(
-            AnyType.of().getId(),
-            AnyType.of().getOriginId(),
-            AnyType.of(),
-            Concept.of(),
-            Dict.of(),
-            Dict.of(),
-            Ref.of());
+    private static final Def<AnyType> INSTANCE = new Def();
 
     private T type;
     private String id;
-    private String originId;
-    private Dict name;
-    private Dict description;
-    private Concept concept;
-    private Ref ref;
+    private DefMetadata metadata;    
 
     private Def() {
         id = "";
-        name = Dict.of();
-        description = Dict.of();
-        concept = Concept.of();
-        ref = Ref.of();
-        type = null;
+        metadata = DefMetadata.of();
+        type = (T) AnyType.of();
     }
 
     @JsonCreator
-    private Def(@JsonProperty("id") String id,
-            @JsonProperty("originId") String originId,
-            @JsonProperty("type") T type,
-            @JsonProperty("concept") Concept concept,
-            @JsonProperty("name") Dict name,
-            @JsonProperty("description") Dict description,
-            @JsonProperty("ref") Ref ref) {
-        this();
-
-        this.type = type;
-        this.id = id;      
-        this.originId = originId;
-        this.concept = concept;        
-        this.name = name;
-        this.description = description;
-        this.ref = ref;
+    private Def(
+            @JsonProperty("id") @Nullable String id,
+            @JsonProperty("metadata") @Nullable DefMetadata metadata,
+            @JsonProperty("type") @Nullable Type type) {
+        this();      
+        
+        this.id = id == null ? "" : id;      
+        this.metadata = (metadata == null) ? DefMetadata.of() : metadata;
+        this.type = (T) (type == null ? AnyType.of() : type);
         checkState();
     }
 
     private void checkState() {
         checkNotNull(id);
-        checkNotNull(concept);
-        checkNotNull(originId);
-        checkNotNull(name);
-        checkNotNull(description);
+        checkNotNull(metadata);
         checkNotNull(type);
-        checkNotNull(ref);
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 17 * hash + Objects.hashCode(this.type);
-        hash = 17 * hash + Objects.hashCode(this.id);
-        hash = 17 * hash + Objects.hashCode(this.originId);
-        hash = 17 * hash + Objects.hashCode(this.name);
-        hash = 17 * hash + Objects.hashCode(this.description);
-        hash = 17 * hash + Objects.hashCode(this.concept);
-        hash = 17 * hash + Objects.hashCode(this.ref);
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.type);
+        hash = 73 * hash + Objects.hashCode(this.id);
+        hash = 73 * hash + Objects.hashCode(this.metadata);
         return hash;
     }
 
@@ -121,19 +91,7 @@ public class Def<T extends Type> implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.originId, other.originId)) {
-            return false;
-        }
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.description, other.description)) {
-            return false;
-        }
-        if (!Objects.equals(this.concept, other.concept)) {
-            return false;
-        }
-        if (!Objects.equals(this.ref, other.ref)) {
+        if (!Objects.equals(this.metadata, other.metadata)) {
             return false;
         }
         return true;
@@ -141,11 +99,9 @@ public class Def<T extends Type> implements Serializable {
 
     @Override
     public String toString() {
-        return "Def{" + "type=" + type + ", id=" + id + ", originId=" + originId + ", name=" + name + ", description=" + description + ", concept=" + concept + ", ref=" + ref + '}';
+        return "Def{" + "type=" + type + ", id=" + id + ", metadata=" + metadata + '}';
     }
-
-  
-
+    
     public static Builder builder() {
         return new Builder();
     }
@@ -163,59 +119,10 @@ public class Def<T extends Type> implements Serializable {
     }
 
     /**
-     * The id of the object being defined as it is identified on the system of
-     * origin. Since this could be arbitrary it may or not be an IRI and may be
-     * non human readble, i.e. http://mycompany.com/types/3867
-     *
-     */
-    public String getOriginId() {
-        return originId;
-    }
-
-    /**
-     * The high-level concept describing the object being defined. For example,
-     * it could be a Dublin core class or attribute.
-     *
-     * For example, for a class the id of the concept might be an IRI to a
-     * well-known type like i.e. https://schema.org/Person or for a property
-     * could be an IRI to a well-known property like i.e.
-     * <a href="http://schema.org/name" target="_blank">http://schema.org/name</a>
-     *
-     * If unknown, {@link Concept #of()} is used.
-     *
-     */
-    public Concept getConcept() {
-        return concept;
-    }
-
-    /**
-     * Human-readable name of the definition. It can contain spaces.
-     *
-     * @see #getCanonicalName()
-     */
-    public Dict getName() {
-        return name;
-    }
-
-    /**
-     * Natural language description of the definition
-     */
-    public Dict getDescription() {
-        return description;
-    }
-
-    /**
      * The type assigned to the name
      */
     public T getType() {
         return type;
-    }
-
-    /**
-     * A reference to a document and position where the definition is located
-     */
-    public Ref getRef() {
-        return ref;
     }
 
     /**
@@ -260,47 +167,12 @@ public class Def<T extends Type> implements Serializable {
             return this;
         }
 
-        public Builder<W> setOriginId(String originId) {
+        public Builder<W> setMetadata(DefMetadata metadata) {
             if (built) {
                 throw new IllegalStateException(ERR_SET);
             }
 
-            td.originId = originId;
-            return this;
-        }
-
-        public Builder<W> setName(Dict name) {
-            if (built) {
-                throw new IllegalStateException(ERR_SET);
-            }
-
-            td.name = name;
-            return this;
-        }
-
-        public Builder<W> setDescription(Dict description) {
-            if (built) {
-                throw new IllegalStateException(ERR_SET);
-            }
-
-            td.description = description;
-            return this;
-        }
-
-        public Builder<W> setConcept(Concept concept) {
-            if (built) {
-                throw new IllegalStateException(ERR_SET);
-            }
-
-            td.concept = concept;
-            return this;
-        }
-
-        public Builder<W> setRef(Ref ref) {
-            if (built) {
-                throw new IllegalStateException(ERR_SET);
-            }
-            td.ref = ref;
+            td.metadata = metadata;
             return this;
         }
 

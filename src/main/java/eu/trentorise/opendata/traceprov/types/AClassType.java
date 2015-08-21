@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.types;
 
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.traceprov.data.Data;
+import eu.trentorise.opendata.traceprov.data.DataNode;
 import java.util.List;
 import org.immutables.value.Value;
 
@@ -56,7 +56,7 @@ abstract class AClassType extends Type {
     @Value.Default
     @Override
     public Class getJavaClass() {
-        return Data.class; // todo this is important I guess..
+        return DataNode.class; // todo this is important I guess..
     }
 
     @Override
@@ -81,27 +81,15 @@ abstract class AClassType extends Type {
 
     @Value.Default
     @Override
-    public Dict getDescription() {
-        return Dict.of();
+    public DefMetadata getMetadata() {
+        return DefMetadata.builder()
+                .setName(Dict.of())
+                .setDescription(Dict.of())
+                .setConcept(Concept.of())                
+                .setOriginId("")       
+                .build();
     }
 
-    @Value.Default
-    @Override
-    public Dict getName() {
-        return Dict.of();
-    }
-
-    @Value.Default
-    @Override
-    public Concept getConcept() {
-        return Concept.of();
-    }
-
-    @Value.Default
-    @Override
-    public String getOriginId() {
-        return "";
-    }
 
     @Value.Default
     @Override

@@ -21,7 +21,7 @@ import eu.trentorise.opendata.commons.SimpleStyle;
 import org.immutables.value.Value;
 
 /**
- * A reference to a type. 
+ * A reference to a type, useful for types with circular definitions.
  */
 @Value.Immutable
 @SimpleStyle
@@ -32,7 +32,7 @@ abstract class ARefType extends Type {
     private static final long serialVersionUID = 1L;
     
     @Value.Default
-    public String getClassId(){
+    public String gerReferencedTypeId(){
         return "";
     }
     /*

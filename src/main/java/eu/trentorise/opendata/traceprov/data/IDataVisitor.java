@@ -23,7 +23,7 @@ package eu.trentorise.opendata.traceprov.data;
 public interface IDataVisitor {
 
     /**
-     * Visits a DataMap
+     * Visits a {@link DataMap}
      * 
      * @param node the node to visite
      * @param parent the immediate parent of the node which is being visited
@@ -32,10 +32,10 @@ public interface IDataVisitor {
      * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is zero.
      */
-    void visit(DataMap node, Data parent, String field, int pos);
+    void visit(DataMap node, DataNode parent, String field, int pos);
 
     /**
-     * Visits a node list
+     * Visits a {@link DataList}
      * 
      * @param node the node to visit
      * @param parent the immediate parent of the node which is being visited
@@ -44,10 +44,10 @@ public interface IDataVisitor {
      * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is unspecified.
      */    
-    void visit(DataArray node, Data parent, String field, int pos);
+    void visit(DataArray node, DataNode parent, String field, int pos);
 
     /**
-     * Visits a node value
+     * Visits a {@link DataValue}
      * 
      * @param node the node to visit
      * @param parent the immediate parent of the node which is being visited
@@ -56,5 +56,5 @@ public interface IDataVisitor {
      * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is unspecified.
      */    
-    void visit(DataValue node, Data parent, String field, int pos);
+    void visit(DataValue node, DataNode parent, String field, int pos);
 }
