@@ -20,7 +20,7 @@ package eu.trentorise.opendata.traceprov.data;
  *
  * @author David Leoni
  */
-public interface IDataVisitor {
+public interface DataVisitor {
 
     /**
      * Visits a {@link DataMap}

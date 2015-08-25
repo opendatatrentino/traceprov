@@ -17,8 +17,11 @@ package eu.trentorise.opendata.traceprov.types;
 
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
+import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.exceptions.NotFoundException;
 import java.util.List;
+import java.util.Map;
 import org.immutables.value.Value;
 
 /**
@@ -37,14 +40,43 @@ abstract class AClassType extends Type {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The property definitions of the class
+     * The property definitions of the class as map. The keys are camelcased
+     * English short ids relative to this particular class, like
+     * {@code workAddress}, and they are intended to be used in scripting
+     * environments. The key does not necessarily needs to be equal to the last
+     * part of {#link Def#getId() Def id}
      */
-    public abstract List<Def> getPropertyDefs();
+    public abstract Map<String, Def> getPropertyDefs();
+
+    /**
+     * Returns true if class has given property
+     *
+     * @see #getPropertyDef(java.lang.String)
+     */
+    public boolean hasPropertyDef(String propertyName) {
+        checkNotEmpty(propertyName, "Invalid property name!");
+        return getPropertyDefs().containsKey(propertyName);
+    }
+
+    /**
+     * Returns given property, or throws exception if not found
+     *
+     * @throws eu.trentorise.opendata.traceprov.exceptions.NotFoundException
+     * @see #hasPropertyDef(java.lang.String)
+     */
+    public Def getPropertyDef(String propertyName) {
+        checkNotEmpty(propertyName, "Invalid property name!");
+        if (getPropertyDefs().containsKey(propertyName)) {
+            return getPropertyDefs().get(propertyName);
+        } else {
+            throw new NotFoundException("Couldn't find property " + propertyName);
+        }
+    }
 
     /**
      * The method definitions of the class TODO higly fuzzy thing
      */
-    public abstract List<Def<FunctionType>> getMethodDefs();
+    public abstract Map<String, Def<FunctionType>> getMethodDefs();
 
     /**
      * The unique indexes tht may constrain sets of schema values to be unique
@@ -85,11 +117,10 @@ abstract class AClassType extends Type {
         return DefMetadata.builder()
                 .setName(Dict.of())
                 .setDescription(Dict.of())
-                .setConcept(Concept.of())                
-                .setOriginId("")       
+                .setConcept(Concept.of())
+                .setOriginId("")
                 .build();
     }
-
 
     @Value.Default
     @Override

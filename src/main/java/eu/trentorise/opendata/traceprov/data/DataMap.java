@@ -16,8 +16,11 @@
 package eu.trentorise.opendata.traceprov.data;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 
 import eu.trentorise.opendata.commons.validation.Ref;
+import eu.trentorise.opendata.traceprov.exceptions.NotFoundException;
+import eu.trentorise.opendata.traceprov.types.Def;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,14 +56,38 @@ public class DataMap extends DataNode  {
     }
     
     @Override
-    public Map<String, ? extends DataNode> getData(){
-        return (Map<String, ? extends DataNode>) super.getData();
+    public Map<String, ? extends DataNode> getValue(){
+        return (Map<String, ? extends DataNode>) super.getValue();
     }
+    
+  /**
+     * Returns true if class has given property     
+     * 
+     * @see #getPropertyDef(java.lang.String) 
+     */
+    public boolean has(String propertyName){
+        checkNotEmpty(propertyName, "Invalid property name!");
+        return getValue().containsKey(propertyName);
+    }
+    
+    /**
+     * Returns given property, or throws exception if not found
+     * @throws eu.trentorise.opendata.traceprov.exceptions.NotFoundException 
+     * @see #hasPropertyDef(java.lang.String) 
+     */
+    public DataNode get(String propertyName){
+        checkNotEmpty(propertyName, "Invalid property name!");
+        if (getValue().containsKey(propertyName)){
+            return getValue().get(propertyName);
+        } else {
+            throw new NotFoundException("Couldn't find property '" + propertyName + "'");
+        }
+    }            
 
         
     @Override
-    public void accept(IDataVisitor visitor, DataNode parent, String field, int pos){
-        for (Map.Entry<String, ? extends DataNode> entry : getData().entrySet()){
+    public void accept(DataVisitor visitor, DataNode parent, String field, int pos){
+        for (Map.Entry<String, ? extends DataNode> entry : getValue().entrySet()){
             entry.getValue().accept(visitor, this, entry.getKey(), 0);
         }
         visitor.visit(this, parent, field, pos);

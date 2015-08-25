@@ -126,6 +126,16 @@ public class Def<T extends Type> implements Serializable {
     }
 
     /**
+     * Metadata about the definition, such as the natural language name, description, etc
+     * @return 
+     */
+    public DefMetadata getMetadata() {
+        return metadata;
+    }
+
+    
+    
+    /**
      * Default definition.
      */
     public static Def<AnyType> of() {
@@ -137,42 +147,44 @@ public class Def<T extends Type> implements Serializable {
         private static final String ERR_SET = "Tried to set property of an already built TypeDef!";
 
         private boolean built;
-        private final Def<W> td;
+        private final Def<W> def;
 
         private Builder() {
             built = false;
-            td = new Def();
+            def = new Def();
         }
 
         public Def<W> build() {
-            td.checkState();
+            def.checkState();
             built = true;
-            return td;
+            return def;
         }
-
-        public Builder<W> setType(W type) {
+        
+        /**
+         * @throws IllegalStateException if already built
+         */
+        private void checkBuilt(){
             if (built) {
                 throw new IllegalStateException(ERR_SET);
             }
-            td.type = type;
+        }
+
+        public Builder<W> setType(W type) {            
+            checkBuilt();
+            def.type = type;
             return this;
         }
 
         public Builder<W> setId(String id) {
-            if (built) {
-                throw new IllegalStateException(ERR_SET);
-            }
-
-            td.id = id;
+            checkBuilt();
+            def.id = id;
             return this;
         }
 
         public Builder<W> setMetadata(DefMetadata metadata) {
-            if (built) {
-                throw new IllegalStateException(ERR_SET);
-            }
+            checkBuilt();
 
-            td.metadata = metadata;
+            def.metadata = metadata;
             return this;
         }
 

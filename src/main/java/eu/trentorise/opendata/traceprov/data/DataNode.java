@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 /**
  * A node of the common tree format representation. It also holds a provenance
- * reference. Use {@link IDataVisitor} and
+ * reference. Use {@link DataVisitor} and
  * {@link #accept(eu.trentorise.opendata.traceprov.data.IDataVisitor, eu.trentorise.opendata.traceprov.data.Data, java.lang.String, int) accept}
  * to navigate it.
  *
@@ -58,8 +58,7 @@ public abstract class DataNode implements Serializable {
     }
 
     /**
-     * A reference to position in the original file from which this node comes
-     * from. If unknown, {@link NodeMetadata#of()} is returned.
+     * Provenance information about the node.
      */
     public NodeMetadata getMetadata() {
         return metadata;
@@ -68,13 +67,15 @@ public abstract class DataNode implements Serializable {
     /**
      * The subnodes of the node or the terminal value.
      */
-    public Object getData() {
+    public Object getValue() {
         return data;
     }
 
     /**
-     * Calls {@code accept} on subnodes and then {@code visitor.visit} on this
-     * node.
+     * Allows traversing the data tree with a {@link DataVisitor}.
+     * 
+     * <p> Calls {@code accept} on subnodes and then {@code visitor.visit} on this
+     * node. </p>
      *
      * @param visitor a node visitor.
      * @param parent the parent of the node. If unknown, use
@@ -84,7 +85,7 @@ public abstract class DataNode implements Serializable {
      * @param pos The position of the node in the parent array. If it is not in
      * an array, use 0.
      */
-    public abstract void accept(IDataVisitor visitor, DataNode parent, String field, int pos);
+    public abstract void accept(DataVisitor visitor, DataNode parent, String field, int pos);
 
     /**
      * Converts the node to a simple Map/List tree suitable for JSON
@@ -128,7 +129,7 @@ public abstract class DataNode implements Serializable {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getData() + '}';
+        return this.getClass().getSimpleName() + "{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getValue() + '}';
     }
 
 }

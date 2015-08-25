@@ -83,41 +83,41 @@ import org.apache.commons.csv.CSVRecord;
  */
 // todo Just an experiment, in case we need to move this to separate traceprov-csv repo
 public class CsvValidator implements IValidator {
-    
-    private static final Logger LOG = Logger.getLogger(CsvValidator.class.getName());   
+
+    private static final Logger LOG = Logger.getLogger(CsvValidator.class.getName());
     private static final ImmutableList<String> MIMETYPES = ImmutableList.of("text/csv");
-    
+
     @Override
     public ProvFile validate(InputStream stream, String mimeType, Type type, DcatMetadata dcatMetadata) {
 
         LOG.warning("CURRENT CSV VALIDATOR IS *EXPERIMENTAL*. DON'T TRUST IT!");
-        
+
         ProvFile.Builder builder = ProvFile.builder();
-        
+
         try {
-            Reader in =  new InputStreamReader(stream);
-            
+            Reader in = new InputStreamReader(stream);
+
             Iterable<CSVRecord> firstPass = CSVFormat.DEFAULT.parse(in);
             List<String> headers = new ArrayList();
-            if (firstPass.iterator().hasNext()){                
-                for (String header : firstPass.iterator().next()){
+            if (firstPass.iterator().hasNext()) {
+                for (String header : firstPass.iterator().next()) {
                     headers.add(header);
                 }
-                if (headers.isEmpty()){
+                if (headers.isEmpty()) {
                     throw new LoadException("Found no headers in CSV!");
                 }
             } else {
                 throw new LoadException("Provided csv is empty!!!");
             }
-            
+
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(in);
             int pyhsicalRow = 0;
-            
+
             for (CSVRecord record : records) {
                 long physicalColumn = record.getCharacterPosition();
-                
-                for (String field : record){
-                    
+
+                for (String field : record) {
+
                 }
                 String lastName = record.get("Last Name");
                 String firstName = record.get("First Name");
@@ -133,23 +133,25 @@ public class CsvValidator implements IValidator {
     @Override
     public ProvType validateType(InputStream stream, String mimeType) {
         try {
-            Reader in =  new InputStreamReader(stream);
-            
+            Reader in = new InputStreamReader(stream);
+
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(in);
             List<String> headers = new ArrayList();
-            if (records.iterator().hasNext()){                
-                for (String header : records.iterator().next()){
+            if (records.iterator().hasNext()) {
+                for (String header : records.iterator().next()) {
                     headers.add(header);
                 }
-                if (headers.isEmpty()){
+                if (headers.isEmpty()) {
                     throw new LoadException("Found no headers in CSV!");
                 }
-                
+
                 Def.Builder<ClassType> builder = Def.builder();
-                builder.setMetadata(DefMetadata.builder().setName(Dict.of()).build())
-                .setId(TRACEPROV_IRI + "generated-schema/"+UUID.randomUUID())
-                .setType(ClassType.builder().addPropertyDefs(Def.of())
-                .build());
+
+                builder.setType(ClassType.builder().putPropertyDefs("a",Def.of())
+                        .setMetadata(DefMetadata.builder().setName(Dict.of()).build())
+                        .setId(TRACEPROV_IRI + "generated-schema/" + UUID.randomUUID())
+                        
+                                .build());
             } else {
                 throw new LoadException("Provided csv is empty!!!");
             }
@@ -160,8 +162,6 @@ public class CsvValidator implements IValidator {
         throw new RuntimeException("todo implement me!");
     }
 
-    
-    
     @Override
     public ImmutableList<String> getSupportedMimetypes() {
         return MIMETYPES;

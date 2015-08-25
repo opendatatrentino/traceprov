@@ -46,13 +46,13 @@ public class DataValue extends DataNode {
      */
     @Nullable
     @Override
-    public Object getData(){
-        return super.getData();
+    public Object getValue(){
+        return super.getValue();
     }
 
     
     @Override
-    public void accept(IDataVisitor visitor, DataNode parent, String field, int pos) {
+    public void accept(DataVisitor visitor, DataNode parent, String field, int pos) {
         visitor.visit((DataValue) this, parent, field, pos);
     }
 
@@ -92,7 +92,7 @@ public class DataValue extends DataNode {
    
     @Override
     public String toString() {
-        return "DataValue{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getData() + '}';
+        return "DataValue{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getValue() + '}';
     }
     
 }

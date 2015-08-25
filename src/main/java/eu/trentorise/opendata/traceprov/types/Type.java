@@ -23,6 +23,8 @@ import java.util.Locale;
 
 /**
  *
+ * A type expression, including basic data types like Int, boolean, etc. Complex
+ * ones are defined with {@link ClassType}.
  *
  * @author David Leoni
  */
@@ -84,19 +86,31 @@ public abstract class Type implements Serializable {
 
     }
 
+    /**
+     *
+     * A string with the fully qualified name valid as unique identifier for
+     * traceprov operations. The namespace must be suitable use in programming
+     * languages, for example "eu.trentorise.opendata.traceprov.types.IntType"
+     */
     public String getId() {
         return this.getClass().getCanonicalName();
     }
 
     /**
+     * Allows traversing the type tree with a {@link TypeVisitor}.
+     *
+     * <p>
      * Calls {@code accept} on subnodes and then {@code visitor.visit} on this
-     * node.    
-     * todo this should be abstract!
+     * node. todo this should be abstract!</p>
      */
     public void accept(TypeVisitor v) {
         v.visit(this);
     }
 
+    /**
+     * The metadata associated to the type expression when it is defined, i.e.
+     * the name, description, provenance...
+     */
     public DefMetadata getMetadata() {
         return DefMetadata.builder()
                 .setConcept(Concept.of())
@@ -106,8 +120,8 @@ public abstract class Type implements Serializable {
     }
 
     /**
-     * Returns the canonical Java class to represent instances of the type.
-     * Other classes may be added with type converters todo define better
+     * The canonical Java class to represent instances of the type. Other
+     * classes may be added with type converters todo define better
      */
     public abstract Class getJavaClass();
 
@@ -180,4 +194,3 @@ public abstract class Type implements Serializable {
         
      } */
 }
-

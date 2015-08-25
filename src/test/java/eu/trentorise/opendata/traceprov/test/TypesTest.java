@@ -77,12 +77,8 @@ public class TypesTest {
                         .build());
     }
     
-    /**
-     * This fuck doesn't deserialize 'metadata' and I really don't know why
-     * todo review
-     */
+
     @Test
-    @Ignore
     public void testDef() {
         OdtJacksonTester.testJsonConv(objectMapper, LOG,
                 Def.builder()

@@ -30,7 +30,7 @@ import java.util.Map;
  * Produces a simple HashMap/ArrayList version of an {@link DataNode} tree
  * @author David Leoni 
  */
-final class SimpleMapTransformer implements IDataVisitor {
+final class SimpleMapTransformer implements DataVisitor {
     private LinkedList<Map.Entry> stack;    
 
     public SimpleMapTransformer() {
@@ -43,7 +43,7 @@ final class SimpleMapTransformer implements IDataVisitor {
         
         Map map = new HashMap();
         
-        for (int i = 0; i < DataMap.getData().size(); i++){
+        for (int i = 0; i < DataMap.getValue().size(); i++){
             Map.Entry entry = stack.removeFirst();
             map.put(entry.getKey(), entry.getValue());
         }
@@ -65,7 +65,7 @@ final class SimpleMapTransformer implements IDataVisitor {
 
     @Override
     public void visit(DataValue DataValue, DataNode parent, String key, int pos) {
-        stack.addFirst(Maps.immutableEntry(key, DataValue.getData()));
+        stack.addFirst(Maps.immutableEntry(key, DataValue.getValue()));
     }
     
     public Object getResult(){

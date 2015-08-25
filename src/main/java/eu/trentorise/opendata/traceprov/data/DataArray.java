@@ -45,15 +45,15 @@ public class DataArray extends DataNode implements  Iterable<DataNode> {
 
     @Override
     public Iterator<DataNode> iterator() {
-        return getData().iterator();
+        return getValue().iterator();
     }
 
     /**
      * Returns the list of sub nodes.
      */
     @Override
-    public Iterable<DataNode> getData(){
-        return (Iterable<DataNode>) super.getData();
+    public Iterable<DataNode> getValue(){
+        return (Iterable<DataNode>) super.getValue();
     }    
     
     public static DataArray of() {
@@ -81,7 +81,7 @@ public class DataArray extends DataNode implements  Iterable<DataNode> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
-        for (DataNode n : getData()){
+        for (DataNode n : getValue()){
             if (i > 0){
                 sb.append(", ");
             }            
@@ -99,9 +99,9 @@ public class DataArray extends DataNode implements  Iterable<DataNode> {
    
     
     @Override
-    public void accept(IDataVisitor visitor, DataNode parent, String field, int pos) {
+    public void accept(DataVisitor visitor, DataNode parent, String field, int pos) {
         int i = 0;
-        Iterator<DataNode> iter = getData().iterator();
+        Iterator<DataNode> iter = getValue().iterator();
 
         while (iter.hasNext()) {
             DataNode node = iter.next();
