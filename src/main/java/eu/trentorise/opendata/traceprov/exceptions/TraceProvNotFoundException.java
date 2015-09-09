@@ -22,9 +22,9 @@ package eu.trentorise.opendata.traceprov.exceptions;
  * @author David Leoni <david.leoni@unitn.it>
  * @since 0.3
  */
-public class NotFoundException extends TraceProvException {
+public class TraceProvNotFoundException extends TraceProvException {
     
-    private NotFoundException(){
+    private TraceProvNotFoundException(){
         super();
     }
     
@@ -32,14 +32,14 @@ public class NotFoundException extends TraceProvException {
     /**
      * Creates the NotFoundException using the provided message and throwable
      */
-    public NotFoundException(String msg, Throwable tr) {
+    public TraceProvNotFoundException(String msg, Throwable tr) {
         super(msg, tr);
     }
 
     /**
      * Creates the NotFoundException using the provided message
      */
-    public NotFoundException(String msg) {
+    public TraceProvNotFoundException(String msg) {
         super(msg);
     }
 }

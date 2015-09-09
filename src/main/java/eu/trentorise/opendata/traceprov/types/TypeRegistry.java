@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.types;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
-import eu.trentorise.opendata.traceprov.exceptions.NotFoundException;
+import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -57,13 +57,13 @@ public class TypeRegistry {
     }
 
     /**
-     * @throws eu.trentorise.opendata.traceprov.exceptions.NotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException
      */
     public Def<ClassType> getClassDef(String classDefId) {
         checkNotEmpty(classDefId, "Invalid classDef id!");
         Def<ClassType> classDef = classDefs.get(classDefId);
         if (classDef == null) {
-            throw new NotFoundException("Couldn't find classDefId " + classDefId);
+            throw new TraceProvNotFoundException("Couldn't find classDefId " + classDefId);
         }
         return classDef;
 
@@ -95,13 +95,13 @@ public class TypeRegistry {
 
     /**
      * Returns the default instance of a given datatype id
-     * @throws eu.trentorise.opendata.traceprov.exceptions.NotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException
      */
     public Type getDatatype(String datatypeId) {
         checkNotEmpty(datatypeId, "Invalid datatype id!");
         Type type = types.get(datatypeId);
         if (type == null) {
-            throw new NotFoundException("Couldn't find datatypeId " + datatypeId);
+            throw new TraceProvNotFoundException("Couldn't find datatypeId " + datatypeId);
         }
         return type;
     }

@@ -18,7 +18,6 @@ package eu.trentorise.opendata.traceprov.engine;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import eu.trentorise.opendata.traceprov.engine.WeightedResult;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
@@ -31,7 +30,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = WeightedResult.class)
 @JsonDeserialize(as = WeightedResult.class)
-public abstract class AWeightedResult{
+public abstract class AWeightedResult {
     
     @Value.Default
     public double getScore(){

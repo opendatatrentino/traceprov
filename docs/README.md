@@ -52,7 +52,7 @@ tt = eu.trentorise.opendata.traceprov.types
 Main elements are `Type`, `ClassType`, `Def` and `RefType`.
 
 #### Type
-`Type` is a type expression, which doesn't have an associated name. A type can have parameters for generics.
+`Type` is a type expression, which doesn't have an associated name. A type can have parameters to represent generics.
 
 
 
@@ -97,7 +97,7 @@ Let's say we a have a list of integers:
 ListType stringList = ListType.of(IntType.of());
 ```
 
-The typeId field is a string with the java class fully qualified name, WITHOUT eventual parameters as generics:
+The `typeId` field is a string with the java class fully qualified name, WITHOUT eventual parameters as generics:
 ```java
 stringList.getTypeId() == "eu.trentorise.opendata.traceprov.types.ListType"
 ```
@@ -120,36 +120,9 @@ abstract class ListType extends Type {
 }
 ```
 
-#### ClassType
- A `ClassType` is a complex type expression made of properties and methods associated to them.  As class model we get inspiration from Typescript. Notice a class expression doesn't have an id, name or description, as these are assigned within a definition `Def`, see next paragraph.
-
-```java
-ClassType myPersonType = ClassType.builder()
-                            .addProperty(
-                                    Def.builder()
-                                            .setName("age")
-                                            .setType(IntType.of())
-                                        .build())
-                            .addProperty(
-                                    Def.builder()
-                                            .setName("name")
-                                            .setType(StringType.of())
-                                        .build())
-                            )
-                            .addMethod(Def.builder()
-                                            .setName("live")
-                                            .setType(Function..)
-                                            .build())
-                            )
-                            .build()
-``` 
-
-The type id is always the ClassType as for simple types:
-```java
-personTypeExpr.getTypeId() == "eu.trentorise.opendata.traceprov.types.ClassType"
-```
-
 #### Definitions
+
+**TODO OLD & WRONG**
 
 A definition `Def` associates  a name and other semantic info like description to a type expression.
 
@@ -173,7 +146,44 @@ Def<ClassType> myPersonDef = Def.<ClassType>builder()
 
 ```
 
-#### RefType 
+
+
+#### ClassType
+ A `ClassType` is a complex type expression made of properties and methods associated to them.  As class model we get inspiration from _Typescript_. Due to their particular nature, class expressions may also have an identifier. In the example we show the minimal identifiers required to form a class. More metadata such as natural language names, description, etc can be added to class and to each property and method.
+
+```java
+        ClassType myPersonType = ClassType
+                .builder()
+                .setId("org.mycompany.Person")
+                .putPropertyDefs(
+                        "age", // property name within the class, short, english and camelcased
+                        Def
+                        .builder()
+                        // id for eventual condivision of property def with other types. 
+                        .setId("org.mycompany.properties.age")
+                        .setType(IntType.of())
+                        .build())
+                .putPropertyDefs(
+                        "name",
+                        Def
+                        .builder()
+                        .setId("org.mycompany.properties.name")
+                        .setType(StringType.of())
+                        .build())
+                .putMethodDefs("walk",
+                        Def
+                        .builder()
+                        .setId("org.mycompany.methods.walk")
+                        .setType(FunctionType.of()) // todo add better example                                
+                        .build())
+                .build();
+
+``` 
+
+
+
+
+#### RefType
 A reference to a type defined in a definition `Def`. For example, to reference the `Person` defined in the previous example, we would create a `RefType`:
 
 ```java
@@ -185,13 +195,71 @@ myRef.getTypeId() == "tt.RefType"
 
 #### TypeContext
 
-Maybe it can just be a simple
+**TODO** Maybe it can just be a simple
 
 ```java
 Map<String, Def> defs;
 get/has ClassType
 get/has FunctionType
 ```
+
+
+#### Conversions
+
+##### Date conversions
+
+```
+"10/11/2014" -> Java Date (that is number of millisecs from 1970) 38293432489234
+accuracy:	0.6
+```
+
+| candidates  | score |
+| ------------|-------|
+| 10 Nov 2014 | 0.4|
+| 11 Oct 2014 | 0.6|
+
+
+```
+"10/11/2014" -> Java Date (that is number of millisecs from 1970) 38293432489234
+accuracy: 0.6
+```
+
+| candidates  | score | accuracy|
+| ------------|-------|---------|
+| 10 Nov 2014 | 0.4   | 0.6  |
+| 11 Oct 2014 | 0.6   | 0.6  |
+
+
+##### Name enrichment as scored converion
+
+```
+"Trento" -> id
+
+accuracy:	0.6
+```
+
+| candidates  | score |
+| ------------|-------|
+| 10 Nov 2014 | 0.4|
+| 11 Oct 2014 | 0.6|
+
+
+"Trento (TN)" -> id
+accuracy: 0.3
+
+```
+"10/11/2014" -> Java Date (that is number of millisecs from 1970) 38293432489234
+accuracy: 0.6
+```
+
+| candidates  | score | accuracy|
+| ------------|-------|---------|
+| 10 Nov 2014 | 0.4   | 0.6  |
+| 11 Oct 2014 | 0.6   | 0.6  |
+
+
+
+
 
 
 ### Logging

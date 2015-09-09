@@ -148,7 +148,7 @@ public class ConverterTest {
         assertTrue(convert.getAccuracy()>= 1.0);
         assertEquals(Dict.of("a", "b"), convert.value());
         assertEquals(1, convert.getCandidates().size());
-        assertTrue(convert.succeded());
+        assertTrue(convert.completelySucceded());
 
     }
 

@@ -19,7 +19,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.exceptions.NotFoundException;
+import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import eu.trentorise.opendata.traceprov.types.Def;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +72,7 @@ public class DataMap extends DataNode  {
     
     /**
      * Returns given property, or throws exception if not found
-     * @throws eu.trentorise.opendata.traceprov.exceptions.NotFoundException 
+     * @throws eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException 
      * @see #hasPropertyDef(java.lang.String) 
      */
     public DataNode get(String propertyName){
@@ -80,7 +80,7 @@ public class DataMap extends DataNode  {
         if (getValue().containsKey(propertyName)){
             return getValue().get(propertyName);
         } else {
-            throw new NotFoundException("Couldn't find property '" + propertyName + "'");
+            throw new TraceProvNotFoundException("Couldn't find property '" + propertyName + "'");
         }
     }            
 

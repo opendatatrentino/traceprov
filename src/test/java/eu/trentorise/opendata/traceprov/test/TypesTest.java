@@ -23,9 +23,12 @@ import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
 import eu.trentorise.opendata.traceprov.TraceProvModule;
 import eu.trentorise.opendata.traceprov.types.AnyType;
+import eu.trentorise.opendata.traceprov.types.ClassType;
 import eu.trentorise.opendata.traceprov.types.Def;
 import eu.trentorise.opendata.traceprov.types.DefMetadata;
+import eu.trentorise.opendata.traceprov.types.FunctionType;
 import eu.trentorise.opendata.traceprov.types.IntType;
+import eu.trentorise.opendata.traceprov.types.StringType;
 import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 import eu.trentorise.opendata.traceprov.types.TypeVisitor;
@@ -72,11 +75,10 @@ public class TypesTest {
     @Test
     public void testDefMetadata() {
         OdtJacksonTester.testJsonConv(objectMapper, LOG, DefMetadata.builder()
-                        .setOriginId("bla")
-                        .setDescription(Dict.of("ciao"))
-                        .build());
+                .setOriginId("bla")
+                .setDescription(Dict.of("ciao"))
+                .build());
     }
-    
 
     @Test
     public void testDef() {
@@ -166,16 +168,17 @@ public class TypesTest {
     }
 
     public static class TestPrinter extends TypeVisitor {
+
         List<Type> visitedNodes = new ArrayList();
         List<Class<? extends Type>> calledMethods = new ArrayList();
-        
+
         @Override
         public void visitDefault(Type type) {
             LOG.log(Level.FINE, "default visit, type id is {0}", type.getId());
             visitedNodes.add(type);
             calledMethods.add(Type.class);
         }
-        
+
         public void visit(AnyType type) {
             LOG.log(Level.FINE, "AnyType visit, type id is {0}", type.getId());
             visitedNodes.add(type);
@@ -186,18 +189,48 @@ public class TypesTest {
 
     @Test
     public void testVisitorNoSpecificMethod() {
-        TypeVisitor vis = new TestPrinter();        
-        vis.visit(IntType.of());        
+        TypeVisitor vis = new TestPrinter();
+        vis.visit(IntType.of());
         assertEquals(ImmutableList.of(IntType.of()), ((TestPrinter) vis).visitedNodes);
-        assertEquals(ImmutableList.of(Type.class), ((TestPrinter) vis).calledMethods);        
+        assertEquals(ImmutableList.of(Type.class), ((TestPrinter) vis).calledMethods);
     }
-    
+
     @Test
     public void testVisitorWithSpecificMethod() {
-        TypeVisitor vis = new TestPrinter();        
-        vis.visit(AnyType.of());        
-        assertEquals(ImmutableList.of(AnyType.of()), ((TestPrinter)vis).visitedNodes);
-        assertEquals(ImmutableList.of(AnyType.class), ((TestPrinter)vis).calledMethods);
+        TypeVisitor vis = new TestPrinter();
+        vis.visit(AnyType.of());
+        assertEquals(ImmutableList.of(AnyType.of()), ((TestPrinter) vis).visitedNodes);
+        assertEquals(ImmutableList.of(AnyType.class), ((TestPrinter) vis).calledMethods);
     }
-    
+
+    @Test
+    public void testClassType() {
+        ClassType myPersonType = ClassType
+                .builder()
+                .setId("org.mycompany.Person")
+                .putPropertyDefs(
+                        "age", // property name within the class, short, english and camelcased
+                        Def
+                        .builder()
+                        // id for eventual condivision of property def with other types. 
+                        .setId("org.mycompany.properties.age")
+                        .setType(IntType.of())
+                        .build())
+                .putPropertyDefs(
+                        "name",
+                        Def
+                        .builder()
+                        .setId("org.mycompany.properties.name")
+                        .setType(StringType.of())
+                        .build())
+                .putMethodDefs("walk",
+                        Def
+                        .builder()
+                        .setId("org.mycompany.methods.walk")
+                        .setType(FunctionType.of()) // todo add better example                                
+                        .build())
+                .build();
+
+    }
+
 }

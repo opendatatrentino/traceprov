@@ -19,7 +19,7 @@ import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 import eu.trentorise.opendata.traceprov.data.DataNode;
-import eu.trentorise.opendata.traceprov.exceptions.NotFoundException;
+import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import java.util.List;
 import java.util.Map;
 import org.immutables.value.Value;
@@ -61,7 +61,7 @@ abstract class AClassType extends Type {
     /**
      * Returns given property, or throws exception if not found
      *
-     * @throws eu.trentorise.opendata.traceprov.exceptions.NotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException
      * @see #hasPropertyDef(java.lang.String)
      */
     public Def getPropertyDef(String propertyName) {
@@ -69,7 +69,7 @@ abstract class AClassType extends Type {
         if (getPropertyDefs().containsKey(propertyName)) {
             return getPropertyDefs().get(propertyName);
         } else {
-            throw new NotFoundException("Couldn't find property " + propertyName);
+            throw new TraceProvNotFoundException("Couldn't find property " + propertyName);
         }
     }
 
