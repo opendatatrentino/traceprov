@@ -17,8 +17,8 @@ package eu.trentorise.opendata.traceprov.types;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.commons.SimpleStyle;
 import java.io.Serializable;
 import org.immutables.value.Value;
 
@@ -28,7 +28,7 @@ import org.immutables.value.Value;
  * @author David Leoni
  */
 @Value.Immutable
-@SimpleStyle
+@BuilderStylePublic
 @JsonSerialize(as = Concept.class)
 @JsonDeserialize(as = Concept.class)
 abstract class AConcept implements Serializable{
