@@ -4,6 +4,11 @@ WARNING: THIS IS ONLY A TEMPLATE FOR THE DOCUMENTATION. <br/>
 RELEASE DOCS ARE ON THE <a href="http://opendatatrentino.github.io/traceprov/" target="_blank">PROJECT WEBSITE</a>
 </p>
 
+<p class="josman-to-strip" align="center">
+<img alt="Traceprov logo" src="docs/img/traceprov-logo-200px.png" >
+<br/>
+</p>
+
 **About**
 
 Java library for data tracking:
