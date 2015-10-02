@@ -65,12 +65,8 @@ public final class ProvRefs {
      */
     public static String tablePath(int rowIndex, int colIndex) {
         checkArgument(rowIndex >= -1, "row index must be >= -1, found instead %s", rowIndex);
-        checkArgument(colIndex >= -1, "col index must be >= -1, found instead %s", colIndex);
-        if (rowIndex == -1 && colIndex == -1) {
-            return "*";
-        } else {
-            return (rowIndex == -1 ? "*" : rowIndex) + "." + (colIndex == -1 ? "*" : colIndex);
-        }
+        checkArgument(colIndex >= -1, "col index must be >= -1, found instead %s", colIndex);        
+        return "$[" + (rowIndex == -1 ? "*" : rowIndex) + "][" + (colIndex == -1 ? "*" : colIndex ) + "]";
     }
 
     /**
@@ -85,11 +81,7 @@ public final class ProvRefs {
     public static String tablePath(int rowIndex, String header) {
         checkArgument(rowIndex >= -1, "row index must be >= -1, found instead %s", rowIndex);
         checkNotEmpty(header, "Invalid header! To select all headers use *", "");
-        if (rowIndex == -1 && header.equals("*")) {
-            return "*";
-        } else {
-            return (rowIndex == -1 ? "*" : rowIndex) + "." + header;
-        }
+        return "$[" + (rowIndex == -1 ? "*" : rowIndex) + "]." + header;
     }
 
     /**

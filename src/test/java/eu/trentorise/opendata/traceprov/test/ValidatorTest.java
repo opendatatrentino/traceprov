@@ -16,7 +16,8 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import eu.trentorise.opendata.commons.OdtConfig;
-import eu.trentorise.opendata.traceprov.test.services.CsvValidator;
+import eu.trentorise.opendata.traceprov.validation.CsvValidator;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 

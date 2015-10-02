@@ -21,7 +21,7 @@ import java.util.List;
 
 
 /**
- *
+ * TODO Much WIP
  * @author David Leoni
  */
 public abstract class Operation {

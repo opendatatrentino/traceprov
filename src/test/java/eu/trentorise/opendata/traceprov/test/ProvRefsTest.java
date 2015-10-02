@@ -18,6 +18,8 @@ package eu.trentorise.opendata.traceprov.test;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
+import eu.trentorise.opendata.traceprov.types.ProvRefs;
+
 import static eu.trentorise.opendata.traceprov.types.ProvRefs.propertyRef;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -36,7 +38,37 @@ public class ProvRefsTest {
     }
     
     @Test
-    public void test() {
+    public void testTable(){
+	try {
+	    ProvRefs.tablePath(-2, 0);
+	} catch (IllegalArgumentException ex){
+	    
+	}
+	
+	try {
+	    ProvRefs.tablePath(0, -2);
+	} catch (IllegalArgumentException ex){
+	    
+	}
+	
+	
+	assertEquals("$[0][*]", ProvRefs.tablePath(0, -1));
+	
+	assertEquals("$[*][0]", ProvRefs.tablePath(-1, 0));
+	
+	assertEquals("$[*][*]", ProvRefs.tablePath(-1, -1));
+	
+	assertEquals("$[0].*", ProvRefs.tablePath(0, "*"));
+	
+	assertEquals("$[*].a", ProvRefs.tablePath(-1, "a"));
+	
+	assertEquals("$[*].*", ProvRefs.tablePath(-1, "*"));
+	
+	
+    }
+    
+    @Test
+    public void testDcat() {
         assertEquals("catalog", propertyRef(DcatMetadata.class, "catalog"));
 
         try {
@@ -65,4 +97,6 @@ public class ProvRefsTest {
 
         assertEquals("dataset.themes[*].uri", propertyRef(DcatMetadata.class, "dataset", "themes", "uri"));
     }
+    
+    
 }

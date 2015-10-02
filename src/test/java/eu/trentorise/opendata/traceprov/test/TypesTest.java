@@ -179,8 +179,7 @@ public class TypesTest {
             calledMethods.add(Type.class);
         }
 
-        public void visit(AnyType type) {
-            LOG.log(Level.FINE, "AnyType visit, type id is {0}", type.getId());
+        public void visit(AnyType type) {           
             visitedNodes.add(type);
             calledMethods.add(AnyType.class);
         }
