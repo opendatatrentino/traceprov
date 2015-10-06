@@ -17,7 +17,11 @@ package eu.trentorise.opendata.traceprov.data;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import eu.trentorise.opendata.commons.validation.Ref;
+import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
@@ -95,7 +99,7 @@ public abstract class DataNode implements Serializable {
      * HashMap/ArrayList/String/Number/null
      */
     // todo asSimpleJavaType maybe is more descriptive
-    public abstract Object asSimpleType();
+    public abstract Object asSimpleType(TypeRegistry typeRegistry);
 
     @Override
     public int hashCode() {
@@ -131,5 +135,7 @@ public abstract class DataNode implements Serializable {
     public String toString() {
         return this.getClass().getSimpleName() + "{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getValue() + '}';
     }
+
+    
 
 }

@@ -44,4 +44,9 @@ abstract class ADictType extends Type {
     public Class getJavaClass(){
         return Dict.class;
     }
+    
+    @Override
+    public boolean isImmutable(){
+	return true;	
+    }
 }

@@ -17,7 +17,13 @@ package eu.trentorise.opendata.traceprov.validation;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
+
 import com.google.common.collect.ImmutableList;
+
+import eu.trentorise.opendata.traceprov.db.View;
+import eu.trentorise.opendata.traceprov.types.Type;
+
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -28,6 +34,13 @@ import javax.annotation.Nullable;
 public final class Preconditions {
 
     private Preconditions(){}
+    
+    
+    public static Type checkType(@Nullable Type type){
+	checkNotNull(type);
+	checkNotEmpty(type.getId(), "Invalid type datatype id!");
+	return type;
+    }
     
     /**
      *
@@ -87,4 +100,5 @@ public final class Preconditions {
         }
     }
 
+    
 }

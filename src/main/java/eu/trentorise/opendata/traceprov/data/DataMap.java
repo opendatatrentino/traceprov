@@ -20,86 +20,96 @@ import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEm
 
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
-import eu.trentorise.opendata.traceprov.types.Def;
+import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 
-
-/** 
+/**
  * A data node containing a map of fields to other nodes.
- * @author David Leoni 
-*/
+ * 
+ * @author David Leoni
+ */
 
-public class DataMap extends DataNode  {
+public class DataMap extends DataNode {
 
     private static final DataMap INSTANCE = new DataMap();
-    
-    private static final long serialVersionUID = 1L;    
-    
-    private DataMap(){
-        super(Ref.of(), NodeMetadata.of(), new HashMap());
-        
+
+    private static final long serialVersionUID = 1L;
+
+    DataMap() {
+	super(Ref.of(), NodeMetadata.of(), new HashMap());
+
     }
 
-    private DataMap(Ref ref, NodeMetadata metadata,  Map<String, ? extends DataNode> nodes) {
-        super(ref, metadata, nodes);
-        checkNotNull(nodes);                
+    protected DataMap(
+	    Ref ref,
+	    NodeMetadata metadata,
+	    Map<String, ? extends DataNode> nodes) {
+	super(ref, metadata, nodes);
+	checkNotNull(nodes);
     }
-                 
-    public static DataMap of(){
-        return INSTANCE;
+
+    public static DataMap of() {
+	return INSTANCE;
     }
-    
-    public static DataMap of(Ref ref, NodeMetadata metadata, Map<String, ? extends  DataNode> nodes){
-       return new DataMap(ref, metadata, nodes);
+
+    public static DataMap of(
+	    Ref ref,
+	    NodeMetadata metadata,
+	    Map<String, ? extends DataNode> nodes) {
+
+	return new DataMap(ref, metadata, nodes);
     }
-    
+
+
     @Override
-    public Map<String, ? extends DataNode> getValue(){
-        return (Map<String, ? extends DataNode>) super.getValue();
+    public Map<String, ? extends DataNode> getValue() {
+	return (Map<String, ? extends DataNode>) super.getValue();
     }
-    
-  /**
-     * Returns true if class has given property     
+
+    /**
+     * Returns true if map has given property
      * 
-     * @see #getPropertyDef(java.lang.String) 
+     * @see #getPropertyDef(java.lang.String)
      */
-    public boolean has(String propertyName){
-        checkNotEmpty(propertyName, "Invalid property name!");
-        return getValue().containsKey(propertyName);
+    public boolean has(String propertyName) {
+	checkNotEmpty(propertyName, "Invalid property name!");
+	return getValue().containsKey(propertyName);
     }
-    
+
     /**
      * Returns given property, or throws exception if not found
-     * @throws eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException 
-     * @see #hasPropertyDef(java.lang.String) 
+     * 
+     * @throws eu.trentorise.opendata.traceprov.exceptions.
+     *             TraceProvNotFoundException
+     * @see #hasPropertyDef(java.lang.String)
      */
-    public DataNode get(String propertyName){
-        checkNotEmpty(propertyName, "Invalid property name!");
-        if (getValue().containsKey(propertyName)){
-            return getValue().get(propertyName);
-        } else {
-            throw new TraceProvNotFoundException("Couldn't find property '" + propertyName + "'");
-        }
-    }            
-
-        
-    @Override
-    public void accept(DataVisitor visitor, DataNode parent, String field, int pos){
-        for (Map.Entry<String, ? extends DataNode> entry : getValue().entrySet()){
-            entry.getValue().accept(visitor, this, entry.getKey(), 0);
-        }
-        visitor.visit(this, parent, field, pos);
-    };    
-    
-    
-    @Override
-    public Object asSimpleType() {
-        SimpleMapTransformer tran = new SimpleMapTransformer();        
-        accept(tran, DataValue.of(), "",0);        
-        return tran.getResult();
+    public DataNode get(String propertyName) {
+	checkNotEmpty(propertyName, "Invalid property name!");
+	if (getValue().containsKey(propertyName)) {
+	    return getValue().get(propertyName);
+	} else {
+	    throw new TraceProvNotFoundException("Couldn't find property '" + propertyName + "'");
+	}
     }
 
-           
+    @Override
+    public void accept(DataVisitor visitor, DataNode parent, String field, int pos) {
+	for (Map.Entry<String, ? extends DataNode> entry : getValue().entrySet()) {
+	    entry.getValue().accept(visitor, this, entry.getKey(), 0);
+	}
+	visitor.visit(this, parent, field, pos);
+    };
+
+    @Override
+    public Object asSimpleType(TypeRegistry typeRegistry) {
+	SimpleMapTransformer tran = new SimpleMapTransformer(typeRegistry);
+	accept(tran, DataValue.of(), "", 0);
+	return tran.getResult();
+    }
+
 }

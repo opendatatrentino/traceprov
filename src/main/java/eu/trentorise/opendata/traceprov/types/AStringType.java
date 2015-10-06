@@ -38,4 +38,9 @@ abstract class AStringType extends Type {
     public Class getJavaClass() {
         return String.class;
     }
+    
+    @Override
+    public boolean isImmutable() {
+	return true;
+    }
 }

@@ -19,12 +19,14 @@ import com.google.common.collect.ImmutableList;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import eu.trentorise.opendata.commons.validation.Ref;
+import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- * {@link ProvFile} body node containing an array of other nodes.
+ * {@link TraceFile} body node containing an array of other nodes.
  *
  * @author David Leoni
  */
@@ -114,8 +116,8 @@ public class DataArray extends DataNode implements  Iterable<DataNode> {
     }
 
     @Override
-    public Object asSimpleType() {
-        SimpleMapTransformer tran = new SimpleMapTransformer();
+    public Object asSimpleType(TypeRegistry typeRegistry) {
+        SimpleMapTransformer tran = new SimpleMapTransformer(typeRegistry);
         accept(tran, DataValue.of(), "", 0);
         return tran.getResult();
     }

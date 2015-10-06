@@ -128,4 +128,8 @@ abstract class AClassType extends Type {
         return "";
     }
 
+    @Value.Default
+    public boolean isImmutable(){
+	return false;
+    }
 }

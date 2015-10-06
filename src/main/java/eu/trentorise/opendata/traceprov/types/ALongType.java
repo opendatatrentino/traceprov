@@ -26,16 +26,19 @@ import org.immutables.value.Value;
 @JsonSerialize(as = LongType.class)
 @JsonDeserialize(as = LongType.class)
 abstract class ALongType extends Type {
-    
+
     private static final long serialVersionUID = 1L;
     /*
+     * @Override public String getDatatypeStandardId(){ return XSD + "long"; }
+     */
+
     @Override
-    public String getDatatypeStandardId(){
-        return XSD + "long";
-    }*/
-    
-        @Override
-    public Class getJavaClass(){
-        return Long.class;
+    public Class getJavaClass() {
+	return Long.class;
+    }
+
+    @Override
+    public boolean isImmutable() {
+	return true;
     }
 }

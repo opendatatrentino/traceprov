@@ -43,4 +43,9 @@ abstract class ADateTimeType extends Type {
         return String.class;
     }
 
+    @Override
+    public boolean isImmutable(){
+	return true;	
+    }
+    
 }

@@ -38,5 +38,10 @@ abstract class ADoubleType extends Type {
     public Class getJavaClass(){
         return Double.class;
     }
+    
+    @Override
+    public boolean isImmutable(){
+	return true;	
+    }
 
 }

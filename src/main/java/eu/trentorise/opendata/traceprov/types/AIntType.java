@@ -40,4 +40,9 @@ abstract class AIntType extends Type {
     public Class getJavaClass(){
         return Integer.class;
     }
+    
+    @Override
+    public boolean isImmutable(){
+	return true;	
+    }
 }

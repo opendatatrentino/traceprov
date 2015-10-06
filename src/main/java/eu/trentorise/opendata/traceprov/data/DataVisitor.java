@@ -15,17 +15,21 @@
  */
 package eu.trentorise.opendata.traceprov.data;
 
+import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+
 /**
  * Visitor for data nodes.
  *
  * @author David Leoni
  */
 public interface DataVisitor {
+    
+    TypeRegistry getTypeRegistry();
 
     /**
      * Visits a {@link DataMap}
      * 
-     * @param node the node to visite
+     * @param node the node to visit
      * @param parent the immediate parent of the node which is being visited
      * @param field if parent is a {@link DataMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
@@ -35,6 +39,19 @@ public interface DataVisitor {
     void visit(DataMap node, DataNode parent, String field, int pos);
 
     /**
+     * Visits a {@link DataObject}
+     * 
+     * @param node the node to visit
+     * @param parent the immediate parent of the node which is being visited
+     * @param field if parent is a {@link DataMap}, the name of the field under
+     * which the node to be visited lies. Otherwise it is unspecified.
+     * @param pos If the parent node is a {@link DataArray}, pos is the position
+     * in such list. Otherwise it is zero.
+     */
+    void visit(DataObject node, DataNode parent, String field, int pos);
+    
+    
+    /**
      * Visits a {@link DataList}
      * 
      * @param node the node to visit
@@ -42,7 +59,7 @@ public interface DataVisitor {
      * @param field if parent is a {@link DataMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
      * @param pos If the parent node is a {@link DataArray}, pos is the position
-     * in such list. Otherwise it is unspecified.
+     * in such list. Otherwise it is zero.
      */    
     void visit(DataArray node, DataNode parent, String field, int pos);
 
@@ -54,7 +71,7 @@ public interface DataVisitor {
      * @param field if parent is a {@link DataMap}, the name of the field under
      * which the node to be visited lies. Otherwise it is unspecified.
      * @param pos If the parent node is a {@link DataArray}, pos is the position
-     * in such list. Otherwise it is unspecified.
+     * in such list. Otherwise it is zero.
      */    
     void visit(DataValue node, DataNode parent, String field, int pos);
 }

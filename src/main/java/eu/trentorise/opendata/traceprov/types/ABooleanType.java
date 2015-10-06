@@ -39,5 +39,8 @@ abstract class ABooleanType extends Type {
         return Boolean.class;
     }
 
-    
+    @Override
+    public boolean isImmutable(){
+	return true;	
+    }
 }

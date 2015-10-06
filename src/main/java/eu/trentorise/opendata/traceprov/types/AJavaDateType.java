@@ -44,4 +44,8 @@ abstract class AJavaDateType extends Type {
         return Date.class;
     }
 
+    @Override
+    public boolean isImmutable(){
+	return false;	
+    }
 }

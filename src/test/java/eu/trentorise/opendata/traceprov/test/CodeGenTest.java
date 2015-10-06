@@ -24,8 +24,8 @@ import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.DataValue;
-import eu.trentorise.opendata.traceprov.data.ProvFile;
-import eu.trentorise.opendata.traceprov.data.ProvType;
+import eu.trentorise.opendata.traceprov.data.TraceFile;
+import eu.trentorise.opendata.traceprov.data.TraceType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.types.AnyType;
@@ -73,23 +73,23 @@ public class CodeGenTest {
 
     @Test
     public void testRef() {
-        assertEquals("0.0", ProvRefs.tablePath(0, 0));        
-        assertEquals("*.1", ProvRefs.tablePath(-1, 1));  
-        assertEquals("1.*", ProvRefs.tablePath(1, -1));          
-        assertEquals("*", ProvRefs.tablePath(-1, -1));
+        assertEquals("$[0][0]", ProvRefs.tablePath(0, 0));        
+        assertEquals("$[*][1]", ProvRefs.tablePath(-1, 1));  
+        assertEquals("$[1][*]", ProvRefs.tablePath(1, -1));          
+        assertEquals("$[*][*]", ProvRefs.tablePath(-1, -1));
     }
 
     @Test
     public void testDataModel() {
-        assertEquals(ProvFile.of().getData(), DataMap.of());
-        assertEquals(ProvFile.of().getMappings(), ImmutableList.of());
+        assertEquals(TraceFile.of().getData(), DataMap.of());
+        assertEquals(TraceFile.of().getMappings(), ImmutableList.of());
 
         
         
-        ProvFile.builder().setMappings(ImmutableList.of(PropertyMapping.of(Ref.of(),
+        TraceFile.builder().setMappings(ImmutableList.of(PropertyMapping.of(Ref.of(),
                                                         ImmutableList.of("a"))));
         
-        ProvType ps = ProvType.builder().setType(AnyType.of()).build();
+        TraceType ps = TraceType.builder().setType(AnyType.of()).build();
         assertEquals(ImmutableList.of(), ps.getErrors());
         
         DataMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 

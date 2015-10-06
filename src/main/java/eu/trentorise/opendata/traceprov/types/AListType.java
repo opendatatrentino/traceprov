@@ -27,21 +27,25 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ListType.class)
 @JsonDeserialize(as = ListType.class)
 abstract class AListType extends Type {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Value.Default
-    public Type getSubtype(){
-        return AnyType.of();
+    public Type getSubtype() {
+	return AnyType.of();
     }
     /*
+     * @Override public String getDatatypeStandardId(){ return XSD + "sequence";
+     * }
+     */
+
     @Override
-    public String getDatatypeStandardId(){
-        return XSD + "sequence";
-    }*/
-    
-        @Override
-    public Class getJavaClass(){
-        return List.class;
+    public Class getJavaClass() {
+	return List.class;
+    }
+
+    @Override
+    public boolean isImmutable() {
+	return getSubtype().isImmutable();
     }
 }

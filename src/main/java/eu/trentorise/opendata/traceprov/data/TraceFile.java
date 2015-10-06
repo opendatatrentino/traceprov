@@ -34,10 +34,10 @@ import javax.validation.ConstraintViolation;
  *
  * @author David Leoni
  */
-public class ProvFile implements Serializable {
+public class TraceFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final ProvFile INSTANCE = new ProvFile();
+    private static final TraceFile INSTANCE = new TraceFile();
 
     private DcatMetadata dcatMetadata;
     private Type type;
@@ -47,7 +47,7 @@ public class ProvFile implements Serializable {
     private List<ConstraintViolation> dataErrors;
     private ImmutableList<PropertyMapping> mappings;
 
-    ProvFile() {
+    TraceFile() {
         this.dcatMetadata = DcatMetadata.of();
         this.type = AnyType.of();
         this.classDefs = ImmutableList.of();
@@ -57,7 +57,7 @@ public class ProvFile implements Serializable {
         this.mappings = ImmutableList.of();
     }
 
-    ProvFile(
+    TraceFile(
             DcatMetadata dcatMetadata,
             Type type,
             Iterable<ConstraintViolation> schemaErrors,
@@ -137,7 +137,7 @@ public class ProvFile implements Serializable {
     /**
      * Default singleton    
      */
-    public static ProvFile of() {
+    public static TraceFile of() {
         return INSTANCE;
     }
 
@@ -147,11 +147,11 @@ public class ProvFile implements Serializable {
 
     public static class Builder {
 
-        private ProvFile provFile;
+        private TraceFile provFile;
         private boolean doneBuilding;
 
         public Builder() {
-            this.provFile = new ProvFile();
+            this.provFile = new TraceFile();
             this.provFile.dataErrors = new ArrayList();
             doneBuilding = false;
         }
@@ -217,7 +217,7 @@ public class ProvFile implements Serializable {
             this.provFile.mappings = ImmutableList.copyOf(mappings);
         }
 
-        public ProvFile build() {
+        public TraceFile build() {
             for (Def<ClassType> classDef : this.provFile.classDefs) {
 
             }

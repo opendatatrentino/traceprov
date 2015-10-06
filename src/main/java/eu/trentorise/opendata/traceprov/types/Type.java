@@ -24,7 +24,8 @@ import java.util.Locale;
 /**
  *
  * A type expression, including basic data types like Int, boolean, etc. Complex
- * ones are defined with {@link ClassType}.
+ * ones are defined with {@link ClassType}. TraceProv types are more general
+ * than Java ones. todo write more.
  *
  * @author David Leoni
  */
@@ -35,15 +36,15 @@ public abstract class Type implements Serializable {
     /**
      *
      * todo review
-     * <h3> Nulls </h3>
-     * In data we only support 'null', finding 'undefined' in json data would be
-     * considered an error.
+     * <h3>Nulls</h3> In data we only support 'null', finding 'undefined' in
+     * json data would be considered an error.
      *
      * We postulate existance of Null datatype even if users cannot declare it
      * as a type, (this is the same behaviour of Typescript). This is because
      * every object can be null (even primitive datatypes).
      *
-     * <h3> Grammar </h3>
+     * <h3>Grammar</h3>
+     * 
      * <pre>
      *      Dict -> language dict
      *      CanonicalName -> camel cased english name
@@ -93,7 +94,7 @@ public abstract class Type implements Serializable {
      * languages, for example "eu.trentorise.opendata.traceprov.types.IntType"
      */
     public String getId() {
-        return this.getClass().getCanonicalName();
+	return this.getClass().getCanonicalName();
     }
 
     /**
@@ -101,10 +102,11 @@ public abstract class Type implements Serializable {
      *
      * <p>
      * Calls {@code accept} on subnodes and then {@code visitor.visit} on this
-     * node. todo this should be abstract!</p>
+     * node. todo this should be abstract!
+     * </p>
      */
     public void accept(TypeVisitor v) {
-        v.visit(this);
+	v.visit(this);
     }
 
     /**
@@ -112,26 +114,25 @@ public abstract class Type implements Serializable {
      * the name, description, provenance...
      */
     public DefMetadata getMetadata() {
-        return DefMetadata.builder()
-                .setConcept(Concept.of())
-                .setOriginId(getId())
-                .setName(Dict.of(Locale.ENGLISH, this.getClass().getSimpleName()))
-                .build();
+	return DefMetadata.builder()
+		.setConcept(Concept.of())
+		.setOriginId(getId())
+		.setName(Dict.of(Locale.ENGLISH, this.getClass().getSimpleName()))
+		.build();
     }
 
     /**
-     * The canonical Java class to represent instances of the type. Other
+     * The default Java class to represent instances of the type. Other
      * classes may be added with type converters todo define better
      */
     public abstract Class getJavaClass();
 
     /**
-     * Returns whether or not the given {
-     *
-     * @object} is an instance of this type.
+     * Returns whether or not the given {@code object} is an instance of this
+     * type.
      */
     public boolean isInstance(Object object) {
-        throw new UnsupportedOperationException("todo implement me!");
+	throw new UnsupportedOperationException("todo implement me!");
     }
 
     /**
@@ -141,12 +142,13 @@ public abstract class Type implements Serializable {
      * (i.e. empty string, empty list, Person with only string fields which are
      * all empty....)
      *
-     * @throws IllegalArgumentException if {@code object} is not an instance of
-     * this type (that is,
-     * {@link #isInstance(java.lang.Object) isInstance(object)} returns false)
+     * @throws IllegalArgumentException
+     *             if {@code object} is not an instance of this type (that is,
+     *             {@link #isInstance(java.lang.Object) isInstance(object)}
+     *             returns false)
      */
     public boolean isEmpty(Object object) {
-        throw new UnsupportedOperationException("todo implement me!");
+	throw new UnsupportedOperationException("todo implement me!");
     }
 
     /**
@@ -156,12 +158,13 @@ public abstract class Type implements Serializable {
      * degenerate (i.e. empty string, string with only spaces, empty list,
      * Person with only string fields which only have spaces......)
      *
-     * @throws IllegalArgumentException if {@code object} is not an instance of
-     * this type (that is,
-     * {@link #isInstance(java.lang.Object) isInstance(object)} returns false)
+     * @throws IllegalArgumentException
+     *             if {@code object} is not an instance of this type (that is,
+     *             {@link #isInstance(java.lang.Object) isInstance(object)}
+     *             returns false)
      */
     public boolean isDegenerate(Object obj) {
-        throw new UnsupportedOperationException("todo implement me!");
+	throw new UnsupportedOperationException("todo implement me!");
     }
 
     /**
@@ -171,26 +174,37 @@ public abstract class Type implements Serializable {
      * (i.e. string containing the word "null", string with different encodings
      * within....)
      *
-     * @throws IllegalArgumentException if {@code object} is not an instance of
-     * this type (that is,
-     * {@link #isInstance(java.lang.Object) isInstance(object)} returns false)
+     * @throws IllegalArgumentException
+     *             if {@code object} is not an instance of this type (that is,
+     *             {@link #isInstance(java.lang.Object) isInstance(object)}
+     *             returns false)
      */
     public boolean isDirty(Object obj) {
-        throw new UnsupportedOperationException("todo implement me!");
+	throw new UnsupportedOperationException("todo implement me!");
     }
 
     /*
      * *
      *
-     * @param datatype a dataType as defined in
-     * {@link eu.trentorise.opendata.opendatarise.types.OdrDataTypes}.
+     * @param datatype a dataType as defined in {@link
+     * eu.trentorise.opendata.opendatarise.types.OdrDataTypes}.
+     * 
      * @param list
+     * 
      * @param etypeURL an entity type URL in case the dataType is either a
      * STRUCTURE or an ENTITY. Otherwise, it must be empty.
+     * 
      * @param etypeName the name of the etype in case the data either a
      * STRUCTURE or an ENTITY. Otherwise, it must be {@link Dict#of()}.
-     
-     public OdrType(String datatype, boolean list, String etypeURL, Dict etypeName) {
-        
-     } */
+     * 
+     * public OdrType(String datatype, boolean list, String etypeURL, Dict
+     * etypeName) {
+     * 
+     * }
+     */
+
+    /**
+     * Returns true if the instances of this type are immutable.
+     */
+    public abstract boolean isImmutable();
 }

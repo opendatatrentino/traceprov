@@ -58,4 +58,6 @@ abstract class AConcept implements Serializable{
     public Dict getDescription() {
         return Dict.of();
     }
+    
+        
 }

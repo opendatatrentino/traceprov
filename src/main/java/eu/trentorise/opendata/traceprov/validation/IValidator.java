@@ -17,8 +17,8 @@ package eu.trentorise.opendata.traceprov.validation;
 
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
-import eu.trentorise.opendata.traceprov.data.ProvFile;
-import eu.trentorise.opendata.traceprov.data.ProvType;
+import eu.trentorise.opendata.traceprov.data.TraceFile;
+import eu.trentorise.opendata.traceprov.data.TraceType;
 import eu.trentorise.opendata.traceprov.types.Type;
 import java.io.InputStream;
 
@@ -38,12 +38,12 @@ public interface IValidator {
      * @param type the expected schema of the file. If unknown, pass
      * {@link AnyType#of()}.
      *
-     * @throws eu.trentorise.opendata.traceprov.LoadException if some error
+     * @throws eu.trentorise.opendata.traceprov.exceptions.LoadException if some error
      * occurs while physically loading stream. In case format errors are found
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    ProvFile validate(InputStream stream, String mimeType, Type type, DcatMetadata dcatMetadata);
+    TraceFile validate(InputStream stream, String mimeType, Type type, DcatMetadata dcatMetadata);
 
     /**
      * Validates the schema present in the input stream and returns the parsed
@@ -52,12 +52,12 @@ public interface IValidator {
      * @param stream the stream to validate
      * @param mimetype the mimetype of the stream, i.e. application/json+ld
      * 
-     * @throws eu.trentorise.opendata.traceprov.LoadException if some error
+     * @throws eu.trentorise.opendata.traceprov.exceptions.LoadException if some error
      * occurs while physically loading stream. In case format errors are found
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    ProvType validateType(InputStream stream, String mimeType);
+    TraceType validateType(InputStream stream, String mimeType);
 
     /**
      * Returns a list of the mimetypes this validator can parse.

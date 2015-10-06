@@ -18,6 +18,8 @@ package eu.trentorise.opendata.traceprov.data;
 import com.google.common.base.Preconditions;
 
 import eu.trentorise.opendata.commons.validation.Ref;
+import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+
 import javax.annotation.Nullable;
 
 /**
@@ -57,8 +59,8 @@ public class DataValue extends DataNode {
     }
 
     @Override
-    public Object asSimpleType() {
-        SimpleMapTransformer tran = new SimpleMapTransformer();        
+    public Object asSimpleType(TypeRegistry typeRegistry) {
+        SimpleMapTransformer tran = new SimpleMapTransformer(typeRegistry);        
         accept(tran, DataValue.of(), "",0);        
         return tran.getResult();
     }

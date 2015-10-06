@@ -44,4 +44,9 @@ abstract class ANullType extends Type {
         return Object.class;
     }
     
+    @Override
+    public boolean isImmutable() {
+	return true;
+    }
+    
 }

@@ -40,4 +40,14 @@ abstract class ATupleType extends Type {
     public Class getJavaClass() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public boolean isImmutable() {
+	for (Type t : getTypes()){
+	    if (!t.isImmutable()){
+		return false;
+	    }
+	}
+	return true;
+    }
 }

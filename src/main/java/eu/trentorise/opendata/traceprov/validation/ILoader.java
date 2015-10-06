@@ -38,7 +38,7 @@ public interface ILoader {
      * @param url Resource location
      * @param output The output stream where the file will be loaded     
      *
-     * @throws eu.trentorise.opendata.traceprov.LoadException if some error
+     * @throws eu.trentorise.opendata.traceprov.exceptions.LoadException if some error
      * occurs.
      */
     void loadData(URL url, OutputStream output);

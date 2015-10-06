@@ -49,5 +49,10 @@ abstract class ARefType extends Type {
     public Class getJavaClass(){
         return Object.class;
     }
+    
+    @Override
+    public boolean isImmutable() {
+	return true;
+    }
 
 }

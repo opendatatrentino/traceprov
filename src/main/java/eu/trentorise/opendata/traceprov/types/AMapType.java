@@ -33,32 +33,36 @@ import org.immutables.value.Value;
 abstract class AMapType extends Type {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * By default assumes {@link StringType#of()}, although {@link IntType#of()}
      * is also supported.
      */
     @Value.Default
     public Type getKeyType() {
-        return StringType.of();
+	return StringType.of();
     }
-    
+
     /**
      * By default assumes {@link AnyType#of()}.
      */
     @Value.Default
     public Type getValueType() {
-        return AnyType.of();
+	return AnyType.of();
     }
-    
+
     /*
+     * @Override public String getDatatypeStandardId(){ return XSD +
+     * "complexType"; }
+     */
+
     @Override
-    public String getDatatypeStandardId(){
-        return XSD + "complexType";
-    }*/
-    
-        @Override
-    public Class getJavaClass(){
-        return Map.class;
+    public Class getJavaClass() {
+	return Map.class;
+    }
+
+    @Override
+    public boolean isImmutable() {
+	return getKeyType().isImmutable() && getValueType().isImmutable();
     }
 }

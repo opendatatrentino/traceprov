@@ -34,9 +34,9 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = ProvType.class)
-@JsonDeserialize(as = ProvType.class)
-abstract class AProvType implements Serializable {
+@JsonSerialize(as = TraceType.class)
+@JsonDeserialize(as = TraceType.class)
+abstract class ATraceType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

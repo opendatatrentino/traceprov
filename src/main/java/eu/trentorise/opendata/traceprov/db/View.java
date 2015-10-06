@@ -8,11 +8,12 @@ import javax.annotation.concurrent.Immutable;
 import eu.trentorise.opendata.commons.internal.joda.time.DateTime;
 
 /**
- * A View represents an immutable local snapshot of a corresponding object in a
+ * A {@code View} represents an immutable local snapshot of a corresponding object in a
  * foreign server. The view can also represent objects to be created on the
  * foreign server.
  *
- * Views are immutable, and each view should implement a builder() method.
+ * Views are immutable, and each view class should implement a static builder()
+ * method.
  *
  * Must implement equals and hashcode.
  *
@@ -21,8 +22,11 @@ import eu.trentorise.opendata.commons.internal.joda.time.DateTime;
  *
  * View data need not to be correct, in such case validation errors can be
  * retrieved.
+ * 
+ * @param T
+ *            The type of the object this view models. The object can be mutable
  *
- * Superceeds {@link eu.trentorise.opendata.opendatarise.ekb.View}
+ *            Superceeds {@link eu.trentorise.opendata.opendatarise.ekb.View}
  *
  * @author David Leoni
  */
@@ -30,10 +34,10 @@ import eu.trentorise.opendata.commons.internal.joda.time.DateTime;
 public interface View<T> extends Storable {
 
     /**
-     * Returns the odr internal id of the stored view, which must be uniquely
-     * distinguish the view among all views among the same category. There can
-     * be many views having the same {@link #getUrl()}, but they all must have
-     * different id.
+     * Returns the trace prov internal id of the stored view, which must be
+     * uniquely distinguish the view among all views in the same category. There
+     * can be many views having the same {@link #getUrl() url}, but they all
+     * must have different id.
      */
     @JsonProperty("@id")
     @Override
@@ -54,17 +58,18 @@ public interface View<T> extends Storable {
 
     /**
      * Converts the view to the format understandable by the origin/target
-     * server.
+     * server. NOTE: produced object MUST be a DEEP copy of the original one, in
+     * order to avoid accidental changes. 
      */
     T toForeignFormat();
-
+    
+    
     /**
      * Returns true if this view is newer of the provided view. Comparison is
-     * done only on the timestamp or version, *independently* from the view
-     * status. Both views URLs must match, otherwise an IllegalArgumentException
-     * is thrown.
+     * done only on the timestamp or version. Both views URLs must match,
+     * otherwise an IllegalArgumentException is thrown.
      */
-    boolean newerThan(View<T> ctr);
+    boolean newerThan(View<T> view);
 
     /**
      * Returns an immutable map containing field names of the view and eventual
@@ -73,14 +78,15 @@ public interface View<T> extends Storable {
     Map<String, ValidationError> getErrors();
 
     /**
-     * Returns the timestamp when the view was created on local TraceProv database.
+     * Returns the timestamp when the view was created on local TraceProv
+     * database.
      */
     DateTime getTimestamp();
 
     /**
      * Returns true if the controlled object is equal to the controlled object
      * in the provided view, regardless of the objects linked by it. Thus for
-     * this equality relation view properties ( like i.e. {@link #getId()},
+     * this equality relation view specific properties ( like i.e. {@link #getId()},
      * {@link #getTimestamp()}, ...) must not be taken into consideration.
      *
      * @see #deepEquals(eu.trentorise.opendata.opendatarise.db.View)
@@ -89,18 +95,13 @@ public interface View<T> extends Storable {
 
     /**
      * Returns true if the controlled object and all the objects linked by it
-     * are equal to the controlled object in the provided view. Thus for this
-     * equality relation view properties ( like i.e. {@link #getId()},
+     * are equal to the controlled object in the provided view. For this
+     * equality relation view specific properties ( like i.e. {@link #getId()},
      * {@link #getTimestamp()}, ...) must not be taken into consideration.
      *
      * @see #shallowEquals(eu.trentorise.opendata.opendatarise.db.View)
      */
     boolean deepEquals(View<T> view);
-
-    /**
-     * Returns a new immutable view with given id set.
-     */
-    View<T> withId(long id);
 
     /**
      * Returns a list of views from which this view derives from. For example,

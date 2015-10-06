@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.validation;
 import static com.google.common.base.Preconditions.checkArgument;
 import eu.trentorise.opendata.traceprov.data.DataNode;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
-import eu.trentorise.opendata.traceprov.data.ProvFile;
+import eu.trentorise.opendata.traceprov.data.TraceFile;
 import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 
@@ -35,7 +35,7 @@ public final class Validator {
     /**
      * Provfile MUST have a proper type.      
      */
-    public ProvFile validate(ProvFile provFile){
+    public TraceFile validate(TraceFile provFile){
         // todo implement better check
         checkArgument(!provFile.getType().equals(AnyType.of()), "Need a proper Type to validate against, found instead %s!", provFile.getType());
                     
@@ -51,12 +51,12 @@ public final class Validator {
      * @param type the expected schema of the file. If unknown, pass
      * {@link AnyType#of()}.
      *
-     * @throws eu.trentorise.opendata.traceprov.LoadException if some error
+     * @throws eu.trentorise.opendata.traceprov.exceptions.LoadException if some error
      * occurs while physically loading stream. In case format errors are found
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    ProvFile validate(ProvFile provFile, String mimetype, Type type, DcatMetadata dcatMetadata){
+    TraceFile validate(TraceFile provFile, String mimetype, Type type, DcatMetadata dcatMetadata){
         throw new UnsupportedOperationException("todo implement me");
     }
 }

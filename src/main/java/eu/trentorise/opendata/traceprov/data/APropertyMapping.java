@@ -39,11 +39,12 @@ abstract class APropertyMapping implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * A reference to an element in the source file
+     * A reference to an element in the source file. For possible references,
+     * see {@link eu.trentorise.opendata.traceprov.types.ProvRefs}
      */
     @Value.Default
     public Ref getSourceRef() {
-        return Ref.of();
+	return Ref.of();
     }
 
     /**
@@ -58,22 +59,24 @@ abstract class APropertyMapping implements Serializable {
      */
     @Value.Default
     public double getScore() {
-        return 1.0;
+	return 1.0;
     }
 
     /**
      * Returns new immutable {@code PropertyMapping}, with score 1.0
      *
-     * @param sourceRef A reference to an element in the source file
-     * @param targetRef A reference to a target schema attribute path
+     * @param sourceRef
+     *            A reference to an element in the source file
+     * @param targetRef
+     *            A reference to a target schema attribute path
      */
     public static PropertyMapping of(Ref sourceRef, Iterable<String> targetPath) {
-        return PropertyMapping.of(sourceRef, targetPath, 1.0);
+	return PropertyMapping.of(sourceRef, targetPath, 1.0);
     }
 
     @Value.Check
     protected void check() {
-        Preconditions.checkScore(getScore(), "Invalid score!");
+	Preconditions.checkScore(getScore(), "Invalid score!");
     }
 
 }

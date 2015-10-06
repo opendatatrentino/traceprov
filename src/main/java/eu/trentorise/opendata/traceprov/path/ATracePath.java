@@ -25,10 +25,13 @@ import javax.validation.Path;
 import org.immutables.value.Value;
 
 /**
- * An insane mixture of JsonPath and java validation api {@link javax.validation.Path}. JsonPath specs
- * follow <a href="https://github.com/jayway/JsonPath" target="_blank">Jayway implementation </a>
+ * An insane mixture of JsonPath and java validation api
+ * {@link javax.validation.Path}. JsonPath specs follow
+ * <a href="https://github.com/jayway/JsonPath" target="_blank">Jayway
+ * implementation </a>
  * 
  * TODO MUCH WORK IN PROGRESS
+ * 
  * @author David Leoni
  */
 @JsonSerialize(using = ToStringSerializer.class)
@@ -40,67 +43,61 @@ abstract class ATracePath implements Path {
 
     @Override
     public Iterator<Node> iterator() {
-        return (Iterator<Node>) (Iterator<?>) getNodes().iterator();
+	return (Iterator<Node>) (Iterator<?>) getNodes().iterator();
     }
 
     public abstract List<PathElement> getNodes();
 
-    // ------------  JSONPATH stuff    
+    // ------------ JSONPATH stuff
     @Value.Default
     public TracePath getNext() {
-        throw new UnsupportedOperationException("todo implement me");
-        // return TracePath.of();
+	throw new UnsupportedOperationException("todo implement me");
+	// return TracePath.of();
     }
 
     /**
      * Returns the next element in the path.
      *
-     * @throws eu.trentorise.opendata.commons.NotFoundException if not found.
+     * @throws eu.trentorise.opendata.commons.NotFoundException
+     *             if not found.
      */
     public TracePath next() {
-        throw new UnsupportedOperationException("todo implement me");
-        /*if (isLeaf()) {
-            throw new NotFoundException("Current path token is a leaf");
-        }
-        return getNext();*/
+	throw new UnsupportedOperationException("todo implement me");
+	/*
+	 * if (isLeaf()) { throw new NotFoundException(
+	 * "Current path token is a leaf"); } return getNext();
+	 */
     }
 
     /*
-     public boolean isUpstreamDefinite(Path prev, boolean isRoot) {
-     boolean isUpstreamDefinite = isTokenDefinite();
-     if (isUpstreamDefinite && !isRoot) {
-     isUpstreamDefinite = prev.isPathDefinite();
-     }
-     return isUpstreamDefinite;
-     }*/
+     * public boolean isUpstreamDefinite(Path prev, boolean isRoot) { boolean
+     * isUpstreamDefinite = isTokenDefinite(); if (isUpstreamDefinite &&
+     * !isRoot) { isUpstreamDefinite = prev.isPathDefinite(); } return
+     * isUpstreamDefinite; }
+     */
     // could be optimized
     public boolean isPathDefinite() {
-        
-        throw new UnsupportedOperationException("todo implement me");
-        /*if (getNodes().isEmpty()) {
-            return true; // todo check about empty nodes... anyway RootNode IS definite.
-        } else {
-            for (PathNode pn : getNodes()) {
-                if (!pn.isTokenDefinite()) {
-                    return false;
-                }
-            }
-        }
-        return true;*/
+
+	throw new UnsupportedOperationException("todo implement me");
+	/*
+	 * if (getNodes().isEmpty()) { return true; // todo check about empty
+	 * nodes... anyway RootNode IS definite. } else { for (PathNode pn :
+	 * getNodes()) { if (!pn.isTokenDefinite()) { return false; } } } return
+	 * true;
+	 */
     }
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("todo implement me");
-        /*if (isLeaf()) {
-            return getPathFragment();
-        } else {
-            return getPathFragment() + next().toString();
-        }*/
+	throw new UnsupportedOperationException("todo implement me");
+	/*
+	 * if (isLeaf()) { return getPathFragment(); } else { return
+	 * getPathFragment() + next().toString(); }
+	 */
     }
 
     public boolean isLeaf() {
-        throw new UnsupportedOperationException("todo implement me");
-        // return getNext() == null;
+	throw new UnsupportedOperationException("todo implement me");
+	// return getNext() == null;
     }
 }

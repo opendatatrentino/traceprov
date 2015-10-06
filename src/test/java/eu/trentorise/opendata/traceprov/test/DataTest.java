@@ -31,12 +31,17 @@ import eu.trentorise.opendata.traceprov.types.IntType;
 import eu.trentorise.opendata.traceprov.types.ListType;
 import eu.trentorise.opendata.traceprov.types.StringType;
 import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -46,18 +51,33 @@ import org.junit.Test;
  */
 public class DataTest {
 
+    TypeRegistry emptyReg;
+    
     @BeforeClass
     public static void setUpClass() {
         OdtConfig.init(DataTest.class);
+       
     }
 
+    @Before
+    public void beforeMethod(){
+	 emptyReg = TypeRegistry.empty();
+    }
+    
+    @After
+    public void afterMethod(){
+	emptyReg = null;
+    }
+    
     @Test
     public void testWalkerValue() {
-        assertEquals(null, DataValue.of().asSimpleType());
-        assertEquals("a", DataValue.of("a").asSimpleType());
-        assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());
-        assertEquals(Lists.newArrayList("a"), DataArray.of(DataValue.of("a")).asSimpleType());
-        assertEquals(Lists.newArrayList("a"), DataArray.of(DataValue.of("a")).asSimpleType());
+	
+	
+        assertEquals(null, DataValue.of().asSimpleType(emptyReg));
+        assertEquals("a", DataValue.of("a").asSimpleType(emptyReg));
+        assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType(emptyReg));
+        assertEquals(Lists.newArrayList("a"), DataArray.of(DataValue.of("a")).asSimpleType(emptyReg));
+        assertEquals(Lists.newArrayList("a"), DataArray.of(DataValue.of("a")).asSimpleType(emptyReg));
     }
 
     @Test
@@ -74,12 +94,12 @@ public class DataTest {
     @Test
     public void testWalker() {
 
-        assertEquals(new HashMap(), DataMap.of().asSimpleType());
+        assertEquals(new HashMap(), DataMap.of().asSimpleType(emptyReg));
 
         Object res = DataMap.of(Ref.of(),
                 NodeMetadata.of(),
                 ImmutableMap.of("a", DataValue.of("b"),
-                        "c", DataValue.of("d"))).asSimpleType();
+                        "c", DataValue.of("d"))).asSimpleType(emptyReg);
 
         HashMap hm = (HashMap) res;
 

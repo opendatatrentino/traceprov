@@ -40,4 +40,9 @@ abstract class AFloatType extends Type {
         return Float.class;
     }
 
+    
+    @Override
+    public boolean isImmutable(){
+	return true;	
+    }
 }

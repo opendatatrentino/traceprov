@@ -24,6 +24,9 @@ package eu.trentorise.opendata.traceprov.exceptions;
  */
 public class TraceProvNotFoundException extends TraceProvException {
     
+   
+    private static final long serialVersionUID = 1L;
+
     private TraceProvNotFoundException(){
         super();
     }
