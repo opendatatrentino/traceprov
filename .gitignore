@@ -6,6 +6,7 @@
 .import-temp/
 
 target/
+/dependency-reduced-pom.xml
 
 /conf/*
 !/conf/README.txt
