@@ -87,6 +87,13 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+			 			  <artifactSet>			               
+			                <includes>
+			                	<include> eu.trentorise.opendata.traceprov* </include>
+			                	<include> org.apache.commons:*</include>
+			                	<include> commons-io:*</include>
+			                </includes>			                
+			              </artifactSet>						
 							<relocations>							
 								<relocation>
 									<pattern>org.apache.commons</pattern>
@@ -94,7 +101,7 @@
 								</relocation>
 								<relocation>
 									<pattern>commons-io</pattern>
-									<shadedPattern>eu.trentorise.opendata.traceprov.internal.commons-io</shadedPattern>
+									<shadedPattern>eu.trentorise.opendata.traceprov.internal.commons-io</shadedPattern>									
 								</relocation>								
 							</relocations>
 						</configuration>
