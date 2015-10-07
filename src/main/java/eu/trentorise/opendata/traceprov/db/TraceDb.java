@@ -17,6 +17,8 @@ import eu.trentorise.opendata.commons.NotFoundException;
 import eu.trentorise.opendata.commons.OdtUtils;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 import eu.trentorise.opendata.traceprov.TraceProvs;
+import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException;
 
@@ -74,12 +76,12 @@ public class TraceDb {
      *
      * odr todo 0.3 horrible hash map, replace with proper LRU cache/db
      */
-    private Map<String, Table<Long, String, ? super View>> storedValuesByUrl;
+    private Map<String, Table<Long, String, DataNode>> storedValuesByUrl;
 
     /**
      * Class name -> odr id -> Jacksonizable object
      */
-    private Table<String, Long, Object> storedValuesById;
+    private Table<String, Long, DataNode> storedValuesById;
 
     private HashMap<String, Long> storedValuesLatestId;
 
@@ -385,10 +387,10 @@ public class TraceDb {
      *            the TraceProv internal id of the view to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    public synchronized <C extends Object> C read(Class<C> clazz, long viewId) {
+    public synchronized <C> DataObject<C> read(Class<C> clazz, long viewId) {
 	checkNotNull(clazz);
 	checkArgument(viewId >= 0);
-	C ret = (C) storedValuesById.get(clazz.getName(), viewId);
+	DataObject<C> ret =  storedValuesById.get(clazz.getName(), viewId);
 	if (ret == null) {
 	    throw new ViewNotFoundException(
 		    "Couldn't find view with traceprov internal id " + viewId + " of class " + clazz.getName());
@@ -462,14 +464,14 @@ public class TraceDb {
      * @return the object with given url or null if not found.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    public synchronized <C extends View> C read(Class<C> clazz, String url) {
+    public synchronized <C> DataObject<C> read(Class<C> clazz, String url) {
 	checkNotNull(clazz);
 	String normalizedUrl = normalizeUrl(url);
 
 	C candidate1 = read(clazz, TRACEDB_ORIGIN_ID, normalizedUrl);
 
 	if (candidate1 == null) {
-	    Table<Long, String, ? super View> map = storedValuesByUrl.get(clazz.getName());
+	    Table<Long, String, DataObject> map = storedValuesByUrl.get(clazz.getName());
 	    for (Long originId : map.rowKeySet()) {
 		C candidate2 = (C) map.get(originId, normalizedUrl);
 		if (candidate2 != null) {
@@ -614,7 +616,7 @@ public class TraceDb {
     }
 
     /**
-     * Registers a class in ODR.
+     * Registers a class in the db.
      * 
      * @param clazz
      */

@@ -31,7 +31,7 @@ import eu.trentorise.opendata.commons.internal.joda.time.DateTime;
  * @author David Leoni
  */
 @Immutable
-public interface View<T> extends Storable {
+public interface ViewDeprecated<T> extends Storable {
 
     /**
      * Returns the trace prov internal id of the stored view, which must be
