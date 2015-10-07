@@ -23,6 +23,8 @@ import eu.trentorise.opendata.commons.internal.joda.time.DateTime;
  * View data need not to be correct, in such case validation errors can be
  * retrieved.
  * 
+ * @deprecated now using {@link eu.trentorise.opendata.traceprov.data.DataNode instead}
+ * 
  * @param T
  *            The type of the object this view models. The object can be mutable
  *

@@ -21,6 +21,7 @@ import eu.trentorise.opendata.traceprov.data.DataNode;
 import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException;
+import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -37,7 +38,6 @@ import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
-
 /**
  * Database of TraceProv. Serialization is done with Jackson.
  *
@@ -48,8 +48,8 @@ import org.apache.commons.io.FileUtils;
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public class TraceDb {
 
-    public static final String IN_MEMORY_URL = "memory:odrdb";
-    public static final String TRACEDB_FILE = "odrdb.json";
+    public static final String IN_MEMORY_URL = "memory:TraceDb";
+    public static final String TRACEDB_FILE = "TraceDb.json";
 
     private static final String FILE_PREFIX = "file://";
 
@@ -63,27 +63,22 @@ public class TraceDb {
 
     private long originIdCounter;
 
-    @JsonIgnore
-    private ObjectMapper objectMapper;
+    private TypeRegistry typeRegistry;
 
     /**
-     * Maps view class name (i.e.
-     * "eu.trentorise.opendata.opendatarise.EntityView") to a store of that
-     * view, that is, to a table of [originId, externalId] (i.e. 4,
-     * "http://entitypedia.org/entities/123") pairs to corresponding views. This
-     * is a way to say opendatarise knows about entity 123 of entitypedia, which
+     * Maps {@code <originId, externalId>} pairs (i.e.
+     * 4, "http://entitypedia.org/entities/123") to corresponding views. This is
+     * a way to say traceprov knows about entity 123 of entitypedia, which
      * has storedOrigin id = 4
      *
-     * odr todo 0.3 horrible hash map, replace with proper LRU cache/db
+     * odr todo 0.3 horrible table, replace with proper LRU cache/db
      */
-    private Map<String, Table<Long, String, DataNode>> storedValuesByUrl;
+    private Table<Long, String, DataNode> storedValuesByUrl;
 
     /**
-     * Class name -> odr id -> Jacksonizable object
+     * trace id -> Jacksonizable object
      */
-    private Table<String, Long, DataNode> storedValuesById;
-
-    private HashMap<String, Long> storedValuesLatestId;
+    private HashMap<Long, DataNode> storedValuesById;
 
     /**
      * a map origin id -> urls under which that origin is known
@@ -94,21 +89,20 @@ public class TraceDb {
      * If there is a corresponding odr view of the view, its id will be the
      * first of the list. id -> id1, id2, id3 ...
      */
-    private Table<String, Long, LinkedHashSet<Long>> sameAsIds;
+    private HashMap<Long, LinkedHashSet<Long>> sameAsIds;
 
     /**
      * Database with an in-memory db and default Jackson object mapper
      */
     private TraceDb() {
 	this.dbUrl = IN_MEMORY_URL;
-	this.storedValuesByUrl = new HashMap();
-	this.storedValuesById = HashBasedTable.create();
+	this.storedValuesByUrl = HashBasedTable.create();
+	this.storedValuesById = new HashMap();
 	this.storedOrigins = ImmutableListMultimap.of();
 	this.prefixes = new HashMap();
-	this.sameAsIds = HashBasedTable.create();
-	this.objectMapper = new ObjectMapper();
+	this.sameAsIds = new HashMap();
 	this.originIdCounter = 0;
-	this.storedValuesLatestId = new HashMap();
+	this.typeRegistry = TypeRegistry.of();
     }
 
     /**
@@ -121,23 +115,18 @@ public class TraceDb {
     /**
      * Database will point to a folder in the local hard drive
      */
-    private TraceDb(String folderPath, ObjectMapper objectMapper) {
+    private TraceDb(String folderPath, TypeRegistry typeRegistry) {
 	this();
 	checkNotNull(folderPath);
-	checkNotNull(objectMapper);
+	checkNotNull(typeRegistry);
 	this.dbUrl = FILE_PREFIX + folderPath;
-	this.objectMapper = objectMapper;
+	this.typeRegistry = typeRegistry;
     }
 
     /**
-     * @param objectMapper
-     *            The object mapper to use for serialization and
-     *            deserialization. Normally it can be safely shared with other
-     *            instances except when they reconfigure it - in this case other
-     *            threads must not use the object mapper during reconfiguration.
      */
-    public static TraceDb createInMemoryDb(ObjectMapper objectMapper) {
-	TraceDb ret = new TraceDb("", objectMapper);
+    public static TraceDb createInMemoryDb(TypeRegistry typeRegistry) {
+	TraceDb ret = new TraceDb("", typeRegistry);
 	ret.init();
 	return ret;
     }
@@ -155,22 +144,23 @@ public class TraceDb {
      * @throws TraceProvNotFoundException
      *             if the database is not found;
      */
-    public static TraceDb connectToDb(String folderpath, ObjectMapper objectMapper) {
-	LOG.info("Connecting to OdrDb at " + folderpath + "   ...");
+    public static TraceDb connectToDb(String folderpath, TypeRegistry typeRegistry) {
+	LOG.info("Connecting to TraceDb at " + folderpath + "   ...");
 	checkNotEmpty(folderpath, "path to db folder is invalid!");
+	checkNotNull(typeRegistry, "Type registry must not be null!");
 
 	File json = new File(folderpath + File.pathSeparator + "");
 	if (json.exists()) {
 	    try {
-		TraceDb ret = objectMapper.readValue(json, TraceDb.class);
-		ret.objectMapper = objectMapper;
-		LOG.info("Connected to OdrDb at " + folderpath);
+		TraceDb ret = typeRegistry.getObjectMapper().readValue(json, TraceDb.class);
+		ret.typeRegistry = typeRegistry;
+		LOG.info("Connected to TraceDb at " + folderpath);
 		return ret;
 	    } catch (IOException ex) {
 		throw new TraceProvException("Couldn't load the odr database", ex);
 	    }
 	} else {
-	    throw new NotFoundException("Couldn't find any odrdb database in folder " + folderpath);
+	    throw new NotFoundException("Couldn't find any TraceDb database in folder " + folderpath);
 	}
     }
 
@@ -202,7 +192,11 @@ public class TraceDb {
 	    throw new TraceProvException("Couldn't delete odr db file: " + dir, ex);
 	}
 
-	LOG.info("Dropped OdrDb at " + dbUrl);
+	LOG.info("Dropped TraceDb at " + dbUrl);
+    }
+
+    private ObjectMapper om() {
+	return typeRegistry.getObjectMapper();
     }
 
     /**
@@ -222,7 +216,7 @@ public class TraceDb {
 	File outputFile = new File(dbUrl, TRACEDB_FILE);
 	try {
 	    FileWriter w = new FileWriter(outputFile);
-	    objectMapper.writeValue(w, this);
+	    om().writeValue(w, this);
 
 	} catch (Exception ex) {
 	    throw new TraceProvException("Couldn't write to file: " + outputFile.getAbsolutePath(), ex);
@@ -236,7 +230,7 @@ public class TraceDb {
 		    file.close();
 		}
 	    } catch (IOException ex) {
-		LOG.log(Level.SEVERE, "Error while closing odrdb file", ex);
+		LOG.log(Level.SEVERE, "Error while closing TraceDb file", ex);
 	    }
 
 	}
@@ -260,40 +254,41 @@ public class TraceDb {
      * @throws IllegalStateException
      *             if folderpath is non empty
      */
-    public static TraceDb createDb(String folderpath, ObjectMapper objectMapper) {
+    public static TraceDb createDb(String folderpath, TypeRegistry typeRegistry) {
 
-	LOG.info("Creating OdrDb at " + folderpath + "  ...");
+	LOG.info("Creating TraceDb at " + folderpath + "  ...");
 
 	checkNotEmpty(folderpath, "path to db folder is invalid!");
+	checkNotNull(typeRegistry);
 
 	File dir = new File(folderpath);
 	File json = new File(folderpath + File.pathSeparator + "");
 	if (dir.exists()) {
 	    if ((dir.isFile())) {
 		throw new IllegalStateException(
-			"Error while creating an OdrDb, target path should be a directory, found a file instead! "
+			"Error while creating an TraceDb, target path should be a directory, found a file instead! "
 				+ folderpath);
 	    }
 
 	    if (dir.list().length > 0) {
 		throw new IllegalStateException(
-			"Error while creating an OdrDb, target directory is not empty! " + folderpath);
+			"Error while creating an TraceDb, target directory is not empty! " + folderpath);
 	    }
 	}
-	TraceDb odrDb = new TraceDb(folderpath, objectMapper);
+	TraceDb TraceDb = new TraceDb(folderpath, typeRegistry);
 	try {
 	    FileWriter fw = new FileWriter(json);
-	    objectMapper.writeValue(fw, odrDb);
+	    typeRegistry.getObjectMapper().writeValue(fw, TraceDb);
 	} catch (Throwable tr) {
 	    throw new TraceProvException("Error while writing odr db to disk!", tr);
 
 	}
 
-	odrDb.init();
+	TraceDb.init();
 
-	LOG.info("Created OdrDb at " + folderpath);
+	LOG.info("Created TraceDb at " + folderpath);
 
-	return odrDb;
+	return TraceDb;
     }
 
     /**
@@ -387,13 +382,12 @@ public class TraceDb {
      *            the TraceProv internal id of the view to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    public synchronized <C> DataObject<C> read(Class<C> clazz, long viewId) {
-	checkNotNull(clazz);
+    public synchronized DataNode read(long viewId) {
 	checkArgument(viewId >= 0);
-	DataObject<C> ret =  storedValuesById.get(clazz.getName(), viewId);
+	DataNode ret = storedValuesById.get(viewId);
 	if (ret == null) {
 	    throw new ViewNotFoundException(
-		    "Couldn't find view with traceprov internal id " + viewId + " of class " + clazz.getName());
+		    "Couldn't find view with traceprov internal id " + viewId);
 	} else {
 	    return ret;
 	}
@@ -407,15 +401,14 @@ public class TraceDb {
      *            the odr internal id of the view to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    private <C extends View> C readOdrView(Class<C> clazz, long viewId) {
-	checkNotNull(clazz);
+    private DataNode readOdrView(long viewId) {
 	checkArgument(viewId >= 0);
 
-	ImmutableList<Long> clique = readSameAsIds(clazz, viewId);
+	ImmutableList<Long> clique = readSameAsIds(viewId);
 
 	if (!clique.isEmpty()) {
 
-	    C odrView = read(clazz, clique.get(0));
+	    DataNode odrView = read(clique.get(0));
 
 	    if (odrView != null && TRACEDB_ORIGIN_ID == odrView.getOriginId()) {
 		return odrView;
@@ -464,18 +457,17 @@ public class TraceDb {
      * @return the object with given url or null if not found.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    public synchronized <C> DataObject<C> read(Class<C> clazz, String url) {
-	checkNotNull(clazz);
+    public synchronized <C> DataObject<C> read(String url) {
 	String normalizedUrl = normalizeUrl(url);
 
-	C candidate1 = read(clazz, TRACEDB_ORIGIN_ID, normalizedUrl);
+	DataNode candidate1 = read(TRACEDB_ORIGIN_ID, normalizedUrl);
 
 	if (candidate1 == null) {
-	    Table<Long, String, DataObject> map = storedValuesByUrl.get(clazz.getName());
-	    for (Long originId : map.rowKeySet()) {
-		C candidate2 = (C) map.get(originId, normalizedUrl);
+	    
+	    for (Long originId : storedValuesByUrl.rowKeySet()) {
+		DataNode candidate2 = storedValuesByUrl.get(originId, normalizedUrl);
 		if (candidate2 != null) {
-		    C candidate3 = readOdrView(clazz, candidate2.getId());
+		    C candidate3 = readOdrView(candidate2.getId());
 		    if (candidate3 != null) {
 			return candidate3;
 		    }
@@ -528,14 +520,12 @@ public class TraceDb {
      *
      * @return a new view with assigned id.
      */
-    public synchronized View create(View view) {
+    public synchronized DataNode create(DataNode view) {
 	checkNotNull(view);
 	checkRegistered(view.getClass());
 	checkArgument(view.getId() < 0, "Tried to create view with non-negative id: %s", view.getId());
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
     }
-    
-    
 
     /**
      * Writes provided view to its originId / foreign identifier slot. This is a
@@ -550,7 +540,7 @@ public class TraceDb {
     @Nullable
     public synchronized View update(View view) {
 	checkNotNull(view);
-	checkRegistered(view.getClass());	
+	checkRegistered(view.getClass());
 
 	View existingView = read(view.getClass(), view.getId());
 
@@ -583,14 +573,12 @@ public class TraceDb {
      * Returns the ids of the views considered to be the same as the provided
      * one.
      */
-    public synchronized ImmutableList<Long> readSameAsIds(Class<? extends View> clazz, long id) {
-	checkRegistered(clazz);
+    public synchronized ImmutableList<Long> readSameAsIds(long id) {
 	checkArgument(id >= 0);
-	return ImmutableList.copyOf(sameAsIds.get(clazz, id));
+	return ImmutableList.copyOf(sameAsIds.get(id));
     }
 
-    public synchronized ImmutableList<Long> updateSameAsIds(Class<? extends View> clazz, long originId, String url) {
-	checkRegistered(clazz);
+    public synchronized ImmutableList<Long> updateSameAsIds(long originId, String url) {
 	checkArgument(originId >= 0);
 	checkNotEmpty(url, "invalid url!");
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME");
@@ -623,24 +611,10 @@ public class TraceDb {
     public void registerClass(Class clazz) {
 	checkNotNull(clazz);
 	checkState(isRegistered(clazz), "Class %s is already registered in %s !", clazz.getName(),
-		TraceDb.class.getSimpleName());
-	storedValuesByUrl.put(clazz.getName(), HashBasedTable.<Long, String, Object> create());
+		TraceDb.class.getSimpleName());	
     }
 
-    /**
-     * Returns true if given class is registered for usage in TraceProv db.
-     */
-    public boolean isRegistered(Class clazz) {
-	return storedValuesByUrl.get(clazz.getName()) != null;
-    }
 
-    /**
-     * @throws IllegalStateException
-     *             if {@code clazz} is not registered
-     */
-    public void checkRegistered(Class clazz) {
-	checkState(isRegistered(clazz), "Class %s is not registered!", clazz.getName());
-    }
 
     /**
      * Returns the controller status of the controller associated to the clique
@@ -652,8 +626,7 @@ public class TraceDb {
      * @param originId
      *            the id of the server of origin
      */
-    public ControllerStatus controllerStatus(Class clazz, long viewId, long originId) {
-	checkRegistered(clazz);
+    public ControllerStatus controllerStatus(long viewId, long originId) {
 	checkArgument(viewId >= 0);
 	checkArgument(originId >= 0);
 	// The view is NEW if it is not in any equivalence relation with objects
@@ -694,7 +667,7 @@ public class TraceDb {
      * @throws ViewNotFoundException
      *             if objects are not found.
      */
-    public boolean shallowEqual(Class clazz, long viewId1, long viewId2) {
+    public boolean shallowEqual(long viewId1, long viewId2) {
 	View view1 = (View) read(clazz, viewId1);
 	View view2 = (View) read(clazz, viewId2);
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
@@ -707,7 +680,7 @@ public class TraceDb {
      *
      * @throws ViewNotFoundException
      */
-    public boolean deepEqual(Class clazz, long objId1, long objId2) {
+    public boolean deepEqual(long objId1, long objId2) {
 	throw new UnsupportedOperationException("TODO Implement me!!");
     }
 
@@ -718,13 +691,12 @@ public class TraceDb {
      *
      * @throws ViewNotFoundException
      */
-    public boolean sameAs(Class clazz, long viewId1, long viewId2) {
-		
-	read(clazz, viewId1);
-	read(clazz, viewId2);
-	
+    public boolean sameAs(long viewId1, long viewId2) {
 
-	LinkedHashSet<Long> sames = sameAsIds.get(clazz.getName(), viewId1);
+	read(viewId1);
+	read(viewId2);
+
+	LinkedHashSet<Long> sames = sameAsIds.get(viewId1);
 
 	return sames.contains(viewId2);
     }
@@ -733,8 +705,8 @@ public class TraceDb {
      * @throws ViewNotFoundException
      */
     public boolean isSynchronized(Class clazz, long originId, String externalId) {
-	View odrView = (View) readOdrView(clazz, originId, externalId);
-	View foreignView = (View) read(clazz, originId, externalId);
+	DataNode odrView =  readOdrView(originId, externalId);
+	DataNode foreignView =  read(originId, externalId);
 
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
 	// todo check odrity

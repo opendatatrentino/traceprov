@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 public abstract class DataNode implements Serializable {
 
     private Ref ref;
+    private long id;
     private NodeMetadata metadata;
     private Object data;
 

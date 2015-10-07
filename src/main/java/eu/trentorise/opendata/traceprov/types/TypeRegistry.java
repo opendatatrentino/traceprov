@@ -18,11 +18,17 @@ package eu.trentorise.opendata.traceprov.types;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 import static eu.trentorise.opendata.traceprov.validation.Preconditions.checkType;
+
+import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
+
 import javax.annotation.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -33,7 +39,11 @@ import com.google.common.collect.ImmutableMap;
  */
 public class TypeRegistry {
 
+    private static Logger LOG = Logger.getLogger(TypeRegistry.class.getSimpleName());
+
     private Map<String, Type> types;
+
+    private ObjectMapper objectMapper;
 
     /**
      * Maps Java Class canonical name (i.e. java.util.HashMap) to TraceProv Type
@@ -46,6 +56,12 @@ public class TypeRegistry {
     private TypeRegistry() {
 	this.types = new HashMap();
 	this.classDefs = new HashMap();
+	this.objectMapper = new ObjectMapper();
+    }
+    
+    private TypeRegistry(ObjectMapper objectMapper){
+	checkNotNull(objectMapper);
+	this.objectMapper = objectMapper;
     }
 
     /**
@@ -81,11 +97,10 @@ public class TypeRegistry {
     }
 
     /**
-     * Registers a new type. 
+     * Registers a new type.
      * 
-     * If the type's default Java class is not yet
-     * registered as canonical class for some type, it is associated to
-     * provided type.
+     * If the type's default Java class is not yet registered as canonical class
+     * for some type, it is associated to provided type.
      * 
      * @return The previous value associated with key, or null if there was no
      *         mapping for key.
@@ -176,7 +191,21 @@ public class TypeRegistry {
      * {@link eu.trentorise.opendata.traceprov.types}
      */
     public static TypeRegistry of() {
-	TypeRegistry reg = new TypeRegistry();
+	return new TypeRegistry();
+    }
+    
+    /**
+     * Creates new registry filled with default datatypes in
+     * {@link eu.trentorise.opendata.traceprov.types}
+     * 
+     * * @param objectMapper The object mapper to use for serialization and
+     * deserialization. Normally it can be safely shared with other instances
+     * except when they reconfigure it - in this case other threads must not use
+     * the object mapper during reconfiguration.
+     * 
+     */
+    public static TypeRegistry of(ObjectMapper objectMapper) {
+	TypeRegistry reg = new TypeRegistry(objectMapper);
 	reg.put(AnyType.of());
 	reg.put(BooleanType.of());
 	reg.put(ClassType.of());
@@ -236,4 +265,8 @@ public class TypeRegistry {
 	return retb.build();
     }
 
+    /** todo write about sharing */
+    public ObjectMapper getObjectMapper(){
+	return objectMapper;
+    }
 }
