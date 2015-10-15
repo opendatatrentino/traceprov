@@ -27,6 +27,7 @@ import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.DataValue;
 import eu.trentorise.opendata.traceprov.types.ClassType;
 import eu.trentorise.opendata.traceprov.types.Def;
+import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.types.IntType;
 import eu.trentorise.opendata.traceprov.types.ListType;
 import eu.trentorise.opendata.traceprov.types.StringType;
@@ -67,17 +68,20 @@ public class DataTest {
     @After
     public void afterMethod(){
 	emptyReg = null;
+	TraceDb.getCurrentDb().setTypeRegistry(TypeRegistry.of());
     }
+    
+    
     
     @Test
     public void testWalkerValue() {
 	
-	
-        assertEquals(null, DataValue.of().asSimpleType(emptyReg));
-        assertEquals("a", DataValue.of("a").asSimpleType(emptyReg));
-        assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType(emptyReg));
-        assertEquals(Lists.newArrayList("a"), DataArray.of(DataValue.of("a")).asSimpleType(emptyReg));
-        assertEquals(Lists.newArrayList("a"), DataArray.of(DataValue.of("a")).asSimpleType(emptyReg));
+	TraceDb.getCurrentDb().setTypeRegistry(emptyReg);
+        assertEquals(null, DataValue.of().asSimpleType());
+        assertEquals("a", DataValue.of("a").asSimpleType());
+        assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());
+        assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), DataValue.of("a")).asSimpleType());
+        assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), DataValue.of("a")).asSimpleType());
     }
 
     @Test
@@ -88,18 +92,20 @@ public class DataTest {
         }
         DataArray nodes = DataArray.of(list);
         assertTrue(nodes.toString().contains("..."));
-        assertFalse(DataArray.of(DataValue.of()).toString().contains("..."));
+        assertFalse(DataArray.of(Ref.of(), DataValue.of()).toString().contains("..."));
     }
 
     @Test
     public void testWalker() {
 
-        assertEquals(new HashMap(), DataMap.of().asSimpleType(emptyReg));
+	TraceDb.getCurrentDb().setTypeRegistry(TypeRegistry.empty());
+	
+        assertEquals(new HashMap(), DataMap.of().asSimpleType());
 
         Object res = DataMap.of(Ref.of(),
                 NodeMetadata.of(),
                 ImmutableMap.of("a", DataValue.of("b"),
-                        "c", DataValue.of("d"))).asSimpleType(emptyReg);
+                        "c", DataValue.of("d"))).asSimpleType();
 
         HashMap hm = (HashMap) res;
 
@@ -131,6 +137,7 @@ public class DataTest {
         );
 
         DataNode data = DataArray.of(
+        	Ref.of(),
                 DataMap.of(
                         Ref.of(),
                         NodeMetadata.of(),
@@ -162,7 +169,7 @@ public class DataTest {
                     DataMap dataMap = (DataMap) dn;
                     for (String key : elNames) {
                         DataValue val = (DataValue) dataMap.get(key);
-                        String value =  val.getValue().toString();
+                        String value =  val.getRawValue().toString();
                         row.add(value);
                     }
                 }

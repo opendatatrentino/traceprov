@@ -19,31 +19,37 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 import static eu.trentorise.opendata.traceprov.validation.Preconditions.checkType;
 
-import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 /**
  * Todo this is much in WTF status
+ * 
+ * NOT threadsafe.
  *
  * @author David Leoni
  */
-public class TypeRegistry {
+public class TypeRegistry implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static Logger LOG = Logger.getLogger(TypeRegistry.class.getSimpleName());
 
     private Map<String, Type> types;
 
     private ObjectMapper objectMapper;
+
+    // private Kryo kryo;
 
     /**
      * Maps Java Class canonical name (i.e. java.util.HashMap) to TraceProv Type
@@ -57,9 +63,12 @@ public class TypeRegistry {
 	this.types = new HashMap();
 	this.classDefs = new HashMap();
 	this.objectMapper = new ObjectMapper();
+	this.canonicalTypes = new HashMap();
+	// this.kryo = new Kryo();
     }
-    
-    private TypeRegistry(ObjectMapper objectMapper){
+
+    private TypeRegistry(ObjectMapper objectMapper) {
+	this();
 	checkNotNull(objectMapper);
 	this.objectMapper = objectMapper;
     }
@@ -122,11 +131,21 @@ public class TypeRegistry {
      * @throws IllegalStateException
      *             if the provided type is not registered.
      */
+    public void checkRegistered(String typeId) {
+	checkNotEmpty(typeId, "Invalid TraceType id!");
+	if (!hasType(typeId)) {
+	    throw new IllegalStateException("Provided tracetype with id " + typeId + " is not registered!");
+	}
+    }
+
+    /**
+     * 
+     * @throws IllegalStateException
+     *             if the provided type is not registered.
+     */
     public void checkRegistered(Type traceType) {
 	checkNotNull(traceType);
-	if (!hasType(traceType.getId())) {
-	    throw new IllegalStateException("Provided tracetype " + traceType.toString() + " is not registered!");
-	}
+	checkRegistered(traceType.getId());
     }
 
     /**
@@ -191,9 +210,9 @@ public class TypeRegistry {
      * {@link eu.trentorise.opendata.traceprov.types}
      */
     public static TypeRegistry of() {
-	return new TypeRegistry();
+	return new TypeRegistry(new ObjectMapper());
     }
-    
+
     /**
      * Creates new registry filled with default datatypes in
      * {@link eu.trentorise.opendata.traceprov.types}
@@ -208,23 +227,26 @@ public class TypeRegistry {
 	TypeRegistry reg = new TypeRegistry(objectMapper);
 	reg.put(AnyType.of());
 	reg.put(BooleanType.of());
+	reg.put(CollectionType.of());
 	reg.put(ClassType.of());
 	reg.put(DateTimeType.of());
-	reg.put(DictType.of());
-	reg.put(LocalizedStringType.of());
+	reg.put(DictType.of());	
 	reg.put(DoubleType.of());
 	reg.put(FloatType.of());
 	reg.put(FunctionType.of());
-	reg.put(RefType.of());
 	reg.put(IntType.of());
 	reg.put(JavaDateType.of());
 	reg.put(ListType.of());
+	reg.put(LocalizedStringType.of());
 	reg.put(LongType.of());
 	reg.put(MapType.of());
-	reg.put(NullType.of());
+	reg.put(NullType.of());	
+	reg.put(RefType.of());
+	reg.put(SetType.of());
 	reg.put(StringType.of());
 	reg.put(TupleType.of());
 	reg.put(UndefinedType.of());
+	reg.put(Types.PUBLISHER_TYPE);
 	return reg;
     }
 
@@ -265,8 +287,23 @@ public class TypeRegistry {
 	return retb.build();
     }
 
+    /**
+     * Returns true if provided object is instance of TraceType having given
+     * typeid
+     */
+    public boolean isInstance(@Nullable Object obj, String typeId) {
+	checkNotEmpty(typeId, "Invalid TraceType id!");
+	for (Type t : types.values()) {
+	    if (t.isInstance(obj)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     /** todo write about sharing */
-    public ObjectMapper getObjectMapper(){
+    public ObjectMapper getObjectMapper() {
 	return objectMapper;
     }
+        
 }

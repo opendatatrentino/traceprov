@@ -15,81 +15,103 @@
  */
 package eu.trentorise.opendata.traceprov.data;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+import eu.trentorise.opendata.traceprov.data.DataArray.Builder;
+import eu.trentorise.opendata.traceprov.db.TraceDb;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import org.immutables.value.Value;
+
+import com.google.common.base.Preconditions;
+
 /**
- * A node of the common tree format representation. It also holds a provenance
- * reference. Use {@link DataVisitor} and
- * {@link #accept(eu.trentorise.opendata.traceprov.data.IDataVisitor, eu.trentorise.opendata.traceprov.data.Data, java.lang.String, int) accept}
- * to navigate it.
+ * A node of the TraceProv tree format representation. Use {@link DataVisitor}
+ * and
+ * {@link #accept(eu.trentorise.opendata.traceprov.data.IDataVisitor, eu.trentorise.opendata.traceprov.data.Data, java.lang.String, int)
+ * accept} to navigate it. Each DataNode contains a raw java object, which may
+ * contain references to other DataNodes.
  *
  * @author David Leoni
  */
 public abstract class DataNode implements Serializable {
 
-    private Ref ref;
-    private long id;
-    private NodeMetadata metadata;
-    private Object data;
-
-    DataNode() {
-        this.ref = Ref.of();
-        this.metadata = NodeMetadata.of();
-        this.data = null;
-    }
-
-    DataNode(Ref ref, NodeMetadata metadata, @Nullable Object data) {
-        checkNotNull(ref);
-        checkNotNull(metadata);
-        this.ref = ref;
-        this.metadata = metadata;
-        this.data = data;
+    /**
+     * The numerical id of the datanode inside a {@link TraceDb}. If unknown
+     * defaults to -1.
+     */
+    @Value.Default
+    public long getId() {
+	return -1;
     }
 
     /**
      * A reference to position in the original file from which this node comes
      * from. If unknown, {@link Ref#of()} is returned.
      */
+    @Value.Default
     public Ref getRef() {
-        return ref;
+	return Ref.of();
     }
 
     /**
      * Provenance information about the node.
      */
+    @Value.Default
     public NodeMetadata getMetadata() {
-        return metadata;
+	return NodeMetadata.of();
     }
 
     /**
-     * The subnodes of the node or the terminal value.
+     * The Java object backing this node, which can't be another DataNode
+     * (although the object can contain references to other DataNodes).
+     * <p>
+     * <b>DO NOT MODIFY THE RETURNED OBJECT</b>. If you need to modify the
+     * object, use the copy returned by {@link #copyRawValue()} instead.
+     * <p>
      */
-    public Object getValue() {
-        return data;
+    @Value.Default
+    @Nullable
+    public Object getRawValue() {
+	return null;
+    }
+
+    /**
+     * A deep copy of the Java object backing this node (immutable objects won't
+     * be copied). If you just need to read the object without modifying it, use
+     * {@link #getValue()} instead.
+     */
+    // todo say it's using current type reg
+    public Object copyRawValue() {
+	return TraceDb.getCurrentDb()
+		.getTypeRegistry()
+		.getCanonicalTypeFromInstance(getRawValue())
+		.deepCopy(getRawValue());
     }
 
     /**
      * Allows traversing the data tree with a {@link DataVisitor}.
      * 
-     * <p> Calls {@code accept} on subnodes and then {@code visitor.visit} on this
-     * node. </p>
+     * <p>
+     * Calls {@code accept} on subnodes and then {@code visitor.visit} on this
+     * node.
+     * </p>
      *
-     * @param visitor a node visitor.
-     * @param parent the parent of the node. If unknown, use
-     * {@link DataValue#of()}
-     * @param field The immediate field of a map under which current node is
-     * stored. If unknown, use "".
-     * @param pos The position of the node in the parent array. If it is not in
-     * an array, use 0.
+     * @param visitor
+     *            a node visitor.
+     * @param parent
+     *            the parent of the node. If unknown, use {@link DataValue#of()}
+     * @param field
+     *            The immediate field of a map under which current node is
+     *            stored. If unknown, use "".
+     * @param pos
+     *            The position of the node in the parent array. If it is not in
+     *            an array, use 0.
      */
+    // todo write about default type reg
     public abstract void accept(DataVisitor visitor, DataNode parent, String field, int pos);
 
     /**
@@ -97,46 +119,36 @@ public abstract class DataNode implements Serializable {
      * serialization without the metadata information such as provenance.
      *
      * @return a tree made of the following objects:
-     * HashMap/ArrayList/String/Number/null
+     *         HashMap/ArrayList/String/Number/null
      */
     // todo asSimpleJavaType maybe is more descriptive
-    public abstract Object asSimpleType(TypeRegistry typeRegistry);
+    public abstract Object asSimpleType();
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.ref);
-        hash = 17 * hash + Objects.hashCode(this.metadata);
-        hash = 17 * hash + Objects.hashCode(this.data);
-        return hash;
+    @Value.Check
+    protected void check() {
+	if (getRawValue() instanceof DataNode) {
+	    throw new UnsupportedOperationException(
+		    "Cannot contain data nodes! Raw value class: " + getRawValue().getClass().getName());
+	}
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final DataNode other = (DataNode) obj;
-        if (!Objects.equals(this.ref, other.ref)) {
-            return false;
-        }
-        if (!Objects.equals(this.metadata, other.metadata)) {
-            return false;
-        }
-        if (!Objects.equals(this.data, other.data)) {
-            return false;
-        }
-        return true;
+    /**
+     * Creates a builder initialized with this values.
+     */
+    public abstract Builder fromThis();
+
+    public abstract static class Builder {
+
+	public abstract Builder from(DataNode instance);
+
+	public abstract Builder setRawValue(Object rawVal);
+
+	public abstract Builder setId(long id);
+
+	public abstract Builder setRef(Ref ref);
+
+	public abstract Builder setMetadata(NodeMetadata metadata);
+	
+	public abstract DataNode build();
     }
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + "{" + "ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + getValue() + '}';
-    }
-
-    
-
 }

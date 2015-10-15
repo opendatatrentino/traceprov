@@ -29,7 +29,7 @@ import eu.trentorise.opendata.traceprov.data.TraceType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.ProvRefs;
+import eu.trentorise.opendata.traceprov.types.TraceRefs;
 import eu.trentorise.opendata.traceprov.data.PropertyMapping;
 import java.util.Locale;
 import org.junit.Test;
@@ -73,10 +73,10 @@ public class CodeGenTest {
 
     @Test
     public void testRef() {
-        assertEquals("$[0][0]", ProvRefs.tablePath(0, 0));        
-        assertEquals("$[*][1]", ProvRefs.tablePath(-1, 1));  
-        assertEquals("$[1][*]", ProvRefs.tablePath(1, -1));          
-        assertEquals("$[*][*]", ProvRefs.tablePath(-1, -1));
+        assertEquals("$[0][0]", TraceRefs.tablePath(0, 0));        
+        assertEquals("$[*][1]", TraceRefs.tablePath(-1, 1));  
+        assertEquals("$[1][*]", TraceRefs.tablePath(1, -1));          
+        assertEquals("$[*][*]", TraceRefs.tablePath(-1, -1));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class CodeGenTest {
         assertEquals(ImmutableList.of(), ps.getErrors());
         
         DataMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 
-                DataArray.of(DataValue.of(Ref.of(), NodeMetadata.of(), 3))));
+                DataArray.of(Ref.of(), DataValue.of(Ref.of(), NodeMetadata.of(), 3))));
     }
 
     

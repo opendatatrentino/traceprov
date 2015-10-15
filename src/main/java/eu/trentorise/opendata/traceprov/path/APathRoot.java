@@ -22,7 +22,7 @@ package eu.trentorise.opendata.traceprov.path;
  */
 //@Value.Immutable
 //@SimpleStyle
-abstract class APathRoot extends PathElement {
+abstract class APathRoot extends TracePathElement {
 
     @Override
     public String getPathFragment() {

@@ -40,7 +40,7 @@ abstract class APropertyMapping implements Serializable {
 
     /**
      * A reference to an element in the source file. For possible references,
-     * see {@link eu.trentorise.opendata.traceprov.types.ProvRefs}
+     * see {@link eu.trentorise.opendata.traceprov.types.TraceRefs}
      */
     @Value.Default
     public Ref getSourceRef() {

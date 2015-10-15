@@ -71,7 +71,7 @@ public interface ViewDeprecated<T> extends Storable {
      * done only on the timestamp or version. Both views URLs must match,
      * otherwise an IllegalArgumentException is thrown.
      */
-    boolean newerThan(View<T> view);
+    boolean newerThan(ViewDeprecated<T> view);
 
     /**
      * Returns an immutable map containing field names of the view and eventual
@@ -93,7 +93,7 @@ public interface ViewDeprecated<T> extends Storable {
      *
      * @see #deepEquals(eu.trentorise.opendata.opendatarise.db.View)
      */
-    boolean shallowEquals(View<T> view);
+    boolean shallowEquals(ViewDeprecated<T> view);
 
     /**
      * Returns true if the controlled object and all the objects linked by it
@@ -103,7 +103,7 @@ public interface ViewDeprecated<T> extends Storable {
      *
      * @see #shallowEquals(eu.trentorise.opendata.opendatarise.db.View)
      */
-    boolean deepEquals(View<T> view);
+    boolean deepEquals(ViewDeprecated<T> view);
 
     /**
      * Returns a list of views from which this view derives from. For example,

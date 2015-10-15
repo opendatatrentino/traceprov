@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
 
 /**
  * Produces a simple HashMap/ArrayList version of an {@link DataNode} tree. Only
- * data values will be kept (metadata will be stripped).
+ * data values will be kept (metadata will be stripped). Maps must have String keys.
  * 
  * @author David Leoni
  */
@@ -59,9 +59,10 @@ final class SimpleMapTransformer implements DataVisitor {
 
 	Map map = new HashMap();
 
-	for (int i = 0; i < dataMap.getValue().size(); i++) {
-	    Map.Entry entry = stack.removeFirst();
-	    map.put(entry.getKey(), entry.getValue());
+	for (Map.Entry e : dataMap.entrySet()){
+	
+	    Map.Entry stackEntry = stack.removeFirst();
+	    map.put(stackEntry.getKey(), stackEntry.getValue());
 	}
 	stack.addFirst(Maps.immutableEntry(key, map));
     }
@@ -72,12 +73,12 @@ final class SimpleMapTransformer implements DataVisitor {
 	PropertyDescriptor[] propertyDescriptors;
 
 	try {
-	    propertyDescriptors = Introspector.getBeanInfo(dataObject.getValue().getClass(), Object.class)
+	    propertyDescriptors = Introspector.getBeanInfo(dataObject.getRawValue().getClass(), Object.class)
 		    .getPropertyDescriptors();
 
 	} catch (IntrospectionException ex) {
 	    throw new TraceProvException(
-		    "Error while accessing properties of Java object of class " + dataObject.getValue().getClass(), ex);
+		    "Error while accessing properties of Java object of class " + dataObject.getRawValue().getClass(), ex);
 	}
 
 	for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
@@ -88,12 +89,12 @@ final class SimpleMapTransformer implements DataVisitor {
 	    if (readMethod != null) {
 		Object res;
 		try {
-		    res = readMethod.invoke(dataObject.getValue());
+		    res = readMethod.invoke(dataObject.getRawValue());
 		    stack.addFirst(Maps.immutableEntry(readMethod.getName(), res));
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 		    throw new TraceProvException(
 			    "Error while invoking getter " + readMethod.toString() + "  of Java object of class "
-				    + dataObject.getValue().getClass(),
+				    + dataObject.getRawValue().getClass(),
 			    ex);
 		}
 
@@ -117,16 +118,11 @@ final class SimpleMapTransformer implements DataVisitor {
 
     @Override
     public void visit(DataValue DataValue, DataNode parent, String key, int pos) {
-	stack.addFirst(Maps.immutableEntry(key, DataValue.getValue()));
+	stack.addFirst(Maps.immutableEntry(key, DataValue.getRawValue()));
     }
 
     public Object getResult() {
 	checkState(stack.size() == 1, "Stack should have only one element, found instead %s elements", stack.size());
 	return stack.getFirst().getValue();
-    }
-
-    @Override
-    public TypeRegistry getTypeRegistry() {	
-	return this.typeRegistry;
     }
 }

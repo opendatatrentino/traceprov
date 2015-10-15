@@ -22,9 +22,11 @@ import javax.validation.Path;
  *
  * @author David Leoni
  */
-abstract class APathProperty extends PathElement implements Path.PropertyNode {
+class APathProperty extends TracePathElement implements Path.PropertyNode {
 
-    public abstract List<String> getProperties();
+    public  List<String> getProperties(){
+	throw new UnsupportedOperationException("TODO implement me");
+    };
 
     @Override
     public boolean isTokenDefinite() {
@@ -35,7 +37,7 @@ abstract class APathProperty extends PathElement implements Path.PropertyNode {
     public String getPathFragment() {
         return new StringBuilder()
                 .append("[")
-                .append(PathElement.join(", ", "'", getProperties()))
+                .append(TracePathElement.join(", ", "'", getProperties()))
                 .append("]").toString();
     }
 }

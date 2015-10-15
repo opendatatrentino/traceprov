@@ -22,9 +22,7 @@ import eu.trentorise.opendata.traceprov.types.TypeRegistry;
  *
  * @author David Leoni
  */
-public interface DataVisitor {
-    
-    TypeRegistry getTypeRegistry();
+public interface DataVisitor {    
 
     /**
      * Visits a {@link DataMap}

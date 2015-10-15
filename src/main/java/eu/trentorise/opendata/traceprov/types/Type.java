@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import eu.trentorise.opendata.commons.Dict;
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,58 +32,10 @@ import java.util.Locale;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE, property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class Type implements Serializable {
+public abstract class Type<T> implements Serializable {
 
-    /**
-     *
-     * todo review
-     * <h3>Nulls</h3> In data we only support 'null', finding 'undefined' in
-     * json data would be considered an error.
-     *
-     * We postulate existance of Null datatype even if users cannot declare it
-     * as a type, (this is the same behaviour of Typescript). This is because
-     * every object can be null (even primitive datatypes).
-     *
-     * <h3>Grammar</h3>
-     * 
-     * <pre>
-     *      Dict -> language dict
-     *      CanonicalName -> camel cased english name
-     *
-     * PrimitiveType ->
-     *        String  with regex
-     *      | Int
-     *      | Long
-     *      | Float
-     *      | Double
-     *      | Date
-     *
-     * Type ->
-     *        PrimitiveType
-     *      | TypeId
-     *      | List<Type>
-     *      | Map<String | Int, Type>
-     * </pre>
-     */
-    /**
-     * <pre>
-     *      JSON-LD CONTEXT ->
-     *             Type -> Id,
-     * Concept,
-     * CanonicalName,
-     * name : Dict,
-     * description : Dict,
-     * PropertyDef[]
-     *
-     * PropertyDef -> Id, Concept, CanonicalName, Name, Type
-     *
-     * </pre>
-     *
-     * Although Json-ld always allow inserting multiple values (because of the
-     * open world assumption), we demand multiple values must be explicitly
-     * declared. todo review this
-     *
-     */
+    private static Logger LOG = Logger.getLogger(Type.class.getSimpleName());
+    
     protected Type() {
 
     }
@@ -122,10 +75,10 @@ public abstract class Type implements Serializable {
     }
 
     /**
-     * The default Java class to represent instances of the type. Other
-     * classes may be added with type converters todo define better
+     * The default Java class to represent instances of the type. Other classes
+     * may be added with type converters todo define better
      */
-    public abstract Class getJavaClass();
+    public abstract Class<T> getJavaClass();
 
     /**
      * Returns whether or not the given {@code object} is an instance of this
@@ -148,6 +101,26 @@ public abstract class Type implements Serializable {
      *             returns false)
      */
     public boolean isEmpty(Object object) {
+	throw new UnsupportedOperationException("todo implement me!");
+    }
+
+    /**
+     * Returns the canonical empty object for this type. The returned object is
+     * always the same, even if type is not immutable. For getting always a new
+     * instance, see {@link #newEmpty()}
+     */
+    public Object empty() {
+	throw new UnsupportedOperationException("todo implement me!");
+    }
+
+    /**
+     * Returns the canonical empty object for this type. If type is immutable,
+     * returns always the same instance, otherwise returns a newly created
+     * instance each time.
+     * 
+     * @see #empty()
+     */
+    public Object newEmpty() {
 	throw new UnsupportedOperationException("todo implement me!");
     }
 
@@ -203,8 +176,36 @@ public abstract class Type implements Serializable {
      * }
      */
 
+    protected void checkInstance(Object obj){
+	if (!isInstance(obj)){
+	    throw new IllegalArgumentException("Provided object is not instance of Trace Type " + getId());
+	}
+    }
+    
     /**
      * Returns true if the instances of this type are immutable.
      */
     public abstract boolean isImmutable();
+    
+    
+    public <W> W deepCopy(W obj){
+	checkInstance(obj);
+	if (isImmutable()){
+	    return obj;
+	} else {
+	    LOG.warning("TODO - CALLED deepCopy ON TYPE " + getId() + " BUT RETURNING SAME INPUT UNCHANGED!!");
+	    return obj;
+	}
+    }
+    
+    public <W> W shallowCopy(W obj){
+	checkInstance(obj);
+	if (isImmutable()){
+	    return obj;
+	} else {
+	    LOG.warning("TODO - CALLED deepCopy ON TYPE " + getClass().getSimpleName() + " BUT RETURNING SAME INPUT UNCHANGED!!");
+	    return obj;
+	}
+    }
+    
 }

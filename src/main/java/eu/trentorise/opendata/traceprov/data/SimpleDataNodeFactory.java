@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
 import eu.trentorise.opendata.commons.validation.Ref;
+import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
@@ -20,6 +22,8 @@ import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 public class SimpleDataNodeFactory implements DataNodeFactory {
 
     private static final SimpleDataNodeFactory INSTANCE = new SimpleDataNodeFactory();
+    
+    private static Logger LOG = Logger.getLogger(SimpleDataNodeFactory.class.getSimpleName());
     
     public SimpleDataNodeFactory(){
     }
@@ -40,9 +44,9 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
     public DataNode makeNode(
 	    		Ref ref, 
 	    		NodeMetadata metadata, 
-	    		@Nullable Object obj,
-	    		TypeRegistry typeRegistry) {
+	    		@Nullable Object obj) {
 
+	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
 	if (obj == null || obj instanceof String || obj instanceof Number) {
 	    Type canType = typeRegistry.getCanonicalTypeFromInstance(obj);
 	    NodeMetadata newMetadata;
@@ -61,21 +65,22 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 	    for (Object key : map.keySet()) {
 		String keyString;
 		if (key == null){
-		    throw new IllegalArgumentException("Found map with nasty null key while converting java object tree to DataNode tree! value toString() = " + map.get(null).toString());
+		    LOG.fine("Found map with nasty null key while converting java object tree to DataNode tree! Converting to generic DataObject.");
+		    return DataObject.of(ref, metadata, obj);
 		} else if (key instanceof String){
 		    keyString = (String) key;
 		} else {
-		    throw new IllegalArgumentException("Found map with non-string key while converting java object tree to DataNode tree! Key toString() = " + key.toString());
+		    LOG.fine("Found map with non-string key while converting java object tree to DataNode tree! Converting to generic DataObject.");
+		    return DataObject.of(ref, metadata, obj);
 		}
 		
-				
+
 		Object subObj = map.get(keyString);
 		
 		DataNode subNode = makeNode(
 			DataNodes.makeSubRef(ref, keyString),
-			DataNodes.makeMetadata(metadata, subObj, typeRegistry),
-			subObj,
-			typeRegistry);
+			DataNodes.makeMetadata(metadata, subObj),
+			subObj);
 		
 		newMap.put(keyString, subNode);
 	    }	
@@ -86,9 +91,8 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 	    int index = 0;
 	    for (Object item : col){		
 		DataNode nodeItem = DataNodes.makeNode(DataNodes.makeSubRef(ref, index),
-			DataNodes.makeMetadata(metadata, item, typeRegistry),
-			item,
-			typeRegistry);
+			DataNodes.makeMetadata(metadata, item),
+			item);
 		ret.add(nodeItem);
 		index += 1;
 	    }

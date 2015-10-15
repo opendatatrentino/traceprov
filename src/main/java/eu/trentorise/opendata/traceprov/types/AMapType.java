@@ -51,11 +51,6 @@ abstract class AMapType extends Type {
 	return AnyType.of();
     }
 
-    /*
-     * @Override public String getDatatypeStandardId(){ return XSD +
-     * "complexType"; }
-     */
-
     @Override
     public Class getJavaClass() {
 	return Map.class;

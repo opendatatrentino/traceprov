@@ -17,9 +17,16 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import org.immutables.value.Value;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Maps;
 
+import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.Ref;
+import eu.trentorise.opendata.traceprov.data.DataNode.Builder;
+import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
@@ -30,38 +37,27 @@ import eu.trentorise.opendata.traceprov.types.TypeRegistry;
  * 
  * @author David Leoni
  */
-public class DataObject<T> extends DataNode {
-
-    private static final DataObject INSTANCE = new DataObject();
+// todo implement asDataMap? abstract map interface from DataMap?
+@Value.Immutable
+@BuilderStylePublic
+@JsonSerialize(as = DataObject.class)
+@JsonDeserialize(as = DataObject.class)
+class ADataObject extends DataNode {
 
     private static final long serialVersionUID = 1L;
 
-    private DataObject() {
-	super(Ref.of(), NodeMetadata.of(), new Object());
-
-    }
-
-    private DataObject(Ref ref, NodeMetadata metadata, @Nullable T obj) {
-	super(ref, metadata, obj);
-    }
-
-    public static DataObject of() {
-	return INSTANCE;
-    }
-
-    public static DataObject of(Ref ref, NodeMetadata metadata, @Nullable Object obj) {
-	return new DataObject(ref, metadata, obj);
-    }
-
     /**
-     * Returns the wrapped Java object. The object is copied with
+     * {@inheritDoc}
+     * By default returns null
      */
+    @Nullable
+    @Value.Default
     @Override
-    public T getValue() {
-
-	return (T) super.getValue();
+    public Object getRawValue() {		
+	return null;	
     }
 
+    
     private static String stripIsGet(String getterName) {
 	if (getterName.startsWith("is")) {
 	    return getterName.substring(2);
@@ -83,12 +79,12 @@ public class DataObject<T> extends DataNode {
 	PropertyDescriptor[] propertyDescriptors;
 
 	try {
-	    propertyDescriptors = Introspector.getBeanInfo(getValue().getClass(), Object.class)
+	    propertyDescriptors = Introspector.getBeanInfo(getRawValue().getClass(), Object.class)
 		    .getPropertyDescriptors();
 
 	} catch (IntrospectionException ex) {
 	    throw new TraceProvException(
-		    "Error while accessing properties of Java object of class " + getValue().getClass(), ex);
+		    "Error while accessing properties of Java object of class " + getRawValue().getClass(), ex);
 	}
 
 	for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
@@ -105,17 +101,17 @@ public class DataObject<T> extends DataNode {
 	return false;
     }
 
-    public List<String> keySet() {
+    public List<String> keys() {
 
 	PropertyDescriptor[] propertyDescriptors;
 
 	try {
-	    propertyDescriptors = Introspector.getBeanInfo(getValue().getClass(), Object.class)
+	    propertyDescriptors = Introspector.getBeanInfo(getRawValue().getClass(), Object.class)
 		    .getPropertyDescriptors();
 
 	} catch (IntrospectionException ex) {
 	    throw new TraceProvException(
-		    "Error while accessing properties of Java object of class " + getValue().getClass(), ex);
+		    "Error while accessing properties of Java object of class " + getRawValue().getClass(), ex);
 	}
 
 	List<String> ret = new ArrayList();
@@ -131,17 +127,19 @@ public class DataObject<T> extends DataNode {
 	return ret;
     }
 
-    public List<DataNode> values(TypeRegistry typeRegistry) {
+    public List<DataNode> values() {
 
+	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	
 	PropertyDescriptor[] propertyDescriptors;
 
 	try {
-	    propertyDescriptors = Introspector.getBeanInfo(getValue().getClass(), Object.class)
+	    propertyDescriptors = Introspector.getBeanInfo(getRawValue().getClass(), Object.class)
 		    .getPropertyDescriptors();
 
 	} catch (IntrospectionException ex) {
 	    throw new TraceProvException(
-		    "Error while accessing properties of Java object of class " + getValue().getClass(), ex);
+		    "Error while accessing properties of Java object of class " + getRawValue().getClass(), ex);
 	}
 
 	List<DataNode> ret = new ArrayList();
@@ -154,18 +152,13 @@ public class DataObject<T> extends DataNode {
 		String propertyName = stripIsGet(readMethod.getName());
 		Object res;
 		try {
-		    res = readMethod.invoke(getValue());
-		    Ref newRef = DataNodes.makeSubRef(getRef(), propertyName);
-
-		    NodeMetadata newMetadata = DataNodes.makeMetadata(getMetadata(),
-			    res, typeRegistry);
-
-		    ret.add(DataNodes.makeNode(newRef, newMetadata, res, typeRegistry));
+		    res = readMethod.invoke(getRawValue());
+		    ret.add(DataNodes.makeSubnode(this,propertyName, res));
 
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 		    throw new TraceProvException(
 			    "Error while invoking getter " + readMethod.toString() + "  of Java object of class "
-				    + getValue().getClass(),
+				    + getRawValue().getClass(),
 			    ex);
 		}
 
@@ -175,8 +168,9 @@ public class DataObject<T> extends DataNode {
 
 	return ret;
 
-    }
-
+    }    
+    
+    
     /**
      * Returns given property, or throws exception if not found
      * 
@@ -184,17 +178,19 @@ public class DataObject<T> extends DataNode {
      *             TraceProvNotFoundException
      * @see #hasPropertyDef(java.lang.String)
      */
-    public DataNode get(String propertyName, TypeRegistry typeRegistry) {
+    public DataNode get(String propertyName) {
 	checkNotEmpty(propertyName, "Invalid property name!");
 	PropertyDescriptor[] propertyDescriptors;
 
+	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	
 	try {
-	    propertyDescriptors = Introspector.getBeanInfo(getValue().getClass(), Object.class)
+	    propertyDescriptors = Introspector.getBeanInfo(getRawValue().getClass(), Object.class)
 		    .getPropertyDescriptors();
 
 	} catch (IntrospectionException ex) {
 	    throw new TraceProvException(
-		    "Error while accessing properties of Java object of class " + getValue().getClass(), ex);
+		    "Error while accessing properties of Java object of class " + getRawValue().getClass(), ex);
 	}
 
 	for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
@@ -205,18 +201,14 @@ public class DataObject<T> extends DataNode {
 	    if (readMethod != null && stripIsGet(readMethod.getName()).equals(propertyName)) {
 		Object res;
 		try {
-		    res = readMethod.invoke(getValue());
-		    Ref newRef = DataNodes.makeSubRef(getRef(), propertyName);
+		    res = readMethod.invoke(getRawValue());
 
-		    NodeMetadata newMetadata = DataNodes.makeMetadata(getMetadata(),
-			    res, typeRegistry);
-
-		    return DataNodes.makeNode(newRef, newMetadata, res, typeRegistry);
+		    return DataNodes.makeSubnode(this, propertyName, res);
 
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 		    throw new TraceProvException(
 			    "Error while invoking getter " + readMethod.toString() + "  of Java object of class "
-				    + getValue().getClass(),
+				    + getRawValue().getClass(),
 			    ex);
 		}
 
@@ -227,17 +219,19 @@ public class DataObject<T> extends DataNode {
 	throw new TraceProvNotFoundException("Couldn't find property " + propertyName);
     }
     
-    public List<Map.Entry<String, ? extends DataNode>> entrySet(TypeRegistry typeRegistry){
+    public List<Map.Entry<String, ? extends DataNode>> entries(){
+
+	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
 	
 	PropertyDescriptor[] propertyDescriptors;
 
 	try {
-	    propertyDescriptors = Introspector.getBeanInfo(getValue().getClass(), Object.class)
+	    propertyDescriptors = Introspector.getBeanInfo(getRawValue().getClass(), Object.class)
 		    .getPropertyDescriptors();
 
 	} catch (IntrospectionException ex) {
 	    throw new TraceProvException(
-		    "Error while accessing properties of Java object of class " + getValue().getClass(), ex);
+		    "Error while accessing properties of Java object of class " + getRawValue().getClass(), ex);
 	}
 
 	List<Map.Entry<String, ? extends DataNode>> ret = new ArrayList();
@@ -251,20 +245,16 @@ public class DataObject<T> extends DataNode {
 		String propertyName = stripIsGet(readMethod.getName());
 		Object res;
 		try {
-		    res = readMethod.invoke(getValue());
-		    Ref newRef = DataNodes.makeSubRef(getRef(), propertyName);
-
-		    NodeMetadata newMetadata = DataNodes.makeMetadata(getMetadata(),
-			    res, typeRegistry);
+		    res = readMethod.invoke(getRawValue());
 		    
 		    Entry<String, DataNode> entry = Maps.immutableEntry(propertyName, 
-			    DataNodes.makeNode(newRef, newMetadata, res, typeRegistry));
+			    DataNodes.makeSubnode(this, propertyName, res));
 		    ret.add(entry);
 
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 		    throw new TraceProvException(
 			    "Error while invoking getter " + readMethod.toString() + "  of Java object of class "
-				    + getValue().getClass(),
+				    + getRawValue().getClass(),
 			    ex);
 		}
 
@@ -276,19 +266,42 @@ public class DataObject<T> extends DataNode {
     }
 
     @Override
-    public void accept(DataVisitor visitor, DataNode parent, String field, int pos) {
-	values(visitor.getTypeRegistry());
-	for (Map.Entry<String, ? extends DataNode> entry : entrySet(visitor.getTypeRegistry())) {
+    public void accept(
+	    DataVisitor visitor, 
+	    DataNode parent, 
+	    String field, 
+	    int pos) {
+	values();
+	for (Map.Entry<String, ? extends DataNode> entry : entries()) {
 	    entry.getValue().accept(visitor, this, entry.getKey(), 0);
 	}
-	visitor.visit(this, parent, field, pos);
+	visitor.visit((DataObject) this, parent, field, pos);
     };
 
     @Override
-    public Object asSimpleType(TypeRegistry typeRegistry) {
+    public Object asSimpleType() {
+	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
 	SimpleMapTransformer tran = new SimpleMapTransformer(typeRegistry);
 	accept(tran, DataValue.of(), "", 0);
 	return tran.getResult();
+    }
+
+
+    public static DataObject of(Ref ref, NodeMetadata metadata, @Nullable Object obj) {
+	return DataObject.builder()
+		.setRef(ref)
+		.setMetadata(metadata)
+		.setRawValue(obj)
+		.build();
+    }
+
+    @Override
+    public Builder fromThis() {	
+	return DataObject.builder();
+    }
+    
+    public static abstract class  Builder extends DataNode.Builder {	
+	
     }
 
 }

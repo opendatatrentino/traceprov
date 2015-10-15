@@ -21,7 +21,6 @@ import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEm
 
 import com.google.common.collect.ImmutableList;
 
-import eu.trentorise.opendata.traceprov.db.View;
 import eu.trentorise.opendata.traceprov.types.Type;
 
 import java.util.List;

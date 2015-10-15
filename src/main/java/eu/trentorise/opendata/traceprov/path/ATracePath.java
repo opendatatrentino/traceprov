@@ -25,8 +25,8 @@ import javax.validation.Path;
 import org.immutables.value.Value;
 
 /**
- * An insane mixture of JsonPath and java validation api
- * {@link javax.validation.Path}. JsonPath specs follow
+ * A Java validation api implementation, extended with some JsonPath construct.
+ * For JsonPath we try to follow
  * <a href="https://github.com/jayway/JsonPath" target="_blank">Jayway
  * implementation </a>
  * 
@@ -41,14 +41,8 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 abstract class ATracePath implements Path {
 
-    @Override
-    public Iterator<Node> iterator() {
-	return (Iterator<Node>) (Iterator<?>) getNodes().iterator();
-    }
+    public abstract List<TracePathElement> getNodes();
 
-    public abstract List<PathElement> getNodes();
-
-    // ------------ JSONPATH stuff
     @Value.Default
     public TracePath getNext() {
 	throw new UnsupportedOperationException("todo implement me");
@@ -99,5 +93,10 @@ abstract class ATracePath implements Path {
     public boolean isLeaf() {
 	throw new UnsupportedOperationException("todo implement me");
 	// return getNext() == null;
+    }
+
+    @Override
+    public Iterator<Node> iterator() {
+	return (Iterator<Node>) (Iterator<?>) getNodes().iterator();
     }
 }

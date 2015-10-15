@@ -18,21 +18,22 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import static eu.trentorise.opendata.traceprov.types.Types.XSD;
 import java.util.List;
+import java.util.Set;
+
 import org.immutables.value.Value;
 
 @Value.Immutable
 @SimpleStyle
-@JsonSerialize(as = ListType.class)
-@JsonDeserialize(as = ListType.class)
-abstract class AListType extends ACollectionType {
+@JsonSerialize(as = SetType.class)
+@JsonDeserialize(as = SetType.class)
+abstract class ASetType extends ACollectionType {
 
     private static final long serialVersionUID = 1L;
 
     @Override
     public Class getJavaClass() {
-	return List.class;
+	return Set.class;
     }
 
     @Override
@@ -42,7 +43,7 @@ abstract class AListType extends ACollectionType {
   
     @Override
     public boolean isAllowingDuplicates() {
-	return false;
+	return true;
     }
     
 }

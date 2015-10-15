@@ -25,9 +25,11 @@ import org.immutables.value.Value;
  */
 
 //@Value.Immutable
-abstract class APathArray extends PathElement {
-
-    // -------------------    JSONPATH stuff 
+abstract class APathArray extends TracePathElement { 
+    
+    /** 
+     * todo put examples
+     */
     public static enum Operation {
 
         CONTEXT_SIZE,

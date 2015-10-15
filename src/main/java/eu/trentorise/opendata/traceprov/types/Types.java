@@ -56,6 +56,8 @@ public final class Types {
     private static final Map<Locale, Map<String, String>> DATATYPE_PRETTY_NAMES_MAP = new HashMap();
     private static final Map JAVA_DATATYPES = new HashMap();
 
+    
+    public static final Type PUBLISHER_TYPE = ClassType.builder().setId(TraceProvs.TRACEPROV_NAMESPACE + ".dcat.Publisher").build();
     static {
         /*
          DATATYPE_PRETTY_NAMES_EN.put(XSD_STRING, "String");

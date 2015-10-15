@@ -1,89 +1,130 @@
 package eu.trentorise.opendata.traceprov.db;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Table;
-
-import eu.trentorise.opendata.commons.NotFoundException;
-import eu.trentorise.opendata.commons.OdtUtils;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
-import eu.trentorise.opendata.traceprov.TraceProvs;
-import eu.trentorise.opendata.traceprov.data.DataNode;
-import eu.trentorise.opendata.traceprov.data.DataObject;
-import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
-import eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException;
-import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
+
 import org.apache.commons.io.FileUtils;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Table;
+
+import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.commons.NotFoundException;
+import eu.trentorise.opendata.commons.OdtUtils;
+import eu.trentorise.opendata.commons.validation.Ref;
+import eu.trentorise.opendata.traceprov.TraceProvs;
+import eu.trentorise.opendata.traceprov.data.DataMap;
+import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.DataObject;
+import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
+import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
+import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
+import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
+import eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException;
+import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TypeRegistry;
+import eu.trentorise.opendata.traceprov.types.Types;
+
 /**
- * Database of TraceProv. Serialization is done with Jackson.
+ * Database of TraceProv. Allows storing foreign objects while
+ * tracking their provenance. Follows a NOSQL philophy, where objects are wrapped in
+ * {@link DataNode DataNodes} and indexing is manual.
+ * 
+ * Currently Serialization is done with Jackson. Object cloning with Kryo.
  *
- * Current implementation is just a prototype and thus super inefficient.
+ * NOTE: Current implementation is just a prototype and thus super inefficient.
  *
  * @author David Leoni
  */
+// todo make interface
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public class TraceDb {
+
+    private static Logger LOG = Logger.getLogger(TraceDb.class.getSimpleName());
 
     public static final String IN_MEMORY_URL = "memory:TraceDb";
     public static final String TRACEDB_FILE = "TraceDb.json";
 
     private static final String FILE_PREFIX = "file://";
 
-    public static final long TRACEDB_ORIGIN_ID = 0L;
+    public static final long TRACEDB_PUBLISHER_ID = 0L;
+    public static final String TRACEDB_PUBLISHER_URI = TraceProvs.TRACEPROV_IRI + "/db/tracedb-publisher";
 
-    private static Logger LOG = Logger.getLogger(TraceDb.class.getSimpleName());
+    /**
+     * Note this one doesn't have id as it must be created first.
+     */
+    private static final DataNode INIT_TRACEDB_PUBLISHER = DataObject.builder()
+	    .setRawValue(FoafAgent.builder()
+		    .setName(Dict.of("TraceDb Default Publisher"))
+		    .setUri(TRACEDB_PUBLISHER_URI))
+	    .build();
+
+    /**
+     * TODO super prototype, naming is probably wrong
+     */
+    private static final ThreadLocal<TraceDb> dbPool = new ThreadLocal<TraceDb>() {
+	@Override
+	protected TraceDb initialValue() {
+	    return new TraceDb();
+	}
+    };
 
     private Map<String, String> prefixes;
 
     private String dbUrl;
 
-    private long originIdCounter;
+    private long idCounter;
 
     private TypeRegistry typeRegistry;
 
+    private boolean initialized;
+
     /**
-     * Maps {@code <originId, externalId>} pairs (i.e.
-     * 4, "http://entitypedia.org/entities/123") to corresponding views. This is
-     * a way to say traceprov knows about entity 123 of entitypedia, which
-     * has storedOrigin id = 4
-     *
-     * odr todo 0.3 horrible table, replace with proper LRU cache/db
+     * Maps {@code <publisherId, externalId>} pairs (i.e. 4,
+     * "http://entitypedia.org/entities/123") to corresponding views. This is a
+     * way to say TraceProv knows about entity 123 of publisher Entitypedia,
+     * which has traceprov internal id = 4
+     * 
      */
     private Table<Long, String, DataNode> storedValuesByUrl;
 
     /**
-     * trace id -> Jacksonizable object
+     * trace id -> DataNode object
      */
     private HashMap<Long, DataNode> storedValuesById;
 
     /**
-     * a map origin id -> urls under which that origin is known
+     * A multimap type id -> traceprov internal ids of DataNode which are
+     * instances of that type
      */
-    private ImmutableListMultimap<Long, String> storedOrigins;
+    private Multimap<String, Long> indexedValues;
+
+    private Set<String> indexedTypes;
 
     /**
      * If there is a corresponding odr view of the view, its id will be the
@@ -98,37 +139,94 @@ public class TraceDb {
 	this.dbUrl = IN_MEMORY_URL;
 	this.storedValuesByUrl = HashBasedTable.create();
 	this.storedValuesById = new HashMap();
-	this.storedOrigins = ImmutableListMultimap.of();
+	this.indexedValues = HashMultimap.create();
+	this.indexedTypes = new HashSet();
 	this.prefixes = new HashMap();
 	this.sameAsIds = new HashMap();
-	this.originIdCounter = 0;
+	this.idCounter = 0;
 	this.typeRegistry = TypeRegistry.of();
+    }
+
+    /**
+     * The publisher of objects created with Tracedb. TODO this should be
+     * configurable.
+     */
+    public AFoafAgent readTracedbPublisher() {
+	return (AFoafAgent) read(TRACEDB_PUBLISHER_ID).getRawValue();
+    }
+
+    /**
+     * The publisher to use for objects with unknown publisher.
+     */
+    public AFoafAgent readUnknownPublisher() {
+	return (AFoafAgent) read(TRACEDB_PUBLISHER_ID).getRawValue();
     }
 
     /**
      * Initializes db with default values.
      */
     private void init() {
-	createOrigin(ImmutableList.of(TraceProvs.TRACEPROV_IRI));
+
+	if (initialized) {
+	    LOG.warning("Initializing database twice!");
+	} else {
+	    create(INIT_TRACEDB_PUBLISHER);
+	}
+	initialized = true;
+	LOG.info("TraceDB " + getDbUrl() + " is now initialized.");
     }
 
     /**
      * Database will point to a folder in the local hard drive
      */
-    private TraceDb(String folderPath, TypeRegistry typeRegistry) {
-	this();
+    private void init(String folderPath, TypeRegistry typeRegistry) {
+	if (initialized) {
+	    LOG.warning("Initializing database twice!");
+	} else {
+	    create(INIT_TRACEDB_PUBLISHER);
+	}
 	checkNotNull(folderPath);
 	checkNotNull(typeRegistry);
 	this.dbUrl = FILE_PREFIX + folderPath;
 	this.typeRegistry = typeRegistry;
+	initialized = true;
+	LOG.info("TraceDB " + getDbUrl() + " is now initialized.");
+    }
+
+    /**
+     * @throws IllegalStateException
+     */
+    void checkInitialized() {
+	if (!initialized) {
+	    throw new IllegalStateException("TraceDb was not properly initialized!");
+	}
     }
 
     /**
      */
     public static TraceDb createInMemoryDb(TypeRegistry typeRegistry) {
-	TraceDb ret = new TraceDb("", typeRegistry);
-	ret.init();
+	TraceDb ret = dbPool.get();
+	ret.init("", typeRegistry);
 	return ret;
+    }
+
+    /**
+     * Indexes all objects which are instances of provided {@coder traceType}.
+     * Successive put operations will maintain the index updated.
+     * 
+     * @param typeId
+     */
+    public void indexType(String typeId) {
+	checkNotEmpty(typeId, "Invalid TraceType id!");
+	typeRegistry.checkRegistered(typeId);
+	Type type = typeRegistry.getType(typeId);
+	for (Map.Entry<Long, DataNode> entry : this.storedValuesById.entrySet()) {
+	    Object rawValue = entry.getValue().getRawValue();
+	    if (type.isInstance(rawValue)) {
+		indexedValues.put(typeId, entry.getKey());
+	    }
+	}
+
     }
 
     /**
@@ -136,13 +234,13 @@ public class TraceDb {
      *
      * @param folderpath
      *            The folder where the db is located
-     * @param objectMapper
-     *            The object mapper to use for serialization and
+     * @param typeRegistry
+     *            The type registry to use for type casting, serialization and
      *            deserialization. Normally it can be safely shared with other
      *            instances except when they reconfigure it - in this case other
      *            threads must not use the object mapper during reconfiguration.
      * @throws TraceProvNotFoundException
-     *             if the database is not found;
+     *             if the database is not found
      */
     public static TraceDb connectToDb(String folderpath, TypeRegistry typeRegistry) {
 	LOG.info("Connecting to TraceDb at " + folderpath + "   ...");
@@ -157,10 +255,10 @@ public class TraceDb {
 		LOG.info("Connected to TraceDb at " + folderpath);
 		return ret;
 	    } catch (IOException ex) {
-		throw new TraceProvException("Couldn't load the odr database", ex);
+		throw new TraceProvException("Couldn't load TraceDB", ex);
 	    }
 	} else {
-	    throw new NotFoundException("Couldn't find any TraceDb database in folder " + folderpath);
+	    throw new TraceProvNotFoundException("Couldn't find any TraceDb database in folder " + folderpath);
 	}
     }
 
@@ -275,20 +373,19 @@ public class TraceDb {
 			"Error while creating an TraceDb, target directory is not empty! " + folderpath);
 	    }
 	}
-	TraceDb TraceDb = new TraceDb(folderpath, typeRegistry);
+	TraceDb traceDb = dbPool.get();
+	traceDb.init(folderpath, typeRegistry);
 	try {
 	    FileWriter fw = new FileWriter(json);
-	    typeRegistry.getObjectMapper().writeValue(fw, TraceDb);
+	    typeRegistry.getObjectMapper().writeValue(fw, traceDb);
 	} catch (Throwable tr) {
 	    throw new TraceProvException("Error while writing odr db to disk!", tr);
 
 	}
 
-	TraceDb.init();
-
 	LOG.info("Created TraceDb at " + folderpath);
 
-	return TraceDb;
+	return traceDb;
     }
 
     /**
@@ -299,7 +396,7 @@ public class TraceDb {
      * @param url
      *            i.e. http://www.w3.org/1999/02/22-rdf-syntax-ns#
      */
-    public synchronized void putPrefix(String prefix, String url) {
+    public void putPrefix(String prefix, String url) {
 	checkNotEmpty(prefix, "Url prefix is invalid!");
 	checkNotEmpty(url, "Url is invalid!");
 	prefixes.put(prefix, url);
@@ -311,7 +408,7 @@ public class TraceDb {
      * @param prefix
      *            Notice prefix is supposed to include the colon, like 'foaf:'
      */
-    public synchronized boolean hasPrefix(String prefix) {
+    public boolean hasPrefix(String prefix) {
 	checkNotEmpty(prefix, "URL prefix is invalid!");
 	String pfx = prefixes.get(prefix);
 	return pfx != null;
@@ -323,11 +420,11 @@ public class TraceDb {
      * @throws NotFoundException
      *             if prefix doesn't have associated any expansion in the db
      */
-    public synchronized String getPrefix(String prefix) {
+    public String getPrefix(String prefix) {
 	checkNotEmpty(prefix, "URL prefix is invalid!");
 	String pfx = prefixes.get(prefix);
 	if (pfx == null) {
-	    throw new NotFoundException("Prefix not found!");
+	    throw new TraceProvNotFoundException("Prefix not found!");
 	} else {
 	    return pfx;
 	}
@@ -338,7 +435,7 @@ public class TraceDb {
      * prefixes. If provided URL has an unknown prefix, the URL is returned as
      * it is.
      */
-    public synchronized String expandUrl(String url) {
+    public String expandUrl(String url) {
 	checkNotEmpty(url, "URL is invalid!");
 
 	for (String prefix : prefixes.keySet()) {
@@ -363,7 +460,7 @@ public class TraceDb {
     /**
      * Returns an immutable map with [prefix, expanded url] pairs
      */
-    public synchronized Map<String, String> getAllPrefixes() {
+    public Map<String, String> getAllPrefixes() {
 	return ImmutableMap.copyOf(prefixes);
     }
 
@@ -382,7 +479,8 @@ public class TraceDb {
      *            the TraceProv internal id of the view to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    public synchronized DataNode read(long viewId) {
+    public DataNode read(long viewId) {
+	checkInitialized();
 	checkArgument(viewId >= 0);
 	DataNode ret = storedValuesById.get(viewId);
 	if (ret == null) {
@@ -393,15 +491,24 @@ public class TraceDb {
 	}
     }
 
+    private DataNode readPublisherNode(DataNode dataNode) {
+
+	String uri = dataNode.getMetadata().getPublisher().getUri();
+	String normalizedUrl = normalizeUrl(uri);
+
+	return read(normalizedUrl);
+    }
+
     /**
-     * Returns the eventual main view generated by odr that might be aliasing
-     * the provided view.
+     * Returns the eventual main view generated by TraceProv that might be
+     * aliasing the provided view.
      *
      * @param viewId
-     *            the odr internal id of the view to retrieve.
+     *            the TraceProv internal id of the view to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    private DataNode readOdrView(long viewId) {
+    private DataNode readMainObject(long viewId) {
+	checkInitialized();
 	checkArgument(viewId >= 0);
 
 	ImmutableList<Long> clique = readSameAsIds(viewId);
@@ -410,126 +517,136 @@ public class TraceDb {
 
 	    DataNode odrView = read(clique.get(0));
 
-	    if (odrView != null && TRACEDB_ORIGIN_ID == odrView.getOriginId()) {
+	    if (TRACEDB_PUBLISHER_ID == readPublisherNode(odrView).getId()) {
 		return odrView;
 	    }
 	}
 	throw new ViewNotFoundException(
-		"Couldn't find view with internal traceprov id " + viewId + " of class " + clazz.getName());
+		"Couldn't find view with internal traceprov id " + viewId);
 
     }
 
     /**
-     * Returns the eventual main view generated by odr that might be aliasing
-     * the provided view.
-     *
-     * @param originId
-     *            the id of the origin server of the view to retrieve
-     * @param externalId
-     *            the id in the external server of the object to retrieve.
-     * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
-     */
-    private <C extends View> C readOdrView(Class<C> clazz, long originId, String externalId) {
-	checkNotNull(clazz);
-	checkArgument(originId >= 0);
-	checkNotEmpty(externalId, "Invalid external id!");
-
-	ImmutableList<Long> clique = readSameAsIds(clazz, originId, externalId);
-
-	if (!clique.isEmpty()) {
-
-	    C odrView = read(clazz, clique.get(0));
-
-	    if (odrView != null && TRACEDB_ORIGIN_ID == odrView.getOriginId()) {
-		return odrView;
-	    }
-	}
-	throw new ViewNotFoundException(clazz, originId, externalId);
-    }
-
-    /**
-     * Returns the view with given url. First origin context searched is
-     * {@link #TRACEDB_ORIGIN_ID}, then all others are tried sequentially. If
+     * Returns the view with given url. First publisher context searched is
+     * {@link #TRACEDB_PUBLISHER_ID}, then all others are tried sequentially. If
      * url is not in any context, an exception is thrown.
      *
      * @param url
      *            the url of the object to retrieve.
-     * @return the object with given url or null if not found.
+     * @return the object with given url or throws exception if not found.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    public synchronized <C> DataObject<C> read(String url) {
+    public DataNode read(String url) {
 	String normalizedUrl = normalizeUrl(url);
 
-	DataNode candidate1 = read(TRACEDB_ORIGIN_ID, normalizedUrl);
+	try {
+	    return read(TRACEDB_PUBLISHER_ID, normalizedUrl);
+	} catch (ViewNotFoundException ex1) {
 
-	if (candidate1 == null) {
-	    
-	    for (Long originId : storedValuesByUrl.rowKeySet()) {
-		DataNode candidate2 = storedValuesByUrl.get(originId, normalizedUrl);
+	    for (Long publisherId : storedValuesByUrl.rowKeySet()) {
+		DataNode candidate2 = storedValuesByUrl.get(publisherId, normalizedUrl);
 		if (candidate2 != null) {
-		    C candidate3 = readOdrView(candidate2.getId());
-		    if (candidate3 != null) {
-			return candidate3;
+		    try {
+			return readMainObject(candidate2.getId());
+		    } catch (ViewNotFoundException ex2) {
+			return candidate2;
 		    }
-
-		    return candidate2;
 		}
 	    }
-	    throw new ViewNotFoundException("Couldn't find view with url: " + url + " of class: " + clazz.getName());
-	} else {
-	    return candidate1;
+	    throw new ViewNotFoundException(
+		    "Couldn't find view with url: " + url);
 	}
     }
 
     /**
      * Returns the view with given url at given origin id. If not present, an
      * exception is thrown.
-     *
-     * @param originUrl
-     *            The url of the context that originated the context.
+     * 
+     * @param publisherId
+     *            The traceprov internal id of the publisher that originated the
+     *            context.
      * @param url
      *            the url of the object to retrieve.
      * @return the object with given url.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    public synchronized <C extends View> C read(Class<C> clazz, long originId, String url) {
-	checkNotNull(clazz);
-	checkArgument(originId >= 0);
-	checkNotEmpty(url, "Invalid url!");
+    public DataNode read(long publisherId, String url) {
 
-	checkRegistered(clazz);
+	checkArgument(publisherId >= 0);
+	checkNotEmpty(url, "Invalid url!");
 
 	String normalizedUrl = normalizeUrl(url);
 
-	C ret = (C) storedValuesByUrl.get(clazz.getName()).get(originId, normalizedUrl);
+	DataNode ret = storedValuesByUrl.get(publisherId, normalizedUrl);
 	if (ret == null) {
-	    throw new ViewNotFoundException("Couldn't find view with url " + url + " and class " + clazz.getName()
-		    + " having origin server id " + originId);
+	    throw new ViewNotFoundException("Couldn't find view with url " + url
+		    + " having publisher traceprov id " + publisherId);
 	} else {
 	    return ret;
 	}
-
-    }
-
-    public synchronized List<String> readOriginUrls(long originId) {
-	return storedOrigins.get(originId);
     }
 
     /**
-     * Creates a new view.
+     * @see #create(Iterable)
+     */
+    public List<DataNode> create(DataNode... dataNodes) {
+	return create(Arrays.asList(dataNodes));
+    }
+
+    private void index(DataNode dataNode) {
+	ImmutableList<Type> types = typeRegistry.getTypesFromInstance(dataNode.getRawValue());
+	for (Type type : types) {
+	    if (indexedTypes.contains(type.getId())) {
+		indexedValues.put(type.getId(), idCounter);
+	    }
+	}
+    }
+
+    /**
+     * Creates new views and return them. They all must have valid publisher and
+     * refs.
      *
      * @return a new view with assigned id.
      */
-    public synchronized DataNode create(DataNode view) {
-	checkNotNull(view);
-	checkRegistered(view.getClass());
-	checkArgument(view.getId() < 0, "Tried to create view with non-negative id: %s", view.getId());
-	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
+    public List<DataNode> create(Iterable<DataNode> dataNodes) {
+	checkInitialized();
+	ImmutableList.Builder<DataNode> retb = ImmutableList.builder();
+
+	for (DataNode dataNode : dataNodes) {
+	    checkNotNull(dataNode);
+	    checkArgument(dataNode.getId() < 0, "Tried to create view with non-negative id: %s", dataNode.getId());
+	    checkArgument(!dataNode.getMetadata().getPublisher().equals(FoafAgent.of()),
+		    "Tried to create datanode with invalid publisher, found one is empty!");
+	    String publisherUri = dataNode.getMetadata().getPublisher().getUri();
+	    checkNotEmpty(publisherUri,
+		    "Tried to create datanode with publisher which has invalid uri!");
+	    long publisherId = read(publisherUri).getId();
+
+	    DataNode toCreate = dataNode.fromThis()
+		    .setId(idCounter)
+		    .build();
+	    storedValuesById.put(idCounter, toCreate);
+	    storedValuesByUrl.put(publisherId, dataNode.getRef().uri(), dataNode);
+	    index(toCreate);
+	    idCounter += 1;
+
+	    retb.add(toCreate);
+	}
+	return retb.build();
+
     }
 
     /**
-     * Writes provided view to its originId / foreign identifier slot. This is a
-     * hard update, if possible just create a new view instead.
+     * 
+     * @see #update(Iterable)
+     */
+    public List<DataNode> update(DataNode... dataNodes) {
+	return Arrays.asList(dataNodes);
+    }
+
+    /**
+     * Writes provided dataNodes to their originId / foreign identifier slot.
+     * This is a hard update, if possible just create a new view instead.
      *
      * @param view
      *            the view to update
@@ -538,21 +655,8 @@ public class TraceDb {
      * @throws ViewNotFoundException
      */
     @Nullable
-    public synchronized View update(View view) {
-	checkNotNull(view);
-	checkRegistered(view.getClass());
-
-	View existingView = read(view.getClass(), view.getId());
-
-	String normalizedUrl = normalizeUrl(view.getUrl());
-	checkArgument(normalizedUrl.equals(view.getUrl()),
-		"Tried to insert view with non-normalized url: %s  \nExpected url: %s", view.getUrl(), normalizedUrl);
-	checkArgument(readOriginUrls(view.getOriginId()).size() > 0, "There is no stored origin with id %s",
-		view.getOriginId());
-
-	Table<Long, String, ? super View> table = storedValuesByUrl.get(view.getClass().getName());
-
-	return (View) table.put(view.getOriginId(), view.getUrl(), view);
+    public List<DataNode> update(Iterable<DataNode> dataNodes) {
+	throw new UnsupportedOperationException("TODO implement me!");
     }
 
     /**
@@ -560,28 +664,10 @@ public class TraceDb {
      * Returns the ids of the views considered to be the same as the provided
      * one.
      */
-    public synchronized ImmutableList<Long> readSameAsIds(Class<? extends View> clazz, long originId, String url) {
-	checkRegistered(clazz);
-	checkArgument(originId >= 0);
-	checkNotEmpty(url, "invalid url!");
-
-	throw new UnsupportedOperationException("TODO IMPLEMENT ME");
-    }
-
-    /**
-     *
-     * Returns the ids of the views considered to be the same as the provided
-     * one.
-     */
-    public synchronized ImmutableList<Long> readSameAsIds(long id) {
+    public ImmutableList<Long> readSameAsIds(long id) {
+	checkInitialized();
 	checkArgument(id >= 0);
 	return ImmutableList.copyOf(sameAsIds.get(id));
-    }
-
-    public synchronized ImmutableList<Long> updateSameAsIds(long originId, String url) {
-	checkArgument(originId >= 0);
-	checkNotEmpty(url, "invalid url!");
-	throw new UnsupportedOperationException("TODO IMPLEMENT ME");
     }
 
     /**
@@ -596,25 +682,11 @@ public class TraceDb {
      * @throws IllegalStateException
      *             if there are no corresponding views for the provided ids
      */
-    public synchronized ImmutableSet<Long> addSameAsIds(Class<? extends View> clazz, Iterable<Long> ids) {
-	checkRegistered(clazz);
+    public ImmutableSet<Long> addSameAsIds(Iterable<Long> ids) {
 	checkNotNull(ids);
 
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME");
     }
-
-    /**
-     * Registers a class in the db.
-     * 
-     * @param clazz
-     */
-    public void registerClass(Class clazz) {
-	checkNotNull(clazz);
-	checkState(isRegistered(clazz), "Class %s is already registered in %s !", clazz.getName(),
-		TraceDb.class.getSimpleName());	
-    }
-
-
 
     /**
      * Returns the controller status of the controller associated to the clique
@@ -635,32 +707,6 @@ public class TraceDb {
     }
 
     /**
-     * Creates a new origin (i.e. something from which we can get data, i.e. a
-     * server, organization, ... ) with the given url aliases (first url is the
-     * prefereed one).
-     *
-     * @return the id of the inserted origin.
-     * @throws IllegalStateException
-     *             in case any of the urls is already associated to an origin.
-     */
-    public synchronized long createOrigin(Iterable<String> urls) {
-
-	for (String url : urls) {
-	    String normalizedUrl = normalizeUrl(url);
-	    if (storedOrigins.containsValue(normalizedUrl)) {
-		ImmutableList<Long> inverse = storedOrigins.inverse().get(url);
-		throw new IllegalStateException("Url " + url + " is already associated to origin ids: " + inverse);
-	    }
-	}
-	long ret = originIdCounter;
-	storedOrigins = ImmutableListMultimap.<Long, String> builder().putAll(storedOrigins).putAll(ret, urls).build();
-
-	originIdCounter += 1;
-
-	return ret;
-    }
-
-    /**
      * Returns true if the stored views corresponding to the two provided ids
      * are equal using Java equality.
      *
@@ -668,8 +714,8 @@ public class TraceDb {
      *             if objects are not found.
      */
     public boolean shallowEqual(long viewId1, long viewId2) {
-	View view1 = (View) read(clazz, viewId1);
-	View view2 = (View) read(clazz, viewId2);
+	DataNode view1 = read(viewId1);
+	DataNode view2 = read(viewId2);
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
 	// return view1.controlledEquals(view2);
     }
@@ -704,9 +750,7 @@ public class TraceDb {
     /**
      * @throws ViewNotFoundException
      */
-    public boolean isSynchronized(Class clazz, long originId, String externalId) {
-	DataNode odrView =  readOdrView(originId, externalId);
-	DataNode foreignView =  read(originId, externalId);
+    public boolean isSynchronized(long originId, String externalId) {
 
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
 	// todo check odrity
@@ -715,7 +759,18 @@ public class TraceDb {
 	 * || odrView.getTimestamp().isEqual(foreignView.getTimestamp())); //&&
 	 * odrView.controlledEquals(foreignView)
 	 */
-
     }
 
+    public static TraceDb getCurrentDb() {
+	return dbPool.get();
+    }
+
+    public TypeRegistry getTypeRegistry() {
+	return typeRegistry;
+    }
+
+    public void setTypeRegistry(TypeRegistry typeRegistry) {
+	checkNotNull(typeRegistry);
+	this.typeRegistry = typeRegistry;
+    }
 }

@@ -21,7 +21,6 @@ public interface DataNodeFactory {
     DataNode makeNode(
 	    Ref ref, 
 	    NodeMetadata metadata, 
-	    @Nullable Object obj, 
-	    TypeRegistry typeRegistry);
+	    @Nullable Object obj);
 
 }

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public final class TraceProvs {
     public static final String TRACEPROV_IRI = "http://opendatatrentino.github.io/traceprov/#";
+    public static final String TRACEPROV_NAMESPACE = "eu.trentorise.opendata.traceprov";
     public static final String TRACEPROV_PREFIX = "traceprov:";
     
     private TraceProvs(){}

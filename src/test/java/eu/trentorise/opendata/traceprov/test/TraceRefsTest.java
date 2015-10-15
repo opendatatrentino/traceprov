@@ -17,10 +17,12 @@ package eu.trentorise.opendata.traceprov.test;
 
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.validation.Ref;
+import eu.trentorise.opendata.traceprov.data.DataNodes;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
-import eu.trentorise.opendata.traceprov.types.ProvRefs;
+import eu.trentorise.opendata.traceprov.types.TraceRefs;
 
-import static eu.trentorise.opendata.traceprov.types.ProvRefs.propertyRef;
+import static eu.trentorise.opendata.traceprov.types.TraceRefs.propertyRef;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
@@ -30,47 +32,66 @@ import org.junit.Test;
  *
  * @author David Leoni
  */
-public class ProvRefsTest {
+public class TraceRefsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        OdtConfig.init(ProvRefsTest.class);
+        OdtConfig.init(TraceRefsTest.class);
     }
     
     @Test
     public void testTable(){
 	try {
-	    ProvRefs.tablePath(-2, 0);
+	    TraceRefs.tablePath(-2, 0);
 	} catch (IllegalArgumentException ex){
 	    
 	}
 	
 	try {
-	    ProvRefs.tablePath(0, -2);
+	    TraceRefs.tablePath(0, -2);
 	} catch (IllegalArgumentException ex){
 	    
 	}
 	
 	
-	assertEquals("$[0][*]", ProvRefs.tablePath(0, -1));
+	assertEquals("$[0][*]", TraceRefs.tablePath(0, -1));
 	
-	assertEquals("$[*][0]", ProvRefs.tablePath(-1, 0));
+	assertEquals("$[*][0]", TraceRefs.tablePath(-1, 0));
 	
-	assertEquals("$[*][*]", ProvRefs.tablePath(-1, -1));
+	assertEquals("$[*][*]", TraceRefs.tablePath(-1, -1));
 	
-	assertEquals("$[0].*", ProvRefs.tablePath(0, "*"));
+	assertEquals("$[0].*", TraceRefs.tablePath(0, "*"));
 	
-	assertEquals("$[*].a", ProvRefs.tablePath(-1, "a"));
+	assertEquals("$[*].a", TraceRefs.tablePath(-1, "a"));
 	
-	assertEquals("$[*].*", ProvRefs.tablePath(-1, "*"));
+	assertEquals("$[*].*", TraceRefs.tablePath(-1, "*"));
 	
 	
     }
     
     @Test
+    public void testDataNodes(){
+	try {
+	    assertEquals(Ref.builder().
+		    setDocumentId(DataNodes.DATANODES_IRI)
+		    .setTracePath("$[*]")
+		    .build(), 
+		    TraceRefs.dataNodesRef(ImmutableList.<Long>of()));
+	    Assert.fail("Shouldn't arrive here!");
+	} catch (IllegalArgumentException ex){	    
+	}
+	
+	assertEquals(Ref.builder()
+			.setDocumentId(DataNodes.DATANODES_IRI)
+			.setTracePath("$[1,3]")
+			.build(), 
+		TraceRefs.dataNodesRef(ImmutableList.of(1L,3L)));
+    }
+    
+    @Test
     public void testDcat() {
         assertEquals("catalog", propertyRef(DcatMetadata.class, "catalog"));
-
+        
         try {
             propertyRef(DcatMetadata.class, "bla");
             Assert.fail();

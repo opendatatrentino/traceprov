@@ -267,10 +267,13 @@ TraceProv database offers persistence and provenance tracking for objects that m
 
 Foreign objects can be:
 
-a) just json taken from webservice
+a) simple json taken from webservice. There might be available some schema (as jsonschema)
 b) Mutable Java classes taken with Java client
 c) Mutable Java interfaces taken with Java client
 d) Immutable Java classes
+
+Objects may be related to other objects. 
+
 
 #### Database implementation
 **TODO very messy**
@@ -349,11 +352,11 @@ Happens when a repository contains urls of entities external to it. Here having 
 
 **derives from view**: can be lazily computed from subvalues
 
-|view id|originUrl|object url|name|province|residents|version|derives from view|last sync|status|
+|view id|originUrl|object url|name|province|residents|version|derives from view|creation timestamp|
 |---------|---|------|---|--|--|--|--|--|-----------|
-|1|ep|dbp:andalo|Rogereto||100|a1|-|11 nov 2014|UNTOUCHED|
-|2|odr|dbp:andalo|Rovereto|Trento|100|a2|1, 3 |-|MODIFIED|
-|3|dbp|dbp:andalo|Rovereto|||b1|-|13 nov 2014|UNTOUCHED|
+|1|ep|dbp:andalo|Rogereto||100|a1|-|11 nov 2014|
+|2|odr|dbp:andalo|Rovereto|Trento|100|a2|1, 3 |-|
+|3|dbp|dbp:andalo|Rovereto|||b1|-|13 nov 2014|
 
 Here `view 2` is a modification of `view 1`, while `view 3` cannot be compared to other views (it's sort of on another branch)
 
