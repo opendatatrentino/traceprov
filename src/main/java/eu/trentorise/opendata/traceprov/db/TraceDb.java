@@ -9,6 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +46,7 @@ import eu.trentorise.opendata.traceprov.TraceProvs;
 import eu.trentorise.opendata.traceprov.data.DataMap;
 import eu.trentorise.opendata.traceprov.data.DataNode;
 import eu.trentorise.opendata.traceprov.data.DataObject;
+import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
@@ -51,8 +57,8 @@ import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 import eu.trentorise.opendata.traceprov.types.Types;
 
 /**
- * Database of TraceProv. Allows storing foreign objects while
- * tracking their provenance. Follows a NOSQL philophy, where objects are wrapped in
+ * Database of TraceProv. Allows storing foreign objects while tracking their
+ * provenance. Follows a NOSQL philophy, where objects are wrapped in
  * {@link DataNode DataNodes} and indexing is manual.
  * 
  * Currently Serialization is done with Jackson. Object cloning with Kryo.
@@ -67,8 +73,8 @@ public class TraceDb {
 
     private static Logger LOG = Logger.getLogger(TraceDb.class.getSimpleName());
 
-    public static final String IN_MEMORY_URL = "memory:TraceDb";
-    public static final String TRACEDB_FILE = "TraceDb.json";
+    public static final String IN_MEMORY_PREFIX = "memory://";
+    public static final String TRACEDB_FILE = "tracedb.json";
 
     private static final String FILE_PREFIX = "file://";
 
@@ -81,7 +87,8 @@ public class TraceDb {
     private static final DataNode INIT_TRACEDB_PUBLISHER = DataObject.builder()
 	    .setRawValue(FoafAgent.builder()
 		    .setName(Dict.of("TraceDb Default Publisher"))
-		    .setUri(TRACEDB_PUBLISHER_URI))
+		    .setUri(TRACEDB_PUBLISHER_URI)
+		    .build())
 	    .build();
 
     /**
@@ -102,7 +109,27 @@ public class TraceDb {
 
     private TypeRegistry typeRegistry;
 
-    private boolean initialized;
+    /**
+     * Not called init() yet
+     */
+    private static int INIT_LEVEL_0 = 0;
+
+    /**
+     * just called init(), but not populated with default values.
+     */
+    private static int INIT_LEVEL_1 = 1;
+
+    /**
+     * populated with default values.
+     */
+    private static int INIT_LEVEL_2 = 2;
+
+    /**
+     * Finished initialization
+     */
+    private static int INIT_LEVEL_3 = 3;
+
+    private int initLevel;
 
     /**
      * Maps {@code <publisherId, externalId>} pairs (i.e. 4,
@@ -136,7 +163,7 @@ public class TraceDb {
      * Database with an in-memory db and default Jackson object mapper
      */
     private TraceDb() {
-	this.dbUrl = IN_MEMORY_URL;
+	this.dbUrl = IN_MEMORY_PREFIX + "/tracedb/defaultdb";
 	this.storedValuesByUrl = HashBasedTable.create();
 	this.storedValuesById = new HashMap();
 	this.indexedValues = HashMultimap.create();
@@ -166,48 +193,71 @@ public class TraceDb {
      * Initializes db with default values.
      */
     private void init() {
-
-	if (initialized) {
-	    LOG.warning("Initializing database twice!");
-	} else {
-	    create(INIT_TRACEDB_PUBLISHER);
-	}
-	initialized = true;
-	LOG.info("TraceDB " + getDbUrl() + " is now initialized.");
+	init(IN_MEMORY_PREFIX + "tracedb/defaultdb", TypeRegistry.of());
     }
 
     /**
-     * Database will point to a folder in the local hard drive
+     * Database will point to a folder in the local hard drive, This method WILL
+     * NOT write in the folder.
      */
-    private void init(String folderPath, TypeRegistry typeRegistry) {
-	if (initialized) {
-	    LOG.warning("Initializing database twice!");
+    private void init(String dbUrl, TypeRegistry typeRegistry) {
+	checkNotEmpty(dbUrl, "Invalid db Url!");
+	checkArgument(dbUrl.startsWith(IN_MEMORY_PREFIX) || dbUrl.startsWith(FILE_PREFIX)
+	, "Only supported db url prefixes are " + IN_MEMORY_PREFIX + " and " + FILE_PREFIX +", found instead url " + dbUrl);
+		
+	if (initLevel > 0) {
+	    LOG.warning("Tried to initialize database twice!");
 	} else {
+	    initLevel = INIT_LEVEL_1;
+	    this.dbUrl = dbUrl;
+	    this.typeRegistry = typeRegistry;
 	    create(INIT_TRACEDB_PUBLISHER);
+	    initLevel = INIT_LEVEL_2;
+	    initLevel = INIT_LEVEL_3;
+	    LOG.info("TraceDB " + getDbUrl() + " is now initialized.");
 	}
-	checkNotNull(folderPath);
-	checkNotNull(typeRegistry);
-	this.dbUrl = FILE_PREFIX + folderPath;
-	this.typeRegistry = typeRegistry;
-	initialized = true;
-	LOG.info("TraceDB " + getDbUrl() + " is now initialized.");
     }
 
     /**
+     * Tests init() was called (db may still not have default values)
+     * 
      * @throws IllegalStateException
      */
-    void checkInitialized() {
-	if (!initialized) {
+    void checkInitialized(int level) {
+	if (initLevel < level) {
 	    throw new IllegalStateException("TraceDb was not properly initialized!");
 	}
     }
 
     /**
+     * Tests db is fully initialized
+     * 
+     * @throws IllegalStateException
      */
-    public static TraceDb createInMemoryDb(TypeRegistry typeRegistry) {
-	TraceDb ret = dbPool.get();
-	ret.init("", typeRegistry);
-	return ret;
+    void checkInitialized() {
+	if (initLevel < INIT_LEVEL_3) {
+	    throw new IllegalStateException("TraceDb was not properly initialized!");
+	}
+    }
+
+    /**
+     * @param dbId
+     *            a name uniquely identifying the db, like mycompany.org/superdb
+     *            resulting Url of the db will be memory://mycompany.org/superdb
+     */
+    public static TraceDb createInMemoryDb(String dbId, TypeRegistry typeRegistry) {
+	TraceDb newDb = new TraceDb();
+	newDb.init(IN_MEMORY_PREFIX + dbId, typeRegistry);
+
+	TraceDb curDb = dbPool.get();
+	if (curDb.initLevel == INIT_LEVEL_0) {
+	    LOG.info("Found no db set in current thread, setting it to " + newDb.getDbUrl());
+	    dbPool.set(newDb);
+	} else {
+	    LOG.info(
+		    "(Found another db set in current thread, to replace it, you need to manually call TraceDb.setCurrentDb())");
+	}
+	return newDb;
     }
 
     /**
@@ -219,7 +269,7 @@ public class TraceDb {
     public void indexType(String typeId) {
 	checkNotEmpty(typeId, "Invalid TraceType id!");
 	typeRegistry.checkRegistered(typeId);
-	Type type = typeRegistry.getType(typeId);
+	Type type = typeRegistry.get(typeId);
 	for (Map.Entry<Long, DataNode> entry : this.storedValuesById.entrySet()) {
 	    Object rawValue = entry.getValue().getRawValue();
 	    if (type.isInstance(rawValue)) {
@@ -247,11 +297,12 @@ public class TraceDb {
 	checkNotEmpty(folderpath, "path to db folder is invalid!");
 	checkNotNull(typeRegistry, "Type registry must not be null!");
 
-	File json = new File(folderpath + File.pathSeparator + "");
+	File json = new File(folderpath + File.separator + TRACEDB_FILE);
 	if (json.exists()) {
 	    try {
 		TraceDb ret = typeRegistry.getObjectMapper().readValue(json, TraceDb.class);
 		ret.typeRegistry = typeRegistry;
+		ret.initLevel = INIT_LEVEL_3;
 		LOG.info("Connected to TraceDb at " + folderpath);
 		return ret;
 	    } catch (IOException ex) {
@@ -273,19 +324,31 @@ public class TraceDb {
 
 	LOG.info("Dropping TraceDb... at " + dbUrl);
 
-	if (IN_MEMORY_URL.equals(dbUrl)) {
+	TraceDb db = dbPool.get();
+	if (db.getDbUrl().equals(this.getDbUrl())) {
+	    dbPool.set(new TraceDb());
+	    // todo what about other threads?
+	    LOG.info("Removed db from local thread.");
+	}
+
+	if (dbUrl.startsWith(IN_MEMORY_PREFIX)) {
 	    return;
 	}
 
-	File dir = new File(folderPath());
-
-	if (!existsDb(dir.getAbsolutePath())) {
+	Path dir;
+	try {
+	    dir = Paths.get(new URI(getDbUrl()));
+	} catch (URISyntaxException ex){
+	    throw new TraceProvException("Some error occurred.", ex);
+	}
+	
+	if (!existsDb(dir.toString())) {
 	    throw new IllegalStateException(
-		    "Tried to drop a directory which doesn't look like a TraceDb folder! " + dir.getAbsolutePath());
+		    "Tried to drop a directory which doesn't look like a TraceDb folder! " + dir.toString());
 	}
 
 	try {
-	    FileUtils.deleteDirectory(dir);
+	    FileUtils.deleteDirectory(new File(dir.toString()));
 	} catch (Exception ex) {
 	    throw new TraceProvException("Couldn't delete odr db file: " + dir, ex);
 	}
@@ -304,7 +367,7 @@ public class TraceDb {
 
 	LOG.info("Flushing TraceDb....");
 
-	if (IN_MEMORY_URL.equals(dbUrl)) {
+	if (dbUrl.startsWith(IN_MEMORY_PREFIX)) {
 	    throw new IllegalStateException("In memory database can't be flushed!");
 	}
 
@@ -333,15 +396,16 @@ public class TraceDb {
 
 	}
 
-	LOG.info("Done flushing Odr db.");
+	LOG.info("Done flushing TraceDb at " + getDbUrl());
 
     }
 
     /**
-     * Returns true if there already an TraceDb in provided folder.
+     * Returns true if there already a TraceDb in provided folder.
      */
     public static boolean existsDb(String folderPath) {
-	return new File(folderPath + File.pathSeparator + TRACEDB_FILE).exists();
+	
+	return new File(folderPath + File.separator + TRACEDB_FILE).exists();
     }
 
     /**
@@ -360,7 +424,7 @@ public class TraceDb {
 	checkNotNull(typeRegistry);
 
 	File dir = new File(folderpath);
-	File json = new File(folderpath + File.pathSeparator + "");
+	File jsonFile = new File(folderpath + File.separator + TRACEDB_FILE);
 	if (dir.exists()) {
 	    if ((dir.isFile())) {
 		throw new IllegalStateException(
@@ -373,19 +437,29 @@ public class TraceDb {
 			"Error while creating an TraceDb, target directory is not empty! " + folderpath);
 	    }
 	}
-	TraceDb traceDb = dbPool.get();
-	traceDb.init(folderpath, typeRegistry);
-	try {
-	    FileWriter fw = new FileWriter(json);
-	    typeRegistry.getObjectMapper().writeValue(fw, traceDb);
-	} catch (Throwable tr) {
-	    throw new TraceProvException("Error while writing odr db to disk!", tr);
 
+	TraceDb newDb = new TraceDb();
+	Path path = Paths.get(folderpath);
+	newDb.init(path.toUri().toString(), typeRegistry);
+	try {
+	    FileWriter fw = new FileWriter(jsonFile);
+	    typeRegistry.getObjectMapper().writeValue(fw, newDb);	   
+	} catch (Throwable tr) {
+	    throw new TraceProvException("Error while writing trace db to disk!", tr);
 	}
 
 	LOG.info("Created TraceDb at " + folderpath);
 
-	return traceDb;
+	TraceDb curDb = dbPool.get();
+	if (curDb.initLevel == INIT_LEVEL_0) {
+	    LOG.info("Found no default db set for this thread, setting it to newly created db.");
+	    dbPool.set(newDb);
+	} else {
+	    LOG.info(
+		    "(Found another db set in current thread, to replace it, you need to manually call TraceDb.setCurrentDb())");
+	}
+
+	return newDb;
     }
 
     /**
@@ -480,7 +554,7 @@ public class TraceDb {
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
     public DataNode read(long viewId) {
-	checkInitialized();
+	checkInitialized(INIT_LEVEL_0);
 	checkArgument(viewId >= 0);
 	DataNode ret = storedValuesById.get(viewId);
 	if (ret == null) {
@@ -609,27 +683,35 @@ public class TraceDb {
      * @return a new view with assigned id.
      */
     public List<DataNode> create(Iterable<DataNode> dataNodes) {
-	checkInitialized();
+	checkInitialized(0);
 	ImmutableList.Builder<DataNode> retb = ImmutableList.builder();
 
 	for (DataNode dataNode : dataNodes) {
 	    checkNotNull(dataNode);
 	    checkArgument(dataNode.getId() < 0, "Tried to create view with non-negative id: %s", dataNode.getId());
-	    checkArgument(!dataNode.getMetadata().getPublisher().equals(FoafAgent.of()),
-		    "Tried to create datanode with invalid publisher, found one is empty!");
-	    String publisherUri = dataNode.getMetadata().getPublisher().getUri();
-	    checkNotEmpty(publisherUri,
-		    "Tried to create datanode with publisher which has invalid uri!");
-	    long publisherId = read(publisherUri).getId();
+
+	    long publisherId = -1;
+
+	    if (!(dataNode.getRawValue() instanceof AFoafAgent
+		    && ((AFoafAgent) dataNode.getRawValue()).getUri().equals(TRACEDB_PUBLISHER_URI))) {
+		checkArgument(!dataNode.getMetadata().getPublisher().equals(FoafAgent.of()),
+			"Tried to create datanode with invalid publisher, found one is empty!");
+		String publisherUri = dataNode.getMetadata().getPublisher().getUri();
+		checkNotEmpty(publisherUri,
+			"Tried to create datanode with publisher which has invalid uri!");
+		publisherId = read(publisherUri).getId();
+	    } else {
+		publisherId = idCounter;
+	    }
 
 	    DataNode toCreate = dataNode.fromThis()
 		    .setId(idCounter)
 		    .build();
 	    storedValuesById.put(idCounter, toCreate);
 	    storedValuesByUrl.put(publisherId, dataNode.getRef().uri(), dataNode);
+
 	    index(toCreate);
 	    idCounter += 1;
-
 	    retb.add(toCreate);
 	}
 	return retb.build();
@@ -763,6 +845,13 @@ public class TraceDb {
 
     public static TraceDb getCurrentDb() {
 	return dbPool.get();
+    }
+
+    public static void setCurrentDb(TraceDb db) {
+	checkNotNull(db);
+	db.checkInitialized();
+	dbPool.set(db);
+	LOG.info("Set current thread tracedb to " + db.getDbUrl());
     }
 
     public TypeRegistry getTypeRegistry() {

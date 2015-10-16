@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -86,6 +87,8 @@ public class TypeRegistry implements Serializable {
 	this.classDefs.put(id, classDef);
 	return ret;
     }
+    
+    
 
     public boolean hasClassDef(String classDefId) {
 	checkNotEmpty(classDefId, "Invalid classDef id!");
@@ -133,7 +136,7 @@ public class TypeRegistry implements Serializable {
      */
     public void checkRegistered(String typeId) {
 	checkNotEmpty(typeId, "Invalid TraceType id!");
-	if (!hasType(typeId)) {
+	if (!contains(typeId)) {
 	    throw new IllegalStateException("Provided tracetype with id " + typeId + " is not registered!");
 	}
     }
@@ -160,7 +163,7 @@ public class TypeRegistry implements Serializable {
 	    throw new TraceProvNotFoundException(
 		    "There is no canonical type associated to class " + clazz.getCanonicalName());
 	}
-	return getType(typeId);
+	return get(typeId);
     }
 
     /**
@@ -178,7 +181,7 @@ public class TypeRegistry implements Serializable {
 	this.canonicalTypes.put(clazzName, traceType.getId());
     }
 
-    public boolean hasType(String typeId) {
+    public boolean contains(String typeId) {
 	checkNotEmpty(typeId, "Invalid type id!");
 	return !(types.get(typeId) == null);
     }
@@ -189,7 +192,7 @@ public class TypeRegistry implements Serializable {
      * @throws eu.trentorise.opendata.traceprov.exceptions.
      *             TraceProvNotFoundException
      */
-    public Type getType(String typeId) {
+    public Type get(String typeId) {		
 	checkNotEmpty(typeId, "Invalid type id!");
 	Type type = types.get(typeId);
 	if (type == null) {
@@ -301,7 +304,10 @@ public class TypeRegistry implements Serializable {
 	return false;
     }
 
-    /** todo write about sharing */
+    /** todo write about sharing
+     * todo ObjectMapper should be saved separately!
+     *  */
+    @JsonIgnore
     public ObjectMapper getObjectMapper() {
 	return objectMapper;
     }
