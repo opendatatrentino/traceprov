@@ -5,7 +5,6 @@ import eu.trentorise.opendata.commons.validation.ValidationError;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.concurrent.Immutable;
-import eu.trentorise.opendata.commons.internal.joda.time.DateTime;
 
 /**
  * A {@code View} represents an immutable local snapshot of a corresponding object in a
@@ -83,7 +82,7 @@ public interface ViewDeprecated<T> extends Storable {
      * Returns the timestamp when the view was created on local TraceProv
      * database.
      */
-    DateTime getTimestamp();
+    String getTimestamp();
 
     /**
      * Returns true if the controlled object is equal to the controlled object
