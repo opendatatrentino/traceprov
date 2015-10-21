@@ -59,12 +59,10 @@ abstract class ADataArray extends DataNode implements Iterable<DataNode> {
     }
 
  
-    public static DataArray of(Iterable rawValues) {
-	return DataArray.builder()
-		.setRawValue(rawValues)
-		.build();
-    }
-
+    /**
+     * 
+     * @param rawValues NOTE: the iterable MUST NOT be anoter DataNode! (although it can contain DataNode(s)
+     */
     public static DataArray of(Ref ref, NodeMetadata metadata, Iterable rawValues) {
 	return DataArray.builder()
 		.setRef(ref)
@@ -73,7 +71,10 @@ abstract class ADataArray extends DataNode implements Iterable<DataNode> {
 		.build();
     }
 
-    public static DataArray of(Ref ref, Object... rawValues) {
+    /**
+     * @param rawValues They can be DataNode(s)
+     */
+    public static DataArray of(Ref ref, NodeMetadata metadata, Object... rawValues) {
 	return DataArray.builder()
 		.setRef(ref)
 		.setRawValue(Lists.newArrayList(rawValues))
@@ -187,7 +188,7 @@ abstract class ADataArray extends DataNode implements Iterable<DataNode> {
 
     @Override
     public Builder fromThis() {	
-	return DataArray.builder();
+	return DataArray.builder().from(this);
     }
     
     

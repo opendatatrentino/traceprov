@@ -293,7 +293,7 @@ class ADataMap extends DataNode implements Map<String, DataNode> {
  
     @Override
     public Builder fromThis() {
-	return DataMap.builder();
+	return DataMap.builder().from(this);
     }
 
     @Value.Check

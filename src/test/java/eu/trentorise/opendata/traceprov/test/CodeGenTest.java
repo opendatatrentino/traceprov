@@ -93,7 +93,7 @@ public class CodeGenTest {
         assertEquals(ImmutableList.of(), ps.getErrors());
         
         DataMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 
-                DataArray.of(Ref.of(), DataValue.of(Ref.of(), NodeMetadata.of(), 3))));
+                DataArray.of(Ref.of(), NodeMetadata.of(), DataValue.of(Ref.of(), NodeMetadata.of(), 3))));
     }
 
     

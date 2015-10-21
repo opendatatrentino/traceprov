@@ -69,18 +69,7 @@ abstract class ADataValue extends DataNode {
 	accept(tran, DataValue.of(), "", 0);
 	return tran.getResult();
     }
-
-    /**
-     * Construct new immutable {@code DataValue} instance.
-     *
-     * @param value
-     *            a String, a Number or null
-     */
-    public static DataValue of(@Nullable Object value) {
-	return DataValue.builder()
-		.setRawValue(value)
-		.build();
-    }
+    
 
     /**
      * Construct new immutable {@code DataValue} instance.
@@ -103,7 +92,6 @@ abstract class ADataValue extends DataNode {
     }
 
 
-
     @Value.Check
     protected void check() {
 	super.check();
@@ -113,8 +101,8 @@ abstract class ADataValue extends DataNode {
     }
     
     @Override
-    public Builder fromThis() {
-	return DataValue.builder();
+    public Builder fromThis() {	
+	return DataValue.builder().from(this);
     }
     
     public static abstract class Builder extends DataNode.Builder {	

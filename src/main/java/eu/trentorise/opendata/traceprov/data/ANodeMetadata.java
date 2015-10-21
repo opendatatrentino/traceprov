@@ -132,15 +132,15 @@ abstract class ANodeMetadata implements Serializable {
      * <a href="http://purl.org/dc/terms/publisher" target="_bank">dct:publisher
      * </a>
      *
-     * Default value is {@link FoafAgent#of()}
+     * Returns the traceprov internal id of the publisher. Default value is -1.
      *
      * @see AFoafAgent
      * @see AFoafPerson
      * @see AFoafOrganization
      */
     @Value.Default
-    public AFoafAgent getPublisher() {
-	return FoafAgent.of();
+    public long getPublisherId() {
+	return -1;
     }
 
     /**

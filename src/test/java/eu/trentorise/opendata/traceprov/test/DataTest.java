@@ -23,6 +23,7 @@ import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
 import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.DataValue;
 import eu.trentorise.opendata.traceprov.types.ClassType;
@@ -75,24 +76,24 @@ public class DataTest {
     
     @Test
     public void testWalkerValue() {
-	
+	DataValue dv = DataValue.of(Ref.of(),NodeMetadata.of(), "a");
 	TraceDb.getCurrentDb().setTypeRegistry(emptyReg);
         assertEquals(null, DataValue.of().asSimpleType());
-        assertEquals("a", DataValue.of("a").asSimpleType());
+        assertEquals("a", dv.asSimpleType());
         assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());
-        assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), DataValue.of("a")).asSimpleType());
-        assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), DataValue.of("a")).asSimpleType());
+        assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(),NodeMetadata.of(), dv).asSimpleType());
+        assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(),NodeMetadata.of(), dv).asSimpleType());
     }
 
     @Test
     public void testNodeListToString() {
         ArrayList list = new ArrayList();
         for (int i = 0; i < 10000; i++) {
-            list.add(DataValue.of(3));
+            list.add(DataValue.of(Ref.of(), NodeMetadata.of(), 3));
         }
-        DataArray nodes = DataArray.of(list);
+        DataArray nodes = DataArray.of(Ref.of(), NodeMetadata.of(), list);
         assertTrue(nodes.toString().contains("..."));
-        assertFalse(DataArray.of(Ref.of(), DataValue.of()).toString().contains("..."));
+        assertFalse(DataArray.of(Ref.of(), NodeMetadata.of(), DataValue.of()).toString().contains("..."));
     }
 
     @Test
@@ -104,8 +105,8 @@ public class DataTest {
 
         Object res = DataMap.of(Ref.of(),
                 NodeMetadata.of(),
-                ImmutableMap.of("a", DataValue.of("b"),
-                        "c", DataValue.of("d"))).asSimpleType();
+                ImmutableMap.of("a", DataValue.of(Ref.of(), NodeMetadata.of(), "b"),
+                        "c", DataValue.of(Ref.of(), NodeMetadata.of(), "d"))).asSimpleType();
 
         HashMap hm = (HashMap) res;
 
@@ -138,16 +139,17 @@ public class DataTest {
 
         DataNode data = DataArray.of(
         	Ref.of(),
+        	NodeMetadata.of(), 
                 DataMap.of(
                         Ref.of(),
                         NodeMetadata.of(),
-                        ImmutableMap.of(prop1ShortId, DataValue.of("a"),
-                                prop2ShortId, DataValue.of(3))),
+                        ImmutableMap.of(prop1ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), "a"),
+                                prop2ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), 3))),
                 DataMap.of(
                         Ref.of(),
                         NodeMetadata.of(),
-                        ImmutableMap.of(prop1ShortId, DataValue.of("b"),
-                                prop2ShortId, DataValue.of(4)))
+                        ImmutableMap.of(prop1ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), "b"),
+                                prop2ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), 4)))
         );
 
         if (traceType instanceof ListType) {
@@ -186,5 +188,15 @@ public class DataTest {
 
         throw new RuntimeException("Shouldn't arrive here!");
 
+    }
+    
+    
+    @Test
+    public void testFromThisBuilder(){
+	DataObject dn = DataObject.builder().setId(1).build();
+	
+	DataNode dn2 = dn.fromThis().setRawValue(2).build();
+	assertEquals(1, dn2.getId());
+	assertEquals(2, dn2.getRawValue());
     }
 }

@@ -297,7 +297,7 @@ class ADataObject extends DataNode {
 
     @Override
     public Builder fromThis() {	
-	return DataObject.builder();
+	return DataObject.builder().from(this);
     }
     
     public static abstract class  Builder extends DataNode.Builder {	

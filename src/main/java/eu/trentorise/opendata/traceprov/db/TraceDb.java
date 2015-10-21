@@ -11,13 +11,12 @@ import java.io.ObjectOutput;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +33,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
 
@@ -43,7 +42,6 @@ import eu.trentorise.opendata.commons.NotFoundException;
 import eu.trentorise.opendata.commons.OdtUtils;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.TraceProvs;
-import eu.trentorise.opendata.traceprov.data.DataMap;
 import eu.trentorise.opendata.traceprov.data.DataNode;
 import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
@@ -54,7 +52,6 @@ import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException;
 import eu.trentorise.opendata.traceprov.types.Type;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
-import eu.trentorise.opendata.traceprov.types.Types;
 
 /**
  * Database of TraceProv. Allows storing foreign objects while tracking their
@@ -81,14 +78,23 @@ public class TraceDb {
     public static final long TRACEDB_PUBLISHER_ID = 0L;
     public static final String TRACEDB_PUBLISHER_URI = TraceProvs.TRACEPROV_IRI + "/db/tracedb-publisher";
 
+    private static final AFoafAgent TRACEDB_PUBLISHER = FoafAgent.builder()
+	    .setName(Dict.of("TraceDb Default Publisher"))
+	    .setUri(TRACEDB_PUBLISHER_URI)
+	    .build();
+
+    private static final NodeMetadata TRACEDB_DEFAULT_NODE_METADATA = NodeMetadata.builder()
+	    .setPublisherId(TRACEDB_PUBLISHER_ID)
+	    .build();
+
     /**
-     * Note this one doesn't have id as it must be created first.
+     * Note this one doesn't have id as it must be created first (although we
+     * know id will be 0). Note also this one self publishes itself.
      */
     private static final DataNode INIT_TRACEDB_PUBLISHER = DataObject.builder()
-	    .setRawValue(FoafAgent.builder()
-		    .setName(Dict.of("TraceDb Default Publisher"))
-		    .setUri(TRACEDB_PUBLISHER_URI)
-		    .build())
+	    .setRef(Ref.ofDocumentId(TRACEDB_PUBLISHER_URI))
+	    .setRawValue(TRACEDB_PUBLISHER)
+	    .setMetadata(TRACEDB_DEFAULT_NODE_METADATA)
 	    .build();
 
     /**
@@ -157,7 +163,7 @@ public class TraceDb {
      * If there is a corresponding odr view of the view, its id will be the
      * first of the list. id -> id1, id2, id3 ...
      */
-    private HashMap<Long, LinkedHashSet<Long>> sameAsIds;
+    private LinkedHashMultimap<Long, Long> sameAsIds;
 
     /**
      * Database with an in-memory db and default Jackson object mapper
@@ -169,7 +175,7 @@ public class TraceDb {
 	this.indexedValues = HashMultimap.create();
 	this.indexedTypes = new HashSet();
 	this.prefixes = new HashMap();
-	this.sameAsIds = new HashMap();
+	this.sameAsIds = LinkedHashMultimap.create();
 	this.idCounter = 0;
 	this.typeRegistry = TypeRegistry.of();
     }
@@ -202,16 +208,17 @@ public class TraceDb {
      */
     private void init(String dbUrl, TypeRegistry typeRegistry) {
 	checkNotEmpty(dbUrl, "Invalid db Url!");
-	checkArgument(dbUrl.startsWith(IN_MEMORY_PREFIX) || dbUrl.startsWith(FILE_PREFIX)
-	, "Only supported db url prefixes are " + IN_MEMORY_PREFIX + " and " + FILE_PREFIX +", found instead url " + dbUrl);
-		
+	checkArgument(dbUrl.startsWith(IN_MEMORY_PREFIX) || dbUrl.startsWith(FILE_PREFIX),
+		"Only supported db url prefixes are " + IN_MEMORY_PREFIX + " and " + FILE_PREFIX
+			+ ", found instead url " + dbUrl);
+
 	if (initLevel > 0) {
 	    LOG.warning("Tried to initialize database twice!");
 	} else {
 	    initLevel = INIT_LEVEL_1;
 	    this.dbUrl = dbUrl;
 	    this.typeRegistry = typeRegistry;
-	    create(INIT_TRACEDB_PUBLISHER);
+	    createPublisher(INIT_TRACEDB_PUBLISHER);
 	    initLevel = INIT_LEVEL_2;
 	    initLevel = INIT_LEVEL_3;
 	    LOG.info("TraceDB " + getDbUrl() + " is now initialized.");
@@ -338,10 +345,10 @@ public class TraceDb {
 	Path dir;
 	try {
 	    dir = Paths.get(new URI(getDbUrl()));
-	} catch (URISyntaxException ex){
+	} catch (URISyntaxException ex) {
 	    throw new TraceProvException("Some error occurred.", ex);
 	}
-	
+
 	if (!existsDb(dir.toString())) {
 	    throw new IllegalStateException(
 		    "Tried to drop a directory which doesn't look like a TraceDb folder! " + dir.toString());
@@ -404,7 +411,7 @@ public class TraceDb {
      * Returns true if there already a TraceDb in provided folder.
      */
     public static boolean existsDb(String folderPath) {
-	
+
 	return new File(folderPath + File.separator + TRACEDB_FILE).exists();
     }
 
@@ -443,7 +450,7 @@ public class TraceDb {
 	newDb.init(path.toUri().toString(), typeRegistry);
 	try {
 	    FileWriter fw = new FileWriter(jsonFile);
-	    typeRegistry.getObjectMapper().writeValue(fw, newDb);	   
+	    typeRegistry.getObjectMapper().writeValue(fw, newDb);
 	} catch (Throwable tr) {
 	    throw new TraceProvException("Error while writing trace db to disk!", tr);
 	}
@@ -547,56 +554,70 @@ public class TraceDb {
     }
 
     /**
-     * Returns the object with given id.
+     * Returns the datanode with given id.
      *
-     * @param viewId
-     *            the TraceProv internal id of the view to retrieve.
+     * @param datanodeId
+     *            the TraceProv internal id of the datanode to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    public DataNode read(long viewId) {
+    public DataNode read(long datanodeId) {
+	return read(Arrays.asList(datanodeId)).get(0);
+    }
+
+    /**
+     * Read all the datanodes with given ids
+     * 
+     * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
+     * if any of the ids is not found.
+     */
+    public List<DataNode> read(Iterable<Long> datanodeIds) {
 	checkInitialized(INIT_LEVEL_0);
-	checkArgument(viewId >= 0);
-	DataNode ret = storedValuesById.get(viewId);
-	if (ret == null) {
-	    throw new ViewNotFoundException(
-		    "Couldn't find view with traceprov internal id " + viewId);
-	} else {
-	    return ret;
+	List<DataNode> ret = new ArrayList();
+	for (Long datanodeId : datanodeIds) {
+	    checkNotNull(datanodeId);
+	    checkArgument(datanodeId >= 0);
+	    DataNode cand = storedValuesById.get(datanodeId);
+	    if (cand == null) {
+		throw new ViewNotFoundException(
+			"Couldn't find view with traceprov internal id " + datanodeId);
+	    } else {
+		ret.add(cand);
+	    }
 	}
+	return ret;
+
     }
 
-    private DataNode readPublisherNode(DataNode dataNode) {
 
-	String uri = dataNode.getMetadata().getPublisher().getUri();
-	String normalizedUrl = normalizeUrl(uri);
-
-	return read(normalizedUrl);
+    protected boolean selfPublished(DataNode mainTraceView){
+	return mainTraceView.getId() == mainTraceView.getMetadata().getPublisherId();
     }
-
+    
     /**
      * Returns the eventual main view generated by TraceProv that might be
      * aliasing the provided view.
      *
-     * @param viewId
+     * @param datanodeId
      *            the TraceProv internal id of the view to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
      */
-    private DataNode readMainObject(long viewId) {
+    private DataNode readMainObject(long datanodeId) {
 	checkInitialized();
-	checkArgument(viewId >= 0);
+	checkArgument(datanodeId >= 0);
 
-	ImmutableList<Long> clique = readSameAsIds(viewId);
+	List<Long> clique = readSameAsIds(datanodeId);
 
 	if (!clique.isEmpty()) {
 
-	    DataNode odrView = read(clique.get(0));
-
-	    if (TRACEDB_PUBLISHER_ID == readPublisherNode(odrView).getId()) {
-		return odrView;
+	    DataNode mainTraceView = read(clique.get(0));
+	    
+	    
+	    if (TRACEDB_PUBLISHER_ID == mainTraceView.getMetadata().getPublisherId()) {
+		return mainTraceView;
 	    }
 	}
 	throw new ViewNotFoundException(
-		"Couldn't find view with internal traceprov id " + viewId);
+		"Couldn't find view with internal traceprov id " + datanodeId);
 
     }
 
@@ -652,9 +673,10 @@ public class TraceDb {
 	String normalizedUrl = normalizeUrl(url);
 
 	DataNode ret = storedValuesByUrl.get(publisherId, normalizedUrl);
+	storedValuesByUrl.row(1L);
 	if (ret == null) {
-	    throw new ViewNotFoundException("Couldn't find view with url " + url
-		    + " having publisher traceprov id " + publisherId);
+	    throw new ViewNotFoundException("Couldn't find view identified by"
+		    + " publisher id " + publisherId + " and external url " + normalizedUrl);
 	} else {
 	    return ret;
 	}
@@ -677,39 +699,109 @@ public class TraceDb {
     }
 
     /**
-     * Creates new views and return them. They all must have valid publisher and
-     * refs.
+     * Returns the publisher id
+     * 
+     * @throws IllegalArgumentException
+     * @throws TraceProvNotFoundException
+     */
+    private long checkDataNodeToStore(DataNode dataNode, boolean toCreate, boolean publisher) {
+	checkNotNull(dataNode);
+	if (toCreate) {
+	    checkArgument(dataNode.getId() < 0, "Tried to create view with non-negative id: %s", dataNode.getId());
+	}
+
+	try {
+	    String refUri = dataNode.getRef().uri();
+	} catch (IllegalStateException ex) {
+	    throw new IllegalArgumentException(
+		    "Tried to create a DataNode without a valid ref! Ref is " + dataNode.toString(), ex);
+	}
+
+	if (publisher) {
+	    /*
+	     * todo useless check? String docId =
+	     * dataNode.getRef().getDocumentId();
+	     * 
+	     * String pubUri = dataNode.getMetadata().getPublisher().getUri();
+	     * /* checkArgument(docId.equals(pubUri),
+	     * "A Publisher self publishes itself, " +
+	     * "so ref.documentId must be equal to metadata.publisher.uri! " +
+	     * "Found instead:\n  ref.documentId=%s\n  metadata.publisher.uri=%s"
+	     * , docId, pubUri);
+	     */
+	    if (toCreate) {
+		long pubId = dataNode.getMetadata().getPublisherId();
+		if (pubId == -1){
+		    return idCounter; // a publisher can self publish itself
+		} else {
+		    return pubId;
+		}
+		
+	    } else {
+		return dataNode.getId();
+	    }
+	} else {
+	    long pubId = dataNode.getMetadata().getPublisherId();
+	    checkArgument( pubId != -1,
+		    "Tried to create datanode with invalid publisher, found one is empty!");
+	    return read(pubId).getId();
+	}
+    }
+
+    /**
+     * @see #createPublisher(Iterable)
+     */
+    public List<DataNode> createPublisher(DataNode... dataNodes) {
+	return createPublisher(Arrays.asList(dataNodes));
+    }
+
+    /**
+     * Creates new data nodes and return them. A Publisher is a some
+     * organization/person/entity from which we can take data. In TraceProv, it
+     * is a DataNode like the others with the peculiarity that it can be its own
+     * publisher, which means ref.documentId can be equal to
+     * metadata.publisher.uri
+     * 
+     * @return new data nodes with newly assigned id.
+     */
+    public List<DataNode> createPublisher(Iterable<DataNode> dataNodes) {
+	return create(dataNodes, true);
+    }
+
+    /**
+     * Creates new data nodes and return them. They all must have valid
+     * publisher and refs.
      *
-     * @return a new view with assigned id.
+     * @return new data nodes with newly assigned id.
      */
     public List<DataNode> create(Iterable<DataNode> dataNodes) {
+	return create(dataNodes, false);
+    }
+
+    /**
+     * Creates new data nodes and return them. They all must have valid
+     * publisher and refs.
+     *
+     * @param publisher if true node will 
+     * @return new data nodes with newly assigned id.
+     */
+    private List<DataNode> create(Iterable<DataNode> dataNodes, boolean publisher) {
 	checkInitialized(0);
 	ImmutableList.Builder<DataNode> retb = ImmutableList.builder();
 
 	for (DataNode dataNode : dataNodes) {
-	    checkNotNull(dataNode);
-	    checkArgument(dataNode.getId() < 0, "Tried to create view with non-negative id: %s", dataNode.getId());
 
-	    long publisherId = -1;
-
-	    if (!(dataNode.getRawValue() instanceof AFoafAgent
-		    && ((AFoafAgent) dataNode.getRawValue()).getUri().equals(TRACEDB_PUBLISHER_URI))) {
-		checkArgument(!dataNode.getMetadata().getPublisher().equals(FoafAgent.of()),
-			"Tried to create datanode with invalid publisher, found one is empty!");
-		String publisherUri = dataNode.getMetadata().getPublisher().getUri();
-		checkNotEmpty(publisherUri,
-			"Tried to create datanode with publisher which has invalid uri!");
-		publisherId = read(publisherUri).getId();
-	    } else {
-		publisherId = idCounter;
-	    }
+	    long publisherId = checkDataNodeToStore(dataNode, true, publisher);
 
 	    DataNode toCreate = dataNode.fromThis()
 		    .setId(idCounter)
+		    .setMetadata(dataNode.getMetadata().withPublisherId(publisherId))
 		    .build();
 	    storedValuesById.put(idCounter, toCreate);
-	    storedValuesByUrl.put(publisherId, dataNode.getRef().uri(), dataNode);
-
+	    String normalizedRefUri = dataNode.getRef().uri();
+	    storedValuesByUrl.put(publisherId, normalizedRefUri, toCreate);	    
+	    putSameAsIds(idCounter);
+	    
 	    index(toCreate);
 	    idCounter += 1;
 	    retb.add(toCreate);
@@ -746,12 +838,19 @@ public class TraceDb {
      * Returns the ids of the views considered to be the same as the provided
      * one.
      */
-    public ImmutableList<Long> readSameAsIds(long id) {
+    public List<Long> readSameAsIds(long id) {
 	checkInitialized();
 	checkArgument(id >= 0);
 	return ImmutableList.copyOf(sameAsIds.get(id));
     }
 
+    /**
+     * @see #putSameAsIds(Iterable)
+     */
+    public void putSameAsIds(Long... ids) {	
+	putSameAsIds(Arrays.asList(ids));
+    }
+    
     /**
      * States all provided view ids are 'same as'. If they are already same as
      * with some other id outside the provided ones, the old same as relation is
@@ -759,15 +858,17 @@ public class TraceDb {
      *
      * @param clazz
      * @param ids
-     *            the sameas ids
-     * @return the old list of same as
+     *            the sameas ids     * 
      * @throws IllegalStateException
-     *             if there are no corresponding views for the provided ids
+     *             if there are no corresponding views for the provided ids,
+     * 
      */
-    public ImmutableSet<Long> addSameAsIds(Iterable<Long> ids) {
+    public void putSameAsIds(Iterable<Long> ids) {
 	checkNotNull(ids);
-
-	throw new UnsupportedOperationException("TODO IMPLEMENT ME");
+	read(ids);
+	for (Long id : ids){
+	    this.sameAsIds.putAll(id, ids);
+	}	
     }
 
     /**
@@ -775,14 +876,14 @@ public class TraceDb {
      * to which the provided view id belongs
      *
      * @param viewId
-     *            the id of a view, which is not necessarily a view generated by
+     *            the id of a view, which may not necessarily be a view generated by
      *            odr.
      * @param originId
      *            the id of the server of origin
      */
-    public ControllerStatus controllerStatus(long viewId, long originId) {
+    public ControllerStatus controllerStatus(long viewId) {
 	checkArgument(viewId >= 0);
-	checkArgument(originId >= 0);
+	
 	// The view is NEW if it is not in any equivalence relation with objects
 	// from the domain.
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME");
@@ -824,7 +925,7 @@ public class TraceDb {
 	read(viewId1);
 	read(viewId2);
 
-	LinkedHashSet<Long> sames = sameAsIds.get(viewId1);
+	Set<Long> sames = sameAsIds.get(viewId1);
 
 	return sames.contains(viewId2);
     }
