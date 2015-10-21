@@ -41,7 +41,7 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
      */
     // TODO make it stack based instead of using recursion 
     @Override
-    public TraceNode makeNode(
+    public TraceData makeNode(
 	    		Ref ref, 
 	    		NodeMetadata metadata, 
 	    		@Nullable Object obj) {
@@ -60,7 +60,7 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 	} else if (obj instanceof Map) {
 	    Map map = (Map) obj;
 	    boolean allDataNodes = true;
-	    Map<String, TraceNode> newMap = new HashMap();
+	    Map<String, TraceData> newMap = new HashMap();
 	    
 	    for (Object key : map.keySet()) {
 		String keyString;
@@ -77,7 +77,7 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 
 		Object subObj = map.get(keyString);
 		
-		TraceNode subNode = makeNode(
+		TraceData subNode = makeNode(
 			DataNodes.makeSubRef(ref, keyString),
 			DataNodes.makeMetadata(metadata, subObj),
 			subObj);
@@ -90,7 +90,7 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 	    List ret = new ArrayList();
 	    int index = 0;
 	    for (Object item : col){		
-		TraceNode nodeItem = DataNodes.makeNode(DataNodes.makeSubRef(ref, index),
+		TraceData nodeItem = DataNodes.makeNode(DataNodes.makeSubRef(ref, index),
 			DataNodes.makeMetadata(metadata, item),
 			item);
 		ret.add(nodeItem);

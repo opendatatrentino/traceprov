@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.TraceNode.Builder;
+import eu.trentorise.opendata.traceprov.data.TraceData.Builder;
 import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
@@ -47,14 +47,14 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = DataArray.class)
 @JsonDeserialize(as = DataArray.class)
-abstract class ADataArray extends TraceNode implements Iterable<TraceNode> {
+abstract class ADataArray extends TraceData implements Iterable<TraceData> {
 
     private static final long serialVersionUID = 1L;
     private static final int MAX_PRINTED_NODES = 10;
     private static final Logger LOG = Logger.getLogger(DataArray.class.getSimpleName());
 
     @Override
-    public Iterator<TraceNode> iterator() {
+    public Iterator<TraceData> iterator() {
 	return new NodeIterator(this);
     }
 
@@ -85,7 +85,7 @@ abstract class ADataArray extends TraceNode implements Iterable<TraceNode> {
     public String toString() {
 	StringBuilder sb = new StringBuilder();
 	int i = 0;
-	for (TraceNode n : this) {
+	for (TraceData n : this) {
 	    if (i > 0) {
 		sb.append(", ");
 	    }
@@ -102,13 +102,13 @@ abstract class ADataArray extends TraceNode implements Iterable<TraceNode> {
     }
 
     @Override
-    public void accept(DataVisitor visitor, TraceNode parent, String field, int pos) {
+    public void accept(DataVisitor visitor, TraceData parent, String field, int pos) {
 	int i = 0;
 	Iterable iterable = (Iterable) getRawValue();
-	Iterator<TraceNode> iter = iterable.iterator();
+	Iterator<TraceData> iter = iterable.iterator();
 
 	while (iter.hasNext()) {
-	    TraceNode node = iter.next();
+	    TraceData node = iter.next();
 	    node.accept(visitor, this, field, i);
 	    i++;
 	}
@@ -125,7 +125,7 @@ abstract class ADataArray extends TraceNode implements Iterable<TraceNode> {
 	return tran.getResult();
     }
 
-    private static class NodeIterator implements Iterator<TraceNode> {
+    private static class NodeIterator implements Iterator<TraceData> {
 
 	private Iterator iterator;
 	private DataArray dataArray;
@@ -145,12 +145,12 @@ abstract class ADataArray extends TraceNode implements Iterable<TraceNode> {
 	}
 
 	@Override
-	public TraceNode next() {
+	public TraceData next() {
 	    Object obj = iterator.next();
-	    TraceNode ret;
+	    TraceData ret;
 
-	    if (obj instanceof TraceNode) {
-		ret = (TraceNode) obj;
+	    if (obj instanceof TraceData) {
+		ret = (TraceData) obj;
 	    } else {
 		ret = DataNodes.makeSubnode(dataArray, index, obj);
 	    }
@@ -192,7 +192,7 @@ abstract class ADataArray extends TraceNode implements Iterable<TraceNode> {
     }
     
     
-    public static abstract class Builder extends TraceNode.Builder {	
+    public static abstract class Builder extends TraceData.Builder {	
 	
     }
 }

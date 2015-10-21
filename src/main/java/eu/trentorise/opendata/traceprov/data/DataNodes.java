@@ -80,15 +80,15 @@ public final class DataNodes {
      * converted to DataNode lazily upon request. If {@code obj} is already a
      * DataNode it is returned as it is.
      */
-    public static TraceNode makeNode(
+    public static TraceData makeNode(
 	    Ref ref,
 	    NodeMetadata metadata,
 	    @Nullable Object obj) {
 
 	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
 
-	if (obj instanceof TraceNode) {
-	    return (TraceNode) obj;
+	if (obj instanceof TraceData) {
+	    return (TraceData) obj;
 	} else if (obj == null || obj instanceof String || obj instanceof Number) {
 	    TraceType canType = typeRegistry.getCanonicalTypeFromInstance(obj);
 	    NodeMetadata newMetadata;
@@ -113,7 +113,7 @@ public final class DataNodes {
     /**
      * TODO do we need it?
      */
-    public static TraceNode makeDeepNode(
+    public static TraceData makeDeepNode(
 	    Ref ref,
 	    NodeMetadata metadata,
 	    @Nullable Object obj) {
@@ -129,7 +129,7 @@ public final class DataNodes {
      * subchildren nodes will be converted lazily to DataNode upon request. If
      * {@code obj} is already a DataNode it is returned as it is.
      */
-    public static TraceNode makeSubnode(
+    public static TraceData makeSubnode(
 	    DataArray dataArray,
 	    long index,
 	    @Nullable Object obj) {
@@ -149,8 +149,8 @@ public final class DataNodes {
      * subchildren nodes will be converted to DataNode upon request. If
      * {@code obj} is already a DataNode it is returned as it is.
      */
-    public static TraceNode makeSubnode(
-	    TraceNode dataMap,
+    public static TraceData makeSubnode(
+	    TraceData dataMap,
 	    String propertyName,
 	    @Nullable Object obj) {
 

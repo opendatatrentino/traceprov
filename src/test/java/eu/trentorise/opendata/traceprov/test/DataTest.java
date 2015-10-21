@@ -22,7 +22,7 @@ import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
-import eu.trentorise.opendata.traceprov.data.TraceNode;
+import eu.trentorise.opendata.traceprov.data.TraceData;
 import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.DataValue;
@@ -137,7 +137,7 @@ public class DataTest {
                 .build()
         );
 
-        TraceNode data = DataArray.of(
+        TraceData data = DataArray.of(
         	Ref.of(),
         	NodeMetadata.of(), 
                 DataMap.of(
@@ -165,7 +165,7 @@ public class DataTest {
                 rows.add(elNames);
 
                 DataArray dataArray = (DataArray) data;
-                for (TraceNode dn : dataArray) {
+                for (TraceData dn : dataArray) {
                     List<String> row = new ArrayList();
                     rows.add(row);
                     DataMap dataMap = (DataMap) dn;
@@ -195,7 +195,7 @@ public class DataTest {
     public void testFromThisBuilder(){
 	DataObject dn = DataObject.builder().setId(1).build();
 	
-	TraceNode dn2 = dn.fromThis().setRawValue(2).build();
+	TraceData dn2 = dn.fromThis().setRawValue(2).build();
 	assertEquals(1, dn2.getId());
 	assertEquals(2, dn2.getRawValue());
     }

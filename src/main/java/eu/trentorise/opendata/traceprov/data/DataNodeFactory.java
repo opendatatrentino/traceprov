@@ -18,7 +18,7 @@ public interface DataNodeFactory {
      * DataArray. The choice of Maps and Collections backing such nodes is left
      * to implementations of this interface.
      */
-    TraceNode makeNode(
+    TraceData makeNode(
 	    Ref ref, 
 	    NodeMetadata metadata, 
 	    @Nullable Object obj);

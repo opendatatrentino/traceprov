@@ -42,7 +42,7 @@ import eu.trentorise.opendata.commons.NotFoundException;
 import eu.trentorise.opendata.commons.OdtUtils;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.TraceProvs;
-import eu.trentorise.opendata.traceprov.data.TraceNode;
+import eu.trentorise.opendata.traceprov.data.TraceData;
 import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
@@ -56,7 +56,7 @@ import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 /**
  * Database of TraceProv. Allows storing foreign objects while tracking their
  * provenance. Follows a NOSQL philophy, where objects are wrapped in
- * {@link TraceNode DataNodes} and indexing is manual.
+ * {@link TraceData DataNodes} and indexing is manual.
  * 
  * Currently Serialization is done with Jackson. Object cloning with Kryo.
  *
@@ -91,7 +91,7 @@ public class TraceDb {
      * Note this one doesn't have id as it must be created first (although we
      * know id will be 0). Note also this one self publishes itself.
      */
-    private static final TraceNode INIT_TRACEDB_PUBLISHER = DataObject.builder()
+    private static final TraceData INIT_TRACEDB_PUBLISHER = DataObject.builder()
 	    .setRef(Ref.ofDocumentId(TRACEDB_PUBLISHER_URI))
 	    .setRawValue(TRACEDB_PUBLISHER)
 	    .setMetadata(TRACEDB_DEFAULT_NODE_METADATA)
@@ -144,12 +144,12 @@ public class TraceDb {
      * which has traceprov internal id = 4
      * 
      */
-    private Table<Long, String, TraceNode> storedValuesByUrl;
+    private Table<Long, String, TraceData> storedValuesByUrl;
 
     /**
      * trace id -> DataNode object
      */
-    private HashMap<Long, TraceNode> storedValuesById;
+    private HashMap<Long, TraceData> storedValuesById;
 
     /**
      * A multimap type id -> traceprov internal ids of DataNode which are
@@ -277,7 +277,7 @@ public class TraceDb {
 	checkNotEmpty(typeId, "Invalid TraceType id!");
 	typeRegistry.checkRegistered(typeId);
 	TraceType type = typeRegistry.get(typeId);
-	for (Map.Entry<Long, TraceNode> entry : this.storedValuesById.entrySet()) {
+	for (Map.Entry<Long, TraceData> entry : this.storedValuesById.entrySet()) {
 	    Object rawValue = entry.getValue().getRawValue();
 	    if (type.isInstance(rawValue)) {
 		indexedValues.put(typeId, entry.getKey());
@@ -560,7 +560,7 @@ public class TraceDb {
      *            the TraceProv internal id of the datanode to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
-    public TraceNode read(long datanodeId) {
+    public TraceData read(long datanodeId) {
 	return read(Arrays.asList(datanodeId)).get(0);
     }
 
@@ -570,13 +570,13 @@ public class TraceDb {
      * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      * if any of the ids is not found.
      */
-    public List<TraceNode> read(Iterable<Long> datanodeIds) {
+    public List<TraceData> read(Iterable<Long> datanodeIds) {
 	checkInitialized(INIT_LEVEL_0);
-	List<TraceNode> ret = new ArrayList();
+	List<TraceData> ret = new ArrayList();
 	for (Long datanodeId : datanodeIds) {
 	    checkNotNull(datanodeId);
 	    checkArgument(datanodeId >= 0);
-	    TraceNode cand = storedValuesById.get(datanodeId);
+	    TraceData cand = storedValuesById.get(datanodeId);
 	    if (cand == null) {
 		throw new DataNotFoundException(
 			"Couldn't find view with traceprov internal id " + datanodeId);
@@ -589,7 +589,7 @@ public class TraceDb {
     }
 
 
-    protected boolean selfPublished(TraceNode mainTraceView){
+    protected boolean selfPublished(TraceData mainTraceView){
 	return mainTraceView.getId() == mainTraceView.getMetadata().getPublisherId();
     }
     
@@ -601,7 +601,7 @@ public class TraceDb {
      *            the TraceProv internal id of the view to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
-    private TraceNode readMainObject(long datanodeId) {
+    private TraceData readMainObject(long datanodeId) {
 	checkInitialized();
 	checkArgument(datanodeId >= 0);
 
@@ -609,7 +609,7 @@ public class TraceDb {
 
 	if (!clique.isEmpty()) {
 
-	    TraceNode mainTraceView = read(clique.get(0));
+	    TraceData mainTraceView = read(clique.get(0));
 	    
 	    
 	    if (TRACEDB_PUBLISHER_ID == mainTraceView.getMetadata().getPublisherId()) {
@@ -631,7 +631,7 @@ public class TraceDb {
      * @return the object with given url or throws exception if not found.
      * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
-    public TraceNode read(String url) {
+    public TraceData read(String url) {
 	String normalizedUrl = normalizeUrl(url);
 
 	try {
@@ -639,7 +639,7 @@ public class TraceDb {
 	} catch (DataNotFoundException ex1) {
 
 	    for (Long publisherId : storedValuesByUrl.rowKeySet()) {
-		TraceNode candidate2 = storedValuesByUrl.get(publisherId, normalizedUrl);
+		TraceData candidate2 = storedValuesByUrl.get(publisherId, normalizedUrl);
 		if (candidate2 != null) {
 		    try {
 			return readMainObject(candidate2.getId());
@@ -665,14 +665,14 @@ public class TraceDb {
      * @return the object with given url.
      * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
-    public TraceNode read(long publisherId, String url) {
+    public TraceData read(long publisherId, String url) {
 
 	checkArgument(publisherId >= 0);
 	checkNotEmpty(url, "Invalid url!");
 
 	String normalizedUrl = normalizeUrl(url);
 
-	TraceNode ret = storedValuesByUrl.get(publisherId, normalizedUrl);
+	TraceData ret = storedValuesByUrl.get(publisherId, normalizedUrl);
 	storedValuesByUrl.row(1L);
 	if (ret == null) {
 	    throw new DataNotFoundException("Couldn't find view identified by"
@@ -685,11 +685,11 @@ public class TraceDb {
     /**
      * @see #create(Iterable)
      */
-    public List<TraceNode> create(TraceNode... dataNodes) {
+    public List<TraceData> create(TraceData... dataNodes) {
 	return create(Arrays.asList(dataNodes));
     }
 
-    private void index(TraceNode dataNode) {
+    private void index(TraceData dataNode) {
 	ImmutableList<TraceType> types = typeRegistry.getTypesFromInstance(dataNode.getRawValue());
 	for (TraceType type : types) {
 	    if (indexedTypes.contains(type.getId())) {
@@ -704,7 +704,7 @@ public class TraceDb {
      * @throws IllegalArgumentException
      * @throws TraceProvNotFoundException
      */
-    private long checkDataNodeToStore(TraceNode dataNode, boolean toCreate, boolean publisher) {
+    private long checkDataNodeToStore(TraceData dataNode, boolean toCreate, boolean publisher) {
 	checkNotNull(dataNode);
 	if (toCreate) {
 	    checkArgument(dataNode.getId() < 0, "Tried to create view with non-negative id: %s", dataNode.getId());
@@ -751,7 +751,7 @@ public class TraceDb {
     /**
      * @see #createPublisher(Iterable)
      */
-    public List<TraceNode> createPublisher(TraceNode... dataNodes) {
+    public List<TraceData> createPublisher(TraceData... dataNodes) {
 	return createPublisher(Arrays.asList(dataNodes));
     }
 
@@ -764,7 +764,7 @@ public class TraceDb {
      * 
      * @return new data nodes with newly assigned id.
      */
-    public List<TraceNode> createPublisher(Iterable<TraceNode> dataNodes) {
+    public List<TraceData> createPublisher(Iterable<TraceData> dataNodes) {
 	return create(dataNodes, true);
     }
 
@@ -774,7 +774,7 @@ public class TraceDb {
      *
      * @return new data nodes with newly assigned id.
      */
-    public List<TraceNode> create(Iterable<TraceNode> dataNodes) {
+    public List<TraceData> create(Iterable<TraceData> dataNodes) {
 	return create(dataNodes, false);
     }
 
@@ -785,15 +785,15 @@ public class TraceDb {
      * @param publisher if true node will 
      * @return new data nodes with newly assigned id.
      */
-    private List<TraceNode> create(Iterable<TraceNode> dataNodes, boolean publisher) {
+    private List<TraceData> create(Iterable<TraceData> dataNodes, boolean publisher) {
 	checkInitialized(0);
-	ImmutableList.Builder<TraceNode> retb = ImmutableList.builder();
+	ImmutableList.Builder<TraceData> retb = ImmutableList.builder();
 
-	for (TraceNode dataNode : dataNodes) {
+	for (TraceData dataNode : dataNodes) {
 
 	    long publisherId = checkDataNodeToStore(dataNode, true, publisher);
 
-	    TraceNode toCreate = dataNode.fromThis()
+	    TraceData toCreate = dataNode.fromThis()
 		    .setId(idCounter)
 		    .setMetadata(dataNode.getMetadata().withPublisherId(publisherId))
 		    .build();
@@ -814,7 +814,7 @@ public class TraceDb {
      * 
      * @see #update(Iterable)
      */
-    public List<TraceNode> update(TraceNode... dataNodes) {
+    public List<TraceData> update(TraceData... dataNodes) {
 	return Arrays.asList(dataNodes);
     }
 
@@ -829,7 +829,7 @@ public class TraceDb {
      * @throws DataNotFoundException
      */
     @Nullable
-    public List<TraceNode> update(Iterable<TraceNode> dataNodes) {
+    public List<TraceData> update(Iterable<TraceData> dataNodes) {
 	throw new UnsupportedOperationException("TODO implement me!");
     }
 
@@ -897,8 +897,8 @@ public class TraceDb {
      *             if objects are not found.
      */
     public boolean shallowEqual(long viewId1, long viewId2) {
-	TraceNode view1 = read(viewId1);
-	TraceNode view2 = read(viewId2);
+	TraceData view1 = read(viewId1);
+	TraceData view2 = read(viewId2);
 	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
 	// return view1.controlledEquals(view2);
     }

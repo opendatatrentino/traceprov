@@ -16,7 +16,7 @@
 package eu.trentorise.opendata.traceprov.validation;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import eu.trentorise.opendata.traceprov.data.TraceNode;
+import eu.trentorise.opendata.traceprov.data.TraceData;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.TraceFile;
 import eu.trentorise.opendata.traceprov.types.TraceType;
@@ -28,7 +28,7 @@ import eu.trentorise.opendata.traceprov.types.AnyType;
  */
 public final class Validator {
     
-    public TraceType inferType(TraceNode node, DcatMetadata dcatMetadata){
+    public TraceType inferType(TraceData node, DcatMetadata dcatMetadata){
         throw new UnsupportedOperationException("todo implement me");
     }
     

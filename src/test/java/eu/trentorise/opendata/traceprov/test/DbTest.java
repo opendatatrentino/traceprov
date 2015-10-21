@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.TraceNode;
+import eu.trentorise.opendata.traceprov.data.TraceData;
 import eu.trentorise.opendata.traceprov.data.DataValue;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.db.TraceDb;
@@ -60,8 +60,8 @@ public class DbTest {
 	return UUID.randomUUID().toString();
     }
         
-    private TraceNode makePublisher(){
-	List<TraceNode> dns = db.createPublisher(
+    private TraceData makePublisher(){
+	List<TraceData> dns = db.createPublisher(
 		DataValue.of(	Ref.ofDocumentId(TEST_PUBLISHER_URI), 
 				INIT_TEST_PUBLISHER_METADATA, 
 				"h"));
@@ -72,33 +72,33 @@ public class DbTest {
     
     @Test
     public void testCreatePublisher()  {	
-	TraceNode pub1 = makePublisher();	
+	TraceData pub1 = makePublisher();	
 	assertTrue(pub1.getId() == 1L);	
 	assertEquals(pub1.getId(), pub1.getMetadata().getPublisherId());
 	assertTrue(db.sameAs(pub1.getId(), pub1.getId()));
 	pub1.getRef().uri(); // should not thow exception		
-	TraceNode readPub1 = db.read(pub1.getId());
+	TraceData readPub1 = db.read(pub1.getId());
 	assertEquals(pub1, readPub1);
 	assertTrue(pub1.getId() == 1L);
-	TraceNode readPubByIdUrl = db.read(pub1.getId(), pub1.getRef().getDocumentId());
+	TraceData readPubByIdUrl = db.read(pub1.getId(), pub1.getRef().getDocumentId());
 	//assertTrue(pub1.equals(readPubByIdUrl));
 	assertTrue(pub1.getId() == 1L);
 	assertEquals(pub1, readPubByIdUrl);	
 	
     }
     
-    private NodeMetadata makeMetadata(TraceNode pub){
+    private NodeMetadata makeMetadata(TraceData pub){
 	return NodeMetadata.builder().setPublisherId(pub.getId()).build();	
     }
     @Test
     public void testCreate()  {
-	TraceNode pub = makePublisher();
-	List<TraceNode> dns = db.create(
+	TraceData pub = makePublisher();
+	List<TraceData> dns = db.create(
 		DataValue.of(Ref.ofDocumentId("a"), 
 			     makeMetadata(pub), 
 			     "b"));
 	assertEquals(1, dns.size());
-	TraceNode dn = dns.get(0);	
+	TraceData dn = dns.get(0);	
 	assertTrue(dn.getId() >= 0);
 		
 	assertEquals("a", dn.getRef().getDocumentId());
@@ -111,7 +111,7 @@ public class DbTest {
     @Test
     public void testReadDefaultNodes() throws IOException {
 	
-	TraceNode tpub = db.read(TraceDb.TRACEDB_PUBLISHER_ID);
+	TraceData tpub = db.read(TraceDb.TRACEDB_PUBLISHER_ID);
 
 	// tracedb publisher is self published
 	assertEquals(TraceDb.TRACEDB_PUBLISHER_ID, tpub.getMetadata().getPublisherId());

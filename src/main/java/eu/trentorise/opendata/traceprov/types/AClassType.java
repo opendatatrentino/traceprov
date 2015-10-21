@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
-import eu.trentorise.opendata.traceprov.data.TraceNode;
+import eu.trentorise.opendata.traceprov.data.TraceData;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +88,7 @@ abstract class AClassType extends TraceType {
     @Value.Default
     @Override
     public Class getJavaClass() {
-        return TraceNode.class; // todo this is important I guess..
+        return TraceData.class; // todo this is important I guess..
     }
 
     @Override

@@ -43,7 +43,7 @@ public class TraceFile implements Serializable {
     private TraceType type;
     private List<Def<ClassType>> classDefs;
     private ImmutableList<ConstraintViolation> typeErrors;
-    private TraceNode data;
+    private TraceData data;
     private List<ConstraintViolation> dataErrors;
     private ImmutableList<PropertyMapping> mappings;
 
@@ -61,7 +61,7 @@ public class TraceFile implements Serializable {
             DcatMetadata dcatMetadata,
             TraceType type,
             Iterable<ConstraintViolation> schemaErrors,
-            TraceNode data,
+            TraceData data,
             List<ConstraintViolation> dataErrors,
             Iterable<PropertyMapping> mappings) {
         checkNotNull(dcatMetadata);
@@ -123,7 +123,7 @@ public class TraceFile implements Serializable {
      * Returns the data content of the file as a hierarchical tree. If no data
      * was found, {@link DataMap#of()} is returned.
      */
-    public TraceNode getData() {
+    public TraceData getData() {
         return data;
     }
 
@@ -187,7 +187,7 @@ public class TraceFile implements Serializable {
             this.provFile.typeErrors = ImmutableList.copyOf(typeErrors);
         }
 
-        public void setData(TraceNode data) {
+        public void setData(TraceData data) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }

@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.immutables.value.Value;
 
-import eu.trentorise.opendata.traceprov.data.TraceNode;
+import eu.trentorise.opendata.traceprov.data.TraceData;
 
 public abstract class ACollectionType extends TraceType {
 

@@ -63,7 +63,7 @@ import com.google.common.collect.Sets;
 @BuilderStylePublic
 @JsonSerialize(as = DataMap.class)
 @JsonDeserialize(as = DataMap.class)
-class ADataMap extends TraceNode implements Map<String, TraceNode> {
+class ADataMap extends TraceData implements Map<String, TraceData> {
 
     private static final long serialVersionUID = 1L;
 
@@ -112,7 +112,7 @@ class ADataMap extends TraceNode implements Map<String, TraceNode> {
    
 
     @Override
-    public void accept(DataVisitor visitor, TraceNode parent, String field, int pos) {
+    public void accept(DataVisitor visitor, TraceData parent, String field, int pos) {
 	Map<Object, Object> map = (Map) getRawValue();	
 	for (Map.Entry entry : map.entrySet()) {
 	    String key = checkKey(entry.getKey());
@@ -167,12 +167,12 @@ class ADataMap extends TraceNode implements Map<String, TraceNode> {
      */
     // todo write more doc
     @Override
-    public Collection<TraceNode> values() {
+    public Collection<TraceData> values() {
 	return Collections2.transform(entrySet(),
-		new Function<Map.Entry<String, TraceNode>, TraceNode>(){
+		new Function<Map.Entry<String, TraceData>, TraceData>(){
 
 		    @Override
-		    public TraceNode apply(java.util.Map.Entry<String, TraceNode> input) {
+		    public TraceData apply(java.util.Map.Entry<String, TraceData> input) {
 			return input.getValue();
 		    }
 	    
@@ -180,7 +180,7 @@ class ADataMap extends TraceNode implements Map<String, TraceNode> {
     }    
 
     @Override
-    public TraceNode get(Object propertyName) {
+    public TraceData get(Object propertyName) {
 	Map map = (Map) getRawValue();
 	String prop = checkKey(propertyName);
 	checkNotNull(propertyName, "Invalid property name!");
@@ -199,7 +199,7 @@ class ADataMap extends TraceNode implements Map<String, TraceNode> {
      * @deprecated
      */
     @Override
-    public TraceNode put(String key, TraceNode value) {
+    public TraceData put(String key, TraceData value) {
 	// TODO Auto-generated method stub
 	throw new UnsupportedOperationException("Not supported");
     }
@@ -208,7 +208,7 @@ class ADataMap extends TraceNode implements Map<String, TraceNode> {
      * @deprecated
      */
     @Override
-    public TraceNode remove(Object key) {
+    public TraceData remove(Object key) {
 	// TODO Auto-generated method stub
 	throw new UnsupportedOperationException("Not supported.");
     }
@@ -217,7 +217,7 @@ class ADataMap extends TraceNode implements Map<String, TraceNode> {
      * @deprecated
      */
     @Override
-    public void putAll(Map<? extends String, ? extends TraceNode> m) {
+    public void putAll(Map<? extends String, ? extends TraceData> m) {
 	// TODO Auto-generated method stub
 	throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -270,14 +270,14 @@ class ADataMap extends TraceNode implements Map<String, TraceNode> {
      */
     // todo write more doc
     @Override
-    public Set<Map.Entry<String, TraceNode>> entrySet() {
+    public Set<Map.Entry<String, TraceData>> entrySet() {
 	final DataMap thisDataMap = (DataMap) this;
 
 	Map map = (Map) getRawValue();
 	return new ForwardingCollectionSet(Collections2.transform(map.entrySet(),
-		new Function<Map.Entry, Map.Entry<String, TraceNode>>() {
+		new Function<Map.Entry, Map.Entry<String, TraceData>>() {
 		    @Override
-		    public Map.Entry<String, TraceNode> apply(Map.Entry input) {
+		    public Map.Entry<String, TraceData> apply(Map.Entry input) {
 			String skey = checkKey(input.getKey());
 
 			return Maps.immutableEntry(
@@ -306,7 +306,7 @@ class ADataMap extends TraceNode implements Map<String, TraceNode> {
 	}
     }
 
-    public static abstract class  Builder extends TraceNode.Builder {	
+    public static abstract class  Builder extends TraceData.Builder {	
 	
     }
 
