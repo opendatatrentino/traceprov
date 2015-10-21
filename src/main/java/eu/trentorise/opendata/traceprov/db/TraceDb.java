@@ -49,7 +49,7 @@ import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
-import eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException;
+import eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException;
 import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
@@ -558,7 +558,7 @@ public class TraceDb {
      *
      * @param datanodeId
      *            the TraceProv internal id of the datanode to retrieve.
-     * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
     public TraceNode read(long datanodeId) {
 	return read(Arrays.asList(datanodeId)).get(0);
@@ -567,7 +567,7 @@ public class TraceDb {
     /**
      * Read all the datanodes with given ids
      * 
-     * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      * if any of the ids is not found.
      */
     public List<TraceNode> read(Iterable<Long> datanodeIds) {
@@ -578,7 +578,7 @@ public class TraceDb {
 	    checkArgument(datanodeId >= 0);
 	    TraceNode cand = storedValuesById.get(datanodeId);
 	    if (cand == null) {
-		throw new ViewNotFoundException(
+		throw new DataNotFoundException(
 			"Couldn't find view with traceprov internal id " + datanodeId);
 	    } else {
 		ret.add(cand);
@@ -599,7 +599,7 @@ public class TraceDb {
      *
      * @param datanodeId
      *            the TraceProv internal id of the view to retrieve.
-     * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
     private TraceNode readMainObject(long datanodeId) {
 	checkInitialized();
@@ -616,7 +616,7 @@ public class TraceDb {
 		return mainTraceView;
 	    }
 	}
-	throw new ViewNotFoundException(
+	throw new DataNotFoundException(
 		"Couldn't find view with internal traceprov id " + datanodeId);
 
     }
@@ -629,26 +629,26 @@ public class TraceDb {
      * @param url
      *            the url of the object to retrieve.
      * @return the object with given url or throws exception if not found.
-     * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
     public TraceNode read(String url) {
 	String normalizedUrl = normalizeUrl(url);
 
 	try {
 	    return read(TRACEDB_PUBLISHER_ID, normalizedUrl);
-	} catch (ViewNotFoundException ex1) {
+	} catch (DataNotFoundException ex1) {
 
 	    for (Long publisherId : storedValuesByUrl.rowKeySet()) {
 		TraceNode candidate2 = storedValuesByUrl.get(publisherId, normalizedUrl);
 		if (candidate2 != null) {
 		    try {
 			return readMainObject(candidate2.getId());
-		    } catch (ViewNotFoundException ex2) {
+		    } catch (DataNotFoundException ex2) {
 			return candidate2;
 		    }
 		}
 	    }
-	    throw new ViewNotFoundException(
+	    throw new DataNotFoundException(
 		    "Couldn't find view with url: " + url);
 	}
     }
@@ -663,7 +663,7 @@ public class TraceDb {
      * @param url
      *            the url of the object to retrieve.
      * @return the object with given url.
-     * @throws eu.trentorise.opendata.traceprov.exceptions.ViewNotFoundException
+     * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
     public TraceNode read(long publisherId, String url) {
 
@@ -675,7 +675,7 @@ public class TraceDb {
 	TraceNode ret = storedValuesByUrl.get(publisherId, normalizedUrl);
 	storedValuesByUrl.row(1L);
 	if (ret == null) {
-	    throw new ViewNotFoundException("Couldn't find view identified by"
+	    throw new DataNotFoundException("Couldn't find view identified by"
 		    + " publisher id " + publisherId + " and external url " + normalizedUrl);
 	} else {
 	    return ret;
@@ -826,7 +826,7 @@ public class TraceDb {
      *            the view to update
      * @return the value previously associated with the originId / foreign
      *         identifier slot
-     * @throws ViewNotFoundException
+     * @throws DataNotFoundException
      */
     @Nullable
     public List<TraceNode> update(Iterable<TraceNode> dataNodes) {
@@ -893,7 +893,7 @@ public class TraceDb {
      * Returns true if the stored views corresponding to the two provided ids
      * are equal using Java equality.
      *
-     * @throws ViewNotFoundException
+     * @throws DataNotFoundException
      *             if objects are not found.
      */
     public boolean shallowEqual(long viewId1, long viewId2) {
@@ -907,7 +907,7 @@ public class TraceDb {
      * Returns true if the stored objects corresponding to the two provided ids
      * are equal using Java equality.
      *
-     * @throws ViewNotFoundException
+     * @throws DataNotFoundException
      */
     public boolean deepEqual(long objId1, long objId2) {
 	throw new UnsupportedOperationException("TODO Implement me!!");
@@ -918,7 +918,7 @@ public class TraceDb {
      * be 'same as' even if they are structually different or represent a new
      * and an old view of the same object.
      *
-     * @throws ViewNotFoundException
+     * @throws DataNotFoundException
      */
     public boolean sameAs(long viewId1, long viewId2) {
 
@@ -931,7 +931,7 @@ public class TraceDb {
     }
 
     /**
-     * @throws ViewNotFoundException
+     * @throws DataNotFoundException
      */
     public boolean isSynchronized(long originId, String externalId) {
 
