@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
  *
  * @author David Leoni
  */
-public class Def<T extends Type> implements Serializable {
+public class Def<T extends TraceType> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +49,7 @@ public class Def<T extends Type> implements Serializable {
 
     @JsonCreator
     private Def(@JsonProperty("id") @Nullable String id, @JsonProperty("metadata") @Nullable DefMetadata metadata,
-	    @JsonProperty("type") @Nullable Type type) {
+	    @JsonProperty("type") @Nullable TraceType type) {
 	this();
 
 	this.id = id == null ? "" : id;
@@ -140,7 +140,7 @@ public class Def<T extends Type> implements Serializable {
 	return INSTANCE;
     }
 
-    public static class Builder<W extends Type> {
+    public static class Builder<W extends TraceType> {
 
 	private static final String ERR_SET = "Tried to set property of an already built TypeDef!";
 

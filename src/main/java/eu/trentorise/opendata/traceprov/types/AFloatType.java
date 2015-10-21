@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import static eu.trentorise.opendata.traceprov.types.Types.XSD;
+import static eu.trentorise.opendata.traceprov.types.TraceTypes.XSD;
 
 import org.immutables.value.Value;
 
@@ -26,7 +26,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = FloatType.class)
 @JsonDeserialize(as = FloatType.class)
-abstract class AFloatType extends Type {
+abstract class AFloatType extends TraceType {
     
     private static final long serialVersionUID = 1L;
     /*

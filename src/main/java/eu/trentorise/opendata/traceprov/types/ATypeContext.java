@@ -43,7 +43,7 @@ public abstract class ATypeContext implements Serializable {
      * Default is {@link eu.trentorise.opendata.traceprov.types.AnyType#of()}.
      */
     @Value.Default
-    public Type getType() {
+    public TraceType getType() {
         return AnyType.of();
     }
 

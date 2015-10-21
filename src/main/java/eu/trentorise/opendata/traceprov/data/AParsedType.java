@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.ValidationError;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ClassType;
 import eu.trentorise.opendata.traceprov.types.Def;
@@ -34,9 +34,9 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @BuilderStylePublic
-@JsonSerialize(as = TraceType.class)
-@JsonDeserialize(as = TraceType.class)
-abstract class ATraceType implements Serializable {
+@JsonSerialize(as = ParsedType.class)
+@JsonDeserialize(as = ParsedType.class)
+abstract class AParsedType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ abstract class ATraceType implements Serializable {
      * {@link AnyType#of()} is returned.
      */
     @Value.Default
-    public Type getType() {
+    public TraceType getType() {
         return AnyType.of();
     }
 

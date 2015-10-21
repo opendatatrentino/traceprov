@@ -31,7 +31,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = DictType.class)
 @JsonDeserialize(as = DictType.class)
-abstract class ADictType extends Type {
+abstract class ADictType extends TraceType {
 
     private static final long serialVersionUID = 1L;
     /*

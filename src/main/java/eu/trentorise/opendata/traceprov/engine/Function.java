@@ -15,7 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.engine;
 
-import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.TraceNode;
 import eu.trentorise.opendata.traceprov.types.FunctionType;
 
 /**
@@ -38,5 +38,5 @@ public abstract class Function {
      * memory... at most they can point to previous values
      *
      */
-    public abstract DataNode apply(Iterable<DataNode> args);
+    public abstract TraceNode apply(Iterable<TraceNode> args);
 }

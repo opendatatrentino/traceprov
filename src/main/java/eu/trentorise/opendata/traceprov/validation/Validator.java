@@ -16,10 +16,10 @@
 package eu.trentorise.opendata.traceprov.validation;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.TraceNode;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.TraceFile;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 
 /**
@@ -28,7 +28,7 @@ import eu.trentorise.opendata.traceprov.types.AnyType;
  */
 public final class Validator {
     
-    public Type inferType(DataNode node, DcatMetadata dcatMetadata){
+    public TraceType inferType(TraceNode node, DcatMetadata dcatMetadata){
         throw new UnsupportedOperationException("todo implement me");
     }
     
@@ -56,7 +56,7 @@ public final class Validator {
      * in the original file, they should be reported within the output object
      * instead of throwing an exception.
      */
-    TraceFile validate(TraceFile provFile, String mimetype, Type type, DcatMetadata dcatMetadata){
+    TraceFile validate(TraceFile provFile, String mimetype, TraceType type, DcatMetadata dcatMetadata){
         throw new UnsupportedOperationException("todo implement me");
     }
 }

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import java.io.IOException;
 
 /**
@@ -47,7 +47,7 @@ public final class TraceProvModule extends SimpleModule {
         super("traceprov-jackson", OdtCommonsModule.readJacksonVersion(TraceProvModule.class));
 
         addDeserializer(GeoJson.class, new GeoJsonDeserializer());
-        addDeserializer(Type.class, new TraceTypeDeserializer());
+        addDeserializer(TraceType.class, new TraceTypeDeserializer());
 
     }
 
@@ -103,24 +103,24 @@ public final class TraceProvModule extends SimpleModule {
 
     }
 
-    public static class TraceTypeDeserializer extends StdDeserializer<Type> {
+    public static class TraceTypeDeserializer extends StdDeserializer<TraceType> {
 
         public TraceTypeDeserializer() {
-            super(Type.class);
+            super(TraceType.class);
         }
 
-        public TraceTypeDeserializer(Class<Type> vc) {
+        public TraceTypeDeserializer(Class<TraceType> vc) {
             super(vc);
         }
 
         @Override
-        public Type deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+        public TraceType deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
             ObjectMapper mapper = (ObjectMapper) jp.getCodec();
             ObjectNode root = (ObjectNode) mapper.readTree(jp);
             String className = root.get("id").asText();  
-            Class<? extends Type> clazz;
+            Class<? extends TraceType> clazz;
             try {
-                clazz = (Class<? extends Type>) Class.forName(className);
+                clazz = (Class<? extends TraceType>) Class.forName(className);
                 return mapper.convertValue(root, clazz);
             }
             catch (ClassNotFoundException ex) {

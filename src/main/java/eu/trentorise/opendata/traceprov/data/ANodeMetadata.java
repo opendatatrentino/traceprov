@@ -23,7 +23,7 @@ import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.geojson.Feature;
 import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import java.io.Serializable;
 import java.util.Locale;
 import org.immutables.value.Value;
@@ -119,11 +119,11 @@ abstract class ANodeMetadata implements Serializable {
     }
 
     /**
-     * The type of the value stored in the node, expressed as {@link Type
+     * The type of the value stored in the node, expressed as {@link TraceType
      * TraceProv Type}. Defaults to {@link AnyType}
      */
     @Value.Default
-    public Type getType() {
+    public TraceType getType() {
 	return AnyType.of();
     }
 

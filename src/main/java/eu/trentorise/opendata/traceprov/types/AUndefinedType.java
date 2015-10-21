@@ -29,7 +29,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = UndefinedType.class)
 @JsonDeserialize(as = UndefinedType.class)
-abstract class AUndefinedType extends Type {
+abstract class AUndefinedType extends TraceType {
 
     private static final long serialVersionUID = 1L;
     /*

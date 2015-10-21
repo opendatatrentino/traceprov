@@ -15,7 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.engine;
 
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import java.util.Locale;
 
 /**
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * @author David Leoni
  */
-public abstract class Converter<S extends Type, T extends Type> {
+public abstract class Converter<S extends TraceType, T extends TraceType> {
 
     public abstract boolean isLongRunning();
 

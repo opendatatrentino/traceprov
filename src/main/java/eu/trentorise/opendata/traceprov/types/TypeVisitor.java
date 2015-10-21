@@ -20,8 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Visitor for {@link Type} objects. default visit method is
- * {@link #visitDefault(eu.trentorise.opendata.traceprov.types.Type) visitDefault(Type)},
+ * Visitor for {@link TraceType} objects. default visit method is
+ * {@link #visitDefault(eu.trentorise.opendata.traceprov.types.TraceType) visitDefault(Type)},
  * but you can define more specific {@code visit(MyType)} methods and those will
  * be automatically picked by a reflection mechanism.
  *
@@ -33,15 +33,15 @@ public abstract class TypeVisitor {
      * Default visit method. Used only if no other {@code visit(MyType)} more
      * specific method has been found.
      */
-    public abstract void visitDefault(Type type);
+    public abstract void visitDefault(TraceType type);
 
     /**
      * Retrieves most specific {@code visit} method. Defaults to
-     * {@link #visit(eu.trentorise.opendata.traceprov.types.Type) visitDefault(Type)}
+     * {@link #visit(eu.trentorise.opendata.traceprov.types.TraceType) visitDefault(Type)}
      *
      * @throws TraceProvException on error
      */
-    protected Method getVisitMethod(Type type) {
+    protected Method getVisitMethod(TraceType type) {
         Class cl = type.getClass();  // the bottom-most class
         // Check through superclasses for matching method
         while (!cl.equals(Object.class)) {
@@ -65,7 +65,7 @@ public abstract class TypeVisitor {
         try {
             // debugMsg("Giving up");
             return getClass().getMethod("visitDefault",
-                    new Class[]{(Type.class)});
+                    new Class[]{(TraceType.class)});
         }
         catch (NoSuchMethodException ex) {
             throw new TraceProvException("Internal error, looked for method " + getClass().getCanonicalName() + "'.visitDefault(Type)' but couldn't find it - and this means class is just broken! ", ex); // Can't happen
@@ -76,12 +76,12 @@ public abstract class TypeVisitor {
     /**
      *
      * Executes most specific {@code visit} method, defaulting to
-     * {@link #visit(eu.trentorise.opendata.traceprov.types.Type) visitDefault(Type)}
+     * {@link #visit(eu.trentorise.opendata.traceprov.types.TraceType) visitDefault(Type)}
      * if none is found.
      *
      * @throws TraceProvException on error
      */
-    public void visit(Type type) {
+    public void visit(TraceType type) {
         Method method = getVisitMethod(type);
         try {
             method.invoke(this, new Object[]{type});

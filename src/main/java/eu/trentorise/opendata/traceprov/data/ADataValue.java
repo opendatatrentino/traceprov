@@ -41,7 +41,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = DataValue.class)
 @JsonDeserialize(as = DataValue.class)
-abstract class ADataValue extends DataNode {
+abstract class ADataValue extends TraceNode {
 
     private static final long serialVersionUID = 1L;    
 
@@ -58,7 +58,7 @@ abstract class ADataValue extends DataNode {
     }     
 
     @Override
-    public void accept(DataVisitor visitor, DataNode parent, String field, int pos) {
+    public void accept(DataVisitor visitor, TraceNode parent, String field, int pos) {
 	visitor.visit((DataValue) this, parent, field, pos);
     }
 
@@ -105,7 +105,7 @@ abstract class ADataValue extends DataNode {
 	return DataValue.builder().from(this);
     }
     
-    public static abstract class Builder extends DataNode.Builder {	
+    public static abstract class Builder extends TraceNode.Builder {	
 	
     }
 

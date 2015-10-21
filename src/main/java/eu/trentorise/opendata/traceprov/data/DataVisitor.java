@@ -34,7 +34,7 @@ public interface DataVisitor {
      * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is zero.
      */
-    void visit(DataMap node, DataNode parent, String field, int pos);
+    void visit(DataMap node, TraceNode parent, String field, int pos);
 
     /**
      * Visits a {@link DataObject}
@@ -46,7 +46,7 @@ public interface DataVisitor {
      * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is zero.
      */
-    void visit(DataObject node, DataNode parent, String field, int pos);
+    void visit(DataObject node, TraceNode parent, String field, int pos);
     
     
     /**
@@ -59,7 +59,7 @@ public interface DataVisitor {
      * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is zero.
      */    
-    void visit(DataArray node, DataNode parent, String field, int pos);
+    void visit(DataArray node, TraceNode parent, String field, int pos);
 
     /**
      * Visits a {@link DataValue}
@@ -71,5 +71,5 @@ public interface DataVisitor {
      * @param pos If the parent node is a {@link DataArray}, pos is the position
      * in such list. Otherwise it is zero.
      */    
-    void visit(DataValue node, DataNode parent, String field, int pos);
+    void visit(DataValue node, TraceNode parent, String field, int pos);
 }

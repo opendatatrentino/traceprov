@@ -14,7 +14,7 @@ import eu.trentorise.opendata.commons.SimpleStyle;
 @SimpleStyle
 @JsonSerialize(as = LocalizedStringType.class)
 @JsonDeserialize(as = LocalizedStringType.class)
-public class ALocalizedStringType extends Type {
+public class ALocalizedStringType extends TraceType {
 
     private static final long serialVersionUID = 1L;
     

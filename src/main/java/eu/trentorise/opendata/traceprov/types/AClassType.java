@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
-import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.TraceNode;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @BuilderStylePublic
 // json ser???
-abstract class AClassType extends Type {
+abstract class AClassType extends TraceType {
 
     private static final long serialVersionUID = 1L;
 
@@ -88,7 +88,7 @@ abstract class AClassType extends Type {
     @Value.Default
     @Override
     public Class getJavaClass() {
-        return DataNode.class; // todo this is important I guess..
+        return TraceNode.class; // todo this is important I guess..
     }
 
     @Override

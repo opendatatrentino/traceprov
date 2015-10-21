@@ -25,7 +25,7 @@ import eu.trentorise.opendata.traceprov.data.DataMap;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.DataValue;
 import eu.trentorise.opendata.traceprov.data.TraceFile;
-import eu.trentorise.opendata.traceprov.data.TraceType;
+import eu.trentorise.opendata.traceprov.data.ParsedType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.types.AnyType;
@@ -89,7 +89,7 @@ public class CodeGenTest {
         TraceFile.builder().setMappings(ImmutableList.of(PropertyMapping.of(Ref.of(),
                                                         ImmutableList.of("a"))));
         
-        TraceType ps = TraceType.builder().setType(AnyType.of()).build();
+        ParsedType ps = ParsedType.builder().setType(AnyType.of()).build();
         assertEquals(ImmutableList.of(), ps.getErrors());
         
         DataMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 

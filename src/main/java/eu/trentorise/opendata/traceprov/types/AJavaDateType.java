@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import static eu.trentorise.opendata.traceprov.types.Types.TRACEPROV_TYPES;
+import static eu.trentorise.opendata.traceprov.types.TraceTypes.TRACEPROV_TYPES;
 import java.util.Date;
 import org.immutables.value.Value;
 
@@ -29,7 +29,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = JavaDateType.class)
 @JsonDeserialize(as = JavaDateType.class)
-abstract class AJavaDateType extends Type {   
+abstract class AJavaDateType extends TraceType {   
     
     private static final long serialVersionUID = 1L;
     /*

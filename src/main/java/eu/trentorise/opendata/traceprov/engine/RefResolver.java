@@ -16,12 +16,12 @@
 package eu.trentorise.opendata.traceprov.engine;
 
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.TraceNode;
 
 /**
  * todo documnetation!!!
  * @author David Leoni
  */
 public interface RefResolver {
-    DataNode resolve(Ref ref);
+    TraceNode resolve(Ref ref);
 }

@@ -46,7 +46,7 @@ public class TypeRegistry implements Serializable {
 
     private static Logger LOG = Logger.getLogger(TypeRegistry.class.getSimpleName());
 
-    private Map<String, Type> types;
+    private Map<String, TraceType> types;
 
     private ObjectMapper objectMapper;
 
@@ -118,9 +118,9 @@ public class TypeRegistry implements Serializable {
      *         mapping for key.
      */
     @Nullable
-    public Type put(Type type) {
+    public TraceType put(TraceType type) {
 	checkType(type);
-	Type ret = this.types.get(type.getId());
+	TraceType ret = this.types.get(type.getId());
 	this.types.put(type.getId(), type);
 	String canTypeId = this.canonicalTypes.get(type.getJavaClass());
 	if (canTypeId == null) {
@@ -146,7 +146,7 @@ public class TypeRegistry implements Serializable {
      * @throws IllegalStateException
      *             if the provided type is not registered.
      */
-    public void checkRegistered(Type traceType) {
+    public void checkRegistered(TraceType traceType) {
 	checkNotNull(traceType);
 	checkRegistered(traceType.getId());
     }
@@ -156,7 +156,7 @@ public class TypeRegistry implements Serializable {
      * 
      * @throws TraceProvNotFoundException
      */
-    public Type getCanonicalType(Class clazz) {
+    public TraceType getCanonicalType(Class clazz) {
 	checkNotNull(clazz);
 	String typeId = this.canonicalTypes.get(clazz.getCanonicalName());
 	if (typeId == null) {
@@ -174,7 +174,7 @@ public class TypeRegistry implements Serializable {
      * @throws IllegalStateException
      *             if the provided type is not registered.
      */
-    public void setCanonicalType(Class clazz, Type traceType) {
+    public void setCanonicalType(Class clazz, TraceType traceType) {
 	checkNotNull(clazz);
 	checkRegistered(traceType);
 	String clazzName = clazz.getCanonicalName();
@@ -192,9 +192,9 @@ public class TypeRegistry implements Serializable {
      * @throws eu.trentorise.opendata.traceprov.exceptions.
      *             TraceProvNotFoundException
      */
-    public Type get(String typeId) {		
+    public TraceType get(String typeId) {		
 	checkNotEmpty(typeId, "Invalid type id!");
-	Type type = types.get(typeId);
+	TraceType type = types.get(typeId);
 	if (type == null) {
 	    throw new TraceProvNotFoundException("Couldn't find typeId " + typeId);
 	}
@@ -249,11 +249,11 @@ public class TypeRegistry implements Serializable {
 	reg.put(StringType.of());
 	reg.put(TupleType.of());
 	reg.put(UndefinedType.of());
-	reg.put(Types.PUBLISHER_TYPE);
+	reg.put(TraceTypes.PUBLISHER_TYPE);
 	return reg;
     }
 
-    public ImmutableMap<String, Type> getTypes() {
+    public ImmutableMap<String, TraceType> getTypes() {
 	return ImmutableMap.copyOf(this.types);
     }
 
@@ -265,7 +265,7 @@ public class TypeRegistry implements Serializable {
      * @throws TraceProvNotFoundException
      *             if {@code obj} cannot be associated to any registered Type
      */
-    public Type getCanonicalTypeFromInstance(@Nullable Object obj) {
+    public TraceType getCanonicalTypeFromInstance(@Nullable Object obj) {
 
 	if (obj == null) {
 	    return NullType.of();
@@ -278,10 +278,10 @@ public class TypeRegistry implements Serializable {
      * Returns possible types of which the given {@obj} can be an instance.
      * First type is the canonical one.
      */
-    public ImmutableList<Type> getTypesFromInstance(@Nullable Object obj) {
-	ImmutableList.Builder<Type> retb = ImmutableList.builder();
+    public ImmutableList<TraceType> getTypesFromInstance(@Nullable Object obj) {
+	ImmutableList.Builder<TraceType> retb = ImmutableList.builder();
 
-	for (Type t : this.types.values()) {
+	for (TraceType t : this.types.values()) {
 	    if (t.isInstance(obj)) {
 		retb.add(t);
 	    }
@@ -296,7 +296,7 @@ public class TypeRegistry implements Serializable {
      */
     public boolean isInstance(@Nullable Object obj, String typeId) {
 	checkNotEmpty(typeId, "Invalid TraceType id!");
-	for (Type t : types.values()) {
+	for (TraceType t : types.values()) {
 	    if (t.isInstance(obj)) {
 		return true;
 	    }

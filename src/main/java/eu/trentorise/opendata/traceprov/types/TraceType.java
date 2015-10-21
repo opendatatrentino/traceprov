@@ -32,11 +32,11 @@ import java.util.logging.Logger;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE, property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class Type<T> implements Serializable {
+public abstract class TraceType<T> implements Serializable {
 
-    private static Logger LOG = Logger.getLogger(Type.class.getSimpleName());
+    private static Logger LOG = Logger.getLogger(TraceType.class.getSimpleName());
     
-    protected Type() {
+    protected TraceType() {
 
     }
 

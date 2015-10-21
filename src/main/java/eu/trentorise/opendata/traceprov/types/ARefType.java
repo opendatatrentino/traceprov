@@ -27,7 +27,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = RefType.class)
 @JsonDeserialize(as = RefType.class)
-abstract class ARefType extends Type {
+abstract class ARefType extends TraceType {
     
     private static final long serialVersionUID = 1L;
     

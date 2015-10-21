@@ -21,11 +21,11 @@ import eu.trentorise.opendata.traceprov.exceptions.LoadException;
 import static eu.trentorise.opendata.traceprov.TraceProvs.TRACEPROV_IRI;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.TraceFile;
-import eu.trentorise.opendata.traceprov.data.TraceType;
+import eu.trentorise.opendata.traceprov.data.ParsedType;
 import eu.trentorise.opendata.traceprov.types.ClassType;
 import eu.trentorise.opendata.traceprov.types.Def;
 import eu.trentorise.opendata.traceprov.types.DefMetadata;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.validation.IValidator;
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,7 +95,7 @@ public class CsvValidator implements IValidator {
     private static final ImmutableList<String> MIMETYPES = ImmutableList.of("text/csv");
 
     @Override
-    public TraceFile validate(InputStream stream, String mimeType, Type type, DcatMetadata dcatMetadata) {
+    public TraceFile validate(InputStream stream, String mimeType, TraceType type, DcatMetadata dcatMetadata) {
 
 	LOG.warning("CURRENT CSV VALIDATOR IS *EXPERIMENTAL*. DON'T TRUST IT!");
 
@@ -137,7 +137,7 @@ public class CsvValidator implements IValidator {
     }
 
     @Override
-    public TraceType validateType(InputStream stream, String mimeType) {
+    public ParsedType validateType(InputStream stream, String mimeType) {
 	try {
 	    Reader in = new InputStreamReader(stream);
 

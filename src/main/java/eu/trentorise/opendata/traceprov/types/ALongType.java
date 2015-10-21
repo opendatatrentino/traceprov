@@ -18,14 +18,14 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import static eu.trentorise.opendata.traceprov.types.Types.XSD;
+import static eu.trentorise.opendata.traceprov.types.TraceTypes.XSD;
 import org.immutables.value.Value;
 
 @Value.Immutable
 @SimpleStyle
 @JsonSerialize(as = LongType.class)
 @JsonDeserialize(as = LongType.class)
-abstract class ALongType extends Type {
+abstract class ALongType extends TraceType {
 
     private static final long serialVersionUID = 1L;
     /*

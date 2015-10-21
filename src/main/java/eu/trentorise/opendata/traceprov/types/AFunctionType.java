@@ -26,19 +26,19 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = FunctionType.class)
 @JsonDeserialize(as = FunctionType.class)
-abstract class AFunctionType extends Type {
+abstract class AFunctionType extends TraceType {
     
     private static final long serialVersionUID = 1L;
     
     /**
      * Todo what about empty list??
      */
-    public List<? extends Type> getSourceTypes(){
+    public List<? extends TraceType> getSourceTypes(){
         return ImmutableList.of(AnyType.of());
     }
     
     @Value.Default
-    public Type getTargetType(){
+    public TraceType getTargetType(){
         return AnyType.of();
     }
     /*

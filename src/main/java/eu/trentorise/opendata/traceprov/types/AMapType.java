@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import static eu.trentorise.opendata.traceprov.types.Types.XSD;
+import static eu.trentorise.opendata.traceprov.types.TraceTypes.XSD;
 import java.util.Map;
 import org.immutables.value.Value;
 
@@ -30,7 +30,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = MapType.class)
 @JsonDeserialize(as = MapType.class)
-abstract class AMapType extends Type {
+abstract class AMapType extends TraceType {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ abstract class AMapType extends Type {
      * is also supported.
      */
     @Value.Default
-    public Type getKeyType() {
+    public TraceType getKeyType() {
 	return StringType.of();
     }
 
@@ -47,7 +47,7 @@ abstract class AMapType extends Type {
      * By default assumes {@link AnyType#of()}.
      */
     @Value.Default
-    public Type getValueType() {
+    public TraceType getValueType() {
 	return AnyType.of();
     }
 

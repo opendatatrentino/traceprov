@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ClassType;
 import eu.trentorise.opendata.traceprov.types.Def;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +40,10 @@ public class TraceFile implements Serializable {
     private static final TraceFile INSTANCE = new TraceFile();
 
     private DcatMetadata dcatMetadata;
-    private Type type;
+    private TraceType type;
     private List<Def<ClassType>> classDefs;
     private ImmutableList<ConstraintViolation> typeErrors;
-    private DataNode data;
+    private TraceNode data;
     private List<ConstraintViolation> dataErrors;
     private ImmutableList<PropertyMapping> mappings;
 
@@ -59,9 +59,9 @@ public class TraceFile implements Serializable {
 
     TraceFile(
             DcatMetadata dcatMetadata,
-            Type type,
+            TraceType type,
             Iterable<ConstraintViolation> schemaErrors,
-            DataNode data,
+            TraceNode data,
             List<ConstraintViolation> dataErrors,
             Iterable<PropertyMapping> mappings) {
         checkNotNull(dcatMetadata);
@@ -93,7 +93,7 @@ public class TraceFile implements Serializable {
      * {@link eu.trentorise.opendata.traceprov.types.AnyType#of() AnyType.of()} is returned.
      */
     //  todo add validator tag for non-any type
-    public Type getType() {
+    public TraceType getType() {
         return type;
     }
 
@@ -123,7 +123,7 @@ public class TraceFile implements Serializable {
      * Returns the data content of the file as a hierarchical tree. If no data
      * was found, {@link DataMap#of()} is returned.
      */
-    public DataNode getData() {
+    public TraceNode getData() {
         return data;
     }
 
@@ -164,7 +164,7 @@ public class TraceFile implements Serializable {
             this.provFile.dcatMetadata = dcatMetadata;
         }
 
-        public void setType(Type type) {
+        public void setType(TraceType type) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }
@@ -187,7 +187,7 @@ public class TraceFile implements Serializable {
             this.provFile.typeErrors = ImmutableList.copyOf(typeErrors);
         }
 
-        public void setData(DataNode data) {
+        public void setData(TraceNode data) {
             if (doneBuilding) {
                 throw new IllegalStateException("The object has already been built!");
             }

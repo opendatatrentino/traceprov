@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.TraceNode;
 
 /**
  * This is just ot generate {@link #CollectionType} implementation
@@ -24,7 +24,7 @@ abstract class AbstractCollectionType extends ACollectionType {
      * By default assumes {@link AnyType#of()}
      */
     @Value.Default
-    public Type getSubtype() {
+    public TraceType getSubtype() {
 	return AnyType.of();
     }
     

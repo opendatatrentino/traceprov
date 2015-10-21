@@ -4,15 +4,15 @@ import java.util.Collection;
 
 import org.immutables.value.Value;
 
-import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.TraceNode;
 
-public abstract class ACollectionType extends Type {
+public abstract class ACollectionType extends TraceType {
 
     /**
      * By default assumes {@link AnyType#of()}
      */
     @Value.Default
-    public Type getSubtype() {
+    public TraceType getSubtype() {
 	return AnyType.of();
     }
     

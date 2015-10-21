@@ -40,8 +40,8 @@ import javax.annotation.Nullable;
  *
  *
  */
-public final class Types {
-    private static final Logger LOG = Logger.getLogger(Types.class.getName());
+public final class TraceTypes {
+    private static final Logger LOG = Logger.getLogger(TraceTypes.class.getName());
 
     
     
@@ -57,7 +57,7 @@ public final class Types {
     private static final Map JAVA_DATATYPES = new HashMap();
 
     
-    public static final Type PUBLISHER_TYPE = ClassType.builder().setId(TraceProvs.TRACEPROV_NAMESPACE + ".dcat.Publisher").build();
+    public static final TraceType PUBLISHER_TYPE = ClassType.builder().setId(TraceProvs.TRACEPROV_NAMESPACE + ".dcat.Publisher").build();
     static {
         /*
          DATATYPE_PRETTY_NAMES_EN.put(XSD_STRING, "String");
@@ -132,7 +132,7 @@ public final class Types {
         return Collections.unmodifiableSet(DATATYPE_PRETTY_NAMES_MAP.keySet());
     }
 
-    private Types() {
+    private TraceTypes() {
 
     }
 

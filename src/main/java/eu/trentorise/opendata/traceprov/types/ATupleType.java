@@ -25,11 +25,11 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = TupleType.class)
 @JsonDeserialize(as = TupleType.class)
-abstract class ATupleType extends Type {
+abstract class ATupleType extends TraceType {
     
     private static final long serialVersionUID = 1L;
     
-    public abstract List<Type> getTypes();
+    public abstract List<TraceType> getTypes();
 /*
     @Override
     public String getDatatypeStandardId() {
@@ -43,7 +43,7 @@ abstract class ATupleType extends Type {
     
     @Override
     public boolean isImmutable() {
-	for (Type t : getTypes()){
+	for (TraceType t : getTypes()){
 	    if (!t.isImmutable()){
 		return false;
 	    }

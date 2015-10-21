@@ -22,7 +22,7 @@ import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
-import eu.trentorise.opendata.traceprov.data.DataNode;
+import eu.trentorise.opendata.traceprov.data.TraceNode;
 import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.DataValue;
@@ -32,7 +32,7 @@ import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.types.IntType;
 import eu.trentorise.opendata.traceprov.types.ListType;
 import eu.trentorise.opendata.traceprov.types.StringType;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
 import java.util.ArrayList;
@@ -131,13 +131,13 @@ public class DataTest {
         Def prop1 = Def.builder().setId(prop1Id).setType(StringType.of()).build();
         Def prop2 = Def.builder().setId(prop2Id).setType(IntType.of()).build();
 
-        Type traceType = ListType.of(ClassType.builder()
+        TraceType traceType = ListType.of(ClassType.builder()
                 .putPropertyDefs(prop1ShortId, prop1) // this really makes no sense
                 .putPropertyDefs(prop2ShortId, prop2)
                 .build()
         );
 
-        DataNode data = DataArray.of(
+        TraceNode data = DataArray.of(
         	Ref.of(),
         	NodeMetadata.of(), 
                 DataMap.of(
@@ -154,7 +154,7 @@ public class DataTest {
 
         if (traceType instanceof ListType) {
             ListType listType = (ListType) traceType;
-            Type subtype = listType.getSubtype();
+            TraceType subtype = listType.getSubtype();
             if (subtype instanceof ClassType) {
                 ClassType classType = (ClassType) subtype;
 
@@ -165,7 +165,7 @@ public class DataTest {
                 rows.add(elNames);
 
                 DataArray dataArray = (DataArray) data;
-                for (DataNode dn : dataArray) {
+                for (TraceNode dn : dataArray) {
                     List<String> row = new ArrayList();
                     rows.add(row);
                     DataMap dataMap = (DataMap) dn;
@@ -195,7 +195,7 @@ public class DataTest {
     public void testFromThisBuilder(){
 	DataObject dn = DataObject.builder().setId(1).build();
 	
-	DataNode dn2 = dn.fromThis().setRawValue(2).build();
+	TraceNode dn2 = dn.fromThis().setRawValue(2).build();
 	assertEquals(1, dn2.getId());
 	assertEquals(2, dn2.getRawValue());
     }

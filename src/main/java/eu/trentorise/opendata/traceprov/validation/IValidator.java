@@ -18,8 +18,8 @@ package eu.trentorise.opendata.traceprov.validation;
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.data.TraceFile;
-import eu.trentorise.opendata.traceprov.data.TraceType;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.data.ParsedType;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import java.io.InputStream;
 
 /**
@@ -30,34 +30,43 @@ import java.io.InputStream;
 public interface IValidator {
 
     /**
-     * Validates the input stream and returns the resulting a common tree format
-     * (which may still have errors).
+     * Validates the input stream and returns the result in TraceProv common
+     * tree format (which may still have errors).
      *
-     * @param stream the stream to validate
-     * @param mimetype the mimetype of the stream, i.e. text/csv
-     * @param type the expected schema of the file. If unknown, pass
-     * {@link AnyType#of()}.
+     * @param stream
+     *            the stream to validate
+     * @param mimetype
+     *            the mimetype of the stream, i.e. text/csv
+     * @param type
+     *            the expected schema of the file. If unknown, pass
+     *            {@link AnyType#of()}.
      *
-     * @throws eu.trentorise.opendata.traceprov.exceptions.LoadException if some error
-     * occurs while physically loading stream. In case format errors are found
-     * in the original file, they should be reported within the output object
-     * instead of throwing an exception.
+     * @throws eu.trentorise.opendata.traceprov.exceptions.LoadException
+     *             if some error occurs while physically loading stream. In case
+     *             format errors are found in the original file, they should be
+     *             reported within the output object instead of throwing an
+     *             exception.
      */
-    TraceFile validate(InputStream stream, String mimeType, Type type, DcatMetadata dcatMetadata);
+    TraceFile validate(InputStream stream, String mimeType, 
+	    TraceType type, 
+	    DcatMetadata dcatMetadata);
 
     /**
      * Validates the schema present in the input stream and returns the parsed
      * result (which may still have errors/warnings).
      *
-     * @param stream the stream to validate
-     * @param mimetype the mimetype of the stream, i.e. application/json+ld
+     * @param stream
+     *            the stream to validate
+     * @param mimetype
+     *            the mimetype of the stream, i.e. application/json+ld
      * 
-     * @throws eu.trentorise.opendata.traceprov.exceptions.LoadException if some error
-     * occurs while physically loading stream. In case format errors are found
-     * in the original file, they should be reported within the output object
-     * instead of throwing an exception.
+     * @throws eu.trentorise.opendata.traceprov.exceptions.LoadException
+     *             if some error occurs while physically loading stream. In case
+     *             format errors are found in the original file, they should be
+     *             reported within the output object instead of throwing an
+     *             exception.
      */
-    TraceType validateType(InputStream stream, String mimeType);
+    ParsedType validateType(InputStream stream, String mimeType);
 
     /**
      * Returns a list of the mimetypes this validator can parse.

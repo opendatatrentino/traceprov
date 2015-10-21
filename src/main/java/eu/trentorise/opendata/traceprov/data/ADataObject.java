@@ -25,7 +25,7 @@ import com.google.common.collect.Maps;
 
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.DataNode.Builder;
+import eu.trentorise.opendata.traceprov.data.TraceNode.Builder;
 import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
@@ -42,7 +42,7 @@ import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 @BuilderStylePublic
 @JsonSerialize(as = DataObject.class)
 @JsonDeserialize(as = DataObject.class)
-class ADataObject extends DataNode {
+class ADataObject extends TraceNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -127,7 +127,7 @@ class ADataObject extends DataNode {
 	return ret;
     }
 
-    public List<DataNode> values() {
+    public List<TraceNode> values() {
 
 	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
 	
@@ -142,7 +142,7 @@ class ADataObject extends DataNode {
 		    "Error while accessing properties of Java object of class " + getRawValue().getClass(), ex);
 	}
 
-	List<DataNode> ret = new ArrayList();
+	List<TraceNode> ret = new ArrayList();
 	for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
 
 	    @Nullable
@@ -178,7 +178,7 @@ class ADataObject extends DataNode {
      *             TraceProvNotFoundException
      * @see #hasPropertyDef(java.lang.String)
      */
-    public DataNode get(String propertyName) {
+    public TraceNode get(String propertyName) {
 	checkNotEmpty(propertyName, "Invalid property name!");
 	PropertyDescriptor[] propertyDescriptors;
 
@@ -219,7 +219,7 @@ class ADataObject extends DataNode {
 	throw new TraceProvNotFoundException("Couldn't find property " + propertyName);
     }
     
-    public List<Map.Entry<String, ? extends DataNode>> entries(){
+    public List<Map.Entry<String, ? extends TraceNode>> entries(){
 
 	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
 	
@@ -234,7 +234,7 @@ class ADataObject extends DataNode {
 		    "Error while accessing properties of Java object of class " + getRawValue().getClass(), ex);
 	}
 
-	List<Map.Entry<String, ? extends DataNode>> ret = new ArrayList();
+	List<Map.Entry<String, ? extends TraceNode>> ret = new ArrayList();
 	
 	for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
 
@@ -247,7 +247,7 @@ class ADataObject extends DataNode {
 		try {
 		    res = readMethod.invoke(getRawValue());
 		    
-		    Entry<String, DataNode> entry = Maps.immutableEntry(propertyName, 
+		    Entry<String, TraceNode> entry = Maps.immutableEntry(propertyName, 
 			    DataNodes.makeSubnode(this, propertyName, res));
 		    ret.add(entry);
 
@@ -268,11 +268,11 @@ class ADataObject extends DataNode {
     @Override
     public void accept(
 	    DataVisitor visitor, 
-	    DataNode parent, 
+	    TraceNode parent, 
 	    String field, 
 	    int pos) {
 	values();
-	for (Map.Entry<String, ? extends DataNode> entry : entries()) {
+	for (Map.Entry<String, ? extends TraceNode> entry : entries()) {
 	    entry.getValue().accept(visitor, this, entry.getKey(), 0);
 	}
 	visitor.visit((DataObject) this, parent, field, pos);
@@ -300,7 +300,7 @@ class ADataObject extends DataNode {
 	return DataObject.builder().from(this);
     }
     
-    public static abstract class  Builder extends DataNode.Builder {	
+    public static abstract class  Builder extends TraceNode.Builder {	
 	
     }
 

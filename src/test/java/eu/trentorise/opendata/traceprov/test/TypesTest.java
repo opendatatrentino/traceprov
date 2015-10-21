@@ -29,10 +29,10 @@ import eu.trentorise.opendata.traceprov.types.DefMetadata;
 import eu.trentorise.opendata.traceprov.types.FunctionType;
 import eu.trentorise.opendata.traceprov.types.IntType;
 import eu.trentorise.opendata.traceprov.types.StringType;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 import eu.trentorise.opendata.traceprov.types.TypeVisitor;
-import eu.trentorise.opendata.traceprov.types.Types;
+import eu.trentorise.opendata.traceprov.types.TraceTypes;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,13 +96,13 @@ public class TypesTest {
     @Test
     public void testCheckTypeId() {
 
-        Types.checkTypeId("a", null);
-        Types.checkTypeId("a<>", null);
-        Types.checkTypeId("a<IntType>", null);
-        Types.checkTypeId("a<IntType<MapType<StringType,IntType>>>", null);
+        TraceTypes.checkTypeId("a", null);
+        TraceTypes.checkTypeId("a<>", null);
+        TraceTypes.checkTypeId("a<IntType>", null);
+        TraceTypes.checkTypeId("a<IntType<MapType<StringType,IntType>>>", null);
 
         try {
-            Types.checkTypeId("", null);
+            TraceTypes.checkTypeId("", null);
             Assert.fail("Shouldn't arrive here!");
         }
         catch (Exception ex) {
@@ -110,7 +110,7 @@ public class TypesTest {
         }
 
         try {
-            Types.checkTypeId("a<", null);
+            TraceTypes.checkTypeId("a<", null);
             Assert.fail("Shouldn't arrive here!");
         }
         catch (Exception ex) {
@@ -126,7 +126,7 @@ public class TypesTest {
     @Ignore
     public void testCheckTypeIdIrregularNesting() {
         try {
-            Types.checkTypeId("a<<>", null);
+            TraceTypes.checkTypeId("a<<>", null);
             Assert.fail("Shouldn't validate irregular nesting: a<<>");
         }
         catch (Exception ex) {
@@ -138,12 +138,12 @@ public class TypesTest {
     @Test
     public void testStripTypeIdGenerics() {
 
-        assertEquals("a", Types.stripGenerics("a"));
-        assertEquals("a", Types.stripGenerics("a<IntType>"));
+        assertEquals("a", TraceTypes.stripGenerics("a"));
+        assertEquals("a", TraceTypes.stripGenerics("a<IntType>"));
 
-        assertEquals("a.b", Types.stripGenerics("a.b<IntType>"));
+        assertEquals("a.b", TraceTypes.stripGenerics("a.b<IntType>"));
 
-        assertEquals("a.b", Types.stripGenerics("a.b<IntType, MapType<StringType, FloatType>>"));
+        assertEquals("a.b", TraceTypes.stripGenerics("a.b<IntType, MapType<StringType, FloatType>>"));
 
     }
 
@@ -153,7 +153,7 @@ public class TypesTest {
 
         TypeRegistry defaultRegistry = TypeRegistry.of();
 
-        String packagenom = Types.class.getPackage().getName();
+        String packagenom = TraceTypes.class.getPackage().getName();
 
         final ClassLoader loader = Thread.currentThread()
                 .getContextClassLoader();
@@ -169,14 +169,14 @@ public class TypesTest {
 
     public static class TestPrinter extends TypeVisitor {
 
-        List<Type> visitedNodes = new ArrayList();
-        List<Class<? extends Type>> calledMethods = new ArrayList();
+        List<TraceType> visitedNodes = new ArrayList();
+        List<Class<? extends TraceType>> calledMethods = new ArrayList();
 
         @Override
-        public void visitDefault(Type type) {
+        public void visitDefault(TraceType type) {
             LOG.log(Level.FINE, "default visit, type id is {0}", type.getId());
             visitedNodes.add(type);
-            calledMethods.add(Type.class);
+            calledMethods.add(TraceType.class);
         }
 
         public void visit(AnyType type) {           
@@ -191,7 +191,7 @@ public class TypesTest {
         TypeVisitor vis = new TestPrinter();
         vis.visit(IntType.of());
         assertEquals(ImmutableList.of(IntType.of()), ((TestPrinter) vis).visitedNodes);
-        assertEquals(ImmutableList.of(Type.class), ((TestPrinter) vis).calledMethods);
+        assertEquals(ImmutableList.of(TraceType.class), ((TestPrinter) vis).calledMethods);
     }
 
     @Test

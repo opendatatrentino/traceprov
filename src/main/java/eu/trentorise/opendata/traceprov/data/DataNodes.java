@@ -14,7 +14,7 @@ import eu.trentorise.opendata.traceprov.TraceProvs;
 import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
 public final class DataNodes {
@@ -67,7 +67,7 @@ public final class DataNodes {
 	    return metadata.withType(AnyType.of());
 	} else {
 	    try {
-		Type canType = typeRegistry.getCanonicalTypeFromInstance(obj);
+		TraceType canType = typeRegistry.getCanonicalTypeFromInstance(obj);
 		return metadata.withType(canType);
 	    } catch (TraceProvNotFoundException ex) {
 		return metadata.withType(AnyType.of());
@@ -80,17 +80,17 @@ public final class DataNodes {
      * converted to DataNode lazily upon request. If {@code obj} is already a
      * DataNode it is returned as it is.
      */
-    public static DataNode makeNode(
+    public static TraceNode makeNode(
 	    Ref ref,
 	    NodeMetadata metadata,
 	    @Nullable Object obj) {
 
 	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
 
-	if (obj instanceof DataNode) {
-	    return (DataNode) obj;
+	if (obj instanceof TraceNode) {
+	    return (TraceNode) obj;
 	} else if (obj == null || obj instanceof String || obj instanceof Number) {
-	    Type canType = typeRegistry.getCanonicalTypeFromInstance(obj);
+	    TraceType canType = typeRegistry.getCanonicalTypeFromInstance(obj);
 	    NodeMetadata newMetadata;
 	    if (metadata.getType().equals(AnyType.of())) {
 		newMetadata = metadata.withType(canType);
@@ -113,7 +113,7 @@ public final class DataNodes {
     /**
      * TODO do we need it?
      */
-    public static DataNode makeDeepNode(
+    public static TraceNode makeDeepNode(
 	    Ref ref,
 	    NodeMetadata metadata,
 	    @Nullable Object obj) {
@@ -129,7 +129,7 @@ public final class DataNodes {
      * subchildren nodes will be converted lazily to DataNode upon request. If
      * {@code obj} is already a DataNode it is returned as it is.
      */
-    public static DataNode makeSubnode(
+    public static TraceNode makeSubnode(
 	    DataArray dataArray,
 	    long index,
 	    @Nullable Object obj) {
@@ -149,8 +149,8 @@ public final class DataNodes {
      * subchildren nodes will be converted to DataNode upon request. If
      * {@code obj} is already a DataNode it is returned as it is.
      */
-    public static DataNode makeSubnode(
-	    DataNode dataMap,
+    public static TraceNode makeSubnode(
+	    TraceNode dataMap,
 	    String propertyName,
 	    @Nullable Object obj) {
 

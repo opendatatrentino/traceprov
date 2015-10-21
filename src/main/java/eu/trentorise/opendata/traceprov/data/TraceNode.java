@@ -37,7 +37,7 @@ import com.google.common.base.Preconditions;
  *
  * @author David Leoni
  */
-public abstract class DataNode implements Serializable {
+public abstract class TraceNode implements Serializable {
 
     /**
      * The numerical id of the datanode inside a {@link TraceDb}. If unknown
@@ -112,7 +112,7 @@ public abstract class DataNode implements Serializable {
      *            an array, use 0.
      */
     // todo write about default type reg
-    public abstract void accept(DataVisitor visitor, DataNode parent, String field, int pos);
+    public abstract void accept(DataVisitor visitor, TraceNode parent, String field, int pos);
 
     /**
      * Converts the node to a simple Map/List tree suitable for JSON
@@ -126,7 +126,7 @@ public abstract class DataNode implements Serializable {
 
     @Value.Check
     protected void check() {
-	if (getRawValue() instanceof DataNode) {
+	if (getRawValue() instanceof TraceNode) {
 	    throw new UnsupportedOperationException(
 		    "Cannot contain data nodes! Raw value class: " + getRawValue().getClass().getName());
 	}
@@ -139,7 +139,7 @@ public abstract class DataNode implements Serializable {
 
     public abstract static class Builder {
 
-	public abstract Builder from(DataNode instance);
+	public abstract Builder from(TraceNode instance);
 
 	public abstract Builder setRawValue(Object rawVal);
 
@@ -149,6 +149,6 @@ public abstract class DataNode implements Serializable {
 
 	public abstract Builder setMetadata(NodeMetadata metadata);
 	
-	public abstract DataNode build();
+	public abstract TraceNode build();
     }
 }

@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.Type;
+import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
 /**
@@ -41,14 +41,14 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
      */
     // TODO make it stack based instead of using recursion 
     @Override
-    public DataNode makeNode(
+    public TraceNode makeNode(
 	    		Ref ref, 
 	    		NodeMetadata metadata, 
 	    		@Nullable Object obj) {
 
 	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
 	if (obj == null || obj instanceof String || obj instanceof Number) {
-	    Type canType = typeRegistry.getCanonicalTypeFromInstance(obj);
+	    TraceType canType = typeRegistry.getCanonicalTypeFromInstance(obj);
 	    NodeMetadata newMetadata;
 	    if (metadata.getType().equals(AnyType.of())){
 		newMetadata = metadata.withType(canType);
@@ -60,7 +60,7 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 	} else if (obj instanceof Map) {
 	    Map map = (Map) obj;
 	    boolean allDataNodes = true;
-	    Map<String, DataNode> newMap = new HashMap();
+	    Map<String, TraceNode> newMap = new HashMap();
 	    
 	    for (Object key : map.keySet()) {
 		String keyString;
@@ -77,7 +77,7 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 
 		Object subObj = map.get(keyString);
 		
-		DataNode subNode = makeNode(
+		TraceNode subNode = makeNode(
 			DataNodes.makeSubRef(ref, keyString),
 			DataNodes.makeMetadata(metadata, subObj),
 			subObj);
@@ -90,7 +90,7 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 	    List ret = new ArrayList();
 	    int index = 0;
 	    for (Object item : col){		
-		DataNode nodeItem = DataNodes.makeNode(DataNodes.makeSubRef(ref, index),
+		TraceNode nodeItem = DataNodes.makeNode(DataNodes.makeSubRef(ref, index),
 			DataNodes.makeMetadata(metadata, item),
 			item);
 		ret.add(nodeItem);

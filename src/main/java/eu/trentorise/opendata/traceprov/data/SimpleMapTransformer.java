@@ -38,7 +38,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
- * Produces a simple HashMap/ArrayList version of an {@link DataNode} tree. Only
+ * Produces a simple HashMap/ArrayList version of an {@link TraceNode} tree. Only
  * data values will be kept (metadata will be stripped). Maps must have String keys.
  * 
  * @author David Leoni
@@ -55,7 +55,7 @@ final class SimpleMapTransformer implements DataVisitor {
     }
 
     @Override
-    public void visit(DataMap dataMap, DataNode parent, String key, int pos) {
+    public void visit(DataMap dataMap, TraceNode parent, String key, int pos) {
 
 	Map map = new HashMap();
 
@@ -68,7 +68,7 @@ final class SimpleMapTransformer implements DataVisitor {
     }
 
     @Override
-    public void visit(DataObject dataObject, DataNode parent, String key, int pos) {
+    public void visit(DataObject dataObject, TraceNode parent, String key, int pos) {
 
 	PropertyDescriptor[] propertyDescriptors;
 
@@ -104,7 +104,7 @@ final class SimpleMapTransformer implements DataVisitor {
     }
 
     @Override
-    public void visit(DataArray nodeList, DataNode parent, String key, int pos) {
+    public void visit(DataArray nodeList, TraceNode parent, String key, int pos) {
 	List ret = new ArrayList();
 
 	for (int i = 0; i < Iterables.size(nodeList); i++) {
@@ -117,7 +117,7 @@ final class SimpleMapTransformer implements DataVisitor {
     }
 
     @Override
-    public void visit(DataValue DataValue, DataNode parent, String key, int pos) {
+    public void visit(DataValue DataValue, TraceNode parent, String key, int pos) {
 	stack.addFirst(Maps.immutableEntry(key, DataValue.getRawValue()));
     }
 
