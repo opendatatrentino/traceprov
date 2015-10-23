@@ -87,22 +87,22 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-			 			  <artifactSet>			               
-			                <includes>
-			                	<include> eu.trentorise.opendata.traceprov* </include>
-			                	<include> org.apache.commons:*</include>
-			                	<include> commons-io:*</include>
-			                </includes>			                
-			              </artifactSet>						
-							<relocations>							
+							<artifactSet>
+								<includes>
+									<include> eu.trentorise.opendata.traceprov* </include>
+									<include> org.apache.commons:*</include>
+									<include> commons-io:*</include>
+								</includes>
+							</artifactSet>
+							<relocations>
 								<relocation>
 									<pattern>org.apache.commons</pattern>
 									<shadedPattern>eu.trentorise.opendata.traceprov.internal.org.apache.commons</shadedPattern>
 								</relocation>
 								<relocation>
 									<pattern>commons-io</pattern>
-									<shadedPattern>eu.trentorise.opendata.traceprov.internal.commons-io</shadedPattern>									
-								</relocation>								
+									<shadedPattern>eu.trentorise.opendata.traceprov.internal.commons-io</shadedPattern>
+								</relocation>
 							</relocations>
 						</configuration>
 					</execution>
@@ -196,6 +196,11 @@
 			<version>2.4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
+
 		<!-- ****************** TEST DEPENDENCIES ********************** -->
 		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
@@ -208,6 +213,14 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
+			
+		</dependency>
+
+		<dependency>
+			<artifactId>hamcrest-core</artifactId>
+			<groupId>org.hamcrest</groupId>
+			<scope>test</scope>
+			<version>1.3</version>
 		</dependency>
 
 		<dependency>
