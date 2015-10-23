@@ -199,4 +199,16 @@ public class DataTest {
 	assertEquals(1, dn2.getId());
 	assertEquals(2, dn2.getRawValue());
     }
+    
+    @Test
+    public void testGenerics(){
+	DataObject.Builder<String> dosb = DataObject.builder();
+	
+	DataObject<String> dos = dosb.setRawValue("a").build();
+	
+	assertEquals("a", dos.getRawValue());
+	
+	String b = dos.withId(4).getRawValue();
+    }
+    
 }
