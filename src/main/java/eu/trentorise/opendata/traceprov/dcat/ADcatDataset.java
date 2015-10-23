@@ -18,6 +18,7 @@ package eu.trentorise.opendata.traceprov.dcat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.commons.PeriodOfTime;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.geojson.Feature;
@@ -235,30 +236,13 @@ abstract class ADcatDataset implements Serializable {
      * The temporal period that the dataset covers, that is, an interval of time
      * that is named or defined by its start and end dates as defined by
      * <a href="http://purl.org/dc/terms/temporal">dct:temporal</a>
+     * 
+     * Defualt value is {@link PeriodOfTime#of()}
      *
-     * {@code 
-     * i.e. dct:temporal
-     * <http://reference.data.gov.uk/id/quarter/2006-Q1> ; }
-     *
-     * For allowed values, see 
-     * <ul>
-     * <li>A string formatted following
-     * <a href="https://en.wikipedia.org/wiki/ISO_8601#Time_intervals">ISO 8601
-     * Date and Time interval</a> string format i.e.
-     * "2007-03-01T13:00:00Z/2008-05-11T15:30:00Z". Note ISO 8601 only allows
-     * <i>closed intervals</i></li>
-     * <li>An open interval where one of the two dates is missing. Interval
-     * shall either begin with '/' or end with '/'. The present date string will
-     * be formatted following <a href="http://www.w3.org/TR/NOTE-datetime">ISO
-     * 8601 Date and Time format</a> NOTE: open intervals are <i> not <i> part
-     * of ISO 8601 standard.</li>
-     * <li>A String in natural language, i.e. Summer of 2014</li>
-     * <li>An empty string if the interval is unknown</li>
-     * </ul>
-     */
+     */ 
     @Value.Default
-    public String getTemporal() {
-	return "";
+    public PeriodOfTime getTemporal() {
+	return PeriodOfTime.of();
     }
 
     /**
