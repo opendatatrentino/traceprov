@@ -24,10 +24,10 @@ import java.io.Serializable;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
 
-
 /**
  * A record in a data catalog, describing a single dataset, as specified by
- * <a href="http://www.w3.org/TR/vocab-dcat/#Class:_Catalog_record">dcat:CatalogRecorda</a>
+ * <a href="http://www.w3.org/TR/vocab-dcat/#Class:_Catalog_record">dcat:
+ * CatalogRecorda</a>
  *
  * This class is optional and not all catalogs will use it. It exists for
  * catalogs where a distinction is made between metadata about a dataset and
@@ -72,7 +72,7 @@ abstract class ADcatCatalogRecord implements Serializable {
      */
     @Value.Default
     public Dict getDescription() {
-        return Dict.of();
+	return Dict.of();
     }
 
     /**
@@ -83,14 +83,15 @@ abstract class ADcatCatalogRecord implements Serializable {
      *
      * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11".
-     * If date is unknown the empty string is used.
+     * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
+     * it with regular dates. If date is unknown the empty string is used.
      *
      * @see ADcatDataset#getIssued()
      */
     @Value.Default
-    public String getIssued(){
-        return "";
+    public String getIssued() {
+	return "";
     };
 
     /**
@@ -101,28 +102,28 @@ abstract class ADcatCatalogRecord implements Serializable {
      * catalog metadata description of the dataset, and not the date of the
      * dataset itself.
      *
-     * Specified by
-     * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
+     * Specified by <a href="http://purl.org/dc/terms/modified">dct:modified</a>
      * If date is unknown the empty string is used.
      * 
      * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11".
-     * If date is unknown the empty string is used.
+     * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
+     * it with regular dates. If date is unknown the empty string is used.
      * 
      * @see ADcatDataset#getModified()
-     */    
+     */
     @Value.Default
-    public String getModified(){
-        return "";
+    public String getModified() {
+	return "";
     };
 
     /**
      * Links the catalog record to the dcat:Dataset resource described in the
      * record. Each catalog record can have at most one primary topic i.e.
      * describes one dataset. Specified by
-     * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic">
-     * foaf:primaryTopic </a>
+     * <a href="http://xmlns.com/foaf/spec/#term_primaryTopic"> foaf:
+     * primaryTopic </a>
      */
     @Nullable
     public abstract DcatDataset getPrimaryTopic();
@@ -133,7 +134,7 @@ abstract class ADcatCatalogRecord implements Serializable {
      */
     @Value.Default
     public Dict getTitle() {
-        return Dict.of();
+	return Dict.of();
     }
 
     /**
@@ -141,7 +142,7 @@ abstract class ADcatCatalogRecord implements Serializable {
      */
     @Value.Default
     public String getUri() {
-        return "";
+	return "";
     }
 
 }

@@ -113,8 +113,9 @@ abstract class ADcatDataset implements Serializable {
      *
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
-     * empty string is used.
+     * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
+     * it with regular dates. If date is unknown the empty string is used.
      */
     @Value.Default
     public String getIssued() {
@@ -167,6 +168,8 @@ abstract class ADcatDataset implements Serializable {
      */
     public abstract List<Locale> getLanguages();
 
+    public static final String UNPARSEABLE = "unparseable:";
+
     /**
      * Most recent date on which the dataset was changed, updated or modified.
      * The value of this property indicates a change to the actual dataset, not
@@ -177,8 +180,9 @@ abstract class ADcatDataset implements Serializable {
      *
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
-     * empty string is used.
+     * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
+     * it with regular dates. If date is unknown the empty string is used.
      *
      * @see #getAccrualPeriodicity()
      */
@@ -229,8 +233,6 @@ abstract class ADcatDataset implements Serializable {
     public GeoJson getSpatial() {
 	return Feature.of();
     }
-    
- 
 
     /**
      * The temporal period that the dataset covers, that is, an interval of time
@@ -239,7 +241,7 @@ abstract class ADcatDataset implements Serializable {
      * 
      * Defualt value is {@link PeriodOfTime#of()}
      *
-     */ 
+     */
     @Value.Default
     public PeriodOfTime getTemporal() {
 	return PeriodOfTime.of();

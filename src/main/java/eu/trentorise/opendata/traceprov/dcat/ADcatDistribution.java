@@ -24,8 +24,8 @@ import java.util.Locale;
 import org.immutables.value.Value;
 
 /**
- * Models a
- * <a href="http://www.w3.org/TR/vocab-dcat/#Class:_Distribution">dcat:Distribution</a>
+ * Models a <a href="http://www.w3.org/TR/vocab-dcat/#Class:_Distribution">dcat:
+ * Distribution</a>
  *
  * @author David Leoni
  */
@@ -50,28 +50,29 @@ abstract class ADcatDistribution implements Serializable {
      * {@link ADcatDataset#getLandingPage()} should be returned by this method,
      * too.
      *
-     * This field is specified by
-     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:accessURL</a>.
-     * For relation with {@link ADcatDataset#getLandingPage()} see
-     * <a href="http://www.w3.org/TR/vocab-dcat/#example-landing-page">
-     * official dcat documentation </a>
+     * This field is specified by <a href=
+     * "http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:
+     * accessURL</a>. For relation with {@link ADcatDataset#getLandingPage()}
+     * see
+     * <a href="http://www.w3.org/TR/vocab-dcat/#example-landing-page"> official
+     * dcat documentation </a>
      *
      */
     @Value.Default
     public String getAccessURL() {
-        return "";
+	return "";
     }
 
     /**
      * The size of a distribution in bytes, as specified by
-     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_size">dcat:byteSize</a>.
-     * The size in bytes can be approximated when the precise size is not known.
-     * When the size of the distribution is not known field must be set to 0
-     * (this default value is not defined by DCAT standard).
+     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_size">
+     * dcat:byteSize</a>. The size in bytes can be approximated when the precise
+     * size is not known. When the size of the distribution is not known field
+     * must be set to 0 (this default value is not defined by DCAT standard).
      */
     @Value.Default
     public int getByteSize() {
-        return 0;
+	return 0;
     }
 
     /**
@@ -80,7 +81,7 @@ abstract class ADcatDistribution implements Serializable {
      */
     @Value.Default
     public String getDatasetUri() {
-        return "";
+	return "";
     }
 
     /**
@@ -89,29 +90,31 @@ abstract class ADcatDistribution implements Serializable {
      */
     @Value.Default
     public Dict getDescription() {
-        return Dict.of();
+	return Dict.of();
     }
 
     /**
      * A file that contains the distribution of the dataset in a given format
-     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_downloadurl">dcat:downloadURL</a>
-     * is a specific form of
-     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:accessURL</a>
-     * (which is returned by {@link #getAccessURL()}. Nevertheless, DCAT does
-     * not define dcat:downloadURL as a subproperty of
-     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:accessURL</a>
-     * not to enforce this entailment as DCAT profiles may wish to impose a
-     * stronger separation where they only use accessURL for non-download
-     * locations.
+     * <a href=
+     * "http://www.w3.org/TR/vocab-dcat/#Property:distribution_downloadurl">dcat
+     * :downloadURL</a> is a specific form of <a href=
+     * "http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:
+     * accessURL</a> (which is returned by {@link #getAccessURL()}.
+     * Nevertheless, DCAT does not define dcat:downloadURL as a subproperty of
+     * <a href=
+     * "http://www.w3.org/TR/vocab-dcat/#Property:distribution_accessurl">dcat:
+     * accessURL</a> not to enforce this entailment as DCAT profiles may wish to
+     * impose a stronger separation where they only use accessURL for
+     * non-download locations.
      *
      * i.e. dcat:downloadURL <http://www.example.org/files/001.csv> ; For
-     * relation with {@link ADcatDataset#getLandingPage()} see
-     * <a href="http://www.w3.org/TR/vocab-dcat/#a-dataset-available-only-behind-some-web-page">
+     * relation with {@link ADcatDataset#getLandingPage()} see <a href=
+     * "http://www.w3.org/TR/vocab-dcat/#a-dataset-available-only-behind-some-web-page">
      * official dcat documentation </a>
      */
     @Value.Default
     public String getDownloadURL() {
-        return "";
+	return "";
     }
 
     /**
@@ -122,7 +125,7 @@ abstract class ADcatDistribution implements Serializable {
      */
     @Value.Default
     public String getFormat() {
-        return "";
+	return "";
     }
 
     /**
@@ -131,14 +134,15 @@ abstract class ADcatDistribution implements Serializable {
      *
      * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
-     * empty string is used.
+     * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
+     * it with regular dates. If date is unknown the empty string is used.
      *
      * @see #getModified()
      */
     @Value.Default
     public String getIssued() {
-        return "";
+	return "";
     }
 
     ;
@@ -147,17 +151,17 @@ abstract class ADcatDistribution implements Serializable {
      * The language of the distribution. Note that this does not explicitly
      * appear in the Distribution description in W3C Recommendation of 16
      * January 2014., but it's existence is indeed cited in the Dataset
-     * description (see {@link ADcatDataset#getLanguages()}). So we made
-     * up the property and the description below to fill the gap.
+     * description (see {@link ADcatDataset#getLanguages()}). So we made up the
+     * property and the description below to fill the gap.
      *
      * This overrides the value of the dataset and catalog language in case of
      * conflict. The returned language should be also in the list of languages
-     * returned by the containing dataset
-     * {@link ADcatDataset#getLanguages()} method.
+     * returned by the containing dataset {@link ADcatDataset#getLanguages()}
+     * method.
      *
      * Java Locale should be created out of language codes as defined by the
-     * Library of Congress
-     * (<a href="http://id.loc.gov/vocabulary/iso639-1.html">ISO 639-1</a>,
+     * Library of Congress (
+     * <a href="http://id.loc.gov/vocabulary/iso639-1.html">ISO 639-1</a>,
      * <a href="http://id.loc.gov/vocabulary/iso639-2.html">ISO 639-2</a>). If a
      * ISO 639-1 (two-letter) code is defined for language, then its
      * corresponding IRI should be used; if no ISO 639-1 code is defined, then
@@ -167,7 +171,7 @@ abstract class ADcatDistribution implements Serializable {
      */
     @Value.Default
     public Locale getLanguage() {
-        return Locale.ROOT;
+	return Locale.ROOT;
     }
 
     ;
@@ -175,8 +179,8 @@ abstract class ADcatDistribution implements Serializable {
     /**
      * A link to the license document under which the distribution is made
      * available. The license should be a legal document giving official
-     * permission to do something with the resource, as specified in
-     * <a href="http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#license">
+     * permission to do something with the resource, as specified in <a href=
+     * "http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#license">
      * dct:license</a>
      *
      * @see #getRights()
@@ -184,7 +188,7 @@ abstract class ADcatDistribution implements Serializable {
      */
     @Value.Default
     public String getLicense() {
-        return "";
+	return "";
     }
 
     /**
@@ -193,13 +197,13 @@ abstract class ADcatDistribution implements Serializable {
      * IANA </a>, for example, "text/csv". This property SHOULD be used when the
      * media type of the distribution is defined in IANA, otherwise
      * <a href="http://purl.org/dc/terms/format">dct:format</a> MAY be used with
-     * different values. Property is specified by
-     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:distribution_media_type">
-     * dcat:mediaType</a>.
+     * different values. Property is specified by <a href=
+     * "http://www.w3.org/TR/vocab-dcat/#Property:distribution_media_type"> dcat
+     * :mediaType</a>.
      */
     @Value.Default
     public String getMediaType() {
-        return "";
+	return "";
     }
 
     /**
@@ -208,21 +212,23 @@ abstract class ADcatDistribution implements Serializable {
      *
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
-     * empty string is used.
+     * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
+     * it with regular dates. If date is unknown the empty string is used.
      *
      * @see ADcatDataset#getModified()
      */
     @Value.Default
     public String getModified() {
-        return "";
+	return "";
     }
-    
+
     /**
      * Information about rights held in and over the distribution, as specified
      * by <a href="http://purl.org/dc/terms/rights"> dct:rights </a>
      *
-     * <a href="http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#license">
+     * <a href=
+     * "http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#license">
      * dct:license</a> as returned by {@link #getLicense()} (which is also a
      * sub-property of dct:rights), can be used to link a distribution to a
      * license document. However, dct:rights returned by this method allow
@@ -235,7 +241,7 @@ abstract class ADcatDistribution implements Serializable {
      */
     @Value.Default
     public String getRights() {
-        return "";
+	return "";
     }
 
     /**
@@ -246,7 +252,7 @@ abstract class ADcatDistribution implements Serializable {
      */
     @Value.Default
     public Dict getTitle() {
-        return Dict.of();
+	return Dict.of();
     }
 
     /**
@@ -259,7 +265,7 @@ abstract class ADcatDistribution implements Serializable {
     // todo should we put an example?
     @Value.Default
     public String getUri() {
-        return "";
+	return "";
     }
 
 }

@@ -53,7 +53,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public Dict getDescription() {
-        return Dict.of();
+	return Dict.of();
     }
 
     ;
@@ -66,17 +66,18 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getHomepage() {
-        return "";
+	return "";
     }
 
     /**
      * Date of formal issuance (e.g., publication) of the catalog, as specified
      * by <a href="http://purl.org/dc/terms/issued">dct:issued</a>
      *
- Note DCAT standard requires dates in string format to be
+     * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11". If date is unknown the
-     * empty string is used.
+     * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
+     * it with regular dates. If date is unknown the empty string is used.
      *
      * @see ADcatDataset#getIssued()
      * @see ADcatDistribution#getIssued()
@@ -85,10 +86,9 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getIssued() {
-        return "";
+	return "";
     }
 
-    ;
 
     /**
      * The languages of the catalog. This refers to the language used in the
@@ -97,8 +97,8 @@ abstract class ADcatCatalog implements Serializable {
      * the dataset level.
      *
      * Java Locale should be created out of language codes defined by the
-     * Library of Congress
-     * (<a href="http://id.loc.gov/vocabulary/iso639-1.html">ISO 639-1</a>,
+     * Library of Congress (
+     * <a href="http://id.loc.gov/vocabulary/iso639-1.html">ISO 639-1</a>,
      * <a href="http://id.loc.gov/vocabulary/iso639-2.html">ISO 639-2</a>). If a
      * ISO 639-1 (two-letter) code is defined for language, then its
      * corresponding IRI should be used; if no ISO 639-1 code is defined, then
@@ -116,20 +116,21 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getLicense() {
-        return "";
+	return "";
     }
 
     /**
      * Most recent date on which the catalog was changed, updated or modified.
-     * Must be in a
-     * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
-     * compliant</a> string format i.e. "2011-12-11" . Specified by
-     * <a href="http://purl.org/dc/terms/modified">dct:modified</a>
-     * If date is unknown the empty string is used.
+     * Must be in a <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date
+     * and Time compliant</a> string format i.e. "2011-12-11" . Specified by
+     * <a href="http://purl.org/dc/terms/modified">dct:modified</a> In TraceProv
+     * if date format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid
+     * confusing it with regular dates. If date is unknown the empty string is
+     * used.
      */
     @Value.Default
     public String getModified() {
-        return "";
+	return "";
     }
 
     /**
@@ -143,7 +144,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public AFoafAgent getPublisher() {
-        return FoafAgent.of();
+	return FoafAgent.of();
     }
 
     /**
@@ -158,7 +159,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getRights() {
-        return "";
+	return "";
     }
 
     /**
@@ -167,15 +168,15 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getSpatial() {
-        return "";
+	return "";
     }
 
     /**
      * The taxonomy of themes used to classify catalog's datasets, as specified
      * by
-     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:catalog_themes">
-     * dcat:themeTaxonomy </a>. Notice that 'category' is also used as synonym
-     * of 'themes' in dcat specs.
+     * <a href="http://www.w3.org/TR/vocab-dcat/#Property:catalog_themes"> dcat:
+     * themeTaxonomy </a>. Notice that 'category' is also used as synonym of
+     * 'themes' in dcat specs.
      *
      * When field is not available {@link SkosConceptScheme#of()} is returned.
      *
@@ -183,7 +184,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public ASkosConceptScheme getThemes() {
-        return SkosConceptScheme.of();
+	return SkosConceptScheme.of();
     }
 
     /**
@@ -193,8 +194,8 @@ abstract class ADcatCatalog implements Serializable {
     // todo put example
     @Value.Default
     public Dict getTitle() {
-        return Dict.of();
-    }    
+	return Dict.of();
+    }
 
     /**
      * Property not in DCAT spec. This should uniquely identify the catalog,
@@ -202,7 +203,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getUri() {
-        return "";
+	return "";
     }
 
 }
