@@ -18,11 +18,17 @@ package eu.trentorise.opendata.traceprov.types;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.Dict;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
+
+import eu.trentorise.opendata.traceprov.TraceProvs;
 import eu.trentorise.opendata.traceprov.data.TraceData;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import java.util.List;
 import java.util.Map;
 import org.immutables.value.Value;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * A special {@code type} to define complex ones. The class is loosely modeled
@@ -34,9 +40,11 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @BuilderStylePublic
-// json ser???
+@JsonSerialize(as = ClassType.class)
+@JsonDeserialize(as = ClassType.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 abstract class AClassType extends TraceType {
-
+     
     private static final long serialVersionUID = 1L;
 
     /**
@@ -106,10 +114,6 @@ abstract class AClassType extends TraceType {
         throw new UnsupportedOperationException("todo implement me!");
     }
 
-    @Override
-    public boolean isInstance(Object object) {
-        throw new UnsupportedOperationException("todo implement me!");
-    }
 
     @Value.Default
     @Override
@@ -132,4 +136,6 @@ abstract class AClassType extends TraceType {
     public boolean isImmutable(){
 	return false;
     }
+    
+    
 }

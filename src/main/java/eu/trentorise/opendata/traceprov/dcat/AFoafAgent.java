@@ -15,6 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.dcat;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.Dict;
@@ -27,17 +28,16 @@ import org.immutables.value.Value;
  *
  * @author David Leoni
  */
-@JsonSerialize(as = FoafAgent.class)
-@JsonDeserialize(as = FoafAgent.class)
+ @JsonTypeInfo(
+	use = JsonTypeInfo.Id.CLASS,
+	include = JsonTypeInfo.As.PROPERTY, 
+	property = "@type") 
 public abstract class AFoafAgent implements Serializable {
 
     public static final String CLASS_URI = "http://xmlns.com/foaf/0.1/Agent";
 
     private static final long serialVersionUID = 1L;
 
-    AFoafAgent() {
-
-    }
 
     /**
      *  <a href="http://xmlns.com/foaf/0.1/mbox" target="_blank">the mail

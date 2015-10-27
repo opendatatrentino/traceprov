@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.immutables.value.Value;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -18,6 +19,7 @@ import eu.trentorise.opendata.traceprov.data.TraceData;
 @BuilderStylePublic
 @JsonSerialize(as = CollectionType.class)
 @JsonDeserialize(as = CollectionType.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 abstract class AbstractCollectionType extends ACollectionType {
 
     /**
@@ -27,68 +29,72 @@ abstract class AbstractCollectionType extends ACollectionType {
     public TraceType getSubtype() {
 	return AnyType.of();
     }
-    
+
     @Override
     public Class getJavaClass() {
 	return Collection.class;
     }
-   
-    
+
+    @Value.Default
     @Override
     public boolean isImmutable() {
-	// TODO Auto-generated method stub
-	throw new UnsupportedOperationException("Not supported yet.");
-    }   
+	return false;
+    }
 
     /**
      * True if the collection is optimized to fully reside in RAM, false
      * otherwise.
      * 
      */
+    @Value.Default
+    @Override
     public boolean isInMemory() {
-	// TODO Auto-generated method stub
-	throw new UnsupportedOperationException("Not supported yet.");
+	return true;
     }
 
     /**
      * True if allows fast access (nearly O(1)) of i-th element.
      */
+    @Value.Default
+    @Override
     public boolean isRandomAccess() {
-	// TODO Auto-generated method stub
-	throw new UnsupportedOperationException("Not supported yet.");
+	return false;
     }
 
     /**
      * True if collection values are generated on demand.
      */
+    @Value.Default
+    @Override
     public boolean isLazy() {
-	// TODO Auto-generated method stub
-	throw new UnsupportedOperationException("Not supported yet.");
+	return false;
     }
 
     /**
      * True if collection has size() method AND calling it is O(1)
      */
+    @Value.Default
+    @Override
     public boolean isSizeFast() {
-	// TODO Auto-generated method stub
-	throw new UnsupportedOperationException("Not supported yet.");
+	return false;
     }
-    
-    public boolean isAllowingDuplicates(){
-	// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+
+    @Value.Default
+    @Override
+    public boolean isAllowingDuplicates() {
+	return true;
     }
-    
-    public boolean isNullHostile(){
-	// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+
+    @Value.Default
+    @Override
+    public boolean isNullHostile() {
+	return false;
     }
-    
-    
-    public boolean isIterationOrderConsistentWithInsertion(){
-	// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+
+    @Value.Default
+    @Override
+    public boolean isIterationOrderConsistentWithInsertion() {
+	return false;
     }
-    
 
 }

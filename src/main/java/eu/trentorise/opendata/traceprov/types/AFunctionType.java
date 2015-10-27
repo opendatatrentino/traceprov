@@ -15,6 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
@@ -26,6 +27,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = FunctionType.class)
 @JsonDeserialize(as = FunctionType.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 abstract class AFunctionType extends TraceType {
     
     private static final long serialVersionUID = 1L;
@@ -49,7 +51,7 @@ abstract class AFunctionType extends TraceType {
 
     @Override
     public Class getJavaClass() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Object.class ; // todo
     }
     
     @Override

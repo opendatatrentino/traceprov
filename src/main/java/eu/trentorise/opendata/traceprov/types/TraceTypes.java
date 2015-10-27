@@ -4,6 +4,8 @@ import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEm
 import eu.trentorise.opendata.traceprov.TraceProvs;
 import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
+import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -57,7 +59,10 @@ public final class TraceTypes {
     private static final Map JAVA_DATATYPES = new HashMap();
 
     
-    public static final TraceType PUBLISHER_TYPE = ClassType.builder().setId(TraceProvs.TRACEPROV_NAMESPACE + ".dcat.Publisher").build();
+    public static final TraceType PUBLISHER_TYPE = ClassType.builder()
+	    .setId(TraceProvs.TRACEPROV_NAMESPACE + ".dcat.Publisher")
+	    .setJavaClass(AFoafAgent.class)
+	    .build();
     static {
         /*
          DATATYPE_PRETTY_NAMES_EN.put(XSD_STRING, "String");

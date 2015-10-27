@@ -17,6 +17,7 @@ package eu.trentorise.opendata.traceprov.geojson;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.common.collect.ImmutableList;
@@ -38,10 +39,14 @@ import org.immutables.value.Value;
  * When only entity id/url is known use
  * {@link Feature#ofId(java.lang.String) Feature.ofId}
  * 
+ * Notice currently it is not possible to store extra fields, 
+ * see https://github.com/immutables/immutables/issues/185
+ * 
  * @author David Leoni
  * @since 0.3
  */
 // todo check this Id.NAME is correct
+
 public abstract class GeoJson implements Serializable {    
         
     @JsonProperty
@@ -54,28 +59,6 @@ public abstract class GeoJson implements Serializable {
 
     @Nullable
     public abstract Crs getCrs();
-
-    /**
-     * Properties that can stay mixed with regular ones in the GeoJson object.
-     * 
-     * (Although internally this is a hash map, DO *NOT* MODIFY IT.)
-     */  
-    // the jolly is so Immutables doesn't consider it as container
-    @Value.Default
-    @JsonAnyGetter
-    public Map<String, ?> getOthers() {
-        return new HashMap();
-    }
-
-    /**
-     * See {@link #getOthers()}
-     *
-     */
-    @JsonAnySetter
-    protected void putOthers(String name, Object value) {
-        Map<String, Object> others = (Map<String, Object>) getOthers(); // stupid Java :@@
-        others.put(name, value);
-    }
 
     public static ImmutableList<Double> position(double lat, double lon) {
         return ImmutableList.of(lat, lon);

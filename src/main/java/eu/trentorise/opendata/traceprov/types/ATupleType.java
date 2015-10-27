@@ -15,9 +15,12 @@
  */
 package eu.trentorise.opendata.traceprov.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
+
+import java.util.Arrays;
 import java.util.List;
 import org.immutables.value.Value;
 
@@ -25,6 +28,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = TupleType.class)
 @JsonDeserialize(as = TupleType.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 abstract class ATupleType extends TraceType {
     
     private static final long serialVersionUID = 1L;
@@ -37,8 +41,8 @@ abstract class ATupleType extends TraceType {
     }*/
 
     @Override
-    public Class getJavaClass() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Class getJavaClass() {	
+        return List.class;
     }
     
     @Override
@@ -50,4 +54,14 @@ abstract class ATupleType extends TraceType {
 	}
 	return true;
     }
+    
+    /**
+     * Construct new immutable {@code TupleType} instance.
+     * @param types value for {@code types}
+     * @return immutable TupleType instance
+     */
+    public static TupleType of(TraceType... types) {
+      return TupleType.of(Arrays.asList(types));
+    }
+
 }

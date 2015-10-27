@@ -28,11 +28,14 @@ import eu.trentorise.opendata.traceprov.types.Def;
 import eu.trentorise.opendata.traceprov.types.DefMetadata;
 import eu.trentorise.opendata.traceprov.types.FunctionType;
 import eu.trentorise.opendata.traceprov.types.IntType;
+import eu.trentorise.opendata.traceprov.types.ListType;
 import eu.trentorise.opendata.traceprov.types.StringType;
 import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 import eu.trentorise.opendata.traceprov.types.TypeVisitor;
 import eu.trentorise.opendata.traceprov.types.TraceTypes;
+import eu.trentorise.opendata.traceprov.types.TupleType;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,30 +53,19 @@ import org.junit.Test;
  *
  * @author David Leoni
  */
-public class TypesTest {
+public class TypesTest extends TraceProvTest {
 
     private static final Logger LOG = Logger.getLogger(TypesTest.class.getName());
-
-    private ObjectMapper objectMapper;
+    
 
     @BeforeClass
     public static void setUpClass() {
         OdtConfig.init(TypesTest.class);
     }
 
-    @Before
-    public void before() {
-        objectMapper = new ObjectMapper();
-        TraceProvModule.registerModulesInto(objectMapper);
-    }
-
-    @After
-    public void after() {
-        objectMapper = null;
-    }
-
+    
     @Test
-    public void testDefMetadata() {
+    public void testDefMetadataJackson() {
         OdtJacksonTester.testJsonConv(objectMapper, LOG, DefMetadata.builder()
                 .setOriginId("bla")
                 .setDescription(Dict.of("ciao"))
@@ -81,7 +73,7 @@ public class TypesTest {
     }
 
     @Test
-    public void testDef() {
+    public void testDefJackson() {
         OdtJacksonTester.testJsonConv(objectMapper, LOG,
                 Def.builder()
                 .setMetadata(
@@ -93,6 +85,18 @@ public class TypesTest {
                 .build());
     }
 
+    @Test
+    public void testTypeJackson() {
+	for (TraceType t : TypeRegistry.of().getTypes().values()){
+	    try {
+		OdtJacksonTester.testJsonConv(objectMapper, LOG, t);
+	    } catch (Exception ex){
+		throw new RuntimeException("JACKSON ERROR FOR TYPE: " + t.toString(), ex);
+	    }
+	}
+    }
+    
+    
     @Test
     public void testCheckTypeId() {
 

@@ -4,6 +4,9 @@ import java.util.Collection;
 
 import org.immutables.value.Value;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import eu.trentorise.opendata.traceprov.data.TraceData;
 
 public abstract class ACollectionType extends TraceType {
@@ -15,12 +18,12 @@ public abstract class ACollectionType extends TraceType {
     public TraceType getSubtype() {
 	return AnyType.of();
     }
-    
+
+    @Value.Default
     @Override
     public boolean isImmutable() {
-	// TODO Auto-generated method stub
-	throw new UnsupportedOperationException("Not supported yet.");
-    }   
+	return false;
+    }
 
     /**
      * True if the collection is optimized to fully reside in RAM, false
@@ -55,22 +58,20 @@ public abstract class ACollectionType extends TraceType {
 	// TODO Auto-generated method stub
 	throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    public boolean isAllowingDuplicates(){
+
+    public boolean isAllowingDuplicates() {
 	// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+	throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    public boolean isNullHostile(){
+
+    public boolean isNullHostile() {
 	// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+	throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    
-    public boolean isIterationOrderConsistentWithInsertion(){
+
+    public boolean isIterationOrderConsistentWithInsertion() {
 	// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+	throw new UnsupportedOperationException("Not supported yet.");
     }
-    
 
 }

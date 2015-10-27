@@ -31,7 +31,7 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 @JsonSerialize(as = FoafOrganization.class)
 @JsonDeserialize(as = FoafOrganization.class)
-abstract class AFoafOrganization extends AFoafAgent implements Serializable  {
+abstract class AFoafOrganization extends AFoafAgent   {
 
     public static final String CLASS_URI = "http://xmlns.com/foaf/0.1/Organization";
 

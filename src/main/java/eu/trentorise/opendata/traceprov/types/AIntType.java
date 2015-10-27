@@ -15,6 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -26,6 +27,7 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = IntType.class)
 @JsonDeserialize(as = IntType.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 abstract class AIntType extends TraceType {
     
     private static final long serialVersionUID = 1L;

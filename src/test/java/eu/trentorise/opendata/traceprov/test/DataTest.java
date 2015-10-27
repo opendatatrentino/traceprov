@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
@@ -26,6 +27,7 @@ import eu.trentorise.opendata.traceprov.data.TraceData;
 import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.data.DataValue;
+import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ClassType;
 import eu.trentorise.opendata.traceprov.types.Def;
 import eu.trentorise.opendata.traceprov.db.TraceDb;
@@ -38,6 +40,8 @@ import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -51,164 +55,165 @@ import org.junit.Test;
  *
  * @author David Leoni
  */
-public class DataTest {
+public class DataTest extends TraceProvTest {
 
-    TypeRegistry emptyReg;
+    private static final Logger LOG = Logger.getLogger(DataTest.class.getCanonicalName());
     
-    @BeforeClass
-    public static void setUpClass() {
-        OdtConfig.init(DataTest.class);
-       
-    }
-
+    private TypeRegistry emptyReg;
+  
     @Before
-    public void beforeMethod(){
-	 emptyReg = TypeRegistry.empty();
+    public void before() {
+	super.before();
+	emptyReg = TypeRegistry.empty();
     }
-    
+
     @After
-    public void afterMethod(){
+    public void after() {
+	super.after();
 	emptyReg = null;
 	TraceDb.getCurrentDb().setTypeRegistry(TypeRegistry.of());
     }
-    
-    
-    
+
     @Test
     public void testWalkerValue() {
-	DataValue dv = DataValue.of(Ref.of(),NodeMetadata.of(), "a");
+	DataValue dv = DataValue.of(Ref.of(), NodeMetadata.of(), "a");
 	TraceDb.getCurrentDb().setTypeRegistry(emptyReg);
-        assertEquals(null, DataValue.of().asSimpleType());
-        assertEquals("a", dv.asSimpleType());
-        assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());
-        assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(),NodeMetadata.of(), dv).asSimpleType());
-        assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(),NodeMetadata.of(), dv).asSimpleType());
+	assertEquals(null, DataValue.of().asSimpleType());
+	assertEquals("a", dv.asSimpleType());
+	assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());
+	assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), NodeMetadata.of(), dv).asSimpleType());
+	assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), NodeMetadata.of(), dv).asSimpleType());
     }
 
     @Test
     public void testNodeListToString() {
-        ArrayList list = new ArrayList();
-        for (int i = 0; i < 10000; i++) {
-            list.add(DataValue.of(Ref.of(), NodeMetadata.of(), 3));
-        }
-        DataArray nodes = DataArray.of(Ref.of(), NodeMetadata.of(), list);
-        assertTrue(nodes.toString().contains("..."));
-        assertFalse(DataArray.of(Ref.of(), NodeMetadata.of(), DataValue.of()).toString().contains("..."));
+	ArrayList list = new ArrayList();
+	for (int i = 0; i < 10000; i++) {
+	    list.add(DataValue.of(Ref.of(), NodeMetadata.of(), 3));
+	}
+	DataArray nodes = DataArray.of(Ref.of(), NodeMetadata.of(), list);
+	assertTrue(nodes.toString().contains("..."));
+	assertFalse(DataArray.of(Ref.of(), NodeMetadata.of(), DataValue.of()).toString().contains("..."));
     }
 
     @Test
     public void testWalker() {
 
 	TraceDb.getCurrentDb().setTypeRegistry(TypeRegistry.empty());
-	
-        assertEquals(new HashMap(), DataMap.of().asSimpleType());
 
-        Object res = DataMap.of(Ref.of(),
-                NodeMetadata.of(),
-                ImmutableMap.of("a", DataValue.of(Ref.of(), NodeMetadata.of(), "b"),
-                        "c", DataValue.of(Ref.of(), NodeMetadata.of(), "d"))).asSimpleType();
+	assertEquals(new HashMap(), DataMap.of().asSimpleType());
 
-        HashMap hm = (HashMap) res;
+	Object res = DataMap.of(Ref.of(),
+		NodeMetadata.of(),
+		ImmutableMap.of("a", DataValue.of(Ref.of(), NodeMetadata.of(), "b"),
+			"c", DataValue.of(Ref.of(), NodeMetadata.of(), "d")))
+		.asSimpleType();
 
-        assertEquals(2, hm.size());
-        assertEquals("b", hm.get("a"));
-        assertEquals("d", hm.get("c"));
+	HashMap hm = (HashMap) res;
+
+	assertEquals(2, hm.size());
+	assertEquals("b", hm.get("a"));
+	assertEquals("d", hm.get("c"));
     }
 
     /**
-     * A little trial to fetch stuff from a CSV-like type
-     * {@code ListType<ClassType>}
+     * A little trial to fetch stuff from a CSV-like type {@code ListType
+     * <ClassType>}
      */
     @Test
     public void testCsvExample() {
 
-        String prop1Id = "my.org.dati.trentino.it.ProdottiCertificati.myProp1";
-        String prop2Id = "my.org.dati.trentino.it.ProdottiCertificati.myProp2";
+	String prop1Id = "my.org.dati.trentino.it.ProdottiCertificati.myProp1";
+	String prop2Id = "my.org.dati.trentino.it.ProdottiCertificati.myProp2";
 
-        String prop1ShortId = "p1";
-        String prop2ShortId = "p2";
+	String prop1ShortId = "p1";
+	String prop2ShortId = "p2";
 
-        Def prop1 = Def.builder().setId(prop1Id).setType(StringType.of()).build();
-        Def prop2 = Def.builder().setId(prop2Id).setType(IntType.of()).build();
+	Def prop1 = Def.builder().setId(prop1Id).setType(StringType.of()).build();
+	Def prop2 = Def.builder().setId(prop2Id).setType(IntType.of()).build();
 
-        TraceType traceType = ListType.of(ClassType.builder()
-                .putPropertyDefs(prop1ShortId, prop1) // this really makes no sense
-                .putPropertyDefs(prop2ShortId, prop2)
-                .build()
-        );
+	TraceType traceType = ListType.of(ClassType.builder()
+		.putPropertyDefs(prop1ShortId, prop1) // this really makes no
+						      // sense
+		.putPropertyDefs(prop2ShortId, prop2)
+		.build());
 
-        TraceData data = DataArray.of(
-        	Ref.of(),
-        	NodeMetadata.of(), 
-                DataMap.of(
-                        Ref.of(),
-                        NodeMetadata.of(),
-                        ImmutableMap.of(prop1ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), "a"),
-                                prop2ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), 3))),
-                DataMap.of(
-                        Ref.of(),
-                        NodeMetadata.of(),
-                        ImmutableMap.of(prop1ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), "b"),
-                                prop2ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), 4)))
-        );
+	TraceData data = DataArray.of(
+		Ref.of(),
+		NodeMetadata.of(),
+		DataMap.of(
+			Ref.of(),
+			NodeMetadata.of(),
+			ImmutableMap.of(prop1ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), "a"),
+				prop2ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), 3))),
+		DataMap.of(
+			Ref.of(),
+			NodeMetadata.of(),
+			ImmutableMap.of(prop1ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), "b"),
+				prop2ShortId, DataValue.of(Ref.of(), NodeMetadata.of(), 4))));
 
-        if (traceType instanceof ListType) {
-            ListType listType = (ListType) traceType;
-            TraceType subtype = listType.getSubtype();
-            if (subtype instanceof ClassType) {
-                ClassType classType = (ClassType) subtype;
+	if (traceType instanceof ListType) {
+	    ListType listType = (ListType) traceType;
+	    TraceType subtype = listType.getSubtype();
+	    if (subtype instanceof ClassType) {
+		ClassType classType = (ClassType) subtype;
 
-                List<String> elNames = classType.getPropertyDefs().keySet().asList();
+		List<String> elNames = classType.getPropertyDefs().keySet().asList();
 
-                List<List<String>> rows = new ArrayList();
+		List<List<String>> rows = new ArrayList();
 
-                rows.add(elNames);
+		rows.add(elNames);
 
-                DataArray dataArray = (DataArray) data;
-                for (TraceData dn : dataArray) {
-                    List<String> row = new ArrayList();
-                    rows.add(row);
-                    DataMap dataMap = (DataMap) dn;
-                    for (String key : elNames) {
-                        DataValue val = (DataValue) dataMap.get(key);
-                        String value =  val.getRawValue().toString();
-                        row.add(value);
-                    }
-                }
-                assertEquals(
-                        ImmutableList.of(
-                                ImmutableList.copyOf(rows.get(0)),
-                                ImmutableList.of("a","3"),
-                                ImmutableList.of("b","4"))
-                        , rows);
-                return;
+		DataArray dataArray = (DataArray) data;
+		for (TraceData dn : dataArray) {
+		    List<String> row = new ArrayList();
+		    rows.add(row);
+		    DataMap dataMap = (DataMap) dn;
+		    for (String key : elNames) {
+			DataValue val = (DataValue) dataMap.get(key);
+			String value = val.getRawValue().toString();
+			row.add(value);
+		    }
+		}
+		assertEquals(
+			ImmutableList.of(
+				ImmutableList.copyOf(rows.get(0)),
+				ImmutableList.of("a", "3"),
+				ImmutableList.of("b", "4")),
+			rows);
+		return;
 
-            }
-        }
+	    }
+	}
 
-        throw new RuntimeException("Shouldn't arrive here!");
+	throw new RuntimeException("Shouldn't arrive here!");
 
     }
-    
-    
+
     @Test
-    public void testFromThisBuilder(){
+    public void testFromThisBuilder() {
 	DataObject dn = DataObject.builder().setId(1).build();
-	
+
 	TraceData dn2 = dn.fromThis().setRawValue(2).build();
 	assertEquals(1, dn2.getId());
 	assertEquals(2, dn2.getRawValue());
     }
-    
+
     @Test
-    public void testGenerics(){
+    public void testGenerics() {
 	DataObject.Builder<String> dosb = DataObject.builder();
-	
+
 	DataObject<String> dos = dosb.setRawValue("a").build();
-	
+
 	assertEquals("a", dos.getRawValue());
-	
+
 	String b = dos.withId(4).getRawValue();
+
     }
-    
+
+    @Test
+    public void testJackson() {
+	OdtJacksonTester.testJsonConv(objectMapper, LOG, AnyType.of());
+    }
+
 }

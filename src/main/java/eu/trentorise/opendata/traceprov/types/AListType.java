@@ -15,6 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.SimpleStyle;
@@ -26,6 +27,8 @@ import org.immutables.value.Value;
 @SimpleStyle
 @JsonSerialize(as = ListType.class)
 @JsonDeserialize(as = ListType.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
+// todo review methods. btw, what is exactly a list for us??
 abstract class AListType extends ACollectionType {
 
     private static final long serialVersionUID = 1L;
@@ -34,15 +37,48 @@ abstract class AListType extends ACollectionType {
     public Class getJavaClass() {
 	return List.class;
     }
-
+    
     @Override
     public boolean isImmutable() {
 	return getSubtype().isImmutable();
     }
-  
+        
     @Override
-    public boolean isAllowingDuplicates() {
+    public boolean isInMemory() {
+	return true;
+    }
+
+    
+    @Override
+    public boolean isRandomAccess() {
+	return true;
+    }
+
+    
+    @Override
+    public boolean isLazy() {
 	return false;
     }
+
+    @Override
+    public boolean isSizeFast() {
+	return true;
+    }
+
+    @Override
+    public boolean isAllowingDuplicates() {
+	return true;
+    }
+
+    @Override
+    public boolean isNullHostile() {
+	return true;
+    }
+
+    @Override
+    public boolean isIterationOrderConsistentWithInsertion() {	
+	return true;
+    }
+
     
 }

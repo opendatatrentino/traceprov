@@ -15,6 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov;
 
+import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -117,17 +118,14 @@ public final class TraceProvModule extends SimpleModule {
         public TraceType deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
             ObjectMapper mapper = (ObjectMapper) jp.getCodec();
             ObjectNode root = (ObjectNode) mapper.readTree(jp);
-            String className = root.get("id").asText();  
-            Class<? extends TraceType> clazz;
-            try {
-                clazz = (Class<? extends TraceType>) Class.forName(className);
-                return mapper.convertValue(root, clazz);
-            }
-            catch (ClassNotFoundException ex) {
-                throw new TraceProvException("Cannot resolve traceprov type class : " + className, ex);
-            }
+            String typeId = root.get("id").asText();  
+            TraceType traceType = TraceDb.getCurrentDb().getTypeRegistry().get(typeId);
+                        
+            try {                
+                return mapper.convertValue(root, traceType.getClass());
+            }            
             catch (Exception ex) {
-                throw new TraceProvException("Cannot convert json to resolved traceprov type class: " + className, ex);
+                throw new TraceProvException("Cannot convert json to resolved traceprov type: " + traceType, ex);
             }
 
         }

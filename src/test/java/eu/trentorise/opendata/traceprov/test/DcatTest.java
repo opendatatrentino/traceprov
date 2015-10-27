@@ -20,43 +20,55 @@ import eu.trentorise.opendata.commons.OdtConfig;
 import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
 import eu.trentorise.opendata.traceprov.TraceProvModule;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
+import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
+import eu.trentorise.opendata.traceprov.dcat.FoafOrganization;
+
 import java.util.Locale;
 import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  *
  * @author David Leoni
  */
-public class DcatTest {
-    private static final Logger LOG = Logger.getLogger(DcatTest.class.getName());         
-    
-    private ObjectMapper objectMapper;
+public class DcatTest extends TraceProvTest {
+    private static final Logger LOG = Logger.getLogger(DcatTest.class.getName());                 
 
     @BeforeClass
     public static void setUpClass() {
         OdtConfig.init(DcatTest.class);
     }    
+           
     
-    @Before
-    public void before() {
-        objectMapper = new ObjectMapper();
-        TraceProvModule.registerModulesInto(objectMapper);
-    }
-
-    @After
-    public void after() {
-        objectMapper = null;
-    }
-    
-    @Test
+    @Test    
     public void testJson(){
                  
+	OdtJacksonTester.testJsonConv(objectMapper, LOG, FoafOrganization.builder().build());
+	
+	OdtJacksonTester.testJsonConv(objectMapper, LOG, FoafAgent.builder().build());
+	
         OdtJacksonTester.testJsonConv(objectMapper, LOG, DcatDataset.builder().build());
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, DcatDataset.builder().addLanguages(Locale.ROOT).addKeywords("hello").build());
+        
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, 
+        	FoafAgent.builder()
+        	.setHomepage("http://hello")
+        	.build());
+        
+        OdtJacksonTester.testJsonConv(objectMapper, LOG, 
+        	DcatDataset.builder()
+        	.addLanguages(Locale.ROOT)
+        	.addKeywords("hello")
+        	.setPublisher(
+        		FoafAgent.builder()
+        		.setHomepage("http://hello")
+        		.build())	
+        	.build());
     }
+    
+    
     
 }

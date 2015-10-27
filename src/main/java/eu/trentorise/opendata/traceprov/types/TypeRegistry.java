@@ -19,6 +19,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 import static eu.trentorise.opendata.traceprov.validation.Preconditions.checkType;
 
+import eu.trentorise.opendata.traceprov.TraceProvModule;
+import eu.trentorise.opendata.traceprov.TraceProvs;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 
 import java.io.Serializable;
@@ -64,6 +66,7 @@ public class TypeRegistry implements Serializable {
 	this.types = new HashMap();
 	this.classDefs = new HashMap();
 	this.objectMapper = new ObjectMapper();
+	TraceProvModule.registerModulesInto(this.objectMapper);
 	this.canonicalTypes = new HashMap();
 	// this.kryo = new Kryo();
     }
@@ -213,7 +216,9 @@ public class TypeRegistry implements Serializable {
      * {@link eu.trentorise.opendata.traceprov.types}
      */
     public static TypeRegistry of() {
-	return new TypeRegistry(new ObjectMapper());
+	ObjectMapper om = new ObjectMapper();
+	TraceProvModule.registerModulesInto(om);	
+	return TypeRegistry.of(om);
     }
 
     /**
@@ -230,8 +235,8 @@ public class TypeRegistry implements Serializable {
 	TypeRegistry reg = new TypeRegistry(objectMapper);
 	reg.put(AnyType.of());
 	reg.put(BooleanType.of());
-	reg.put(CollectionType.of());
-	reg.put(ClassType.of());
+	reg.put(CollectionType.of());	
+	reg.put(ClassType.builder().setId(TraceProvs.TRACEPROV_NAMESPACE + ".types.ClassType").build());
 	reg.put(DateTimeType.of());
 	reg.put(DictType.of());	
 	reg.put(DoubleType.of());

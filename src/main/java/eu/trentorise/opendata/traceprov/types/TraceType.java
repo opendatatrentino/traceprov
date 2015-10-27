@@ -85,7 +85,8 @@ public abstract class TraceType<T> implements Serializable {
      * type.
      */
     public boolean isInstance(Object object) {
-	throw new UnsupportedOperationException("todo implement me!");
+	// todo this is rough...
+	return getJavaClass().isInstance(object);
     }
 
     /**
