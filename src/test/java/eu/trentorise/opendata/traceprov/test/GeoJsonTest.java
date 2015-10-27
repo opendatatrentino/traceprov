@@ -88,7 +88,7 @@ public class GeoJsonTest extends TraceProvTest {
     }
 
     /**
-     * 'Others' field seem problematic with Immutables. See https://github.com/immutables/immutables/issues/185
+     * todo 'Others' field seem problematic with Immutables. See https://github.com/immutables/immutables/issues/185
      */
     @Test
     @Ignore

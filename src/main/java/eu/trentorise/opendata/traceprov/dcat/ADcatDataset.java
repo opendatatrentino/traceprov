@@ -55,14 +55,16 @@ abstract class ADcatDataset implements Serializable {
      * <a href="http://purl.org/dc/terms/accrualPeriodicity"> dct:
      * accrualPeriodicity </a>
      *
-     * Returned format could be either
+     * In this implementation, returned format could be either
      * <ul>
      * <li>A String encoded in
      * <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations" target=
      * "_blank">ISO 8601 Duration format</a>, like i.e. P3Y6M4DT12H30M5S</li>
-     * <li>A String in natural language, like 'Every two weeks except during
-     * summer'</li>
-     * <li>the empty string, in case duration is unknown /li>
+     * <li>A string that can't be parsed as ISO duration (i.e. a string in
+     * natural language, like 'Every two weeks except during summer'). In this
+     * case the string MUST be prepended with {@link #UNPARSEABLE} 
+     * </li>
+     * <li>the empty string, in case duration is unknown </li>
      * </ul>
      */
     @Value.Default
@@ -114,8 +116,9 @@ abstract class ADcatDataset implements Serializable {
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
-     * it with regular dates. If date is unknown the empty string is used.
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid
+     * confusing it with regular dates. If date is unknown the empty string is
+     * used.
      */
     @Value.Default
     public String getIssued() {
@@ -181,8 +184,9 @@ abstract class ADcatDataset implements Serializable {
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
-     * it with regular dates. If date is unknown the empty string is used.
+     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid
+     * confusing it with regular dates. If date is unknown the empty string is
+     * used.
      *
      * @see #getAccrualPeriodicity()
      */
