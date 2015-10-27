@@ -128,7 +128,7 @@ class ADataMap extends TraceData implements Map<String, TraceData> {
 
     @Override
     public Object asSimpleType() {
-	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
 	SimpleMapTransformer tran = new SimpleMapTransformer(typeRegistry);
 	accept(tran, DataValue.of(), "", 0);
 	return tran.getResult();

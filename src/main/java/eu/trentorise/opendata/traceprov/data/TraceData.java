@@ -86,7 +86,7 @@ public abstract class TraceData implements Serializable {
      */
     // todo say it's using current type reg
     public Object copyRawValue() {
-	return TraceDb.getCurrentDb()
+	return TraceDb.getDb()
 		.getTypeRegistry()
 		.getCanonicalTypeFromInstance(getRawValue())
 		.deepCopy(getRawValue());

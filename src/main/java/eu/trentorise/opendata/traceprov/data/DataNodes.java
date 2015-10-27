@@ -60,7 +60,7 @@ public final class DataNodes {
 	    NodeMetadata metadata,
 	    @Nullable Object obj) {
 
-	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
 	checkNotNull(metadata);
 
 	if (obj == null) {
@@ -85,7 +85,7 @@ public final class DataNodes {
 	    NodeMetadata metadata,
 	    @Nullable Object obj) {
 
-	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
 
 	if (obj instanceof TraceData) {
 	    return (TraceData) obj;

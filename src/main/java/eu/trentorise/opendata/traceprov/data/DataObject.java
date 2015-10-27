@@ -140,7 +140,7 @@ public final class DataObject<T> extends TraceData {
 
   public List<TraceData> values() {
 
-	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
 	
 	PropertyDescriptor[] propertyDescriptors;
 
@@ -193,7 +193,7 @@ public final class DataObject<T> extends TraceData {
 	checkNotEmpty(propertyName, "Invalid property name!");
 	PropertyDescriptor[] propertyDescriptors;
 
-	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
 	
 	try {
 	    propertyDescriptors = Introspector.getBeanInfo(getRawValue().getClass(), Object.class)
@@ -232,7 +232,7 @@ public final class DataObject<T> extends TraceData {
   
   public List<Map.Entry<String, ? extends TraceData>> entries(){
 
-	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
 	
 	PropertyDescriptor[] propertyDescriptors;
 
@@ -291,7 +291,7 @@ public final class DataObject<T> extends TraceData {
 
   @Override
   public Object asSimpleType() {
-	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
 	SimpleMapTransformer tran = new SimpleMapTransformer(typeRegistry);
 	accept(tran, DataValue.of(), "", 0);
 	return tran.getResult();

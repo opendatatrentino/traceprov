@@ -119,7 +119,7 @@ public final class TraceProvModule extends SimpleModule {
             ObjectMapper mapper = (ObjectMapper) jp.getCodec();
             ObjectNode root = (ObjectNode) mapper.readTree(jp);
             String typeId = root.get("id").asText();  
-            TraceType traceType = TraceDb.getCurrentDb().getTypeRegistry().get(typeId);
+            TraceType traceType = TraceDb.getDb().getTypeRegistry().get(typeId);
                         
             try {                
                 return mapper.convertValue(root, traceType.getClass());

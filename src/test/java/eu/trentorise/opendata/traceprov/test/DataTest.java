@@ -71,13 +71,13 @@ public class DataTest extends TraceProvTest {
     public void after() {
 	super.after();
 	emptyReg = null;
-	TraceDb.getCurrentDb().setTypeRegistry(TypeRegistry.of());
+	TraceDb.getDb().setTypeRegistry(TypeRegistry.of());
     }
 
     @Test
     public void testWalkerValue() {
 	DataValue dv = DataValue.of(Ref.of(), NodeMetadata.of(), "a");
-	TraceDb.getCurrentDb().setTypeRegistry(emptyReg);
+	TraceDb.getDb().setTypeRegistry(emptyReg);
 	assertEquals(null, DataValue.of().asSimpleType());
 	assertEquals("a", dv.asSimpleType());
 	assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());
@@ -99,7 +99,7 @@ public class DataTest extends TraceProvTest {
     @Test
     public void testWalker() {
 
-	TraceDb.getCurrentDb().setTypeRegistry(TypeRegistry.empty());
+	TraceDb.getDb().setTypeRegistry(TypeRegistry.empty());
 
 	assertEquals(new HashMap(), DataMap.of().asSimpleType());
 

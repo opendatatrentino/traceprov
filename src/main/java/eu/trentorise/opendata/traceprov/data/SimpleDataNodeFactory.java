@@ -46,7 +46,7 @@ public class SimpleDataNodeFactory implements DataNodeFactory {
 	    		NodeMetadata metadata, 
 	    		@Nullable Object obj) {
 
-	TypeRegistry typeRegistry = TraceDb.getCurrentDb().getTypeRegistry();
+	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
 	if (obj == null || obj instanceof String || obj instanceof Number) {
 	    TraceType canType = typeRegistry.getCanonicalTypeFromInstance(obj);
 	    NodeMetadata newMetadata;

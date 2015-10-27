@@ -944,7 +944,12 @@ public class TraceDb {
 	 */
     }
 
-    public static TraceDb getCurrentDb() {
+    /**
+     * Returns the database in the current thread.
+     * 
+     * todo what about initialization??
+     */
+    public static TraceDb getDb() {
 	return dbPool.get();
     }
 
