@@ -2,6 +2,7 @@ package eu.trentorise.opendata.traceprov.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 import java.util.List;
@@ -93,7 +94,7 @@ public class DbTest {
     @Test
     public void testCreate()  {
 	TraceData pub = makePublisher();
-	List<TraceData> dns = db.create(
+	List<? extends TraceData> dns = db.create(
 		DataValue.of(Ref.ofDocumentId("a"), 
 			     makeMetadata(pub), 
 			     "b"));
@@ -102,9 +103,12 @@ public class DbTest {
 	assertTrue(dn.getId() >= 0);
 		
 	assertEquals("a", dn.getRef().getDocumentId());
-	assertEquals(makeMetadata(pub), dn.getMetadata());
+	
+	// test timestamp gets updated:
+	assertEquals(makeMetadata(pub).withTimestamp(dn.getMetadata().getTimestamp()),
+		     dn.getMetadata());
 	assertEquals("b", dn.getRawValue());
-	dn.getRef().uri(); // should not thow exception
+	dn.getRef().uri(); // should not throw exception
 	assertTrue(db.sameAs(dn.getId(), dn.getId()));
     }
     
@@ -118,12 +122,26 @@ public class DbTest {
 	assertTrue(db.sameAs(tpub.getId(), tpub.getId()));
     }
        
-    @Test
-    @Ignore
+    @Test    
     public void testClique(){        
-        throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
-        // odrDb.updateSameAsIds(null, null, null)
-        // odrDb.addSameAsIds(null, null)
+
+	TraceData pub = makePublisher();
+	TraceData data1 = db.create(
+		DataValue.of(Ref.ofDocumentId("a"), 
+			     makeMetadata(pub), 
+			     "b")).get(0);
+	TraceData data2 = db.create(
+		DataValue.of(Ref.ofDocumentId("c"), 
+			     makeMetadata(pub), 
+			     "d")).get(0);
+	assertFalse(db.sameAs(data1.getId(), data2.getId()));
+	assertEquals(data1, db.readMainObject(data1.getId()));
+	db.putSameAsIds(data1.getId(), data2.getId());
+	assertTrue(db.sameAs(data1.getId(), data2.getId()));
+	assertEquals(data1, db.readMainObject(data1.getId()));
+	db.setMainNode(data2.getId());
+	assertEquals(data2, db.readMainObject(data1.getId()));
+	assertEquals(data2, db.readMainObject(data2.getId()));
     }
 
     @Test

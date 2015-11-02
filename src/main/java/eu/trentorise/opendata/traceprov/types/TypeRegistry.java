@@ -236,7 +236,9 @@ public class TypeRegistry implements Serializable {
 	reg.put(AnyType.of());
 	reg.put(BooleanType.of());
 	reg.put(CollectionType.of());	
-	reg.put(ClassType.builder().setId(TraceProvs.TRACEPROV_NAMESPACE + ".types.ClassType").build());
+	reg.put(ClassType.builder()
+		.setId(TraceProvs.TRACEPROV_NAMESPACE + ".types.ClassType")
+		.build());
 	reg.put(DateTimeType.of());
 	reg.put(DictType.of());	
 	reg.put(DoubleType.of());

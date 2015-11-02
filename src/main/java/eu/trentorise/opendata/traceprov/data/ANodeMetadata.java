@@ -76,7 +76,7 @@ abstract class ANodeMetadata implements Serializable {
      *
      * </ul>
      * 
-     * By defualt is {@link PeriodOfTime#of()}
+     * By default is {@link PeriodOfTime#of()}
      */
     @Value.Default
     public PeriodOfTime getTemporal() {
@@ -124,7 +124,8 @@ abstract class ANodeMetadata implements Serializable {
      * <a href="http://purl.org/dc/terms/publisher" target="_bank">dct:publisher
      * </a>
      *
-     * Returns the traceprov internal id of the publisher. Default value is -1.
+     * The field is expressed as the traceprov internal id of the publisher.
+     * Default value is -1. 
      *
      * @see AFoafAgent
      * @see AFoafPerson

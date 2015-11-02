@@ -18,6 +18,8 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.traceprov.exceptions.IncomparableVersionsException;
+
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -28,14 +30,14 @@ import java.util.logging.Logger;
  * ones are defined with {@link ClassType}. TraceProv types are more general
  * than Java ones. todo write more.
  *
- * @author David Leoni
+ * @author David Leoni <T> see {@link #getJavaClass()}
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE, property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class TraceType<T> implements Serializable {
 
     private static Logger LOG = Logger.getLogger(TraceType.class.getSimpleName());
-    
+
     protected TraceType() {
 
     }
@@ -177,36 +179,56 @@ public abstract class TraceType<T> implements Serializable {
      * }
      */
 
-    protected void checkInstance(Object obj){
-	if (!isInstance(obj)){
+    protected void checkInstance(Object obj) {
+	if (!isInstance(obj)) {
 	    throw new IllegalArgumentException("Provided object is not instance of Trace Type " + getId());
 	}
     }
-    
+
     /**
      * Returns true if the instances of this type are immutable.
      */
     public abstract boolean isImmutable();
-    
-    
-    public <W> W deepCopy(W obj){
+
+    public <W> W deepCopy(W obj) {
 	checkInstance(obj);
-	if (isImmutable()){
+	if (isImmutable()) {
 	    return obj;
 	} else {
 	    LOG.warning("TODO - CALLED deepCopy ON TYPE " + getId() + " BUT RETURNING SAME INPUT UNCHANGED!!");
 	    return obj;
 	}
     }
-    
-    public <W> W shallowCopy(W obj){
+
+    public <W> W shallowCopy(W obj) {
 	checkInstance(obj);
-	if (isImmutable()){
+	if (isImmutable()) {
 	    return obj;
 	} else {
-	    LOG.warning("TODO - CALLED deepCopy ON TYPE " + getClass().getSimpleName() + " BUT RETURNING SAME INPUT UNCHANGED!!");
+	    LOG.warning("TODO - CALLED deepCopy ON TYPE " + getClass().getSimpleName()
+		    + " BUT RETURNING SAME INPUT UNCHANGED!!");
 	    return obj;
 	}
     }
-    
+
+    /**
+     * Compares this object with the specified object for version. Returns a
+     * negative integer, zero, or a positive integer as obj1 has less recent
+     * version than, same as, or more recent version than the specified object
+     * according to its publisher. Notice this is different from checking
+     * difference in dataobject timestamps. todo explain better
+     * 
+     * @param obj1
+     *            must belong to this TraceType
+     * @param obj2
+     *            must belong to this TraceType
+     * @throws IncomparableVersionsException
+     *             If the object versions cannot be compared (because maybe
+     *             they are on separate version branchres)
+     * @see eu.trentorise.opendata.traceprov.db.TraceDb#compareVersion(long, long)
+     */
+    public int compareVersion(Object obj1, Object obj2) {
+	throw new IncomparableVersionsException(
+		"Version of Object " + obj1 + " cannot be compared to version of object " + obj2);
+    }
 }
