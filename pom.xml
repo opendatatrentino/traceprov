@@ -33,6 +33,41 @@
 		<developerConnection>scm:git:${project.url}.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+	
+	<repositories>
+		<!--  so it picks superpom snapshot without complaining -->
+        <repository>
+            <id>bootstrap-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    	        <releases><enabled>false</enabled></releases>
+         	<snapshots><enabled>true</enabled></snapshots>
+        </repository>        
+    </repositories>
+    
+	<developers>
+
+		<developer>
+			<id>moaz</id>
+			<name>Moaz Reyad</name>
+			<email>reyad@disi.unitn.it</email>
+			<organization>DISI, University of Trento</organization>
+		</developer>
+
+		<developer>
+			<id>d.leoni</id>
+			<name>David Leoni</name>
+			<email>david.leoni@unitn.it</email>
+			<organization>DISI, University of Trento</organization>
+		</developer>
+
+		<developer>
+			<id>i.tankoyeu</id>
+			<name>Ivan Tankoyeu</name>
+			<email>tankoyeui@disi.unitn.it</email>
+			<organization>DISI, University of Trento</organization>
+		</developer>
+
+	</developers>
 
 
 	<build>
@@ -112,32 +147,7 @@
 
 	</build>
 
-
-	<developers>
-
-		<developer>
-			<id>moaz</id>
-			<name>Moaz Reyad</name>
-			<email>reyad@disi.unitn.it</email>
-			<organization>DISI, University of Trento</organization>
-		</developer>
-
-		<developer>
-			<id>d.leoni</id>
-			<name>David Leoni</name>
-			<email>david.leoni@unitn.it</email>
-			<organization>DISI, University of Trento</organization>
-		</developer>
-
-		<developer>
-			<id>i.tankoyeu</id>
-			<name>Ivan Tankoyeu</name>
-			<email>tankoyeui@disi.unitn.it</email>
-			<organization>DISI, University of Trento</organization>
-		</developer>
-
-	</developers>
-
+	
 	<dependencies>
 
 		<dependency>
