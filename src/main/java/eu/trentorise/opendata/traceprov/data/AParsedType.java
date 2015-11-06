@@ -18,7 +18,6 @@ package eu.trentorise.opendata.traceprov.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.commons.validation.ValidationError;
 import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ClassType;
@@ -57,7 +56,10 @@ abstract class AParsedType implements Serializable {
 
     /**
      * Returns the validation errors found in the original schema file.
+     * 
+     * todo using Object instead of ValidationError
      */
-    public abstract List<ValidationError> getErrors();
+    
+    public abstract List<Object> getErrors();
 
 }

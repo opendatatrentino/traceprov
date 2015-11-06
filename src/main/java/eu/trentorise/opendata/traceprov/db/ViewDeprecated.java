@@ -1,7 +1,6 @@
 package eu.trentorise.opendata.traceprov.db;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.trentorise.opendata.commons.validation.ValidationError;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.concurrent.Immutable;
@@ -76,7 +75,8 @@ public interface ViewDeprecated<T> extends Storable {
      * Returns an immutable map containing field names of the view and eventual
      * corresponding errors.
      */
-    Map<String, ValidationError> getErrors();
+    // todo using Object instead of ValidationError
+    Map<String, Object> getErrors();
 
     /**
      * Returns the timestamp when the view was created on local TraceProv

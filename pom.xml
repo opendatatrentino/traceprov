@@ -33,17 +33,21 @@
 		<developerConnection>scm:git:${project.url}.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
-	
+
 	<repositories>
-		<!--  so it picks superpom snapshot without complaining -->
-        <repository>
-            <id>bootstrap-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    	        <releases><enabled>false</enabled></releases>
-         	<snapshots><enabled>true</enabled></snapshots>
-        </repository>        
-    </repositories>
-    
+		<!-- so it picks superpom snapshot without complaining -->
+		<repository>
+			<id>bootstrap-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<developers>
 
 		<developer>
@@ -147,7 +151,7 @@
 
 	</build>
 
-	
+
 	<dependencies>
 
 		<dependency>
@@ -226,6 +230,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
