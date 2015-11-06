@@ -59,12 +59,19 @@ abstract class ADcatDataset implements Serializable {
      * <ul>
      * <li>A String encoded in
      * <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations" target=
-     * "_blank">ISO 8601 Duration format</a>, like i.e. P3Y6M4DT12H30M5S</li>
-     * <li>A string that can't be parsed as ISO duration (i.e. a string in
-     * natural language, like 'Every two weeks except during summer'). In this
-     * case the string MUST be prepended with {@link #UNPARSEABLE} 
-     * </li>
-     * <li>the empty string, in case duration is unknown </li>
+     * "_blank">ISO 8601 Duration format</a>, like i.e. {@code P3Y6M4DT12H30M5S}
+     * </li> This format can be used when periodicity can be precisely defined
+     * (i.e. there is an update every second for sensor data)
+     * <li>A string with one of the <a href=
+     * "http://publications.europa.eu/mdr/authority/frequency/ target="_blank">
+     * DCAT AP profile frequency codes</a>, like {@code BIWEEKLY} . Note these
+     * codes also include special frequencies such as {@code UNKNOWN},
+     * {@code IRREGULAR}, {@code CONT} and {@code UPDATE_CONT}</li>
+     * <li>A string that can't be parsed as ISO duration nor as DCAT AP
+     * frequency codes (i.e. a string in natural language, like 'Every two weeks
+     * except during summer'). In this case the string MUST be prepended with
+     * {@link #UNPARSEABLE}</li>
+     * <li>the empty string, in case duration is unspecified</li>
      * </ul>
      */
     @Value.Default
@@ -233,6 +240,8 @@ abstract class ADcatDataset implements Serializable {
      * </ul>
      *
      */
+    // where to store MDR codes?
+    // http://publications.europa.eu/mdr/authority/place/
     @Value.Default
     public GeoJson getSpatial() {
 	return Feature.of();

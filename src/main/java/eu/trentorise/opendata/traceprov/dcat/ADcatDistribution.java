@@ -150,7 +150,7 @@ abstract class ADcatDistribution implements Serializable {
     /**
      * The language of the distribution. Note that this does not explicitly
      * appear in the Distribution description in W3C Recommendation of 16
-     * January 2014., but it's existence is indeed cited in the Dataset
+     * January 2014, but it's existence is indeed cited in the Dataset
      * description (see {@link ADcatDataset#getLanguages()}). So we made up the
      * property and the description below to fill the gap.
      *
