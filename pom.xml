@@ -12,7 +12,12 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>eu.trentorise.opendata</groupId>
+	<parent>
+		<groupId>eu.trentorise.opendata</groupId>
+		<artifactId>tod-super-pom</artifactId>
+		<version>1.3.0-SNAPSHOT</version>
+	</parent>
+	
 	<artifactId>traceprov</artifactId>
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -21,11 +26,6 @@
 	<url>https://github.com/opendatatrentino/traceprov/</url>
 	<description>Java library to record provenance of datasets</description>
 
-	<parent>
-		<groupId>eu.trentorise.opendata.commons</groupId>
-		<artifactId>odt-super-pom</artifactId>
-		<version>1.3.0-SNAPSHOT</version>
-	</parent>
 
 	<scm>
 		<url>${project.url}</url>
@@ -107,7 +107,7 @@
 				<artifactId>maven-enforcer-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>eu.trentorise.opendata.josman</groupId>
+				<groupId>eu.trentorise.opendata</groupId>
 				<artifactId>josman-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
@@ -163,8 +163,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>eu.trentorise.opendata.commons</groupId>
-			<artifactId>odt-commons-jackson</artifactId>
+			<groupId>eu.trentorise.opendata</groupId>
+			<artifactId>tod-commons-jackson</artifactId>
 		</dependency>
 
 		<dependency>
@@ -224,8 +224,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>eu.trentorise.opendata.commons</groupId>
-			<artifactId>odt-commons-jackson</artifactId>
+			<groupId>eu.trentorise.opendata</groupId>
+			<artifactId>tod-commons-jackson</artifactId>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>

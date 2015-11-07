@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.test;
 
 import com.google.common.collect.ImmutableList;
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.traceprov.engine.CastResult;
 import eu.trentorise.opendata.traceprov.engine.Converter;
 import eu.trentorise.opendata.traceprov.engine.WeightedResult;
@@ -42,7 +42,7 @@ public class ConverterTest {
 
     @BeforeClass
     public static void setUpClass() {
-        OdtConfig.init(ConverterTest.class);
+        TodConfig.init(ConverterTest.class);
     }
 
     private static class MyDateConverter extends Converter<StringType, JavaDateType> {

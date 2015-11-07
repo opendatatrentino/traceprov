@@ -44,7 +44,7 @@ import com.google.common.collect.Table;
 
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.NotFoundException;
-import eu.trentorise.opendata.commons.OdtUtils;
+import eu.trentorise.opendata.commons.TodUtils;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.TraceProvs;
 import eu.trentorise.opendata.traceprov.data.TraceData;
@@ -541,7 +541,7 @@ public class TraceDb {
     public String normalizeUrl(String url) {
 	checkNotEmpty(url, "Invalid url!");
 	// odr todo 0.3 this is rough....
-	return OdtUtils.removeTrailingSlash(expandUrl(url));
+	return TodUtils.removeTrailingSlash(expandUrl(url));
     }
 
     /**

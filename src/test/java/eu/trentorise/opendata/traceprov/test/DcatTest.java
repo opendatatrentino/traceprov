@@ -16,8 +16,8 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.trentorise.opendata.commons.OdtConfig;
-import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
+import eu.trentorise.opendata.commons.TodConfig;
+import eu.trentorise.opendata.commons.test.jackson.TodJacksonTester;
 import eu.trentorise.opendata.traceprov.TraceProvModule;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
@@ -40,25 +40,25 @@ public class DcatTest extends TraceProvTest {
 
     @BeforeClass
     public static void setUpClass() {
-        OdtConfig.init(DcatTest.class);
+        TodConfig.init(DcatTest.class);
     }    
            
     
     @Test    
     public void testJson(){
                  
-	OdtJacksonTester.testJsonConv(objectMapper, LOG, FoafOrganization.builder().build());
+	TodJacksonTester.testJsonConv(objectMapper, LOG, FoafOrganization.builder().build());
 	
-	OdtJacksonTester.testJsonConv(objectMapper, LOG, FoafAgent.builder().build());
+	TodJacksonTester.testJsonConv(objectMapper, LOG, FoafAgent.builder().build());
 	
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, DcatDataset.builder().build());
+        TodJacksonTester.testJsonConv(objectMapper, LOG, DcatDataset.builder().build());
         
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, 
+        TodJacksonTester.testJsonConv(objectMapper, LOG, 
         	FoafAgent.builder()
         	.setHomepage("http://hello")
         	.build());
         
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, 
+        TodJacksonTester.testJsonConv(objectMapper, LOG, 
         	DcatDataset.builder()
         	.addLanguages(Locale.ROOT)
         	.addKeywords("hello")

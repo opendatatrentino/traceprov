@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.test;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
@@ -44,7 +44,7 @@ public class CodeGenTest {
 
     @BeforeClass
     public static void setUpClass() {
-        OdtConfig.init(CodeGenTest.class);
+        TodConfig.init(CodeGenTest.class);
     }
 
     @Test

@@ -16,7 +16,7 @@
 package eu.trentorise.opendata.traceprov.test;
 
 import com.google.common.collect.ImmutableList;
-import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataNodes;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
@@ -36,7 +36,7 @@ public class TraceRefsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        OdtConfig.init(TraceRefsTest.class);
+        TodConfig.init(TraceRefsTest.class);
     }
     
     @Test

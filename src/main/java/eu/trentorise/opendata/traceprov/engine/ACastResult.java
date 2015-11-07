@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.engine;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.commons.OdtUtils;
+import eu.trentorise.opendata.commons.TodUtils;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -53,7 +53,7 @@ public abstract class ACastResult {
      * @see #completelyFailed()
      */
     public final boolean completelySucceded() {
-        return getAccuracy() >= 1.0 - OdtUtils.TOLERANCE;
+        return getAccuracy() >= 1.0 - TodUtils.TOLERANCE;
     }
 
     /**
@@ -63,7 +63,7 @@ public abstract class ACastResult {
      * @see #completelySucceded()
      */
     public final boolean completelyFailed() {
-        return getAccuracy() <= 0.0 + OdtUtils.TOLERANCE;
+        return getAccuracy() <= 0.0 + TodUtils.TOLERANCE;
     }
 
     /**

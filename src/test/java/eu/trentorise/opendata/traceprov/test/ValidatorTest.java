@@ -15,7 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
-import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.traceprov.validation.CsvValidator;
 
 import org.junit.BeforeClass;
@@ -29,7 +29,7 @@ public class ValidatorTest {
 
     @BeforeClass
     public static void setUpClass() {
-        OdtConfig.init(ValidatorTest.class);
+        TodConfig.init(ValidatorTest.class);
     }
     
     @Test

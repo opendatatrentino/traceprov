@@ -30,8 +30,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import eu.trentorise.opendata.commons.OdtConfig;
-import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
+import eu.trentorise.opendata.commons.TodConfig;
+import eu.trentorise.opendata.commons.test.jackson.TodJacksonTester;
 import eu.trentorise.opendata.traceprov.geojson.Crs;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.geojson.MultiPoint;
@@ -48,7 +48,7 @@ public class GeoJsonTest extends TraceProvTest {
 
     @BeforeClass
     public static void setUpClass() {
-	OdtConfig.init(GeoJsonTest.class);
+	TodConfig.init(GeoJsonTest.class);
     }
 
     @Test
@@ -64,14 +64,14 @@ public class GeoJsonTest extends TraceProvTest {
     @Test
     public void testJacksonGeoJsonFeature() throws JsonProcessingException, IOException {
 
-	OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0));
+	TodJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0));
 
-	OdtJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0), GeoJson.class);
+	TodJacksonTester.testJsonConv(objectMapper, LOG, Point.of(1.0, 2.0), GeoJson.class);
 
-	OdtJacksonTester.testJsonConv(objectMapper, LOG,
+	TodJacksonTester.testJsonConv(objectMapper, LOG,
 		MultiPoint.builder().addCoordinates(ImmutableList.of(1.1, 1.2)).build(), GeoJson.class);
 
-	OdtJacksonTester.testJsonConv(objectMapper, LOG, Polygon.builder().addCoordinates(
+	TodJacksonTester.testJsonConv(objectMapper, LOG, Polygon.builder().addCoordinates(
 		ImmutableList.of(
 			ImmutableList.of(1.1, 1.2),
 			ImmutableList.of(1.1, 1.2),
@@ -79,8 +79,8 @@ public class GeoJsonTest extends TraceProvTest {
 			ImmutableList.of(1.1, 1.2)))
 		.build());
 
-	OdtJacksonTester.testJsonConv(objectMapper, LOG, Crs.ofName("a"));
-	OdtJacksonTester.testJsonConv(objectMapper, LOG,
+	TodJacksonTester.testJsonConv(objectMapper, LOG, Crs.ofName("a"));
+	TodJacksonTester.testJsonConv(objectMapper, LOG,
 		Crs.of("name", ImmutableMap.of(
 			"name", "hello",
 			"x", ImmutableMap.of("x", ImmutableList.of(1, "w")))));
@@ -98,7 +98,7 @@ public class GeoJsonTest extends TraceProvTest {
         //String json = objectMapper.writeValueAsString();
 
         //objectMapper.readValue(json, Feature.class);
-        //OdtJacksonTester.testJsonConv(objectMapper, LOG, Feature.builder().setOthers(hm).build(), GeoJson.class);
+        //TodJacksonTester.testJsonConv(objectMapper, LOG, Feature.builder().setOthers(hm).build(), GeoJson.class);
 
     }
 

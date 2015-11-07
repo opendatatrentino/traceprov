@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.traceprov.TraceProvModule;
 
 public class TraceProvTest {

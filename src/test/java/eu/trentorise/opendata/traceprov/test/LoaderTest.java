@@ -15,7 +15,7 @@
  */
 package eu.trentorise.opendata.traceprov.test;
 
-import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.traceprov.test.services.UrlLoader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +39,7 @@ public class LoaderTest {
     
     @BeforeClass
     public static void setUpClass() {
-        OdtConfig.init(LoaderTest.class);
+        TodConfig.init(LoaderTest.class);
     }
     
     @Test

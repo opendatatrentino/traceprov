@@ -19,8 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.ClassPath;
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.commons.OdtConfig;
-import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
+import eu.trentorise.opendata.commons.TodConfig;
+import eu.trentorise.opendata.commons.test.jackson.TodJacksonTester;
 import eu.trentorise.opendata.traceprov.TraceProvModule;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.ClassType;
@@ -60,13 +60,13 @@ public class TypesTest extends TraceProvTest {
 
     @BeforeClass
     public static void setUpClass() {
-        OdtConfig.init(TypesTest.class);
+        TodConfig.init(TypesTest.class);
     }
 
     
     @Test
     public void testDefMetadataJackson() {
-        OdtJacksonTester.testJsonConv(objectMapper, LOG, DefMetadata.builder()
+        TodJacksonTester.testJsonConv(objectMapper, LOG, DefMetadata.builder()
                 .setOriginId("bla")
                 .setDescription(Dict.of("ciao"))
                 .build());
@@ -74,7 +74,7 @@ public class TypesTest extends TraceProvTest {
 
     @Test
     public void testDefJackson() {
-        OdtJacksonTester.testJsonConv(objectMapper, LOG,
+        TodJacksonTester.testJsonConv(objectMapper, LOG,
                 Def.builder()
                 .setMetadata(
                         DefMetadata.builder()
@@ -89,7 +89,7 @@ public class TypesTest extends TraceProvTest {
     public void testTypeJackson() {
 	for (TraceType t : TypeRegistry.of().getTypes().values()){
 	    try {
-		OdtJacksonTester.testJsonConv(objectMapper, LOG, t);
+		TodJacksonTester.testJsonConv(objectMapper, LOG, t);
 	    } catch (Exception ex){
 		throw new RuntimeException("JACKSON ERROR FOR TYPE: " + t.toString(), ex);
 	    }

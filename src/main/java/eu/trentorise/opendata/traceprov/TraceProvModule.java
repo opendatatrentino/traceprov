@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import eu.trentorise.opendata.commons.jackson.OdtCommonsModule;
+import eu.trentorise.opendata.commons.jackson.TodCommonsModule;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
 import eu.trentorise.opendata.traceprov.types.TraceType;
 import java.io.IOException;
@@ -42,10 +42,10 @@ public final class TraceProvModule extends SimpleModule {
 
     /**
      * Creates the module and registers all the needed serializers and
-     * deserializers for Odt Commons objects
+     * deserializers for Tod Commons objects
      */
     public TraceProvModule() {
-        super("traceprov-jackson", OdtCommonsModule.readJacksonVersion(TraceProvModule.class));
+        super("traceprov-jackson", TodCommonsModule.readJacksonVersion(TraceProvModule.class));
 
         addDeserializer(GeoJson.class, new GeoJsonDeserializer());
         addDeserializer(TraceType.class, new TraceTypeDeserializer());
@@ -65,10 +65,10 @@ public final class TraceProvModule extends SimpleModule {
 
     /**
      * Registers in the provided object mapper the jackson traceprov module and
-     * also the required odt commons and guava module.
+     * also the required tod commons and guava module.
      */
     public static void registerModulesInto(ObjectMapper om) {
-        OdtCommonsModule.registerModulesInto(om);
+        TodCommonsModule.registerModulesInto(om);
         om.registerModule(new TraceProvModule());
     }
 

@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.engine;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import eu.trentorise.opendata.commons.OdtUtils;
+import eu.trentorise.opendata.commons.TodUtils;
 import eu.trentorise.opendata.traceprov.engine.OperationResult;
 import org.immutables.value.Value;
 
@@ -46,7 +46,7 @@ public class AOperationResult {
      * 
      */
     public final boolean succeded() {
-        return getAccuracy() >= 1.0 - OdtUtils.TOLERANCE;
+        return getAccuracy() >= 1.0 - TodUtils.TOLERANCE;
     }
 
     /**

@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.test;
 
 
 import eu.trentorise.opendata.commons.BuildInfo;
-import eu.trentorise.opendata.commons.OdtConfig;
+import eu.trentorise.opendata.commons.TodConfig;
 import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,13 +30,13 @@ public class ConfigTest {
     
     @BeforeClass
     public static void setUpClass() {        
-        OdtConfig.init(ConfigTest.class);        
+        TodConfig.init(ConfigTest.class);        
     }    
     
     
     @Test
     public void testBuildInfo(){
-        BuildInfo buildInfo = OdtConfig.of(ConfigTest.class).getBuildInfo();
+        BuildInfo buildInfo = TodConfig.of(ConfigTest.class).getBuildInfo();
         assertTrue(buildInfo.getScmUrl().length() > 0);
         assertTrue(buildInfo.getVersion().length() > 0);
     }

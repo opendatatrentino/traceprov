@@ -76,7 +76,7 @@ abstract class ADcatCatalog implements Serializable {
      * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid confusing
+     * format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid confusing
      * it with regular dates. If date is unknown the empty string is used.
      *
      * @see ADcatDataset#getIssued()
@@ -124,7 +124,7 @@ abstract class ADcatCatalog implements Serializable {
      * Must be in a <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date
      * and Time compliant</a> string format i.e. "2011-12-11" . Specified by
      * <a href="http://purl.org/dc/terms/modified">dct:modified</a> In TraceProv
-     * if date format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid
+     * if date format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid
      * confusing it with regular dates. If date is unknown the empty string is
      * used.
      */

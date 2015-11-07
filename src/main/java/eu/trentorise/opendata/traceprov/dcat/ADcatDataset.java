@@ -63,7 +63,7 @@ abstract class ADcatDataset implements Serializable {
      * </li> This format can be used when periodicity can be precisely defined
      * (i.e. there is an update every second for sensor data)
      * <li>A string with one of the <a href=
-     * "http://publications.europa.eu/mdr/authority/frequency/ target="_blank">
+     * "http://publications.europa.eu/mdr/authority/frequency/" target="_blank">
      * DCAT AP profile frequency codes</a>, like {@code BIWEEKLY} . Note these
      * codes also include special frequencies such as {@code UNKNOWN},
      * {@code IRREGULAR}, {@code CONT} and {@code UPDATE_CONT}</li>
@@ -123,7 +123,7 @@ abstract class ADcatDataset implements Serializable {
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid
+     * format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid
      * confusing it with regular dates. If date is unknown the empty string is
      * used.
      */
@@ -191,7 +191,7 @@ abstract class ADcatDataset implements Serializable {
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link OdtUtils#UNPARSEABLE} to avoid
+     * format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid
      * confusing it with regular dates. If date is unknown the empty string is
      * used.
      *

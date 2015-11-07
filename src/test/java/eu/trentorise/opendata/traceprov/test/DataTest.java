@@ -18,8 +18,8 @@ package eu.trentorise.opendata.traceprov.test;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import eu.trentorise.opendata.commons.OdtConfig;
-import eu.trentorise.opendata.commons.test.jackson.OdtJacksonTester;
+import eu.trentorise.opendata.commons.TodConfig;
+import eu.trentorise.opendata.commons.test.jackson.TodJacksonTester;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataArray;
 import eu.trentorise.opendata.traceprov.data.DataMap;
@@ -213,7 +213,7 @@ public class DataTest extends TraceProvTest {
 
     @Test
     public void testJackson() {
-	OdtJacksonTester.testJsonConv(objectMapper, LOG, AnyType.of());
+	TodJacksonTester.testJsonConv(objectMapper, LOG, AnyType.of());
     }
 
 }
