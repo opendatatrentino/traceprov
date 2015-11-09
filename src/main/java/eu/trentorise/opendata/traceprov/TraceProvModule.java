@@ -15,7 +15,6 @@
  */
 package eu.trentorise.opendata.traceprov;
 
-import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,7 +25,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import eu.trentorise.opendata.commons.jackson.TodCommonsModule;
 import eu.trentorise.opendata.traceprov.geojson.GeoJson;
-import eu.trentorise.opendata.traceprov.types.TraceType;
 import java.io.IOException;
 
 /**
@@ -47,8 +45,7 @@ public final class TraceProvModule extends SimpleModule {
     public TraceProvModule() {
         super("traceprov-jackson", TodCommonsModule.readJacksonVersion(TraceProvModule.class));
 
-        addDeserializer(GeoJson.class, new GeoJsonDeserializer());
-        addDeserializer(TraceType.class, new TraceTypeDeserializer());
+        addDeserializer(GeoJson.class, new GeoJsonDeserializer());        
 
     }
 
@@ -104,33 +101,7 @@ public final class TraceProvModule extends SimpleModule {
 
     }
 
-    public static class TraceTypeDeserializer extends StdDeserializer<TraceType> {
-
-        public TraceTypeDeserializer() {
-            super(TraceType.class);
-        }
-
-        public TraceTypeDeserializer(Class<TraceType> vc) {
-            super(vc);
-        }
-
-        @Override
-        public TraceType deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-            ObjectMapper mapper = (ObjectMapper) jp.getCodec();
-            ObjectNode root = (ObjectNode) mapper.readTree(jp);
-            String typeId = root.get("id").asText();  
-            TraceType traceType = TraceDb.getDb().getTypeRegistry().get(typeId);
-                        
-            try {                
-                return mapper.convertValue(root, traceType.getClass());
-            }            
-            catch (Exception ex) {
-                throw new TraceProvException("Cannot convert json to resolved traceprov type: " + traceType, ex);
-            }
-
-        }
-
-    }
+   
 
 }
 

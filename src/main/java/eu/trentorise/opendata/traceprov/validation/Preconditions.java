@@ -21,7 +21,6 @@ import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEm
 
 import com.google.common.collect.ImmutableList;
 
-import eu.trentorise.opendata.traceprov.types.TraceType;
 
 import java.util.List;
 import javax.annotation.Nullable;
@@ -34,12 +33,6 @@ public final class Preconditions {
 
     private Preconditions(){}
     
-    
-    public static TraceType checkType(@Nullable TraceType type){
-	checkNotNull(type);
-	checkNotEmpty(type.getId(), "Invalid type datatype id!");
-	return type;
-    }
     
     /**
      *

@@ -20,17 +20,9 @@ import com.google.common.collect.ImmutableMap;
 import eu.trentorise.opendata.commons.Dict;
 import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
-import eu.trentorise.opendata.traceprov.data.DataArray;
-import eu.trentorise.opendata.traceprov.data.DataMap;
-import eu.trentorise.opendata.traceprov.data.NodeMetadata;
-import eu.trentorise.opendata.traceprov.data.DataValue;
-import eu.trentorise.opendata.traceprov.data.TraceFile;
-import eu.trentorise.opendata.traceprov.data.ParsedType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
-import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.TraceRefs;
-import eu.trentorise.opendata.traceprov.data.PropertyMapping;
+
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -70,32 +62,5 @@ public class CodeGenTest {
                 .build();
         assertEquals("", dataset.getModified());
     }
-
-    @Test
-    public void testRef() {
-        assertEquals("$[0][0]", TraceRefs.tablePath(0, 0));        
-        assertEquals("$[*][1]", TraceRefs.tablePath(-1, 1));  
-        assertEquals("$[1][*]", TraceRefs.tablePath(1, -1));          
-        assertEquals("$[*][*]", TraceRefs.tablePath(-1, -1));
-    }
-
-    @Test
-    public void testDataModel() {
-        assertEquals(TraceFile.of().getData(), DataMap.of());
-        assertEquals(TraceFile.of().getMappings(), ImmutableList.of());
-
-        
-        
-        TraceFile.builder().setMappings(ImmutableList.of(PropertyMapping.of(Ref.of(),
-                                                        ImmutableList.of("a"))));
-        
-        ParsedType ps = ParsedType.builder().setType(AnyType.of()).build();
-        assertEquals(ImmutableList.of(), ps.getErrors());
-        
-        DataMap.of(Ref.of(), NodeMetadata.of(), ImmutableMap.of("a", 
-                DataArray.of(Ref.of(), NodeMetadata.of(), DataValue.of(Ref.of(), NodeMetadata.of(), 3))));
-    }
-
-    
     
 }
