@@ -11,6 +11,9 @@ target/
 /conf/*
 !/conf/README.txt
 
+/release.properties
+/pom.xml.releaseBackup
+
 
 ##### INTELLIJ
 
