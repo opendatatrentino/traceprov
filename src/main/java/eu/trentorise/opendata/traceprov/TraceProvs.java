@@ -29,19 +29,5 @@ public final class TraceProvs {
     public static final String TRACEPROV_PREFIX = "traceprov:";
     
     private TraceProvs(){}
-    
-    /**
-     * Configures the provided Jackson ObjectMapper exactly as the internal
-     * JSON mapper used for reading operations. If you want to perform
-     * create/update/delete operations, use {@link  #configureObjectMapperForPosting(com.fasterxml.jackson.databind.ObjectMapper, java.lang.Class)
-     * } instead.
-     *
-     * @param om a Jackson object mapper
-     */
-    public static void configureObjectMapper(ObjectMapper om) {
-        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        TraceProvModule.registerModulesInto(om);
-    }
-       
 
 }

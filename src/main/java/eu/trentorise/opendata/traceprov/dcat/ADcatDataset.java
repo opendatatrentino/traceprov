@@ -54,7 +54,8 @@ abstract class ADcatDataset implements Serializable {
      * The frequency at which dataset is published, as defined by
      * <a href="http://purl.org/dc/terms/accrualPeriodicity"> dct:
      * accrualPeriodicity </a>
-     *
+     * 
+     *<p>
      * In this implementation, returned format could be either
      * <ul>
      * <li>A String encoded in
@@ -62,21 +63,23 @@ abstract class ADcatDataset implements Serializable {
      * "_blank">ISO 8601 Duration format</a>, like i.e. {@code P3Y6M4DT12H30M5S}
      * </li> This format can be used when periodicity can be precisely defined
      * (i.e. there is an update every second for sensor data)
-     * <li>A string with one of the <a href=
-     * "http://publications.europa.eu/mdr/authority/frequency/" target="_blank">
-     * DCAT AP profile frequency codes</a>, like {@code BIWEEKLY} . Note these
-     * codes also include special frequencies such as {@code UNKNOWN},
-     * {@code IRREGULAR}, {@code CONT} and {@code UPDATE_CONT}</li>
+     * <li>A string with one of the
+     * <a href= "http://publications.europa.eu/mdr/authority/frequency/" target=
+     * "_blank"> DCAT AP profile frequency codes</a>, like {@code BIWEEKLY} .
+     * Note these codes also include special frequencies such as {@code UNKNOWN}
+     * , {@code IRREGULAR}, {@code CONT} and {@code UPDATE_CONT}</li>
      * <li>A string that can't be parsed as ISO duration nor as DCAT AP
      * frequency codes (i.e. a string in natural language, like 'Every two weeks
      * except during summer'). In this case the string MUST be prepended with
-     * {@link #UNPARSEABLE}</li>
+     * {@link eu.trentorise.opendata.commons.TodUtils#UNPARSEABLE
+     * "unparseable:"}</li>
      * <li>the empty string, in case duration is unspecified</li>
      * </ul>
+     * </p>
      */
     @Value.Default
     public String getAccrualPeriodicity() {
-	return "";
+        return "";
     }
 
     /**
@@ -89,7 +92,7 @@ abstract class ADcatDataset implements Serializable {
      */
     @Value.Default
     public VCard getContactPoint() {
-	return VCard.of();
+        return VCard.of();
     }
 
     /**
@@ -98,7 +101,7 @@ abstract class ADcatDataset implements Serializable {
      */
     @Value.Default
     public Dict getDescription() {
-	return Dict.of();
+        return Dict.of();
     }
 
     /**
@@ -114,7 +117,7 @@ abstract class ADcatDataset implements Serializable {
      */
     @Value.Default
     public String getIdentifier() {
-	return "";
+        return "";
     }
 
     /**
@@ -123,13 +126,14 @@ abstract class ADcatDataset implements Serializable {
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid
-     * confusing it with regular dates. If date is unknown the empty string is
-     * used.
+     * format is unknown prepend it with
+     * {@link eu.trentorise.opendata.commons.TodUtils#UNPARSEABLE
+     * "unparseable:"} to avoid confusing it with regular dates. If date is
+     * unknown the empty string is used.
      */
     @Value.Default
     public String getIssued() {
-	return "";
+        return "";
     }
 
     /**
@@ -153,7 +157,7 @@ abstract class ADcatDataset implements Serializable {
      */
     @Value.Default
     public String getLandingPage() {
-	return "";
+        return "";
     }
 
     /**
@@ -178,8 +182,6 @@ abstract class ADcatDataset implements Serializable {
      */
     public abstract List<Locale> getLanguages();
 
-    public static final String UNPARSEABLE = "unparseable:";
-
     /**
      * Most recent date on which the dataset was changed, updated or modified.
      * The value of this property indicates a change to the actual dataset, not
@@ -191,15 +193,16 @@ abstract class ADcatDataset implements Serializable {
      * Note Dcat standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid
-     * confusing it with regular dates. If date is unknown the empty string is
-     * used.
+     * format is unknown prepend it with
+     * {@link eu.trentorise.opendata.commons.TodUtils#UNPARSEABLE
+     * ":unparseable"} to avoid confusing it with regular dates. If date is
+     * unknown the empty string is used.
      *
      * @see #getAccrualPeriodicity()
      */
     @Value.Default
     public String getModified() {
-	return "";
+        return "";
     }
 
     /**
@@ -215,7 +218,7 @@ abstract class ADcatDataset implements Serializable {
      */
     @Value.Default
     public AFoafAgent getPublisher() {
-	return FoafAgent.of();
+        return FoafAgent.of();
     }
 
     /**
@@ -231,11 +234,11 @@ abstract class ADcatDataset implements Serializable {
      * {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofName(java.lang.String)
      * Feature object}</li>
      * <li>a url to an identifier of the location, i.e.
-     * http://www.geonames.org/6695072 (in this case you can use
+     * <a href="http://www.geonames.org/6695072" target="_blank"> http://www.geonames.org/6695072</a> (in this case you can use
      * {@link eu.trentorise.opendata.traceprov.geojson.Feature#ofId(java.lang.String)
      * Feature.ofId}</li>
      * <li>if spatial value is unknwon
-     * {@link eu.trentorise.opendata.traceprov.geojson.Feature#of() is returned.
+     * {@link eu.trentorise.opendata.traceprov.geojson.Feature#of() Feature#of()} is returned.
      * </li>
      * </ul>
      *
@@ -244,7 +247,7 @@ abstract class ADcatDataset implements Serializable {
     // http://publications.europa.eu/mdr/authority/place/
     @Value.Default
     public GeoJson getSpatial() {
-	return Feature.of();
+        return Feature.of();
     }
 
     /**
@@ -257,7 +260,7 @@ abstract class ADcatDataset implements Serializable {
      */
     @Value.Default
     public PeriodOfTime getTemporal() {
-	return PeriodOfTime.of();
+        return PeriodOfTime.of();
     }
 
     /**
@@ -276,7 +279,7 @@ abstract class ADcatDataset implements Serializable {
      */
     @Value.Default
     public Dict getTitle() {
-	return Dict.of();
+        return Dict.of();
     }
 
     /**
@@ -286,7 +289,7 @@ abstract class ADcatDataset implements Serializable {
      */
     @Value.Default
     public String getUri() {
-	return "";
+        return "";
     }
 
 }

@@ -53,7 +53,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public Dict getDescription() {
-	return Dict.of();
+        return Dict.of();
     }
 
     ;
@@ -66,7 +66,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getHomepage() {
-	return "";
+        return "";
     }
 
     /**
@@ -76,8 +76,10 @@ abstract class ADcatCatalog implements Serializable {
      * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid confusing
-     * it with regular dates. If date is unknown the empty string is used.
+     * format is unknown prepend it with
+     * {@link eu.trentorise.opendata.commons.TodUtils#UNPARSEABLE
+     * "unparseable:"} to avoid confusing it with regular dates. If date is
+     * unknown the empty string is used.
      *
      * @see ADcatDataset#getIssued()
      * @see ADcatDistribution#getIssued()
@@ -86,9 +88,8 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getIssued() {
-	return "";
+        return "";
     }
-
 
     /**
      * The languages of the catalog. This refers to the language used in the
@@ -116,7 +117,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getLicense() {
-	return "";
+        return "";
     }
 
     /**
@@ -124,13 +125,14 @@ abstract class ADcatCatalog implements Serializable {
      * Must be in a <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date
      * and Time compliant</a> string format i.e. "2011-12-11" . Specified by
      * <a href="http://purl.org/dc/terms/modified">dct:modified</a> In TraceProv
-     * if date format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid
-     * confusing it with regular dates. If date is unknown the empty string is
-     * used.
+     * if date format is unknown prepend it with
+     * {@link eu.trentorise.opendata.commons.TodUtils#UNPARSEABLE
+     * "unparseable:"} to avoid confusing it with regular dates. If date is
+     * unknown the empty string is used.
      */
     @Value.Default
     public String getModified() {
-	return "";
+        return "";
     }
 
     /**
@@ -144,7 +146,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public AFoafAgent getPublisher() {
-	return FoafAgent.of();
+        return FoafAgent.of();
     }
 
     /**
@@ -159,7 +161,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getRights() {
-	return "";
+        return "";
     }
 
     /**
@@ -168,7 +170,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getSpatial() {
-	return "";
+        return "";
     }
 
     /**
@@ -184,7 +186,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public ASkosConceptScheme getThemes() {
-	return SkosConceptScheme.of();
+        return SkosConceptScheme.of();
     }
 
     /**
@@ -194,7 +196,7 @@ abstract class ADcatCatalog implements Serializable {
     // todo put example
     @Value.Default
     public Dict getTitle() {
-	return Dict.of();
+        return Dict.of();
     }
 
     /**
@@ -203,7 +205,7 @@ abstract class ADcatCatalog implements Serializable {
      */
     @Value.Default
     public String getUri() {
-	return "";
+        return "";
     }
 
 }

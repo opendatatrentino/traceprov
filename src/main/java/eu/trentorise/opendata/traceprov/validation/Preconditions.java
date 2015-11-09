@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 /**
  *
  * @author David Leoni
+ * @since 0.3
  */
 public final class Preconditions {
 
@@ -82,7 +83,6 @@ public final class Preconditions {
      * fails; will be converted to a string using String.valueOf(Object) and
      * prepended to more specific error messages.
      *
-     * @param min there must be at least {@code min} positions
      * @throws IllegalArgumentException on invalid coordinates
      */    
     public static void checkPolygon(List<ImmutableList<ImmutableList<Double>>> positions, @Nullable Object prependedErrorMessage){
