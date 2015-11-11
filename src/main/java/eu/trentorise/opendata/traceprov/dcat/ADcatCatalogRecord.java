@@ -72,7 +72,7 @@ abstract class ADcatCatalogRecord implements Serializable {
      */
     @Value.Default
     public Dict getDescription() {
-	return Dict.of();
+        return Dict.of();
     }
 
     /**
@@ -84,14 +84,16 @@ abstract class ADcatCatalogRecord implements Serializable {
      * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid confusing
-     * it with regular dates. If date is unknown the empty string is used.
+     * format is unknown prepend it with
+     * {@link eu.trentorise.opendata.commons.TodUtils#UNPARSEABLE
+     * "unparseable:"} to avoid confusing it with regular dates. If date is
+     * unknown the empty string is used.
      *
      * @see ADcatDataset#getIssued()
      */
     @Value.Default
     public String getIssued() {
-	return "";
+        return "";
     };
 
     /**
@@ -108,14 +110,16 @@ abstract class ADcatCatalogRecord implements Serializable {
      * Note DCAT standard requires dates in string format to be
      * <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601 Date and Time
      * compliant</a> string format i.e. "2011-12-11". In TraceProv if date
-     * format is unknown prepend it with {@link TodUtils#UNPARSEABLE} to avoid confusing
-     * it with regular dates. If date is unknown the empty string is used.
+     * format is unknown prepend it with
+     * {@link eu.trentorise.opendata.commons.TodUtils#UNPARSEABLE
+     * "unparseable:"} to avoid confusing it with regular dates. If date is
+     * unknown the empty string is used.
      * 
      * @see ADcatDataset#getModified()
      */
     @Value.Default
     public String getModified() {
-	return "";
+        return "";
     };
 
     /**
@@ -134,7 +138,7 @@ abstract class ADcatCatalogRecord implements Serializable {
      */
     @Value.Default
     public Dict getTitle() {
-	return Dict.of();
+        return Dict.of();
     }
 
     /**
@@ -142,7 +146,7 @@ abstract class ADcatCatalogRecord implements Serializable {
      */
     @Value.Default
     public String getUri() {
-	return "";
+        return "";
     }
 
 }
