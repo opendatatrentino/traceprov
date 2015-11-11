@@ -1,7 +1,7 @@
 
 #### 0.3.0
 
-November 9th, 2015
+November 11th, 2015
 
 - improved dcat models following DCAT AP 1.1 (adapted for dirty data)
 - added geojson package
