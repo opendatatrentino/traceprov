@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TraceProv</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link id="josman-stylesheet" rel="stylesheet" type="text/css" href="../css/josman.css">
+        <!-- <link id="bootstrap-stylesheet" rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+        <link id="bootstrap-theme-stylesheet" rel="stylesheet" type="text/css" href="../css/bootstrap-theme.min.css">
+        -->
+        <link rel="stylesheet" type="text/css" href="website-template/css/josman.css"> 
+        <!--
+        <link  rel="stylesheet" type="text/css" href="website-template/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="website-template/css/bootstrap-theme.min.css">
+        -->
+    </head>
+    <body>
+        <div id="josman-wrapper">
+            <div id="josman-header">
+
+                <div style="position:absolute;  min-height:100px; min-width:100%; ">
+                    <a id="josman-program-logo-link" href="../index.html">
+                        <img id="josman-program-logo" src="../img/traceprov-logo-200px.png" alt="program logo">    
+                    </a>
+
+                    <a id="josman-repo-link" href="../index.html">TraceProv</a>
+
+
+                    <a href="http://dati.trentino.it/en/" target="_blank">
+                        <img style="float:right; padding:10px; width:80px" src="../img/tod-logo.png" alt="organization logo">                        
+                    </a>
+
+                    <div id="josman-nav-header">
+                        <a id="josman-home" href="../index.html">Home</a>                        
+                        <span id="josman-usage" style="margin-left:15px">Usage:                        
+                            
+                            
+                        <a class="josman-version-tab-header " href="../0.3/index.html">0.3</a><a class="josman-version-tab-header " href="../0.2/index.html">0.2</a><a class="josman-version-tab-header josman-tag-selected" href="../0.1/index.html">0.1</a></span>
+                        <span style="margin-left:35px">
+                            <a id="josman-project" class="josman-external-link" href="https://github.com/opendatatrentino/traceprov" target="_blank">Repo</a>
+                            <a id="josman-wiki" class="josman-external-link" href="https://github.com/opendatatrentino/traceprov/wiki" target="_blank">Wiki</a> 
+                        </span>
+                    </div>
+                </div>                
+
+            </div>
+
+            <div id="josman-sidebar">
+                <div id="josman-internal-sidebar" class="josman-sidebar-block"><ul class="josman-tree"><li><div class="josman-sidebar-page-title josman-sidebar-selected">Usage</div><ul class="josman-tree"></ul></li></ul></div>
+
+
+
+                <div id="josman-sidebar-managed-block" class="josman-sidebar-block">
+
+                    <div id="josman-javadoc-link" class="josman-sidebar-page-title"><a class="josman-external-link" href="javadoc/index.html" target="_blank">Javadoc</a></div>
+                    <!-- <div><a href="CHANGES.html">Release notes</a></div> -->              
+                </div>
+
+
+            </div>
+
+            <div id="josman-content">
+                <div id="josman-internal-content"><h1><a href="#traceprov-api" name="traceprov-api">TraceProv API</a></h1><p>Java interface for provenance management. </p><p><strong>Project status</strong>: Currently holds Java models for <a href="http://www.w3.org/TR/vocab-dcat/">DCAT catalog vocabulary</a> and references to dataset elements.</p><p><strong>Roadmap</strong>: see <a href="https://github.com/opendatatrentino/traceprov/issues">project issues</a></p><h4><a href="#usage-snapshots" name="usage-snapshots">Usage - snapshots</a></h4><p>WARNING: THIS IS A DEVELOPMENT VERSION THAT CAN CHANGE AT ANY TIME, DO NOT USE IT IN PRODUCTION</p><p>To use snapshots version in Maven, add this to your pom.xml:</p>
+<pre><code>  &lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;sonatype-nexus-snapshots&lt;/id&gt;
+        &lt;name&gt;project&lt;/name&gt;
+        &lt;url&gt;https://oss.sonatype.org/content/repositories/snapshots/&lt;/url&gt;            
+    &lt;/repository&gt;        
+&lt;/repositories&gt;
+</code></pre><p>in the <em>dependencies</em> section, add:</p>
+<pre><code>    &lt;dependency&gt;
+      &lt;groupId&gt;eu.trentorise.opendata&lt;/groupId&gt;
+      &lt;artifactId&gt;traceprov&lt;/artifactId&gt;
+      &lt;version&gt;0.X.0-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+</code></pre><p>where X is the current version</p><h4><a href="#versioning" name="versioning">Versioning</a></h4><p>1) For 0.MINOR.PATCH series, we will increase the MINOR at each change to the api, no matter how small it is. If we only change the javadoc without changing the api we increase the PATCH.</p><p>2) When we reach 1.0.0 we will follow semver.org rules:</p><p>Given a version number MAJOR.MINOR.PATCH, increment the:</p>
+<pre><code>MAJOR version when you make incompatible API changes,
+MINOR version when you add functionality in a backwards-compatible manner, and
+PATCH version when you make backwards-compatible bug fixes.
+</code></pre><p>Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.</p><h4><a href="#projects-using-this-api" name="projects-using-this-api">Projects using this API</a></h4>
+<ul>
+  <li><a href="https://github.com/opendatatrentino/Jackan">Jackan</a>: client for accessing opendata catalogs</li>
+  <li><a href="https://github.com/opendatatrentino/OpenDataRise">OpenDataRise</a>: power tool to cleanse and semantify open data, based on Refine</li>
+</ul><h4><a href="#credits-" name="credits-">Credits:</a></h4>
+<ul>
+  <li>Moaz Reyad - DISI at University of Trento - <a href="mailto:moaz.reyad@unitn.it">moaz.reyad@unitn.it</a></li>
+  <li>David Leoni - Trento Rise - <a href="mailto:david.leoni@unitn.it">david.leoni@unitn.it</a></li>
+  <li>Ivan Tankoyeu - DISI at University of Trento - <a href="mailto:tankoyeu@disi.unitn.it">tankoyeu@disi.unitn.it</a></li>
+</ul></div>
+            </div>
+
+        </div>        
+        <script src="../js/jquery-1.11.2.min.js"></script>
+        <!-- <script src="../js/bootstrap-3.3.4.min.js"></script> -->
+
+        <!-- quick and silly hack to get the file -->
+        <script src="website-template/js/jquery-1.11.2.min.js"></script>
+        <!-- quick and silly hack to get the file -->
+        <script src="website-template/js/jquery-3.3.4.min.js"></script>
+        <script>
+            // idotic CSS in style doesn't work, so use jquery instead: 
+            // also would like pre code but this will select code and won't work. There aren't selectors for parents
+
+            $("pre").css("max-width", "680px").css("overflow-x", "auto");
+
+            /* We don't support this yet...
+             $('.josman-tree-toggle').click(function () {
+             $(this).parent().children('ul.tree').toggle(200);
+             return false;
+             });
+             */
+        </script>
+    </body>
+</html>
