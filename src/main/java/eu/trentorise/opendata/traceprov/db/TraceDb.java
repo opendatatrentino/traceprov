@@ -654,8 +654,7 @@ public class TraceDb {
             throw new AmbiguousUrlException("Tried to read url which is in more then one sameas clique!",
                     normalizedUrl);
         }
-        return readMainObject(idToData.get(0)
-                                      .getId());
+        return readMainObject(idToData.values().iterator().next().getId());
 
     }
 
