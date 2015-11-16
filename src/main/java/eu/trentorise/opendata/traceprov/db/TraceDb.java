@@ -36,7 +36,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.SetView;
@@ -54,6 +56,7 @@ import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
+import eu.trentorise.opendata.traceprov.exceptions.AmbiguousUrlException;
 import eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException;
 import eu.trentorise.opendata.traceprov.exceptions.IncomparableVersionsException;
 import eu.trentorise.opendata.traceprov.types.TraceType;
@@ -85,32 +88,32 @@ public class TraceDb {
     public static final String TRACEDB_PUBLISHER_URI = TraceProvs.TRACEPROV_IRI + "/db/tracedb-publisher";
 
     private static final AFoafAgent TRACEDB_PUBLISHER = FoafAgent.builder()
-	    .setName(Dict.of("TraceDb Default Publisher"))
-	    .setUri(TRACEDB_PUBLISHER_URI)
-	    .build();
+                                                                 .setName(Dict.of("TraceDb Default Publisher"))
+                                                                 .setUri(TRACEDB_PUBLISHER_URI)
+                                                                 .build();
 
     private static final NodeMetadata TRACEDB_DEFAULT_NODE_METADATA = NodeMetadata.builder()
-	    .setPublisherId(TRACEDB_PUBLISHER_ID)
-	    .build();
+                                                                                  .setPublisherId(TRACEDB_PUBLISHER_ID)
+                                                                                  .build();
 
     /**
      * Note this one doesn't have id as it must be created first (although we
      * know id will be 0). Note also this one self publishes itself.
      */
     private static final TraceData INIT_TRACEDB_PUBLISHER = DataObject.builder()
-	    .setRef(Ref.ofDocumentId(TRACEDB_PUBLISHER_URI))
-	    .setRawValue(TRACEDB_PUBLISHER)
-	    .setMetadata(TRACEDB_DEFAULT_NODE_METADATA)
-	    .build();
+                                                                      .setRef(Ref.ofDocumentId(TRACEDB_PUBLISHER_URI))
+                                                                      .setRawValue(TRACEDB_PUBLISHER)
+                                                                      .setMetadata(TRACEDB_DEFAULT_NODE_METADATA)
+                                                                      .build();
 
     /**
      * TODO super prototype, naming is probably wrong
      */
     private static final ThreadLocal<TraceDb> dbPool = new ThreadLocal<TraceDb>() {
-	@Override
-	protected TraceDb initialValue() {
-	    return new TraceDb();
-	}
+        @Override
+        protected TraceDb initialValue() {
+            return new TraceDb();
+        }
     };
 
     private Map<String, String> prefixes;
@@ -175,15 +178,16 @@ public class TraceDb {
      * Database with an in-memory db and default Jackson object mapper
      */
     private TraceDb() {
-	this.dbUrl = IN_MEMORY_PREFIX + "/tracedb/defaultdb";
-	this.storedValuesByUrl = HashBasedTable.create();
-	this.storedValuesById = new HashMap();
-	this.indexedValues = HashMultimap.create();
-	this.indexedTypes = new HashSet();
-	this.prefixes = new HashMap();
-	this.sameAsIds = LinkedHashMultimap.create();
-	this.idCounter = 0;
-	this.typeRegistry = TypeRegistry.of();
+
+        this.dbUrl = IN_MEMORY_PREFIX + "/tracedb/defaultdb";
+        this.storedValuesByUrl = HashBasedTable.create();
+        this.storedValuesById = new HashMap();
+        this.indexedValues = HashMultimap.create();
+        this.indexedTypes = new HashSet();
+        this.prefixes = new HashMap();
+        this.sameAsIds = LinkedHashMultimap.create();
+        this.idCounter = 0;
+        this.typeRegistry = TypeRegistry.of();
     }
 
     /**
@@ -191,21 +195,21 @@ public class TraceDb {
      * configurable.
      */
     public AFoafAgent readTracedbPublisher() {
-	return (AFoafAgent) read(TRACEDB_PUBLISHER_ID).getRawValue();
+        return (AFoafAgent) read(TRACEDB_PUBLISHER_ID).getRawValue();
     }
 
     /**
      * The publisher to use for objects with unknown publisher.
      */
     public AFoafAgent readUnknownPublisher() {
-	return (AFoafAgent) read(TRACEDB_PUBLISHER_ID).getRawValue();
+        return (AFoafAgent) read(TRACEDB_PUBLISHER_ID).getRawValue();
     }
 
     /**
      * Initializes db with default values.
      */
     private void init() {
-	init(IN_MEMORY_PREFIX + "tracedb/defaultdb", TypeRegistry.of());
+        init(IN_MEMORY_PREFIX + "tracedb/defaultdb", TypeRegistry.of());
     }
 
     /**
@@ -213,22 +217,22 @@ public class TraceDb {
      * NOT write in the folder.
      */
     private void init(String dbUrl, TypeRegistry typeRegistry) {
-	checkNotEmpty(dbUrl, "Invalid db Url!");
-	checkArgument(dbUrl.startsWith(IN_MEMORY_PREFIX) || dbUrl.startsWith(FILE_PREFIX),
-		"Only supported db url prefixes are " + IN_MEMORY_PREFIX + " and " + FILE_PREFIX
-			+ ", found instead url " + dbUrl);
+        checkNotEmpty(dbUrl, "Invalid db Url!");
+        checkArgument(dbUrl.startsWith(IN_MEMORY_PREFIX) || dbUrl.startsWith(FILE_PREFIX),
+                "Only supported db url prefixes are " + IN_MEMORY_PREFIX + " and " + FILE_PREFIX
+                        + ", found instead url " + dbUrl);
 
-	if (initLevel > 0) {
-	    LOG.warning("Tried to initialize database twice!");
-	} else {
-	    initLevel = INIT_LEVEL_1;
-	    this.dbUrl = dbUrl;
-	    this.typeRegistry = typeRegistry;
-	    createPublisher(INIT_TRACEDB_PUBLISHER);
-	    initLevel = INIT_LEVEL_2;
-	    initLevel = INIT_LEVEL_3;
-	    LOG.info("TraceDB " + getDbUrl() + " is now initialized.");
-	}
+        if (initLevel > 0) {
+            LOG.warning("Tried to initialize database twice!");
+        } else {
+            initLevel = INIT_LEVEL_1;
+            this.dbUrl = dbUrl;
+            this.typeRegistry = typeRegistry;
+            createPublisher(INIT_TRACEDB_PUBLISHER);
+            initLevel = INIT_LEVEL_2;
+            initLevel = INIT_LEVEL_3;
+            LOG.info("TraceDB " + getDbUrl() + " is now initialized.");
+        }
     }
 
     /**
@@ -237,9 +241,9 @@ public class TraceDb {
      * @throws IllegalStateException
      */
     void checkInitialized(int level) {
-	if (initLevel < level) {
-	    throw new IllegalStateException("TraceDb was not properly initialized!");
-	}
+        if (initLevel < level) {
+            throw new IllegalStateException("TraceDb was not properly initialized!");
+        }
     }
 
     /**
@@ -248,9 +252,9 @@ public class TraceDb {
      * @throws IllegalStateException
      */
     void checkInitialized() {
-	if (initLevel < INIT_LEVEL_3) {
-	    throw new IllegalStateException("TraceDb was not properly initialized!");
-	}
+        if (initLevel < INIT_LEVEL_3) {
+            throw new IllegalStateException("TraceDb was not properly initialized!");
+        }
     }
 
     /**
@@ -259,18 +263,18 @@ public class TraceDb {
      *            resulting Url of the db will be memory://mycompany.org/superdb
      */
     public static TraceDb createInMemoryDb(String dbId, TypeRegistry typeRegistry) {
-	TraceDb newDb = new TraceDb();
-	newDb.init(IN_MEMORY_PREFIX + dbId, typeRegistry);
+        TraceDb newDb = new TraceDb();
+        newDb.init(IN_MEMORY_PREFIX + dbId, typeRegistry);
 
-	TraceDb curDb = dbPool.get();
-	if (curDb.initLevel == INIT_LEVEL_0) {
-	    LOG.info("Found no db set in current thread, setting it to " + newDb.getDbUrl());
-	    dbPool.set(newDb);
-	} else {
-	    LOG.info(
-		    "(Found another db set in current thread, to replace it, you need to manually call TraceDb.setCurrentDb())");
-	}
-	return newDb;
+        TraceDb curDb = dbPool.get();
+        if (curDb.initLevel == INIT_LEVEL_0) {
+            LOG.info("Found no db set in current thread, setting it to " + newDb.getDbUrl());
+            dbPool.set(newDb);
+        } else {
+            LOG.info(
+                    "(Found another db set in current thread, to replace it, you need to manually call TraceDb.setCurrentDb())");
+        }
+        return newDb;
     }
 
     /**
@@ -280,15 +284,16 @@ public class TraceDb {
      * @param typeId
      */
     public void indexType(String typeId) {
-	checkNotEmpty(typeId, "Invalid TraceType id!");
-	typeRegistry.checkRegistered(typeId);
-	TraceType type = typeRegistry.get(typeId);
-	for (Map.Entry<Long, TraceData> entry : this.storedValuesById.entrySet()) {
-	    Object rawValue = entry.getValue().getRawValue();
-	    if (type.isInstance(rawValue)) {
-		indexedValues.put(typeId, entry.getKey());
-	    }
-	}
+        checkNotEmpty(typeId, "Invalid TraceType id!");
+        typeRegistry.checkRegistered(typeId);
+        TraceType type = typeRegistry.get(typeId);
+        for (Map.Entry<Long, TraceData> entry : this.storedValuesById.entrySet()) {
+            Object rawValue = entry.getValue()
+                                   .getRawValue();
+            if (type.isInstance(rawValue)) {
+                indexedValues.put(typeId, entry.getKey());
+            }
+        }
 
     }
 
@@ -306,28 +311,29 @@ public class TraceDb {
      *             if the database is not found
      */
     public static TraceDb connectToDb(String folderpath, TypeRegistry typeRegistry) {
-	LOG.info("Connecting to TraceDb at " + folderpath + "   ...");
-	checkNotEmpty(folderpath, "path to db folder is invalid!");
-	checkNotNull(typeRegistry, "Type registry must not be null!");
+        LOG.info("Connecting to TraceDb at " + folderpath + "   ...");
+        checkNotEmpty(folderpath, "path to db folder is invalid!");
+        checkNotNull(typeRegistry, "Type registry must not be null!");
 
-	File json = new File(folderpath + File.separator + TRACEDB_FILE);
-	if (json.exists()) {
-	    try {
-		TraceDb ret = typeRegistry.getObjectMapper().readValue(json, TraceDb.class);
-		ret.typeRegistry = typeRegistry;
-		ret.initLevel = INIT_LEVEL_3;
-		LOG.info("Connected to TraceDb at " + folderpath);
-		return ret;
-	    } catch (IOException ex) {
-		throw new TraceProvException("Couldn't load TraceDB", ex);
-	    }
-	} else {
-	    throw new TraceProvNotFoundException("Couldn't find any TraceDb database in folder " + folderpath);
-	}
+        File json = new File(folderpath + File.separator + TRACEDB_FILE);
+        if (json.exists()) {
+            try {
+                TraceDb ret = typeRegistry.getObjectMapper()
+                                          .readValue(json, TraceDb.class);
+                ret.typeRegistry = typeRegistry;
+                ret.initLevel = INIT_LEVEL_3;
+                LOG.info("Connected to TraceDb at " + folderpath);
+                return ret;
+            } catch (IOException ex) {
+                throw new TraceProvException("Couldn't load TraceDB", ex);
+            }
+        } else {
+            throw new TraceProvNotFoundException("Couldn't find any TraceDb database in folder " + folderpath);
+        }
     }
 
     private String folderPath() {
-	return dbUrl.substring(FILE_PREFIX.length());
+        return dbUrl.substring(FILE_PREFIX.length());
     }
 
     /**
@@ -335,42 +341,43 @@ public class TraceDb {
      */
     public void drop() {
 
-	LOG.info("Dropping TraceDb... at " + dbUrl);
+        LOG.info("Dropping TraceDb... at " + dbUrl);
 
-	TraceDb db = dbPool.get();
-	if (db.getDbUrl().equals(this.getDbUrl())) {
-	    dbPool.set(new TraceDb());
-	    // todo what about other threads?
-	    LOG.info("Removed db from local thread.");
-	}
+        TraceDb db = dbPool.get();
+        if (db.getDbUrl()
+              .equals(this.getDbUrl())) {
+            dbPool.set(new TraceDb());
+            // todo what about other threads?
+            LOG.info("Removed db from local thread.");
+        }
 
-	if (dbUrl.startsWith(IN_MEMORY_PREFIX)) {
-	    return;
-	}
+        if (dbUrl.startsWith(IN_MEMORY_PREFIX)) {
+            return;
+        }
 
-	Path dir;
-	try {
-	    dir = Paths.get(new URI(getDbUrl()));
-	} catch (URISyntaxException ex) {
-	    throw new TraceProvException("Some error occurred.", ex);
-	}
+        Path dir;
+        try {
+            dir = Paths.get(new URI(getDbUrl()));
+        } catch (URISyntaxException ex) {
+            throw new TraceProvException("Some error occurred.", ex);
+        }
 
-	if (!existsDb(dir.toString())) {
-	    throw new IllegalStateException(
-		    "Tried to drop a directory which doesn't look like a TraceDb folder! " + dir.toString());
-	}
+        if (!existsDb(dir.toString())) {
+            throw new IllegalStateException(
+                    "Tried to drop a directory which doesn't look like a TraceDb folder! " + dir.toString());
+        }
 
-	try {
-	    FileUtils.deleteDirectory(new File(dir.toString()));
-	} catch (Exception ex) {
-	    throw new TraceProvException("Couldn't delete odr db file: " + dir, ex);
-	}
+        try {
+            FileUtils.deleteDirectory(new File(dir.toString()));
+        } catch (Exception ex) {
+            throw new TraceProvException("Couldn't delete odr db file: " + dir, ex);
+        }
 
-	LOG.info("Dropped TraceDb at " + dbUrl);
+        LOG.info("Dropped TraceDb at " + dbUrl);
     }
 
     private ObjectMapper om() {
-	return typeRegistry.getObjectMapper();
+        return typeRegistry.getObjectMapper();
     }
 
     /**
@@ -378,38 +385,38 @@ public class TraceDb {
      */
     public void flush() {
 
-	LOG.info("Flushing TraceDb....");
+        LOG.info("Flushing TraceDb....");
 
-	if (dbUrl.startsWith(IN_MEMORY_PREFIX)) {
-	    throw new IllegalStateException("In memory database can't be flushed!");
-	}
+        if (dbUrl.startsWith(IN_MEMORY_PREFIX)) {
+            throw new IllegalStateException("In memory database can't be flushed!");
+        }
 
-	OutputStream file = null;
-	ObjectOutput oos = null;
+        OutputStream file = null;
+        ObjectOutput oos = null;
 
-	File outputFile = new File(dbUrl, TRACEDB_FILE);
-	try {
-	    FileWriter w = new FileWriter(outputFile);
-	    om().writeValue(w, this);
+        File outputFile = new File(dbUrl, TRACEDB_FILE);
+        try {
+            FileWriter w = new FileWriter(outputFile);
+            om().writeValue(w, this);
 
-	} catch (Exception ex) {
-	    throw new TraceProvException("Couldn't write to file: " + outputFile.getAbsolutePath(), ex);
-	} finally {
-	    try {
-		if (oos != null) {
-		    oos.close();
-		}
+        } catch (Exception ex) {
+            throw new TraceProvException("Couldn't write to file: " + outputFile.getAbsolutePath(), ex);
+        } finally {
+            try {
+                if (oos != null) {
+                    oos.close();
+                }
 
-		if (file != null) {
-		    file.close();
-		}
-	    } catch (IOException ex) {
-		LOG.log(Level.SEVERE, "Error while closing TraceDb file", ex);
-	    }
+                if (file != null) {
+                    file.close();
+                }
+            } catch (IOException ex) {
+                LOG.log(Level.SEVERE, "Error while closing TraceDb file", ex);
+            }
 
-	}
+        }
 
-	LOG.info("Done flushing TraceDb at " + getDbUrl());
+        LOG.info("Done flushing TraceDb at " + getDbUrl());
 
     }
 
@@ -418,7 +425,7 @@ public class TraceDb {
      */
     public static boolean existsDb(String folderPath) {
 
-	return new File(folderPath + File.separator + TRACEDB_FILE).exists();
+        return new File(folderPath + File.separator + TRACEDB_FILE).exists();
     }
 
     /**
@@ -431,48 +438,51 @@ public class TraceDb {
      */
     public static TraceDb createDb(String folderpath, TypeRegistry typeRegistry) {
 
-	LOG.info("Creating TraceDb at " + folderpath + "  ...");
+        LOG.info("Creating TraceDb at " + folderpath + "  ...");
 
-	checkNotEmpty(folderpath, "path to db folder is invalid!");
-	checkNotNull(typeRegistry);
+        checkNotEmpty(folderpath, "path to db folder is invalid!");
+        checkNotNull(typeRegistry);
 
-	File dir = new File(folderpath);
-	File jsonFile = new File(folderpath + File.separator + TRACEDB_FILE);
-	if (dir.exists()) {
-	    if ((dir.isFile())) {
-		throw new IllegalStateException(
-			"Error while creating an TraceDb, target path should be a directory, found a file instead! "
-				+ folderpath);
-	    }
+        File dir = new File(folderpath);
+        File jsonFile = new File(folderpath + File.separator + TRACEDB_FILE);
+        if (dir.exists()) {
+            if ((dir.isFile())) {
+                throw new IllegalStateException(
+                        "Error while creating an TraceDb, target path should be a directory, found a file instead! "
+                                + folderpath);
+            }
 
-	    if (dir.list().length > 0) {
-		throw new IllegalStateException(
-			"Error while creating an TraceDb, target directory is not empty! " + folderpath);
-	    }
-	}
+            if (dir.list().length > 0) {
+                throw new IllegalStateException(
+                        "Error while creating an TraceDb, target directory is not empty! " + folderpath);
+            }
+        }
 
-	TraceDb newDb = new TraceDb();
-	Path path = Paths.get(folderpath);
-	newDb.init(path.toUri().toString(), typeRegistry);
-	try {
-	    FileWriter fw = new FileWriter(jsonFile);
-	    typeRegistry.getObjectMapper().writeValue(fw, newDb);
-	} catch (Throwable tr) {
-	    throw new TraceProvException("Error while writing trace db to disk!", tr);
-	}
+        TraceDb newDb = new TraceDb();
+        Path path = Paths.get(folderpath);
+        newDb.init(path.toUri()
+                       .toString(),
+                typeRegistry);
+        try {
+            FileWriter fw = new FileWriter(jsonFile);
+            typeRegistry.getObjectMapper()
+                        .writeValue(fw, newDb);
+        } catch (Throwable tr) {
+            throw new TraceProvException("Error while writing trace db to disk!", tr);
+        }
 
-	LOG.info("Created TraceDb at " + folderpath);
+        LOG.info("Created TraceDb at " + folderpath);
 
-	TraceDb curDb = dbPool.get();
-	if (curDb.initLevel == INIT_LEVEL_0) {
-	    LOG.info("Found no default db set for this thread, setting it to newly created db.");
-	    dbPool.set(newDb);
-	} else {
-	    LOG.info(
-		    "(Found another db set in current thread, to replace it, you need to manually call TraceDb.setCurrentDb())");
-	}
+        TraceDb curDb = dbPool.get();
+        if (curDb.initLevel == INIT_LEVEL_0) {
+            LOG.info("Found no default db set for this thread, setting it to newly created db.");
+            dbPool.set(newDb);
+        } else {
+            LOG.info(
+                    "(Found another db set in current thread, to replace it, you need to manually call TraceDb.setCurrentDb())");
+        }
 
-	return newDb;
+        return newDb;
     }
 
     /**
@@ -484,9 +494,9 @@ public class TraceDb {
      *            i.e. http://www.w3.org/1999/02/22-rdf-syntax-ns#
      */
     public void putPrefix(String prefix, String url) {
-	checkNotEmpty(prefix, "Url prefix is invalid!");
-	checkNotEmpty(url, "Url is invalid!");
-	prefixes.put(prefix, url);
+        checkNotEmpty(prefix, "Url prefix is invalid!");
+        checkNotEmpty(url, "Url is invalid!");
+        prefixes.put(prefix, url);
     }
 
     /**
@@ -496,9 +506,9 @@ public class TraceDb {
      *            Notice prefix is supposed to include the colon, like 'foaf:'
      */
     public boolean hasPrefix(String prefix) {
-	checkNotEmpty(prefix, "URL prefix is invalid!");
-	String pfx = prefixes.get(prefix);
-	return pfx != null;
+        checkNotEmpty(prefix, "URL prefix is invalid!");
+        String pfx = prefixes.get(prefix);
+        return pfx != null;
     }
 
     /**
@@ -508,13 +518,13 @@ public class TraceDb {
      *             if prefix doesn't have associated any expansion in the db
      */
     public String getPrefix(String prefix) {
-	checkNotEmpty(prefix, "URL prefix is invalid!");
-	String pfx = prefixes.get(prefix);
-	if (pfx == null) {
-	    throw new TraceProvNotFoundException("Prefix not found!");
-	} else {
-	    return pfx;
-	}
+        checkNotEmpty(prefix, "URL prefix is invalid!");
+        String pfx = prefixes.get(prefix);
+        if (pfx == null) {
+            throw new TraceProvNotFoundException("Prefix not found!");
+        } else {
+            return pfx;
+        }
     }
 
     /**
@@ -523,14 +533,14 @@ public class TraceDb {
      * it is.
      */
     public String expandUrl(String url) {
-	checkNotEmpty(url, "URL is invalid!");
+        checkNotEmpty(url, "URL is invalid!");
 
-	for (String prefix : prefixes.keySet()) {
-	    if (url.startsWith(prefix)) {
-		return prefixes.get(prefix) + url.substring(prefix.length());
-	    }
-	}
-	return url;
+        for (String prefix : prefixes.keySet()) {
+            if (url.startsWith(prefix)) {
+                return prefixes.get(prefix) + url.substring(prefix.length());
+            }
+        }
+        return url;
     }
 
     /**
@@ -539,16 +549,16 @@ public class TraceDb {
      * @return the normalized url
      */
     public String normalizeUrl(String url) {
-	checkNotEmpty(url, "Invalid url!");
-	// odr todo 0.3 this is rough....
-	return TodUtils.removeTrailingSlash(expandUrl(url));
+        checkNotEmpty(url, "Invalid url!");
+        // odr todo 0.3 this is rough....
+        return TodUtils.removeTrailingSlash(expandUrl(url));
     }
 
     /**
      * Returns an immutable map with [prefix, expanded url] pairs
      */
     public Map<String, String> getAllPrefixes() {
-	return ImmutableMap.copyOf(prefixes);
+        return ImmutableMap.copyOf(prefixes);
     }
 
     /**
@@ -556,7 +566,7 @@ public class TraceDb {
      * {@link #IN_MEMORY_URL} is returned.
      */
     public String getDbUrl() {
-	return dbUrl;
+        return dbUrl;
     }
 
     /**
@@ -567,7 +577,7 @@ public class TraceDb {
      * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
     public TraceData read(long datanodeId) {
-	return read(Arrays.asList(datanodeId)).get(0);
+        return read(Arrays.asList(datanodeId)).get(0);
     }
 
     /**
@@ -577,80 +587,103 @@ public class TraceDb {
      *             if any of the ids is not found.
      */
     public List<TraceData> read(Iterable<Long> datanodeIds) {
-	checkInitialized(INIT_LEVEL_0);
-	List<TraceData> ret = new ArrayList();
-	for (Long datanodeId : datanodeIds) {
-	    checkNotNull(datanodeId);
-	    checkArgument(datanodeId >= 0);
-	    TraceData cand = storedValuesById.get(datanodeId);
-	    if (cand == null) {
-		throw new DataNotFoundException(
-			"Couldn't find view with traceprov internal id " + datanodeId);
-	    } else {
-		ret.add(cand);
-	    }
-	}
-	return ret;
+        checkInitialized(INIT_LEVEL_0);
+        List<TraceData> ret = new ArrayList();
+        for (Long datanodeId : datanodeIds) {
+            checkNotNull(datanodeId);
+            checkArgument(datanodeId >= 0);
+            TraceData cand = storedValuesById.get(datanodeId);
+            if (cand == null) {
+                throw new DataNotFoundException("Couldn't find view with traceprov internal id " + datanodeId);
+            } else {
+                ret.add(cand);
+            }
+        }
+        return ret;
 
     }
 
     protected boolean selfPublished(TraceData mainTraceView) {
-	return mainTraceView.getId() == mainTraceView.getMetadata().getPublisherId();
+        return mainTraceView.getId() == mainTraceView.getMetadata()
+                                                     .getPublisherId();
     }
 
     /**
-     * Returns the view that might be aliasing provided {@code datanodeId}.
-     * Returned view must belong to the same sameAs clique a {@code datanodeId}
+     * Returns the main view of the sameas clique where {@code datanodeId}
+     * belongs to.
      *
      * @param datanodeId
      *            the TraceProv internal id of the view to retrieve.
      * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
      */
     public TraceData readMainObject(long datanodeId) {
-	checkInitialized();
-	checkArgument(datanodeId >= 0);
+        checkInitialized();
+        checkArgument(datanodeId >= 0);
 
-	List<Long> clique = readSameAsIds(datanodeId);
+        List<Long> clique = readSameAsIds(datanodeId);
 
-	if (!clique.isEmpty()) {
-
-	    return read(clique.get(0));	   
-	}
-	throw new DataNotFoundException(
-		"Couldn't find view with internal traceprov id " + datanodeId);
+        if (!clique.isEmpty()) {
+            return read(clique.get(0));
+        }
+        throw new DataNotFoundException("Couldn't find view with internal traceprov id " + datanodeId);
 
     }
 
     /**
-     * Returns the main view with given url. First publisher context searched is
-     * {@link #TRACEDB_PUBLISHER_ID}, then all others are tried sequentially. If
-     * url is not in any context, an exception is thrown.
+     * Searches sames cliques for a data object with provided url as external
+     * id. If found, returns the main view of the sameas clique. If url is in
+     * more than one clique, or in no clique, an exception is thrown.
      *
      * @param url
      *            the url of the object to retrieve.
-     * @return the object with given url or throws exception if not found.
+     * @return the data object with given url or throws exception if not found.
      * @throws eu.trentorise.opendata.traceprov.exceptions.DataNotFoundException
+     *             if no clique is found.
+     * @throws eu.trentorise.opendata.traceprov.exceptions.AmbiguousUrlException
+     *             if two cliques are found.
      */
-    public TraceData rekkad(String url) {
-	String normalizedUrl = normalizeUrl(url);
+    public TraceData read(String url) {
+        String normalizedUrl = normalizeUrl(url);
 
-	try {
-	    return read(TRACEDB_PUBLISHER_ID, normalizedUrl);
-	} catch (DataNotFoundException ex1) {
+        Map<Long, TraceData> idToData = this.storedValuesByUrl.column(normalizedUrl);
 
-	    for (Long publisherId : storedValuesByUrl.rowKeySet()) {
-		TraceData candidate2 = storedValuesByUrl.get(publisherId, normalizedUrl);
-		if (candidate2 != null) {
-		    try {
-			return readMainObject(candidate2.getId());
-		    } catch (DataNotFoundException ex2) {
-			return candidate2;
-		    }
-		}
-	    }
-	    throw new DataNotFoundException(
-		    "Couldn't find view with url: " + url);
-	}
+        if (idToData.isEmpty()) {
+            throw new DataNotFoundException("Couldn't find any stored object with url " + url);
+        }
+        if (!sameAs(idToData.keySet())) {
+            throw new AmbiguousUrlException("Tried to read url which is in more then one sameas clique!",
+                    normalizedUrl);
+        }
+        return readMainObject(idToData.get(0)
+                                      .getId());
+
+    }
+
+    /**
+     * todo experiment to read first stuff published tracedb publisher and then
+     * search other pubs.
+     * 
+     * @deprecated currently makes no sense, don't use it.
+     */
+    public TraceData readExperimental(String url) {
+        String normalizedUrl = normalizeUrl(url);
+
+        try {
+            return read(TRACEDB_PUBLISHER_ID, normalizedUrl);
+        } catch (DataNotFoundException ex1) {
+
+            for (Long publisherId : storedValuesByUrl.rowKeySet()) {
+                TraceData candidate2 = storedValuesByUrl.get(publisherId, normalizedUrl);
+                if (candidate2 != null) {
+                    try {
+                        return readMainObject(candidate2.getId());
+                    } catch (DataNotFoundException ex2) {
+                        return candidate2;
+                    }
+                }
+            }
+            throw new DataNotFoundException("Couldn't find view with url: " + url);
+        }
     }
 
     /**
@@ -667,35 +700,35 @@ public class TraceDb {
      */
     public TraceData read(long publisherId, String url) {
 
-	checkArgument(publisherId >= 0);
-	checkNotEmpty(url, "Invalid url!");
+        checkArgument(publisherId >= 0);
+        checkNotEmpty(url, "Invalid url!");
 
-	String normalizedUrl = normalizeUrl(url);
+        String normalizedUrl = normalizeUrl(url);
 
-	TraceData ret = storedValuesByUrl.get(publisherId, normalizedUrl);
-	storedValuesByUrl.row(1L);
-	if (ret == null) {
-	    throw new DataNotFoundException("Couldn't find view identified by"
-		    + " publisher id " + publisherId + " and external url " + normalizedUrl);
-	} else {
-	    return ret;
-	}
+        TraceData ret = storedValuesByUrl.get(publisherId, normalizedUrl);
+        storedValuesByUrl.row(1L);
+        if (ret == null) {
+            throw new DataNotFoundException("Couldn't find view identified by" + " publisher id " + publisherId
+                    + " and external url " + normalizedUrl);
+        } else {
+            return ret;
+        }
     }
 
     /**
      * @see #create(Iterable)
      */
     public <T extends TraceData> List<T> create(T... dataNodes) {
-	return create(Arrays.asList(dataNodes));
+        return create(Arrays.asList(dataNodes));
     }
 
     private void index(TraceData dataNode) {
-	ImmutableList<TraceType> types = typeRegistry.getTypesFromInstance(dataNode.getRawValue());
-	for (TraceType type : types) {
-	    if (indexedTypes.contains(type.getId())) {
-		indexedValues.put(type.getId(), idCounter);
-	    }
-	}
+        ImmutableList<TraceType> types = typeRegistry.getTypesFromInstance(dataNode.getRawValue());
+        for (TraceType type : types) {
+            if (indexedTypes.contains(type.getId())) {
+                indexedValues.put(type.getId(), idCounter);
+            }
+        }
     }
 
     /**
@@ -705,54 +738,56 @@ public class TraceDb {
      * @throws TraceProvNotFoundException
      */
     private long checkDataNodeToStore(TraceData dataNode, boolean toCreate, boolean publisher) {
-	checkNotNull(dataNode);
-	if (toCreate) {
-	    checkArgument(dataNode.getId() < 0, "Tried to create view with non-negative id: %s", dataNode.getId());
-	}
+        checkNotNull(dataNode);
+        if (toCreate) {
+            checkArgument(dataNode.getId() < 0, "Tried to create view with non-negative id: %s", dataNode.getId());
+        }
 
-	try {
-	    String refUri = dataNode.getRef().uri();
-	} catch (IllegalStateException ex) {
-	    throw new IllegalArgumentException(
-		    "Tried to create a DataNode without a valid ref! Ref is " + dataNode.toString(), ex);
-	}
+        try {
+            String refUri = dataNode.getRef()
+                                    .uri();
+        } catch (IllegalStateException ex) {
+            throw new IllegalArgumentException(
+                    "Tried to create a DataNode without a valid ref! Ref is " + dataNode.toString(), ex);
+        }
 
-	if (publisher) {
-	    /*
-	     * todo useless check? String docId =
-	     * dataNode.getRef().getDocumentId();
-	     * 
-	     * String pubUri = dataNode.getMetadata().getPublisher().getUri();
-	     * /* checkArgument(docId.equals(pubUri),
-	     * "A Publisher self publishes itself, " +
-	     * "so ref.documentId must be equal to metadata.publisher.uri! " +
-	     * "Found instead:\n  ref.documentId=%s\n  metadata.publisher.uri=%s"
-	     * , docId, pubUri);
-	     */
-	    if (toCreate) {
-		long pubId = dataNode.getMetadata().getPublisherId();
-		if (pubId == -1) {
-		    return idCounter; // a publisher can self publish itself
-		} else {
-		    return pubId;
-		}
+        if (publisher) {
+            /*
+             * todo useless check? String docId =
+             * dataNode.getRef().getDocumentId();
+             * 
+             * String pubUri = dataNode.getMetadata().getPublisher().getUri();
+             * /* checkArgument(docId.equals(pubUri),
+             * "A Publisher self publishes itself, " +
+             * "so ref.documentId must be equal to metadata.publisher.uri! " +
+             * "Found instead:\n  ref.documentId=%s\n  metadata.publisher.uri=%s"
+             * , docId, pubUri);
+             */
+            if (toCreate) {
+                long pubId = dataNode.getMetadata()
+                                     .getPublisherId();
+                if (pubId == -1) {
+                    return idCounter; // a publisher can self publish itself
+                } else {
+                    return pubId;
+                }
 
-	    } else {
-		return dataNode.getId();
-	    }
-	} else {
-	    long pubId = dataNode.getMetadata().getPublisherId();
-	    checkArgument(pubId != -1,
-		    "Tried to create datanode with invalid publisher, found one is empty!");
-	    return read(pubId).getId();
-	}
+            } else {
+                return dataNode.getId();
+            }
+        } else {
+            long pubId = dataNode.getMetadata()
+                                 .getPublisherId();
+            checkArgument(pubId != -1, "Tried to create datanode with invalid publisher, found one is empty!");
+            return read(pubId).getId();
+        }
     }
 
     /**
      * @see #createPublisher(Iterable)
      */
     public List<TraceData> createPublisher(TraceData... dataNodes) {
-	return createPublisher(Arrays.asList(dataNodes));
+        return createPublisher(Arrays.asList(dataNodes));
     }
 
     /**
@@ -765,7 +800,7 @@ public class TraceDb {
      * @return new data nodes with newly assigned id.
      */
     public List<TraceData> createPublisher(Iterable<TraceData> dataNodes) {
-	return create(dataNodes, true);
+        return create(dataNodes, true);
     }
 
     /**
@@ -775,7 +810,7 @@ public class TraceDb {
      * @return new data nodes with newly assigned id.
      */
     public <T extends TraceData> List<T> create(Iterable<T> dataNodes) {
-	return create(dataNodes, false);
+        return create(dataNodes, false);
     }
 
     /**
@@ -787,33 +822,34 @@ public class TraceDb {
      * @return new data nodes with newly assigned id.
      */
     private <T extends TraceData> List<T> create(Iterable<T> dataNodes, boolean publisher) {
-	checkInitialized(0);
-	ImmutableList.Builder<T> retb = ImmutableList.builder();
+        checkInitialized(0);
+        ImmutableList.Builder<T> retb = ImmutableList.builder();
 
-	for (TraceData dataNode : dataNodes) {
+        for (TraceData dataNode : dataNodes) {
 
-	    long publisherId = checkDataNodeToStore(dataNode, true, publisher);
+            long publisherId = checkDataNodeToStore(dataNode, true, publisher);
 
-	    NodeMetadata newwMetadata = NodeMetadata.builder()
-		    .from(dataNode.getMetadata())
-		    .setPublisherId(publisherId)
-		    .setTimestamp(new Timestamp(System.currentTimeMillis()))
-		    .build();
+            NodeMetadata newwMetadata = NodeMetadata.builder()
+                                                    .from(dataNode.getMetadata())
+                                                    .setPublisherId(publisherId)
+                                                    .setTimestamp(new Timestamp(System.currentTimeMillis()))
+                                                    .build();
 
-	    T toCreate = (T) dataNode.fromThis()
-		    .setId(idCounter)
-		    .setMetadata(newwMetadata)
-		    .build();
-	    storedValuesById.put(idCounter, toCreate);
-	    String normalizedRefUri = dataNode.getRef().uri();
-	    storedValuesByUrl.put(publisherId, normalizedRefUri, toCreate);
-	    putSameAsIds(idCounter);
+            T toCreate = (T) dataNode.fromThis()
+                                     .setId(idCounter)
+                                     .setMetadata(newwMetadata)
+                                     .build();
+            storedValuesById.put(idCounter, toCreate);
+            String normalizedRefUri = dataNode.getRef()
+                                              .uri();
+            storedValuesByUrl.put(publisherId, normalizedRefUri, toCreate);
+            putSameAsIds(idCounter);
 
-	    index(toCreate);
-	    idCounter += 1;
-	    retb.add(toCreate);
-	}
-	return retb.build();
+            index(toCreate);
+            idCounter += 1;
+            retb.add(toCreate);
+        }
+        return retb.build();
 
     }
 
@@ -822,7 +858,7 @@ public class TraceDb {
      * @see #update(Iterable)
      */
     public List<TraceData> update(TraceData... dataNodes) {
-	return Arrays.asList(dataNodes);
+        return Arrays.asList(dataNodes);
     }
 
     /**
@@ -837,25 +873,25 @@ public class TraceDb {
      */
     @Nullable
     public List<TraceData> update(Iterable<TraceData> dataNodes) {
-	throw new UnsupportedOperationException("TODO implement me!");
+        throw new UnsupportedOperationException("TODO implement me!");
     }
 
     /**
      *
      * Returns the ids of the views considered to be the same as the provided
-     * one.
+     * one (including it).
      */
     public List<Long> readSameAsIds(long id) {
-	checkInitialized();
-	checkArgument(id >= 0);
-	return ImmutableList.copyOf(sameAsIds.get(id));
+        checkInitialized();
+        checkArgument(id >= 0);
+        return ImmutableList.copyOf(sameAsIds.get(id));
     }
 
     /**
      * @see #putSameAsIds(Iterable)
      */
-    public void putSameAsIds(Long... ids) {
-	putSameAsIds(Arrays.asList(ids));
+    public void putSameAsIds(long mainId, Long... ids) {
+        putSameAsIds(Arrays.asList(ids), mainId);
     }
 
     /**
@@ -863,36 +899,53 @@ public class TraceDb {
      * 
      */
     public void setMainNode(long datanodeId) {
-	read(datanodeId);
+        read(datanodeId);
 
-	Set<Long> ids = ImmutableSet.copyOf(sameAsIds.get(datanodeId));
+        Set<Long> ids = ImmutableSet.copyOf(sameAsIds.get(datanodeId));
 
-	for (Long id : ids) {
-	    // because get returns a view
-	    Set<Long> valsCopy = new LinkedHashSet(this.sameAsIds.get(id));
-	    this.sameAsIds.removeAll(id);
-	    this.sameAsIds.put(id, datanodeId);
-	    this.sameAsIds.putAll(id, valsCopy);
-	}
+        for (Long id : ids) {
+            // because get returns a view
+            Set<Long> valsCopy = new LinkedHashSet(this.sameAsIds.get(id));
+            this.sameAsIds.removeAll(id);
+            this.sameAsIds.put(id, datanodeId);
+            this.sameAsIds.putAll(id, valsCopy);
+        }
     }
 
     /**
      * States all provided view ids are 'same as'. If they are already same as
-     * with some other id outside the provided ones, the old same as relation is
-     * enlarged to include the new relations. Main views are not changed.
+     * with some other id outside the provided ones, the old relations are
+     * merged into the provided one.
      *
      * @param ids
-     *            the sameas ids *
+     *            the sameas ids
+     * @param mainId
+     *            the id of the main view among provided ids. It must belong to
+     *            the enlarged clique.
      * @throws IllegalStateException
      *             if there are no corresponding views for the provided ids,
      * 
      */
-    public void putSameAsIds(Iterable<Long> ids) {
-	checkNotNull(ids);
-	read(ids);
-	for (Long id : ids) {
-	    this.sameAsIds.putAll(id, ids);
-	}
+    public void putSameAsIds(Iterable<Long> ids, long mainId) {
+        checkNotNull(ids);
+        checkArgument(mainId >= 0, "Invalid id: " + mainId);
+        if (!Iterables.contains(ids, mainId)) {
+            read(mainId);
+        }
+        
+        ImmutableSet.Builder<Long> enlargedCliqueb = ImmutableSet.builder();
+        enlargedCliqueb.add(mainId);
+        for (Long id : ids) {
+            enlargedCliqueb.addAll(readSameAsIds(id));
+        }
+        
+        ImmutableSet<Long> enlargedClique = enlargedCliqueb.build();
+        
+        for (Long id : enlargedClique) {
+            this.sameAsIds.removeAll(id);
+            this.sameAsIds.putAll(id, enlargedClique);
+        }
+        assert true;
     }
 
     /**
@@ -906,11 +959,11 @@ public class TraceDb {
      *            the id of the server of origin
      */
     public ControllerStatus controllerStatus(long viewId) {
-	checkArgument(viewId >= 0);
+        checkArgument(viewId >= 0);
 
-	// The view is NEW if it is not in any equivalence relation with objects
-	// from the domain.
-	throw new UnsupportedOperationException("TODO IMPLEMENT ME");
+        // The view is NEW if it is not in any equivalence relation with objects
+        // from the domain.
+        throw new UnsupportedOperationException("TODO IMPLEMENT ME");
     }
 
     /**
@@ -921,10 +974,10 @@ public class TraceDb {
      *             if objects are not found.
      */
     public boolean shallowEqual(long viewId1, long viewId2) {
-	TraceData view1 = read(viewId1);
-	TraceData view2 = read(viewId2);
-	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
-	// return view1.controlledEquals(view2);
+        TraceData view1 = read(viewId1);
+        TraceData view2 = read(viewId2);
+        throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
+        // return view1.controlledEquals(view2);
     }
 
     /**
@@ -934,24 +987,34 @@ public class TraceDb {
      * @throws DataNotFoundException
      */
     public boolean deepEqual(long objId1, long objId2) {
-	throw new UnsupportedOperationException("TODO Implement me!!");
+        throw new UnsupportedOperationException("TODO Implement me!!");
     }
 
     /**
-     * Returns true if first view is same as second view. Notice two views may
-     * be 'same as' even if they are structually different or represent a new
-     * and an old view of the same object.
+     * @see #sameAs(List)
+     */
+    public boolean sameAs(Long... viewIds) {
+        return sameAs(Arrays.asList(viewIds));
+    }
+
+    /**
+     * Returns true if provided views all belong to the same clique.
      *
      * @throws DataNotFoundException
      */
-    public boolean sameAs(long viewId1, long viewId2) {
-
-	read(viewId1);
-	read(viewId2);
-
-	Set<Long> sames = sameAsIds.get(viewId1);
-
-	return sames.contains(viewId2);
+    public boolean sameAs(Iterable<Long> viewIds) {
+        long firstMainId = -1;
+        for (Long viewId : viewIds) {
+            long curMainId = readMainObject(viewId).getId();
+            if (firstMainId == -1) {
+                firstMainId = curMainId;
+            } else {
+                if (curMainId != firstMainId) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -959,13 +1022,13 @@ public class TraceDb {
      */
     public boolean isSynchronized(long originId, String externalId) {
 
-	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
-	// todo check odrity
-	/*
-	 * return (odrView.getTimestamp().isBefore(foreignView.getTimestamp())
-	 * || odrView.getTimestamp().isEqual(foreignView.getTimestamp())); //&&
-	 * odrView.controlledEquals(foreignView)
-	 */
+        throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
+        // todo check odrity
+        /*
+         * return (odrView.getTimestamp().isBefore(foreignView.getTimestamp())
+         * || odrView.getTimestamp().isEqual(foreignView.getTimestamp())); //&&
+         * odrView.controlledEquals(foreignView)
+         */
     }
 
     /**
@@ -974,23 +1037,23 @@ public class TraceDb {
      * todo what about initialization??
      */
     public static TraceDb getDb() {
-	return dbPool.get();
+        return dbPool.get();
     }
 
     public static void setCurrentDb(TraceDb db) {
-	checkNotNull(db);
-	db.checkInitialized();
-	dbPool.set(db);
-	LOG.info("Set current thread tracedb to " + db.getDbUrl());
+        checkNotNull(db);
+        db.checkInitialized();
+        dbPool.set(db);
+        LOG.info("Set current thread tracedb to " + db.getDbUrl());
     }
 
     public TypeRegistry getTypeRegistry() {
-	return typeRegistry;
+        return typeRegistry;
     }
 
     public void setTypeRegistry(TypeRegistry typeRegistry) {
-	checkNotNull(typeRegistry);
-	this.typeRegistry = typeRegistry;
+        checkNotNull(typeRegistry);
+        this.typeRegistry = typeRegistry;
     }
 
     /**
@@ -1016,51 +1079,54 @@ public class TraceDb {
      *        disagree on version.
      */
     public int compareVersion(long objId1, long objId2) {
-	TraceData node1 = read(objId1);
-	TraceData node2 = read(objId2);
+        TraceData node1 = read(objId1);
+        TraceData node2 = read(objId2);
 
-	ImmutableList<TraceType> types1 = typeRegistry.getTypesFromInstance(node1.getRawValue());
-	ImmutableList<TraceType> types2 = typeRegistry.getTypesFromInstance(node1.getRawValue());
+        ImmutableList<TraceType> types1 = typeRegistry.getTypesFromInstance(node1.getRawValue());
+        ImmutableList<TraceType> types2 = typeRegistry.getTypesFromInstance(node1.getRawValue());
 
-	SetView<TraceType> types = Sets.intersection(new HashSet(types1), new HashSet(types2));
+        SetView<TraceType> types = Sets.intersection(new HashSet(types1), new HashSet(types2));
 
-	Multimap<Integer, TraceType> agreeing = HashMultimap.create();
+        Multimap<Integer, TraceType> agreeing = HashMultimap.create();
 
-	for (TraceType type : types) {
-	    try {
-		int x = type.compareVersion(node1.getRawValue(), node2.getRawValue());
-		if (x < 0) {
-		    agreeing.put(-1, type);
-		} else if (x == 0) {
-		    agreeing.put(0, type);
-		} else {
-		    agreeing.put(+1, type);
-		}
-	    } catch (IncomparableVersionsException ex) {
+        for (TraceType type : types) {
+            try {
+                int x = type.compareVersion(node1.getRawValue(), node2.getRawValue());
+                if (x < 0) {
+                    agreeing.put(-1, type);
+                } else if (x == 0) {
+                    agreeing.put(0, type);
+                } else {
+                    agreeing.put(+1, type);
+                }
+            } catch (IncomparableVersionsException ex) {
 
-	    }
-	}
+            }
+        }
 
-	int lastKey = -2;
-	for (Integer key : agreeing.keySet()) {
-	    if (agreeing.get(key).size() > 0) {
-		if (lastKey == -2) {
-		    lastKey = key;
-		} else {
-		    throw new IncomparableVersionsException(
-			    "Found at least two types that were in disagreement on version "
-				    + "of data nodes " + node1.getId() + " and " + node2.getId()
-				    + ". \n Agreement map: " + agreeing.toString());
-		}
-	    }
-	}
-	if (lastKey == -2) {
-	    return node1.getMetadata().getTimestamp().compareTo(
-		    node2.getMetadata().getTimestamp());
+        int lastKey = -2;
+        for (Integer key : agreeing.keySet()) {
+            if (agreeing.get(key)
+                        .size() > 0) {
+                if (lastKey == -2) {
+                    lastKey = key;
+                } else {
+                    throw new IncomparableVersionsException(
+                            "Found at least two types that were in disagreement on version " + "of data nodes "
+                                    + node1.getId() + " and " + node2.getId() + ". \n Agreement map: "
+                                    + agreeing.toString());
+                }
+            }
+        }
+        if (lastKey == -2) {
+            return node1.getMetadata()
+                        .getTimestamp()
+                        .compareTo(node2.getMetadata()
+                                        .getTimestamp());
 
-	} else {
-	    return lastKey;
-	}
+        } else {
+            return lastKey;
+        }
 
     }
 }

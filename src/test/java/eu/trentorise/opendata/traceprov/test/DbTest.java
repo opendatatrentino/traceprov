@@ -48,105 +48,111 @@ public class DbTest {
     
     @Before
     public void before() throws Exception {
-	db = TraceDb.createInMemoryDb(randomId(), TypeRegistry.of());
-	TraceDb.setCurrentDb(db);
+    	db = TraceDb.createInMemoryDb(randomId(), TypeRegistry.of());
+    	TraceDb.setCurrentDb(db);
     }
 
     @After
     public void after() {
-	db.drop();
+        db.drop();
     }
 
     private String randomId(){
-	return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString();
     }
         
     private TraceData makePublisher(){
-	List<TraceData> dns = db.createPublisher(
-		DataValue.of(	Ref.ofDocumentId(TEST_PUBLISHER_URI), 
-				INIT_TEST_PUBLISHER_METADATA, 
-				"h"));
-	assertEquals(1, dns.size());
-	return dns.get(0);	
+    	List<TraceData> dns = db.createPublisher(
+    		DataValue.of(	Ref.ofDocumentId(TEST_PUBLISHER_URI), 
+    				INIT_TEST_PUBLISHER_METADATA, 
+    				"h"));
+    	assertEquals(1, dns.size());
+    	return dns.get(0);	
     }
     
     
     @Test
     public void testCreatePublisher()  {	
-	TraceData pub1 = makePublisher();	
-	assertTrue(pub1.getId() == 1L);	
-	assertEquals(pub1.getId(), pub1.getMetadata().getPublisherId());
-	assertTrue(db.sameAs(pub1.getId(), pub1.getId()));
-	pub1.getRef().uri(); // should not thow exception		
-	TraceData readPub1 = db.read(pub1.getId());
-	assertEquals(pub1, readPub1);
-	assertTrue(pub1.getId() == 1L);
-	TraceData readPubByIdUrl = db.read(pub1.getId(), pub1.getRef().getDocumentId());
-	//assertTrue(pub1.equals(readPubByIdUrl));
-	assertTrue(pub1.getId() == 1L);
-	assertEquals(pub1, readPubByIdUrl);	
-	
+        TraceData pub1 = makePublisher();	
+    	assertTrue(pub1.getId() == 1L);	
+    	assertEquals(pub1.getId(), pub1.getMetadata().getPublisherId());
+    	assertTrue(db.sameAs(pub1.getId(), pub1.getId()));
+    	pub1.getRef().uri(); // should not thow exception		
+    	TraceData readPub1 = db.read(pub1.getId());
+    	assertEquals(pub1, readPub1);
+    	assertTrue(pub1.getId() == 1L);
+    	TraceData readPubByIdUrl = db.read(pub1.getId(), pub1.getRef().getDocumentId());
+    	//assertTrue(pub1.equals(readPubByIdUrl));
+    	assertTrue(pub1.getId() == 1L);
+    	assertEquals(pub1, readPubByIdUrl);	
+    	
     }
     
     private NodeMetadata makeMetadata(TraceData pub){
-	return NodeMetadata.builder().setPublisherId(pub.getId()).build();	
+        return NodeMetadata.builder().setPublisherId(pub.getId()).build();	
     }
     @Test
     public void testCreate()  {
-	TraceData pub = makePublisher();
-	List<? extends TraceData> dns = db.create(
-		DataValue.of(Ref.ofDocumentId("a"), 
-			     makeMetadata(pub), 
-			     "b"));
-	assertEquals(1, dns.size());
-	TraceData dn = dns.get(0);	
-	assertTrue(dn.getId() >= 0);
-		
-	assertEquals("a", dn.getRef().getDocumentId());
-	
-	// test timestamp gets updated:
-	assertEquals(makeMetadata(pub).withTimestamp(dn.getMetadata().getTimestamp()),
-		     dn.getMetadata());
-	assertEquals("b", dn.getRawValue());
-	dn.getRef().uri(); // should not throw exception
-	assertTrue(db.sameAs(dn.getId(), dn.getId()));
+    	TraceData pub = makePublisher();
+    	List<? extends TraceData> dns = db.create(
+    		DataValue.of(Ref.ofDocumentId("a"), 
+    			     makeMetadata(pub), 
+    			     "b"));
+    	assertEquals(1, dns.size());
+    	TraceData dn = dns.get(0);	
+    	assertTrue(dn.getId() >= 0);
+    		
+    	assertEquals("a", dn.getRef().getDocumentId());
+    	
+    	// test timestamp gets updated:
+    	assertEquals(makeMetadata(pub).withTimestamp(dn.getMetadata().getTimestamp()),
+    		     dn.getMetadata());
+    	assertEquals("b", dn.getRawValue());
+    	dn.getRef().uri(); // should not throw exception
+    	assertTrue(db.sameAs(dn.getId(), dn.getId()));
     }
     
     @Test
     public void testReadDefaultNodes() throws IOException {
 	
-	TraceData tpub = db.read(TraceDb.TRACEDB_PUBLISHER_ID);
-
-	// tracedb publisher is self published
-	assertEquals(TraceDb.TRACEDB_PUBLISHER_ID, tpub.getMetadata().getPublisherId());
-	assertTrue(db.sameAs(tpub.getId(), tpub.getId()));
+    	TraceData tpub = db.read(TraceDb.TRACEDB_PUBLISHER_ID);
+    
+    	// tracedb publisher is self published
+    	assertEquals(TraceDb.TRACEDB_PUBLISHER_ID, tpub.getMetadata().getPublisherId());
+    	assertTrue(db.sameAs(tpub.getId(), tpub.getId()));
     }
        
     @Test    
     public void testClique(){        
 
-	TraceData pub = makePublisher();
-	TraceData data1 = db.create(
-		DataValue.of(Ref.ofDocumentId("a"), 
-			     makeMetadata(pub), 
-			     "b")).get(0);
-	TraceData data2 = db.create(
-		DataValue.of(Ref.ofDocumentId("c"), 
-			     makeMetadata(pub), 
-			     "d")).get(0);
-	assertFalse(db.sameAs(data1.getId(), data2.getId()));
-	assertEquals(data1, db.readMainObject(data1.getId()));
-	db.putSameAsIds(data1.getId(), data2.getId());
-	assertTrue(db.sameAs(data1.getId(), data2.getId()));
-	assertEquals(data1, db.readMainObject(data1.getId()));
-	db.setMainNode(data2.getId());
-	assertEquals(data2, db.readMainObject(data1.getId()));
-	assertEquals(data2, db.readMainObject(data2.getId()));
+    	TraceData pub = makePublisher();
+    	TraceData data1 = db.create(
+    		DataValue.of(Ref.ofDocumentId("a"), 
+    			     makeMetadata(pub), 
+    			     "b")).get(0);
+    	TraceData data2 = db.create(
+    		DataValue.of(Ref.ofDocumentId("c"), 
+    			     makeMetadata(pub), 
+    			     "d")).get(0);
+    	assertFalse(db.sameAs(data1.getId(), data2.getId()));
+    	assertEquals(data1, db.readMainObject(data1.getId()));
+    	LOG.info("before put same as");
+        LOG.info("data1 mainId = " + db.readMainObject(data1.getId()).getId());
+        LOG.info("data2 mainId = " + db.readMainObject(data2.getId()).getId());        
+    	db.putSameAsIds(data1.getId(), data2.getId());
+    	LOG.info("after put same as");
+    	LOG.info("data1 mainId = " + db.readMainObject(data1.getId()).getId());
+    	LOG.info("data2 mainId = " + db.readMainObject(data2.getId()).getId());
+    	assertTrue(db.sameAs(data1.getId(), data2.getId()));
+    	assertEquals(data1, db.readMainObject(data1.getId()));
+    	db.setMainNode(data2.getId());
+    	assertEquals(data2, db.readMainObject(data1.getId()));
+    	assertEquals(data2, db.readMainObject(data2.getId()));
     }
 
     @Test
     @Ignore
     public void testUpdateRead() {
-	throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
+        throw new UnsupportedOperationException("TODO IMPLEMENT ME!");
     }
 }
