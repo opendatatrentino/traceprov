@@ -167,10 +167,10 @@ public class DbTest {
                             .get(0);
         TraceData data2 = db.create(DataValue.of(Ref.ofDocumentId("a"), makeMetadata(pub2), "d"))
                             .get(0);
-        
+
         assertEquals(data1, db.read(pub1.getId(), "a"));
         assertEquals(data2, db.read(pub2.getId(), "a"));
-        
+
         try {
             db.read("a");
             Assert.fail("Shouldn't arrive here!");

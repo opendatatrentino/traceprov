@@ -50,6 +50,7 @@ import eu.trentorise.opendata.commons.TodUtils;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.TraceProvs;
 import eu.trentorise.opendata.traceprov.data.TraceData;
+import eu.trentorise.opendata.traceprov.data.TraceDatas;
 import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
@@ -153,7 +154,7 @@ public class TraceDb {
      * which has traceprov internal id = 4
      * 
      */
-    private Table<Long, String, TraceData> storedValuesByUrl;
+    private Table<Long, String, ArrayList<TraceData>> storedValuesByUrl;
 
     /**
      * trace id -> DataNode object
@@ -645,49 +646,36 @@ public class TraceDb {
     public TraceData read(String url) {
         String normalizedUrl = normalizeUrl(url);
 
-        Map<Long, TraceData> idToData = this.storedValuesByUrl.column(normalizedUrl);
+        // publisherId -> many original urls
+        Map<Long, ArrayList<TraceData>> publisherIdToData = this.storedValuesByUrl.column(normalizedUrl);
 
-        if (idToData.isEmpty()) {
+        if (publisherIdToData.isEmpty()) {
             throw new DataNotFoundException("Couldn't find any stored object with url " + url);
         }
-        if (!sameAs(idToData.keySet())) {
+
+        Set<Long> ids = new HashSet();
+        for (List<TraceData> tds : publisherIdToData.values()) {
+            ids.addAll(TraceDatas.ids(tds));
+        }
+
+        if (ids.isEmpty()) {
+            throw new IllegalStateException("Values shouldn't be empty for normalizedUrl " + normalizedUrl);
+        }
+
+        if (!sameAs(ids)) {
             throw new AmbiguousUrlException("Tried to read url which is in more then one sameas clique!",
                     normalizedUrl);
+
         }
-        return readMainObject(idToData.values().iterator().next().getId());
+
+        return readMainObject(ids.iterator()
+                                 .next());
 
     }
 
     /**
-     * todo experiment to read first stuff published tracedb publisher and then
-     * search other pubs.
-     * 
-     * @deprecated currently makes no sense, don't use it.
-     */
-    public TraceData readExperimental(String url) {
-        String normalizedUrl = normalizeUrl(url);
-
-        try {
-            return read(TRACEDB_PUBLISHER_ID, normalizedUrl);
-        } catch (DataNotFoundException ex1) {
-
-            for (Long publisherId : storedValuesByUrl.rowKeySet()) {
-                TraceData candidate2 = storedValuesByUrl.get(publisherId, normalizedUrl);
-                if (candidate2 != null) {
-                    try {
-                        return readMainObject(candidate2.getId());
-                    } catch (DataNotFoundException ex2) {
-                        return candidate2;
-                    }
-                }
-            }
-            throw new DataNotFoundException("Couldn't find view with url: " + url);
-        }
-    }
-
-    /**
-     * Returns the view with given url at given origin id. If not present, an
-     * exception is thrown.
+     * Returns the main view with given url at given origin id. If not present,
+     * an exception is thrown.
      * 
      * @param publisherId
      *            The traceprov internal id of the publisher that originated the
@@ -704,14 +692,15 @@ public class TraceDb {
 
         String normalizedUrl = normalizeUrl(url);
 
-        TraceData ret = storedValuesByUrl.get(publisherId, normalizedUrl);
-        storedValuesByUrl.row(1L);
-        if (ret == null) {
-            throw new DataNotFoundException("Couldn't find view identified by" + " publisher id " + publisherId
+        List<TraceData> rets = getStoredValuesByUrl(publisherId, normalizedUrl);
+
+        if (rets.isEmpty()) {
+            throw new DataNotFoundException("Couldn't find view identified by publisher id " + publisherId
                     + " and external url " + normalizedUrl);
-        } else {
-            return ret;
         }
+
+        return rets.get(0);
+
     }
 
     /**
@@ -813,6 +802,39 @@ public class TraceDb {
     }
 
     /**
+     * In case key has no value, the empty array is returned.
+     * <strong>NOTE:</strong> this empty array is <strong>not</strong> stored in
+     * the table.
+     */
+    private ArrayList<TraceData> getStoredValuesByUrl(long publisherId, String url) {
+        ArrayList<TraceData> ret = this.storedValuesByUrl.get(publisherId, url);
+        if (ret == null) {
+            return new ArrayList();
+        } else {
+            return ret;
+        }
+
+    }
+
+    private void insertStoredValueByUrl(TraceData traceData) {
+        long id = traceData.getId();
+        long pubId = traceData
+                .getMetadata()
+                .getPublisherId();
+        checkArgument(id >= 0, "Invalid tracedata id! Found: %s", id);
+        String uri = traceData.getRef()
+                              .uri();
+        ArrayList<TraceData> datanodes = storedValuesByUrl.get(pubId,
+                uri);
+        if (datanodes == null) {
+            storedValuesByUrl.put(pubId, uri, Lists.newArrayList(traceData));
+        } else {
+            datanodes.add(traceData);
+            storedValuesByUrl.put(pubId, uri, datanodes);
+        }
+    }
+
+    /**
      * Creates new data nodes and return them. They all must have valid
      * publisher and refs.
      *
@@ -839,9 +861,7 @@ public class TraceDb {
                                      .setMetadata(newwMetadata)
                                      .build();
             storedValuesById.put(idCounter, toCreate);
-            String normalizedRefUri = dataNode.getRef()
-                                              .uri();
-            storedValuesByUrl.put(publisherId, normalizedRefUri, toCreate);
+            insertStoredValueByUrl(toCreate);
             putSameAsIds(idCounter);
 
             index(toCreate);
@@ -931,19 +951,21 @@ public class TraceDb {
         if (!Iterables.contains(ids, mainId)) {
             read(mainId);
         }
-        
+
         ImmutableSet.Builder<Long> enlargedCliqueb = ImmutableSet.builder();
         enlargedCliqueb.add(mainId);
         for (Long id : ids) {
             enlargedCliqueb.addAll(readSameAsIds(id));
         }
-        
+
         ImmutableSet<Long> enlargedClique = enlargedCliqueb.build();
-        
+
         for (Long id : enlargedClique) {
             this.sameAsIds.removeAll(id);
             this.sameAsIds.putAll(id, enlargedClique);
+
         }
+
         assert true;
     }
 

@@ -15,8 +15,13 @@
  */
 package eu.trentorise.opendata.traceprov;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Table;
+import com.google.common.collect.Table.Cell;
+
 
 /**
  * Utilities for TraceProv library
@@ -42,6 +47,16 @@ public final class TraceProvs {
         om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         TraceProvModule.registerModulesInto(om);
     }
-       
-
+    
+    /**
+     * @since 0.4.0
+     */
+    public static String tableToString(Table table){
+        StringBuilder sb = new StringBuilder();
+        Set<Cell> cellSet = table.cellSet();
+        for (Cell cell: cellSet){
+            sb.append(cell.getRowKey()+" "+cell.getColumnKey()+" "+cell.getValue() + "\n");
+        }
+        return sb.toString();
+    }
 }
