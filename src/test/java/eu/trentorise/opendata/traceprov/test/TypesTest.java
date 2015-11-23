@@ -36,14 +36,16 @@ import eu.trentorise.opendata.traceprov.types.TypeVisitor;
 import eu.trentorise.opendata.traceprov.types.TraceTypes;
 import eu.trentorise.opendata.traceprov.types.TupleType;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -234,6 +236,23 @@ public class TypesTest extends TraceProvTest {
                         .build())
                 .build();
 
+    }
+    
+    private static class A {
+        Date d;
+    }
+   
+    
+    @Test
+    public void copyTest(){
+        TypeRegistry reg = TypeRegistry.of();
+        A a1 = new A();
+        a1.d = new Date(0);
+        
+        A a2 = reg.fullDeepCopy(a1);
+        assertTrue(a1.d.equals(a2.d));
+        a2.d = new Date(1);
+        assertFalse(a1.d.equals(a2.d));
     }
 
 }

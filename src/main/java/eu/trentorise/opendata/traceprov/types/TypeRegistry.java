@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -52,7 +53,7 @@ public class TypeRegistry implements Serializable {
 
     private ObjectMapper objectMapper;
 
-    // private Kryo kryo;
+    private Kryo kryo;
 
     /**
      * Maps Java Class canonical name (i.e. java.util.HashMap) to TraceProv Type
@@ -63,18 +64,18 @@ public class TypeRegistry implements Serializable {
     private Map<String, Def<ClassType>> classDefs;
 
     private TypeRegistry() {
-	this.types = new HashMap();
-	this.classDefs = new HashMap();
-	this.objectMapper = new ObjectMapper();
-	TraceProvModule.registerModulesInto(this.objectMapper);
-	this.canonicalTypes = new HashMap();
-	// this.kryo = new Kryo();
+        this.types = new HashMap();
+        this.classDefs = new HashMap();
+        this.objectMapper = new ObjectMapper();
+        TraceProvModule.registerModulesInto(this.objectMapper);
+        this.canonicalTypes = new HashMap();
+        this.kryo = new Kryo();
     }
 
     private TypeRegistry(ObjectMapper objectMapper) {
-	this();
-	checkNotNull(objectMapper);
-	this.objectMapper = objectMapper;
+        this();
+        checkNotNull(objectMapper);
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -84,18 +85,16 @@ public class TypeRegistry implements Serializable {
      */
     @Nullable
     public Def<ClassType> put(String id, Def<ClassType> classDef) {
-	checkNotEmpty(id, "Invalid classDef id!");
-	checkNotNull(classDef);
-	Def<ClassType> ret = this.classDefs.get(id);
-	this.classDefs.put(id, classDef);
-	return ret;
+        checkNotEmpty(id, "Invalid classDef id!");
+        checkNotNull(classDef);
+        Def<ClassType> ret = this.classDefs.get(id);
+        this.classDefs.put(id, classDef);
+        return ret;
     }
-    
-    
 
     public boolean hasClassDef(String classDefId) {
-	checkNotEmpty(classDefId, "Invalid classDef id!");
-	return !(classDefs.get(classDefId) == null);
+        checkNotEmpty(classDefId, "Invalid classDef id!");
+        return !(classDefs.get(classDefId) == null);
     }
 
     /**
@@ -103,12 +102,12 @@ public class TypeRegistry implements Serializable {
      *             TraceProvNotFoundException
      */
     public Def<ClassType> getClassDef(String classDefId) {
-	checkNotEmpty(classDefId, "Invalid classDef id!");
-	Def<ClassType> classDef = classDefs.get(classDefId);
-	if (classDef == null) {
-	    throw new TraceProvNotFoundException("Couldn't find classDefId " + classDefId);
-	}
-	return classDef;
+        checkNotEmpty(classDefId, "Invalid classDef id!");
+        Def<ClassType> classDef = classDefs.get(classDefId);
+        if (classDef == null) {
+            throw new TraceProvNotFoundException("Couldn't find classDefId " + classDefId);
+        }
+        return classDef;
     }
 
     /**
@@ -122,14 +121,14 @@ public class TypeRegistry implements Serializable {
      */
     @Nullable
     public TraceType put(TraceType type) {
-	checkType(type);
-	TraceType ret = this.types.get(type.getId());
-	this.types.put(type.getId(), type);
-	String canTypeId = this.canonicalTypes.get(type.getJavaClass());
-	if (canTypeId == null) {
-	    setCanonicalType(type.getJavaClass(), type);
-	}
-	return ret;
+        checkType(type);
+        TraceType ret = this.types.get(type.getId());
+        this.types.put(type.getId(), type);
+        String canTypeId = this.canonicalTypes.get(type.getJavaClass());
+        if (canTypeId == null) {
+            setCanonicalType(type.getJavaClass(), type);
+        }
+        return ret;
     }
 
     /**
@@ -138,10 +137,10 @@ public class TypeRegistry implements Serializable {
      *             if the provided type is not registered.
      */
     public void checkRegistered(String typeId) {
-	checkNotEmpty(typeId, "Invalid TraceType id!");
-	if (!contains(typeId)) {
-	    throw new IllegalStateException("Provided tracetype with id " + typeId + " is not registered!");
-	}
+        checkNotEmpty(typeId, "Invalid TraceType id!");
+        if (!contains(typeId)) {
+            throw new IllegalStateException("Provided tracetype with id " + typeId + " is not registered!");
+        }
     }
 
     /**
@@ -150,8 +149,8 @@ public class TypeRegistry implements Serializable {
      *             if the provided type is not registered.
      */
     public void checkRegistered(TraceType traceType) {
-	checkNotNull(traceType);
-	checkRegistered(traceType.getId());
+        checkNotNull(traceType);
+        checkRegistered(traceType.getId());
     }
 
     /**
@@ -160,13 +159,13 @@ public class TypeRegistry implements Serializable {
      * @throws TraceProvNotFoundException
      */
     public TraceType getCanonicalType(Class clazz) {
-	checkNotNull(clazz);
-	String typeId = this.canonicalTypes.get(clazz.getCanonicalName());
-	if (typeId == null) {
-	    throw new TraceProvNotFoundException(
-		    "There is no canonical type associated to class " + clazz.getCanonicalName());
-	}
-	return get(typeId);
+        checkNotNull(clazz);
+        String typeId = this.canonicalTypes.get(clazz.getCanonicalName());
+        if (typeId == null) {
+            throw new TraceProvNotFoundException(
+                    "There is no canonical type associated to class " + clazz.getCanonicalName());
+        }
+        return get(typeId);
     }
 
     /**
@@ -178,15 +177,15 @@ public class TypeRegistry implements Serializable {
      *             if the provided type is not registered.
      */
     public void setCanonicalType(Class clazz, TraceType traceType) {
-	checkNotNull(clazz);
-	checkRegistered(traceType);
-	String clazzName = clazz.getCanonicalName();
-	this.canonicalTypes.put(clazzName, traceType.getId());
+        checkNotNull(clazz);
+        checkRegistered(traceType);
+        String clazzName = clazz.getCanonicalName();
+        this.canonicalTypes.put(clazzName, traceType.getId());
     }
 
     public boolean contains(String typeId) {
-	checkNotEmpty(typeId, "Invalid type id!");
-	return !(types.get(typeId) == null);
+        checkNotEmpty(typeId, "Invalid type id!");
+        return !(types.get(typeId) == null);
     }
 
     /**
@@ -195,20 +194,20 @@ public class TypeRegistry implements Serializable {
      * @throws eu.trentorise.opendata.traceprov.exceptions.
      *             TraceProvNotFoundException
      */
-    public TraceType get(String typeId) {		
-	checkNotEmpty(typeId, "Invalid type id!");
-	TraceType type = types.get(typeId);
-	if (type == null) {
-	    throw new TraceProvNotFoundException("Couldn't find typeId " + typeId);
-	}
-	return type;
+    public TraceType get(String typeId) {
+        checkNotEmpty(typeId, "Invalid type id!");
+        TraceType type = types.get(typeId);
+        if (type == null) {
+            throw new TraceProvNotFoundException("Couldn't find typeId " + typeId);
+        }
+        return type;
     }
 
     /**
      * Creates new empty registry
      */
     public static TypeRegistry empty() {
-	return new TypeRegistry();
+        return new TypeRegistry();
     }
 
     /**
@@ -216,9 +215,9 @@ public class TypeRegistry implements Serializable {
      * {@link eu.trentorise.opendata.traceprov.types}
      */
     public static TypeRegistry of() {
-	ObjectMapper om = new ObjectMapper();
-	TraceProvModule.registerModulesInto(om);	
-	return TypeRegistry.of(om);
+        ObjectMapper om = new ObjectMapper();
+        TraceProvModule.registerModulesInto(om);
+        return TypeRegistry.of(om);
     }
 
     /**
@@ -232,36 +231,36 @@ public class TypeRegistry implements Serializable {
      * 
      */
     public static TypeRegistry of(ObjectMapper objectMapper) {
-	TypeRegistry reg = new TypeRegistry(objectMapper);
-	reg.put(AnyType.of());
-	reg.put(BooleanType.of());
-	reg.put(CollectionType.of());	
-	reg.put(ClassType.builder()
-		.setId(TraceProvs.TRACEPROV_NAMESPACE + ".types.ClassType")
-		.build());
-	reg.put(DateTimeType.of());
-	reg.put(DictType.of());	
-	reg.put(DoubleType.of());
-	reg.put(FloatType.of());
-	reg.put(FunctionType.of());
-	reg.put(IntType.of());
-	reg.put(JavaDateType.of());
-	reg.put(ListType.of());
-	reg.put(LocalizedStringType.of());
-	reg.put(LongType.of());
-	reg.put(MapType.of());
-	reg.put(NullType.of());	
-	reg.put(RefType.of());
-	reg.put(SetType.of());
-	reg.put(StringType.of());
-	reg.put(TupleType.of());
-	reg.put(UndefinedType.of());
-	reg.put(TraceTypes.PUBLISHER_TYPE);
-	return reg;
+        TypeRegistry reg = new TypeRegistry(objectMapper);
+        reg.put(AnyType.of());
+        reg.put(BooleanType.of());
+        reg.put(CollectionType.of());
+        reg.put(ClassType.builder()
+                         .setId(TraceProvs.TRACEPROV_NAMESPACE + ".types.ClassType")
+                         .build());
+        reg.put(DateTimeType.of());
+        reg.put(DictType.of());
+        reg.put(DoubleType.of());
+        reg.put(FloatType.of());
+        reg.put(FunctionType.of());
+        reg.put(IntType.of());
+        reg.put(JavaDateType.of());
+        reg.put(ListType.of());
+        reg.put(LocalizedStringType.of());
+        reg.put(LongType.of());
+        reg.put(MapType.of());
+        reg.put(NullType.of());
+        reg.put(RefType.of());
+        reg.put(SetType.of());
+        reg.put(StringType.of());
+        reg.put(TupleType.of());
+        reg.put(UndefinedType.of());
+        reg.put(TraceTypes.PUBLISHER_TYPE);
+        return reg;
     }
 
     public ImmutableMap<String, TraceType> getTypes() {
-	return ImmutableMap.copyOf(this.types);
+        return ImmutableMap.copyOf(this.types);
     }
 
     /**
@@ -274,11 +273,11 @@ public class TypeRegistry implements Serializable {
      */
     public TraceType getCanonicalTypeFromInstance(@Nullable Object obj) {
 
-	if (obj == null) {
-	    return NullType.of();
-	} else {
-	    return getCanonicalType(obj.getClass());
-	}
+        if (obj == null) {
+            return NullType.of();
+        } else {
+            return getCanonicalType(obj.getClass());
+        }
     }
 
     /**
@@ -286,15 +285,15 @@ public class TypeRegistry implements Serializable {
      * First type is the canonical one.
      */
     public ImmutableList<TraceType> getTypesFromInstance(@Nullable Object obj) {
-	ImmutableList.Builder<TraceType> retb = ImmutableList.builder();
+        ImmutableList.Builder<TraceType> retb = ImmutableList.builder();
 
-	for (TraceType t : this.types.values()) {
-	    if (t.isInstance(obj)) {
-		retb.add(t);
-	    }
-	}
+        for (TraceType t : this.types.values()) {
+            if (t.isInstance(obj)) {
+                retb.add(t);
+            }
+        }
 
-	return retb.build();
+        return retb.build();
     }
 
     /**
@@ -302,21 +301,30 @@ public class TypeRegistry implements Serializable {
      * typeid
      */
     public boolean isInstance(@Nullable Object obj, String typeId) {
-	checkNotEmpty(typeId, "Invalid TraceType id!");
-	for (TraceType t : types.values()) {
-	    if (t.isInstance(obj)) {
-		return true;
-	    }
-	}
-	return false;
+        checkNotEmpty(typeId, "Invalid TraceType id!");
+        for (TraceType t : types.values()) {
+            if (t.isInstance(obj)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    /** todo write about sharing
-     * todo ObjectMapper should be saved separately!
-     *  */
+    /**
+     * todo write about sharing todo ObjectMapper should be saved separately!
+     */
     @JsonIgnore
     public ObjectMapper getObjectMapper() {
-	return objectMapper;
+        return objectMapper;
     }
-        
+
+    /**
+     * Returns a deep copy of provided object. Always performs a deep copy, even
+     * if the object is known to be immutable. As a consequence, this operation
+     * can be quite expensive.
+     */
+    // todo currently it is not configurable.
+    public <W> W fullDeepCopy(W obj) {
+        return kryo.copy(obj);
+    }
 }

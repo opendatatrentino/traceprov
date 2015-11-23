@@ -17,8 +17,8 @@
 		<artifactId>tod-super-pom</artifactId>
 		<version>1.4.0-SNAPSHOT</version>
 	</parent>
-	
-    <groupId>eu.trentorise.opendata</groupId>	
+
+	<groupId>eu.trentorise.opendata</groupId>
 	<artifactId>traceprov</artifactId>
 	<version>0.4.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -132,6 +132,7 @@
 									<include> eu.trentorise.opendata.traceprov* </include>
 									<include> org.apache.commons:*</include>
 									<include> commons-io:*</include>
+									<include> com.esotericsoftware:*</include>
 								</includes>
 							</artifactSet>
 							<relocations>
@@ -143,6 +144,10 @@
 									<pattern>commons-io</pattern>
 									<shadedPattern>eu.trentorise.opendata.traceprov.internal.commons-io</shadedPattern>
 								</relocation>
+								<dependency>
+									<pattern>com.esotericsoftware.kryo</pattern>
+									<shadedPattern>eu.trentorise.opendata.traceprov.internal.kryo</shadedPattern>			
+								</dependency>
 							</relocations>
 						</configuration>
 					</execution>
@@ -216,6 +221,11 @@
 			<artifactId>joda-time</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryo-shaded</artifactId>			
+		</dependency>
+
 		<!-- ****************** TEST DEPENDENCIES ********************** -->
 		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
@@ -237,11 +247,12 @@
 			<scope>test</scope>
 		</dependency>
 
-       <!--  needed even if it is a junit dep because maven shade excluding it from builds :-/ -->          	
+		<!-- needed even if it is a junit dep because maven shade excluding it 
+			from builds :-/ -->
 		<dependency>
 			<artifactId>hamcrest-core</artifactId>
 			<groupId>org.hamcrest</groupId>
-			<scope>test</scope>			
+			<scope>test</scope>
 		</dependency>
 
 

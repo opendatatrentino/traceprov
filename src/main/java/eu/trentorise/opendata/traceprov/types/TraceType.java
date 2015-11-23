@@ -18,6 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import eu.trentorise.opendata.commons.Dict;
+import eu.trentorise.opendata.traceprov.db.TraceDb;
 import eu.trentorise.opendata.traceprov.exceptions.IncomparableVersionsException;
 
 import java.io.Serializable;
@@ -49,7 +50,8 @@ public abstract class TraceType<T> implements Serializable {
      * languages, for example "eu.trentorise.opendata.traceprov.types.IntType"
      */
     public String getId() {
-	return this.getClass().getCanonicalName();
+        return this.getClass()
+                   .getCanonicalName();
     }
 
     /**
@@ -61,7 +63,7 @@ public abstract class TraceType<T> implements Serializable {
      * </p>
      */
     public void accept(TypeVisitor v) {
-	v.visit(this);
+        v.visit(this);
     }
 
     /**
@@ -69,11 +71,12 @@ public abstract class TraceType<T> implements Serializable {
      * the name, description, provenance...
      */
     public DefMetadata getMetadata() {
-	return DefMetadata.builder()
-		.setConcept(Concept.of())
-		.setOriginId(getId())
-		.setName(Dict.of(Locale.ENGLISH, this.getClass().getSimpleName()))
-		.build();
+        return DefMetadata.builder()
+                          .setConcept(Concept.of())
+                          .setOriginId(getId())
+                          .setName(Dict.of(Locale.ENGLISH, this.getClass()
+                                                               .getSimpleName()))
+                          .build();
     }
 
     /**
@@ -87,8 +90,8 @@ public abstract class TraceType<T> implements Serializable {
      * type.
      */
     public boolean isInstance(Object object) {
-	// todo this is rough...
-	return getJavaClass().isInstance(object);
+        // todo this is rough...
+        return getJavaClass().isInstance(object);
     }
 
     /**
@@ -104,7 +107,7 @@ public abstract class TraceType<T> implements Serializable {
      *             returns false)
      */
     public boolean isEmpty(Object object) {
-	throw new UnsupportedOperationException("todo implement me!");
+        throw new UnsupportedOperationException("todo implement me!");
     }
 
     /**
@@ -113,7 +116,7 @@ public abstract class TraceType<T> implements Serializable {
      * instance, see {@link #newEmpty()}
      */
     public Object empty() {
-	throw new UnsupportedOperationException("todo implement me!");
+        throw new UnsupportedOperationException("todo implement me!");
     }
 
     /**
@@ -124,7 +127,7 @@ public abstract class TraceType<T> implements Serializable {
      * @see #empty()
      */
     public Object newEmpty() {
-	throw new UnsupportedOperationException("todo implement me!");
+        throw new UnsupportedOperationException("todo implement me!");
     }
 
     /**
@@ -140,7 +143,7 @@ public abstract class TraceType<T> implements Serializable {
      *             returns false)
      */
     public boolean isDegenerate(Object obj) {
-	throw new UnsupportedOperationException("todo implement me!");
+        throw new UnsupportedOperationException("todo implement me!");
     }
 
     /**
@@ -156,7 +159,7 @@ public abstract class TraceType<T> implements Serializable {
      *             returns false)
      */
     public boolean isDirty(Object obj) {
-	throw new UnsupportedOperationException("todo implement me!");
+        throw new UnsupportedOperationException("todo implement me!");
     }
 
     /*
@@ -180,9 +183,9 @@ public abstract class TraceType<T> implements Serializable {
      */
 
     protected void checkInstance(Object obj) {
-	if (!isInstance(obj)) {
-	    throw new IllegalArgumentException("Provided object is not instance of Trace Type " + getId());
-	}
+        if (!isInstance(obj)) {
+            throw new IllegalArgumentException("Provided object is not instance of Trace Type " + getId());
+        }
     }
 
     /**
@@ -190,31 +193,39 @@ public abstract class TraceType<T> implements Serializable {
      */
     public abstract boolean isImmutable();
 
+    /**
+     * Performs a deep copy of the provided object. If object is immutable, it
+     * is returned as is.
+     * 
+     * @param obj
+     *            must be an instance of this type.
+     */
     public <W> W deepCopy(W obj) {
-	checkInstance(obj);
-	if (isImmutable()) {
-	    return obj;
-	} else {
-	    LOG.warning("TODO - CALLED deepCopy ON TYPE " + getId() + " BUT RETURNING SAME INPUT UNCHANGED!!");
-	    return obj;
-	}
+        checkInstance(obj);
+        if (isImmutable()) {
+            return obj;
+        } else {
+            return TraceDb.getDb()
+                          .getTypeRegistry()
+                          .fullDeepCopy(obj);
+        }
     }
 
     public <W> W shallowCopy(W obj) {
-	checkInstance(obj);
-	if (isImmutable()) {
-	    return obj;
-	} else {
-	    LOG.warning("TODO - CALLED deepCopy ON TYPE " + getClass().getSimpleName()
-		    + " BUT RETURNING SAME INPUT UNCHANGED!!");
-	    return obj;
-	}
+        checkInstance(obj);
+        if (isImmutable()) {
+            return obj;
+        } else {
+            LOG.warning("TODO - CALLED deepCopy ON TYPE " + getClass().getSimpleName()
+                    + " BUT RETURNING SAME INPUT UNCHANGED!!");
+            return obj;
+        }
     }
 
     /**
      * Compares this object with the specified object for version. Returns a
-     * negative integer, zero, or a positive integer as obj1 has less recent
-     * version than, same as, or more recent version than the specified object
+     * negative integer, zero, or a positive integer as {@code obj1} has less
+     * recent version than, same as, or more recent version than {@code obj2}
      * according to its publisher. Notice this is different from checking
      * difference in dataobject timestamps. todo explain better
      * 
@@ -223,12 +234,13 @@ public abstract class TraceType<T> implements Serializable {
      * @param obj2
      *            must belong to this TraceType
      * @throws IncomparableVersionsException
-     *             If the object versions cannot be compared (because maybe
-     *             they are on separate version branchres)
-     * @see eu.trentorise.opendata.traceprov.db.TraceDb#compareVersion(long, long)
+     *             If the object versions cannot be compared (because maybe they
+     *             are on separate version branches)
+     * @see eu.trentorise.opendata.traceprov.db.TraceDb#compareVersion(long,
+     *      long)
      */
     public int compareVersion(Object obj1, Object obj2) {
-	throw new IncomparableVersionsException(
-		"Version of Object " + obj1 + " cannot be compared to version of object " + obj2);
+        throw new IncomparableVersionsException(
+                "Version of Object " + obj1 + " cannot be compared to version of object " + obj2);
     }
 }

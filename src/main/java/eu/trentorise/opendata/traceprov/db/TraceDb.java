@@ -215,7 +215,7 @@ public class TraceDb {
 
     /**
      * Database will point to a folder in the local hard drive, This method WILL
-     * NOT write in the folder.
+     * <i>NOT</i> write in the folder.
      */
     private void init(String dbUrl, TypeRegistry typeRegistry) {
         checkNotEmpty(dbUrl, "Invalid db Url!");
@@ -818,14 +818,12 @@ public class TraceDb {
 
     private void insertStoredValueByUrl(TraceData traceData) {
         long id = traceData.getId();
-        long pubId = traceData
-                .getMetadata()
-                .getPublisherId();
+        long pubId = traceData.getMetadata()
+                              .getPublisherId();
         checkArgument(id >= 0, "Invalid tracedata id! Found: %s", id);
         String uri = traceData.getRef()
                               .uri();
-        ArrayList<TraceData> datanodes = storedValuesByUrl.get(pubId,
-                uri);
+        ArrayList<TraceData> datanodes = storedValuesByUrl.get(pubId, uri);
         if (datanodes == null) {
             storedValuesByUrl.put(pubId, uri, Lists.newArrayList(traceData));
         } else {
@@ -874,15 +872,34 @@ public class TraceDb {
 
     /**
      * 
-     * @see #update(Iterable)
+     * @see #hardUpdate(Iterable)
      */
-    public List<TraceData> update(TraceData... dataNodes) {
+    protected List<TraceData> hardUpdate(TraceData... dataNodes) {
         return Arrays.asList(dataNodes);
     }
 
     /**
+     * todo
+     * @see {@link #hardUpdate(Iterable)}
+     */
+    @Nullable
+    public List<TraceData> update(Iterable<TraceData> dataNodes) {
+        throw new UnsupportedOperationException("TODO implement me!");
+    }
+
+    /**
+     * 
+     * @see #hardUpdate(Iterable)
+     */
+    protected List<TraceData> update(TraceData... dataNodes) {
+        throw new UnsupportedOperationException("TODO implement me!");
+        // return Arrays.asList(dataNodes);
+    }
+
+    /**
      * Writes provided dataNodes to their originId / foreign identifier slot.
-     * This is a hard update, if possible just create a new view instead.
+     * This is a hard update, if possible just create a new view using
+     * {@link #update } instead.
      *
      * @param view
      *            the view to update
@@ -891,7 +908,7 @@ public class TraceDb {
      * @throws DataNotFoundException
      */
     @Nullable
-    public List<TraceData> update(Iterable<TraceData> dataNodes) {
+    protected List<TraceData> hardUpdate(Iterable<TraceData> dataNodes) {
         throw new UnsupportedOperationException("TODO implement me!");
     }
 
@@ -910,7 +927,7 @@ public class TraceDb {
      * @see #putSameAsIds(Iterable)
      */
     public void putSameAsIds(long mainId, Long... ids) {
-        putSameAsIds(Arrays.asList(ids), mainId);
+        putSameAsIds(mainId, Arrays.asList(ids));
     }
 
     /**
@@ -945,7 +962,7 @@ public class TraceDb {
      *             if there are no corresponding views for the provided ids,
      * 
      */
-    public void putSameAsIds(Iterable<Long> ids, long mainId) {
+    public void putSameAsIds(long mainId, Iterable<Long> ids) {
         checkNotNull(ids);
         checkArgument(mainId >= 0, "Invalid id: " + mainId);
         if (!Iterables.contains(ids, mainId)) {
