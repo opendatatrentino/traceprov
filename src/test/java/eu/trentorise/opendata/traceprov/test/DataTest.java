@@ -63,26 +63,26 @@ public class DataTest extends TraceProvTest {
   
     @Before
     public void before() {
-	super.before();
-	emptyReg = TypeRegistry.empty();
+    	super.before();
+    	emptyReg = TypeRegistry.empty();
     }
 
     @After
     public void after() {
-	super.after();
-	emptyReg = null;
-	TraceDb.getDb().setTypeRegistry(TypeRegistry.of());
+    	super.after();
+    	emptyReg = null;
+    	TraceDb.getDb().setTypeRegistry(TypeRegistry.of());
     }
 
     @Test
     public void testWalkerValue() {
-	DataValue dv = DataValue.of(Ref.of(), NodeMetadata.of(), "a");
-	TraceDb.getDb().setTypeRegistry(emptyReg);
-	assertEquals(null, DataValue.of().asSimpleType());
-	assertEquals("a", dv.asSimpleType());
-	assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());
-	assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), NodeMetadata.of(), dv).asSimpleType());
-	assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), NodeMetadata.of(), dv).asSimpleType());
+    	DataValue dv = DataValue.of(Ref.of(), NodeMetadata.of(), "a");
+    	TraceDb.getDb().setTypeRegistry(emptyReg);
+    	assertEquals(null, DataValue.of().asSimpleType());
+    	assertEquals("a", dv.asSimpleType());
+    	assertEquals(Lists.newArrayList(), DataArray.of().asSimpleType());
+    	assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), NodeMetadata.of(), dv).asSimpleType());
+    	assertEquals(Lists.newArrayList("a"), DataArray.of(Ref.of(), NodeMetadata.of(), dv).asSimpleType());
     }
 
     @Test
@@ -99,21 +99,21 @@ public class DataTest extends TraceProvTest {
     @Test
     public void testWalker() {
 
-	TraceDb.getDb().setTypeRegistry(TypeRegistry.empty());
-
-	assertEquals(new HashMap(), DataMap.of().asSimpleType());
-
-	Object res = DataMap.of(Ref.of(),
-		NodeMetadata.of(),
-		ImmutableMap.of("a", DataValue.of(Ref.of(), NodeMetadata.of(), "b"),
-			"c", DataValue.of(Ref.of(), NodeMetadata.of(), "d")))
-		.asSimpleType();
-
-	HashMap hm = (HashMap) res;
-
-	assertEquals(2, hm.size());
-	assertEquals("b", hm.get("a"));
-	assertEquals("d", hm.get("c"));
+    	TraceDb.getDb().setTypeRegistry(TypeRegistry.empty());
+    
+    	assertEquals(new HashMap(), DataMap.of().asSimpleType());
+    
+    	Object res = DataMap.of(Ref.of(),
+    		NodeMetadata.of(),
+    		ImmutableMap.of("a", DataValue.of(Ref.of(), NodeMetadata.of(), "b"),
+    			"c", DataValue.of(Ref.of(), NodeMetadata.of(), "d")))
+    		.asSimpleType();
+    
+    	HashMap hm = (HashMap) res;
+    
+    	assertEquals(2, hm.size());
+    	assertEquals("b", hm.get("a"));
+    	assertEquals("d", hm.get("c"));
     }
 
     /**
@@ -201,19 +201,19 @@ public class DataTest extends TraceProvTest {
 
     @Test
     public void testGenerics() {
-	DataObject.Builder<String> dosb = DataObject.builder();
-
-	DataObject<String> dos = dosb.setRawValue("a").build();
-
-	assertEquals("a", dos.getRawValue());
-
-	String b = dos.withId(4).getRawValue();
+    	DataObject.Builder<String> dosb = DataObject.builder();
+    
+    	DataObject<String> dos = dosb.setRawValue("a").build();
+    
+    	assertEquals("a", dos.getRawValue());
+    
+    	String b = dos.withId(4).getRawValue();
 
     }
 
     @Test
     public void testJackson() {
-	TodJacksonTester.testJsonConv(objectMapper, LOG, AnyType.of());
+        TodJacksonTester.testJsonConv(objectMapper, LOG, AnyType.of());
     }
 
 }
