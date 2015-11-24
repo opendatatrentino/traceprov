@@ -52,7 +52,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 /**
  * 
  * A data node that encapsulates a Java object which is supposed to respect bean
- * conventions. Also, getters are not supposed to throw exceptions.
+ * conventions. Also, getters are not supposed to throw eu.trentorise.opendata.commons.exceptions.
  * 
  * @author David Leoni
  */

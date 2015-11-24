@@ -17,7 +17,7 @@ package eu.trentorise.opendata.traceprov.exceptions;
 
 /**
  * Exception thrown when file loading goes wrong. Usually it will wrap most
- * common java io exceptions.
+ * common java io eu.trentorise.opendata.commons.exceptions.
  *
  * @author David Leoni
  */

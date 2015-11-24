@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.path;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import exceptions.TodNotFoundException;
+import eu.trentorise.opendata.commons.exceptions.TodNotFoundException;
 
 import java.util.Iterator;
 import java.util.List;
@@ -53,7 +53,7 @@ abstract class ATracePath implements Path {
     /**
      * Returns the next element in the path.
      *
-     * @throws exceptions.TodNotFoundException
+     * @throws eu.trentorise.opendata.commons.exceptions.TodNotFoundException
      *             if not found.
      */
     public TracePath next() {
