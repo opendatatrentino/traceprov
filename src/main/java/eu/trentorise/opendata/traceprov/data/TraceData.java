@@ -37,7 +37,7 @@ import com.google.common.base.Preconditions;
  *
  * @author David Leoni
  */
-public abstract class TraceData implements Serializable {
+public abstract class TraceData<T> implements Serializable {
 
     /**
      * The numerical id of the datanode inside a {@link TraceDb}. If unknown
@@ -75,7 +75,7 @@ public abstract class TraceData implements Serializable {
      */
     @Value.Default
     @Nullable
-    public Object getRawValue() {
+    public T getRawValue() {
 	return null;
     }
 
@@ -85,11 +85,11 @@ public abstract class TraceData implements Serializable {
      * {@link #getValue()} instead.
      */
     // todo say it's using current type reg
-    public Object copyRawValue() {
-	return TraceDb.getDb()
+    public T copyRawValue() {
+	return (T) TraceDb.getDb()    
 		.getTypeRegistry()
-		.getCanonicalTypeFromInstance(getRawValue())
-		.deepCopy(getRawValue());
+		.getCanonicalTypeFromInstance(getRawValue())  // todo this looks fishy
+		.smartCopy(getRawValue());
     }
 
     /**

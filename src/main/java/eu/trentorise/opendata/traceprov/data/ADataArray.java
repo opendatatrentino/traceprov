@@ -55,115 +55,118 @@ abstract class ADataArray extends TraceData implements Iterable<TraceData> {
 
     @Override
     public Iterator<TraceData> iterator() {
-	return new NodeIterator(this);
+        return new NodeIterator(this);
     }
 
- 
     /**
      * 
-     * @param rawValues NOTE: the iterable MUST NOT be anoter DataNode! (although it can contain DataNode(s)
+     * @param rawValues
+     *            NOTE: the iterable MUST NOT be anoter DataNode! (although it
+     *            can contain DataNode(s)
      */
     public static DataArray of(Ref ref, NodeMetadata metadata, Iterable rawValues) {
-	return DataArray.builder()
-		.setRef(ref)
-		.setMetadata(metadata)
-		.setRawValue(rawValues)
-		.build();
+        return DataArray.builder()
+                        .setRef(ref)
+                        .setMetadata(metadata)
+                        .setRawValue(rawValues)
+                        .build();
     }
 
     /**
-     * @param rawValues They can be DataNode(s)
+     * @param rawValues
+     *            They can be DataNode(s)
      */
     public static DataArray of(Ref ref, NodeMetadata metadata, Object... rawValues) {
-	return DataArray.builder()
-		.setRef(ref)
-		.setRawValue(Lists.newArrayList(rawValues))
-		.build();
+        return DataArray.builder()
+                        .setRef(ref)
+                        .setRawValue(Lists.newArrayList(rawValues))
+                        .build();
     }
 
     @Override
     public String toString() {
-	StringBuilder sb = new StringBuilder();
-	int i = 0;
-	for (TraceData n : this) {
-	    if (i > 0) {
-		sb.append(", ");
-	    }
-	    if (i < MAX_PRINTED_NODES) {
-		sb.append(n.toString());
-	    } else {
-		sb.append("...");
-		break;
-	    }
-	    i++;
-	}
-	sb.append("]");
-	return "NodeList{ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + sb.toString() + '}';
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for (TraceData n : this) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+            if (i < MAX_PRINTED_NODES) {
+                sb.append(n.toString());
+            } else {
+                sb.append("...");
+                break;
+            }
+            i++;
+        }
+        sb.append("]");
+        return "NodeList{ref=" + getRef() + ", metadata=" + getMetadata() + ", data=" + sb.toString() + '}';
     }
 
     @Override
     public void accept(DataVisitor visitor, TraceData parent, String field, int pos) {
-	int i = 0;
-	Iterable iterable = (Iterable) getRawValue();
-	Iterator<TraceData> iter = iterable.iterator();
+        int i = 0;
+        Iterable iterable = (Iterable) getRawValue();
+        Iterator<TraceData> iter = iterable.iterator();
 
-	while (iter.hasNext()) {
-	    TraceData node = iter.next();
-	    node.accept(visitor, this, field, i);
-	    i++;
-	}
+        while (iter.hasNext()) {
+            TraceData node = iter.next();
+            node.accept(visitor, this, field, i);
+            i++;
+        }
 
-	visitor.visit((DataArray) this, parent, field, pos);
+        visitor.visit((DataArray) this, parent, field, pos);
 
     }
 
     @Override
     public Object asSimpleType() {
-	TypeRegistry typeRegistry = TraceDb.getDb().getTypeRegistry();
-	SimpleMapTransformer tran = new SimpleMapTransformer(typeRegistry);
-	accept(tran, DataValue.of(), "", 0);
-	return tran.getResult();
+        TypeRegistry typeRegistry = TraceDb.getDb()
+                                           .getTypeRegistry();
+        SimpleMapTransformer tran = new SimpleMapTransformer(typeRegistry);
+        accept(tran, DataValue.of(), "", 0);
+        return tran.getResult();
     }
 
     private static class NodeIterator implements Iterator<TraceData> {
 
-	private Iterator iterator;
-	private DataArray dataArray;
-	private long index;
+        private Iterator iterator;
+        private DataArray dataArray;
+        private long index;
 
-	public NodeIterator(ADataArray dataArray) {
-	    checkNotNull(dataArray);
-	    
-	    Iterable iterable = (Iterable) dataArray.getRawValue();
-	    this.iterator = iterable.iterator();
-	    this.index = 0;
-	}
+        public NodeIterator(ADataArray dataArray) {
+            checkNotNull(dataArray);
 
-	@Override
-	public boolean hasNext() {
-	    return iterator.hasNext();
-	}
+            Iterable iterable = (Iterable) dataArray.getRawValue();
+            this.iterator = iterable.iterator();
+            this.index = 0;
+        }
 
-	@Override
-	public TraceData next() {
-	    Object obj = iterator.next();
-	    TraceData ret;
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
 
-	    if (obj instanceof TraceData) {
-		ret = (TraceData) obj;
-	    } else {
-		ret = DataNodes.makeSubnode(dataArray, index, obj);
-	    }
+        @Override
+        public TraceData next() {
+            Object obj = iterator.next();
+            TraceData ret;
 
-	    index += 1;
-	    return ret;
+            if (obj instanceof TraceData) {
+                ret = (TraceData) obj;
+            } else {
+                ret = DataNodes.makeSubnode(dataArray, index, obj);
+            }
 
-	}
+            index += 1;
+            return ret;
 
-	@Override
-	public void remove() {
-	    throw new UnsupportedOperationException("REMOVE IS NOT UNSUPPORTED!");
-	}
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("REMOVE IS NOT UNSUPPORTED!");
+        }
 
     }
 
@@ -173,26 +176,27 @@ abstract class ADataArray extends TraceData implements Iterable<TraceData> {
     @Value.Default
     @Override
     public Object getRawValue() {
-	return ImmutableList.of();
+        return ImmutableList.of();
     }
-    
+
     @Value.Check
     protected void check() {
-	super.check();
+        super.check();
 
-	if (!(getRawValue() instanceof Iterable)) {
-	    String className = getRawValue() == null ? "null" : getRawValue().getClass().getCanonicalName();
-	    throw new IllegalStateException("Only supported raw value for now is Iterable! Found instead " + className);
-	}
+        if (!(getRawValue() instanceof Iterable)) {
+            String className = getRawValue() == null ? "null" : getRawValue().getClass()
+                                                                             .getCanonicalName();
+            throw new IllegalStateException("Only supported raw value for now is Iterable! Found instead " + className);
+        }
     }
 
     @Override
-    public Builder fromThis() {	
-	return DataArray.builder().from(this);
+    public Builder fromThis() {
+        return DataArray.builder()
+                        .from(this);
     }
-    
-    
-    public static abstract class Builder extends TraceData.Builder {	
-	
+
+    public static abstract class Builder extends TraceData.Builder {
+
     }
 }

@@ -249,7 +249,7 @@ public class TypesTest extends TraceProvTest {
         A a1 = new A();
         a1.d = new Date(0);
         
-        A a2 = reg.fullDeepCopy(a1);
+        A a2 = reg.deepCopy(a1);
         assertTrue(a1.d.equals(a2.d));
         a2.d = new Date(1);
         assertFalse(a1.d.equals(a2.d));

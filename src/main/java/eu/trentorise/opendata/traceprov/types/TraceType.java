@@ -200,25 +200,33 @@ public abstract class TraceType<T> implements Serializable {
      * @param obj
      *            must be an instance of this type.
      */
-    public <W> W deepCopy(W obj) {
+    public <W> W smartCopy(W obj) {
         checkInstance(obj);
         if (isImmutable()) {
             return obj;
         } else {
             return TraceDb.getDb()
                           .getTypeRegistry()
-                          .fullDeepCopy(obj);
+                          .deepCopy(obj);
         }
     }
+
+    /**
+     * Performs a shallow copy of the provided object, Always copy the object,
+     * even if it is immutable.
+     * 
+     * @param obj
+     *            must be an instance of this type.
+     */
 
     public <W> W shallowCopy(W obj) {
         checkInstance(obj);
         if (isImmutable()) {
             return obj;
         } else {
-            LOG.warning("TODO - CALLED deepCopy ON TYPE " + getClass().getSimpleName()
-                    + " BUT RETURNING SAME INPUT UNCHANGED!!");
-            return obj;
+            return TraceDb.getDb()
+                          .getTypeRegistry()
+                          .shallowCopy(obj);
         }
     }
 

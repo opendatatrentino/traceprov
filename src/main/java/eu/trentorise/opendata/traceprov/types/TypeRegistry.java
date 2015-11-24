@@ -319,12 +319,22 @@ public class TypeRegistry implements Serializable {
     }
 
     /**
+     * Returns a shallow copy of provided object. Always performs a deep copy, even
+     * if the object is known to be immutable. As a consequence, this operation
+     * can be quite expensive.
+     */
+    // todo currently it is not configurable.
+    public <W> W shallowCopy(W obj) {
+        return kryo.copyShallow(obj);
+    }
+    
+    /**
      * Returns a deep copy of provided object. Always performs a deep copy, even
      * if the object is known to be immutable. As a consequence, this operation
      * can be quite expensive.
      */
     // todo currently it is not configurable.
-    public <W> W fullDeepCopy(W obj) {
+    public <W> W deepCopy(W obj) {
         return kryo.copy(obj);
     }
 }

@@ -15,7 +15,6 @@
  */
 package eu.trentorise.opendata.traceprov.engine;
 
-import eu.trentorise.opendata.commons.NotFoundException;
 import eu.trentorise.opendata.traceprov.types.TraceType;
 import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 
@@ -67,7 +66,7 @@ public class ConverterRegistry {
     /**
      * The converter from type {@code S} to {@code T}, if available
      *
-     * @throws NotFoundException is not available
+     * @throws TraceProvNotFoundException is not available
      * @see #hasInverse(eu.trentorise.opendata.traceprov.types.TraceType,
      * eu.trentorise.opendata.traceprov.types.TraceType)
      */

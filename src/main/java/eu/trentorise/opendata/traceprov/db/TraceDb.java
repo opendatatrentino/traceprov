@@ -45,7 +45,6 @@ import com.google.common.collect.Sets.SetView;
 import com.google.common.collect.Table;
 
 import eu.trentorise.opendata.commons.Dict;
-import eu.trentorise.opendata.commons.NotFoundException;
 import eu.trentorise.opendata.commons.TodUtils;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.TraceProvs;
@@ -515,7 +514,7 @@ public class TraceDb {
     /**
      * Returns the prefix expansion, if present in the db.
      *
-     * @throws NotFoundException
+     * @throws TraceProvNotFoundException
      *             if prefix doesn't have associated any expansion in the db
      */
     public String getPrefix(String prefix) {
