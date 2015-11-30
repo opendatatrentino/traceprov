@@ -28,6 +28,7 @@ import eu.trentorise.opendata.traceprov.data.TraceFile;
 import eu.trentorise.opendata.traceprov.data.ParsedType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
+import eu.trentorise.opendata.traceprov.path.TracePaths;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.TraceRefs;
 import eu.trentorise.opendata.traceprov.data.PropertyMapping;
@@ -73,10 +74,10 @@ public class CodeGenTest {
 
     @Test
     public void testRef() {
-        assertEquals("$[0][0]", TraceRefs.tablePath(0, 0));        
-        assertEquals("$[*][1]", TraceRefs.tablePath(-1, 1));  
-        assertEquals("$[1][*]", TraceRefs.tablePath(1, -1));          
-        assertEquals("$[*][*]", TraceRefs.tablePath(-1, -1));
+        assertEquals("$[0][0]", TracePaths.tablePath(0, 0));        
+        assertEquals("$[*][1]", TracePaths.tablePath(-1, 1));  
+        assertEquals("$[1][*]", TracePaths.tablePath(1, -1));          
+        assertEquals("$[*][*]", TracePaths.tablePath(-1, -1));
     }
 
     @Test

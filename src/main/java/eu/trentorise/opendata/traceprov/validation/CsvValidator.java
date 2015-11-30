@@ -39,53 +39,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 /**
- * <h3>Example</h3> Suppose we have an original CSV table like this:
- * 
- * <pre>
- *      h1,h2
- *      aa,ab
- *      ba,bb
- * </pre>
- * 
- * its JSON view format is supposed to be like this:
- *
- * <pre>
- *  [
- *      ["h1","h2"],
- *      ["aa","ab"],
- *      ["ba","bb"]
- *  ]
- * </pre>
- * <p>
- * We don't use an array of records as original header names may be empty or
- * duplicated. Thus cell "ba" can be pinpointed with the JsonPath expression
- * $[2][0] (preferred) or 2.0 . First one is preferred as it is clearer and
- * closer in syntax to Javascript<br/>
- * The first column can be selected with JsonPath expression $[*][0] (preferred)
- * or *.0
- * </p>
- * <p>
- * Once CSV is correctly loaded and transformed in a proper common tree
- * representation, then we can afford to have a more user friendly version with
- * records like this:
- *
- * <pre>
- *      [
- *          {
- *              "h1":"aa",
- *              "h2":"ab"
- *          },
- *           {
- *              "h1":"ba",
- *              "h2":"bb"
- *          }
- *      ]
- * </pre>
- * 
- * First column can be selected with JsonPath $[*].h1 (preferred) or *.h1
- * </p>
- *
- * @author David Leoni
+ * See manual for detailed explanation of how a CSV should be searched. todo put link
  */
 // todo Just an experiment, in case we need to move this to separate
 // traceprov-csv repo
