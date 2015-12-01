@@ -75,9 +75,9 @@ public class CodeGenTest {
     @Test
     public void testRef() {
         assertEquals("$[0][0]", TracePaths.tablePath(0, 0));        
-        assertEquals("$[*][1]", TracePaths.tablePath(-1, 1));  
-        assertEquals("$[1][*]", TracePaths.tablePath(1, -1));          
-        assertEquals("$[*][*]", TracePaths.tablePath(-1, -1));
+        assertEquals("$[ALL][1]", TracePaths.tablePath(-1, 1));  
+        assertEquals("$[1][ALL]", TracePaths.tablePath(1, -1));          
+        assertEquals("$[ALL][ALL]", TracePaths.tablePath(-1, -1));
     }
 
     @Test

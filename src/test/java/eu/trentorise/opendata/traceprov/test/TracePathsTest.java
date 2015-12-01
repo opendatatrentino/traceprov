@@ -53,17 +53,17 @@ public class TracePathsTest {
 
         }
 
-        assertEquals("$[0][*]", TracePaths.tablePath(0, -1));
+        assertEquals("$[0][ALL]", TracePaths.tablePath(0, -1));
 
-        assertEquals("$[*][0]", TracePaths.tablePath(-1, 0));
+        assertEquals("$[ALL][0]", TracePaths.tablePath(-1, 0));
 
-        assertEquals("$[*][*]", TracePaths.tablePath(-1, -1));
+        assertEquals("$[ALL][ALL]", TracePaths.tablePath(-1, -1));
 
-        assertEquals("$[0].*", TracePaths.tablePath(0, "*"));
+        assertEquals("$[0].ALL", TracePaths.tablePath(0, "ALL"));
 
-        assertEquals("$[*].a", TracePaths.tablePath(-1, "a"));
+        assertEquals("$[ALL].a", TracePaths.tablePath(-1, "a"));
 
-        assertEquals("$[*].*", TracePaths.tablePath(-1, "*"));
+        assertEquals("$[ALL].ALL", TracePaths.tablePath(-1, "ALL"));
 
     }
 
@@ -72,7 +72,7 @@ public class TracePathsTest {
         try {
             assertEquals(Ref.builder()
                             .setDocumentId(DataNodes.DATANODES_IRI)
-                            .setTracePath("$[*]")
+                            .setTracePath("$[ALL]")
                             .build(),
                     TraceRefs.dataNodesRef(ImmutableList.<Long> of()));
             Assert.fail("Shouldn't arrive here!");
@@ -111,7 +111,7 @@ public class TracePathsTest {
 
         assertEquals("catalog.publisher", TracePaths.propertyPath(DcatMetadata.class, "catalog", "publisher"));
 
-        assertEquals("dataset.themes[*].uri", TracePaths.propertyPath(DcatMetadata.class, "dataset", "themes", "uri"));
+        assertEquals("dataset.themes[ALL].uri", TracePaths.propertyPath(DcatMetadata.class, "dataset", "themes", "uri"));
     }
 
 }

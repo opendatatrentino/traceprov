@@ -76,7 +76,7 @@ public final class TracePaths {
                         }
                         ret.append(property);
                         if (Collection.class.isAssignableFrom(candidateClass)) {
-                            ret.append("[*]");
+                            ret.append("[ALL]");
                             try {
                                 curClass = getCollectionType(pd.getReadMethod());
                                 break;
@@ -141,7 +141,7 @@ public final class TracePaths {
     public static String tablePath(int rowIndex, int colIndex) {
         checkArgument(rowIndex >= -1, "row index must be >= -1, found instead %s", rowIndex);
         checkArgument(colIndex >= -1, "col index must be >= -1, found instead %s", colIndex);
-        return "$[" + (rowIndex == -1 ? "*" : rowIndex) + "][" + (colIndex == -1 ? "*" : colIndex) + "]";
+        return "$[" + (rowIndex == -1 ? "ALL" : rowIndex) + "][" + (colIndex == -1 ? "ALL" : colIndex) + "]";
     }
 
     /**
@@ -152,17 +152,17 @@ public final class TracePaths {
      * @param rowIndex
      *            the row index, starting from 0. To select all rows, use -1
      * @param header.
-     *            To select all headers, use *
+     *            To select all headers, use ALL
      */
     public static String tablePath(int rowIndex, String header) {
         checkArgument(rowIndex >= -1, "row index must be >= -1, found instead %s", rowIndex);
-        checkNotEmpty(header, "Invalid header! To select all headers use *", "");
-        return "$[" + (rowIndex == -1 ? "*" : rowIndex) + "]." + header;
+        checkNotEmpty(header, "Invalid header! To select all headers use ALL", "");
+        return "$[" + (rowIndex == -1 ? "ALL" : rowIndex) + "]." + header;
     }
 
     /**
      * Looks in the return type of provided method and gives back the type of a
-     * collection, like String in List&lt;String&gt;
+     * collection, like String in {@code List<String>}
      *
      * @throws IllegalArgumentException
      *             if method doesn't return generids
