@@ -20,6 +20,7 @@ import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataNodes;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
+import eu.trentorise.opendata.traceprov.tracel.PropertyPath;
 import eu.trentorise.opendata.traceprov.tracel.TracePaths;
 import eu.trentorise.opendata.traceprov.types.TraceRefs;
 
@@ -85,33 +86,33 @@ public class TracePathsTest {
                         .build(),
                 TraceRefs.dataNodesRef(ImmutableList.of(1L, 3L)));
     }
-/*
+
     @Test
     public void testDcat() {
-        assertEquals("catalog", PropertyPath.of(DcatMetadata.class, "catalog"));
+        assertEquals("$.catalog", PropertyPath.of("$", DcatMetadata.class, "catalog").asString());
 
         try {
-            PropertyPath.of(DcatMetadata.class, "bla");
+            PropertyPath.of("$", DcatMetadata.class, "bla");
             Assert.fail();
         } catch (IllegalArgumentException ex) {
 
         }
 
         try {
-            PropertyPath.of(DcatMetadata.class, ImmutableList.<String> of());
+            PropertyPath.of("$", DcatMetadata.class, ImmutableList.<String> of());
         } catch (IllegalArgumentException ex) {
 
         }
 
         try {
-            PropertyPath.of(DcatMetadata.class, " ", "publisher");
+            PropertyPath.of("$", DcatMetadata.class, " ", "publisher");
         } catch (IllegalArgumentException ex) {
 
         }
 
-        assertEquals("catalog.publisher", PropertyPath.of(DcatMetadata.class, "catalog", "publisher"));
+        assertEquals("$.catalog.publisher", PropertyPath.of("$", DcatMetadata.class, "catalog", "publisher").asString());
 
-        assertEquals("dataset.themes[ALL].uri", PropertyPath.of(DcatMetadata.class, "dataset", "themes", "uri"));
+        assertEquals("$.dataset.themes.uri", PropertyPath.of("$", DcatMetadata.class, "dataset", "themes", "uri").asString());
     }
-*/
+
 }

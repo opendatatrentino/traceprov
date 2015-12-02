@@ -32,7 +32,7 @@ abstract class AId extends Token {
 
     @Value.Check
     protected void check(){        
-        if (Tracel.isValidId(getLabel())){
+        if (!Tracel.isValidId(getLabel())){
             throw new IllegalStateException("Token Id " + getLabel() + " is not valid!");
         }
     }

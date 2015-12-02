@@ -14,4 +14,11 @@ public final class Tracel {
         checkNotNull(id);
         return !id.isEmpty() && !id.contains(" ") && !Character.isDigit(id.charAt(0));
     }
+
+    public static void checkValidId(String id) {
+        if (!isValidId(id)){
+            throw new IllegalArgumentException("Invalid identifier! Found " + id);
+        }
+        
+    }
 }
