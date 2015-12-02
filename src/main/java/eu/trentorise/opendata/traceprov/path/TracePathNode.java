@@ -23,7 +23,7 @@ import javax.validation.Path;
  * TODO much work in progress
  * Inspired by  {@link Path.Node} of java validation api
  */
-public abstract class TracePathElement implements Path.Node {
+public abstract class TracePathNode implements Path.Node {
     
     
     /**

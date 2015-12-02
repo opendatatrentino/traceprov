@@ -17,21 +17,21 @@ package eu.trentorise.opendata.traceprov.path;
 
 /**
  * Adapted from
- * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/RootPathToken.java
+ * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/ScanPathToken.java
  *
  */
 //@Value.Immutable
 //@SimpleStyle
-abstract class APathRoot extends TracePathElement {
-
-    @Override
-    public String getPathFragment() {
-        return "$";
-    }
+abstract class APathNodeScan extends TracePathNode {
 
     @Override
     public boolean isTokenDefinite() {
-        return true;
+        return false;
+    }
+
+    @Override
+    public String getPathFragment() {
+        return "..";
     }
 
 }

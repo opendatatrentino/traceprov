@@ -475,6 +475,52 @@ CkanDatasetCtr hospitals = Catalogs.of().getCkanService().fetchDataset("http://d
 
 If we keep reading local cache no problem should arise
 
+### TraceEL
+
+TraceProv Expression Engine
+
+Rationale: all expressions must be valid Javascript ES6 expressions
+
+
+`$` is the root, but is not mandatory to start expression with it (unless you're accessing some stringy field like in `$["my field"]`)
+
+```
+
+Expr
+|
+|- Token
+|
+Path
+|
+PropertyPath     myProp.otherProp     $["my Prop"]["Other Prop"]
+
+Expr examples:
+let x = 5; props["some field"].makeNice(someParams, x)[4]
+
+Token examples:
+ID:			myId
+DEF:		let ID = EXPR
+ENTRY:		(ID | STRING_LITERAL) : EXPR
+ENVEXPR:  	DEF; EXPR
+ARRAY:		[EXPRs]
+OBJECT:		{ENTRYs}
+INDEX:		[i]
+                            (x[e]) x : array,  e : integer)
+PROPERTY: 		[e]
+							(x[e]) x : object,  e : string)
+			|	.ID
+
+FUNCALL:  	ID(EXPRs)           makeNice()
+LAMBDA:   	(IDs)=>EXPR		    (x)=>x*2
+STRING_LITERAL:		"my String"
+INT_LITERAL:		5
+DOUBLE_LITERAL:		3.4
+LiTERAL:  	   	INT_LITERAL
+			|	DOUBLE_LITERAL
+			|  	STRING_LITERAL
+
+```
+
 ### TracePath
 
 There is no widely used standard query language for json / javascript objects. `XPath` is the most well known tree query language, but it is only for xml. There is an equivalent `JsonPath` language, but it has no formal specs and many implementations. Also, it looks like json/javascript but it is not valid javascript. For this reason we adopt JsonPath but changing some symbols so it it remains valid Javascript. The expressions can be made parseable by using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank">ES6 Proxies</a> todo write more.

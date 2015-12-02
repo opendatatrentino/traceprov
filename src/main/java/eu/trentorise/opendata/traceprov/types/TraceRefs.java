@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.commons.validation.Ref.Builder;
 import eu.trentorise.opendata.traceprov.data.DataNodes;
-import eu.trentorise.opendata.traceprov.path.TracePaths;
+import eu.trentorise.opendata.traceprov.tracel.TracePaths;
 
 import java.util.logging.Logger;
 

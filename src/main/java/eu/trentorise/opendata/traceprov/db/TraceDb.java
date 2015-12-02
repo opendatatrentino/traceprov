@@ -77,7 +77,7 @@ import eu.trentorise.opendata.traceprov.types.TypeRegistry;
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public class TraceDb {
 
-    private static Logger LOG = Logger.getLogger(TraceDb.class.getSimpleName());
+    private static final Logger LOG = Logger.getLogger(TraceDb.class.getSimpleName());
 
     public static final String IN_MEMORY_PREFIX = "memory://";
     public static final String TRACEDB_FILE = "tracedb.json";

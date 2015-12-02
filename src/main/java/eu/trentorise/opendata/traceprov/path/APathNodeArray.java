@@ -25,7 +25,7 @@ import org.immutables.value.Value;
  */
 
 //@Value.Immutable
-abstract class APathArray extends TracePathElement { 
+abstract class APathNodeArray extends TracePathNode { 
     
     /** 
      * todo put examples

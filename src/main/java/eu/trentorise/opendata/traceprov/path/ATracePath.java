@@ -42,12 +42,12 @@ import org.immutables.value.Value;
 @BuilderStylePublic
 abstract class ATracePath implements Path {
 
-    public abstract List<TracePathElement> getNodes();
+    public abstract List<TracePathNode> getNodes();
 
     @Value.Default
     public TracePath getNext() {
-	throw new UnsupportedOperationException("todo implement me");
-	// return TracePath.of();
+        throw new UnsupportedOperationException("todo implement me");
+        // return TracePath.of();
     }
 
     /**
@@ -57,11 +57,11 @@ abstract class ATracePath implements Path {
      *             if not found.
      */
     public TracePath next() {
-	throw new UnsupportedOperationException("todo implement me");
-	/*
-	 * if (isLeaf()) { throw new NotFoundException(
-	 * "Current path token is a leaf"); } return getNext();
-	 */
+        throw new UnsupportedOperationException("todo implement me");
+        /*
+         * if (isLeaf()) { throw new NotFoundException(
+         * "Current path token is a leaf"); } return getNext();
+         */
     }
 
     /*
@@ -73,31 +73,31 @@ abstract class ATracePath implements Path {
     // could be optimized
     public boolean isPathDefinite() {
 
-	throw new UnsupportedOperationException("todo implement me");
-	/*
-	 * if (getNodes().isEmpty()) { return true; // todo check about empty
-	 * nodes... anyway RootNode IS definite. } else { for (PathNode pn :
-	 * getNodes()) { if (!pn.isTokenDefinite()) { return false; } } } return
-	 * true;
-	 */
+        throw new UnsupportedOperationException("todo implement me");
+        /*
+         * if (getNodes().isEmpty()) { return true; // todo check about empty
+         * nodes... anyway RootNode IS definite. } else { for (PathNode pn :
+         * getNodes()) { if (!pn.isTokenDefinite()) { return false; } } } return
+         * true;
+         */
     }
 
     @Override
     public String toString() {
-	throw new UnsupportedOperationException("todo implement me");
-	/*
-	 * if (isLeaf()) { return getPathFragment(); } else { return
-	 * getPathFragment() + next().toString(); }
-	 */
+        throw new UnsupportedOperationException("todo implement me");
+        /*
+         * if (isLeaf()) { return getPathFragment(); } else { return
+         * getPathFragment() + next().toString(); }
+         */
     }
 
     public boolean isLeaf() {
-	throw new UnsupportedOperationException("todo implement me");
-	// return getNext() == null;
+        throw new UnsupportedOperationException("todo implement me");
+        // return getNext() == null;
     }
 
     @Override
     public Iterator<Node> iterator() {
-	return (Iterator<Node>) (Iterator<?>) getNodes().iterator();
+        return (Iterator<Node>) (Iterator<?>) getNodes().iterator();
     }
 }

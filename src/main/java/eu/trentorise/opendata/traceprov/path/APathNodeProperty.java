@@ -15,23 +15,29 @@
  */
 package eu.trentorise.opendata.traceprov.path;
 
+import java.util.List;
+import javax.validation.Path;
+
 /**
- * Adapted from
- * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/ScanPathToken.java
- *
+ * 
+ * @author David Leoni
  */
-//@Value.Immutable
-//@SimpleStyle
-abstract class APathScan extends TracePathElement {
+class APathNodeProperty extends TracePathNode implements Path.PropertyNode {
+
+    public List<String> getProperties() {
+        throw new UnsupportedOperationException("TODO implement me");
+    };
 
     @Override
     public boolean isTokenDefinite() {
-        return false;
+        return true;
     }
 
     @Override
     public String getPathFragment() {
-        return "..";
+        return new StringBuilder().append("[")
+                                  .append(TracePathNode.join(", ", "'", getProperties()))
+                                  .append("]")
+                                  .toString();
     }
-
 }

@@ -15,29 +15,23 @@
  */
 package eu.trentorise.opendata.traceprov.path;
 
-import java.util.List;
-import javax.validation.Path;
-
 /**
+ * Adapted from
+ * https://github.com/jayway/JsonPath/blob/json-path-2.0.0/json-path/src/main/java/com/jayway/jsonpath/internal/token/RootPathToken.java
  *
- * @author David Leoni
  */
-class APathProperty extends TracePathElement implements Path.PropertyNode {
+//@Value.Immutable
+//@SimpleStyle
+abstract class APathNodeRoot extends TracePathNode {
 
-    public  List<String> getProperties(){
-	throw new UnsupportedOperationException("TODO implement me");
-    };
+    @Override
+    public String getPathFragment() {
+        return "$";
+    }
 
     @Override
     public boolean isTokenDefinite() {
         return true;
     }
 
-    @Override
-    public String getPathFragment() {
-        return new StringBuilder()
-                .append("[")
-                .append(TracePathElement.join(", ", "'", getProperties()))
-                .append("]").toString();
-    }
 }

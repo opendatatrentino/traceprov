@@ -30,11 +30,8 @@ public abstract class AController {
     /**
      * Returns an immutable map containing field names of the view and eventual
      * corresponding errors. todo using Object instead of ValidationError
-     */    
-    @Value.Default
-    public Map<String, Object> getErrors(){
-        return ImmutableMap.of();
-    }
+     */   
+    public abstract Map<String, Object> getErrors();
 
     /**
      * The status of the controller.

@@ -28,7 +28,7 @@ import eu.trentorise.opendata.traceprov.data.TraceFile;
 import eu.trentorise.opendata.traceprov.data.ParsedType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
-import eu.trentorise.opendata.traceprov.path.TracePaths;
+import eu.trentorise.opendata.traceprov.tracel.TracePaths;
 import eu.trentorise.opendata.traceprov.types.AnyType;
 import eu.trentorise.opendata.traceprov.types.TraceRefs;
 import eu.trentorise.opendata.traceprov.data.PropertyMapping;

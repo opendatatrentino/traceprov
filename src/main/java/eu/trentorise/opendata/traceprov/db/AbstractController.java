@@ -12,6 +12,6 @@ import eu.trentorise.opendata.commons.BuilderStylePublic;
  */
 @Value.Immutable
 @BuilderStylePublic
-class AbstractController extends AController {
+abstract class AbstractController extends AController {
     
 }
