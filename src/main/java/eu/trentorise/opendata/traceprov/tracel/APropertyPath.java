@@ -49,10 +49,10 @@ abstract class APropertyPath extends Expr {
     }
 
     
-    public static PropertyPath of(List<String> path){
+    public static PropertyPath of(Iterable<String> path){
         checkNotEmpty(path, "Invalid fields of property path!");
         return PropertyPath.builder()
-                .setRoot(Id.of(path.get(0)))
+                .setRoot(Id.of(path.iterator().next()))
                 .addProperties(Iterables.skip(path, 1)).build();
     }
     
