@@ -521,13 +521,13 @@ LiTERAL:  	   	INT_LITERAL
 
 ```
 
-### TracePath
+### TraceQuery
 
 There is no widely used standard query language for json / javascript objects. `XPath` is the most well known tree query language, but it is only for xml. There is an equivalent `JsonPath` language, but it has no formal specs and many implementations. Also, it looks like json/javascript but it is not valid javascript. For this reason we adopt JsonPath but changing some symbols so it it remains valid Javascript. The expressions can be made parseable by using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank">ES6 Proxies</a> todo write more.
 
-| JsonPath                  |Pure Javascript| Description                                                        ||
+| JsonPath                  |TraceQuery| Description                                                        ||
 | :------------------------ | |:----------------------------------------------------------------- |
-| `$`                       | `$` |The root element to query. This starts all path expressions.       |
+| `$`                       | `T` |The root element to query. This starts all path expressions.       |
 | `@`                       | `NODE`|The current node being processed by a filter predicate.            |
 | `*`                       | `ALL`|Wildcard. Available anywhere a name or numeric are required.       |
 | `..`                      | `.DEEP.`|Deep scan. Available anywhere a name is required.                  |
@@ -559,9 +559,9 @@ There is no widely used standard query language for json / javascript objects. `
   <p>
   We don't use an array of records as original header names may be empty or
   duplicated. Thus cell `ba` can be pinpointed with the TracePath expression
-  `$[2][0]` (preferred) or `2.0` . First one is preferred as it is clearer and
+  `T[2][0]` (preferred) or `2.0` . First one is preferred as it is clearer and
   closer in syntax to Javascript<br/>
-  The first column can be selected with JsonPath expression `$[ALL][0]` (preferred)
+  The first column can be selected with JsonPath expression `T[ALL][0]` (preferred)
   or `ALL.0`
   </p>
   
@@ -582,7 +582,7 @@ There is no widely used standard query language for json / javascript objects. `
        ]
 ```
 
-  First column can be selected with TracePath `$[ALL].h1` (preferred) or `ALL.h1`
+  First column can be selected with TracePath `T[ALL].h1` (preferred) or `ALL.h1`
   
 
 

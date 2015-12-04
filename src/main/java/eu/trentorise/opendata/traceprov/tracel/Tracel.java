@@ -1,5 +1,6 @@
 package eu.trentorise.opendata.traceprov.tracel;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 
@@ -132,4 +133,48 @@ public final class Tracel {
         }
         throw new IllegalArgumentException("Couldn't find generic type argument in method " + method);
     }
+    
+    /**
+     * Returns the json path for cells in a table without headers. See
+     * {@link eu.trentorise.opendata.traceprov.validation.CsvValidator} for
+     * examples of tabular models.
+     *
+     * @param root  the  
+     * @param rowIndex
+     *            the row index, starting from 0. To select all rows, use -1
+     * @param columnIndex
+     *            the column index, starting from 0. To select all columns, use
+     *            -1
+     */
+    public static PropertyPath tablePath(PropertyPath rootPath, long rowIndex, long colIndex) {
+        checkArgument(rowIndex >= -1, "row index must be >= -1, found instead %s", rowIndex);
+        checkArgument(colIndex >= -1, "col index must be >= -1, found instead %s", colIndex);
+        String r = rowIndex == -1 ? "ALL" : Long.toString(rowIndex);
+        String c = colIndex == -1 ? "ALL" : Long.toString(colIndex);
+        
+        return rootPath.appendProperties(r, c);
+    }    
+    
+    
+    /**
+     * Returns the json path for cells in a table with headers. See
+     * {@link eu.trentorise.opendata.traceprov.services.CsvValidator} for
+     * examples of tabular models.
+     *
+     * @param rowIndex
+     *            the row index, starting from 0. To select all rows, use -1
+     * @param header.
+     *            To select all headers, use ALL
+     */
+    public static PropertyPath tablePath(PropertyPath rootPath, long rowIndex, String header) {
+        checkArgument(rowIndex >= -1, "row index must be >= -1, found instead %s", rowIndex);
+        checkNotEmpty(header, "Invalid header! To select all headers use ALL", "");
+        
+        String r = rowIndex == -1 ? "ALL" : Long.toString(rowIndex);
+        
+        return rootPath.appendProperties(r, header);
+    }
+
+ 
+    
 }

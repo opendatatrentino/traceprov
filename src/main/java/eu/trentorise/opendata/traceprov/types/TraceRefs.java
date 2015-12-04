@@ -71,8 +71,7 @@ public final class TraceRefs {
     /**
      * 
      * Makes a Ref to several DataNodes. DocumentId is fixed to
-     * {@link DataNodes.DATANODES_IRI}/datanodes, and tracePath will look like
-     * $[14,25,32,45]
+     * {@link DataNodes.DATANODES_IRI}/datanodes, TODO TRACEPATH
      * 
      */
     // todo use custom db documentid?
@@ -80,8 +79,9 @@ public final class TraceRefs {
         Builder retb = Ref.builder();
 
         retb.setDocumentId(DataNodes.DATANODES_IRI);
-        retb.setTracePath(TraceQueries.dataNodesPath(nodeIds));
+        //retb.setTracePath(TraceQueries.dataNodesPath(nodeIds));
 
+        LOG.warning("TODO: dataNodesRef NEEDS TO BE MUCH BETTER SPEFICIED! ");
         return retb.build();
 
     }

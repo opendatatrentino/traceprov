@@ -21,60 +21,45 @@ import com.google.common.collect.Iterables;
 
 public final class TraceQueries {
 
-    private static final Logger LOG = Logger.getLogger(TraceQueries.class.getName());    
+    private static final Logger LOG = Logger.getLogger(TraceQueries.class.getName());
+
+    public static final Id ROOT = Id.of("T");
     
+    public static final PropertyPath ROOT_EXPR = PropertyPath.builder().setRoot(Id.of("T")).build();
+
     private TraceQueries() {
     }
 
-    public static String dataNodesPath(Iterable<Long> nodeIds) {
+    public static PropertyPath dataNodesPath(Iterable<Long> nodeIds) {
         checkNotEmpty(nodeIds, "Invalid node ids!");
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("$[");
-        boolean first = true;
+        PropertyPath.Builder retb = PropertyPath.builder();
+        retb.setRoot(ROOT);               
 
-        for (Long nodeId : nodeIds) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(",");
-            }
-            sb.append(nodeId);
+        retb.addProperties("TODO_DATA_NODES");
+        for (Long nodeId : nodeIds) {            
+            retb.addProperties(Long.toString(nodeId));
         }
-        sb.append("]");
-        return sb.toString();
+        return retb.build();
     }
 
-    /**
-     * Returns the json path for cells in a table without headers. See
-     * {@link eu.trentorise.opendata.traceprov.validation.CsvValidator} for
-     * examples of tabular models.
-     *
-     * @param rowIndex
-     *            the row index, starting from 0. To select all rows, use -1
-     * @param columnIndex
-     *            the column index, starting from 0. To select all columns, use
-     *            -1
-     */
-    public static String tablePath(int rowIndex, int colIndex) {
-        checkArgument(rowIndex >= -1, "row index must be >= -1, found instead %s", rowIndex);
-        checkArgument(colIndex >= -1, "col index must be >= -1, found instead %s", colIndex);
-        return "$[" + (rowIndex == -1 ? "ALL" : rowIndex) + "][" + (colIndex == -1 ? "ALL" : colIndex) + "]";
+
+
+   
+
+    public static boolean isQuery(Expr expr) {
+        if (expr instanceof PropertyPath) {
+            PropertyPath pp = (PropertyPath) expr;
+            return ROOT.equals(pp.getRoot());
+        }
+        throw new UnsupportedOperationException("Provided expression is not a supported kind of TraceQuery!");
     }
 
-    /**
-     * Returns the json path for cells in a table with headers. See
-     * {@link eu.trentorise.opendata.traceprov.services.CsvValidator} for
-     * examples of tabular models.
-     *
-     * @param rowIndex
-     *            the row index, starting from 0. To select all rows, use -1
-     * @param header.
-     *            To select all headers, use ALL
-     */
-    public static String tablePath(int rowIndex, String header) {
-        checkArgument(rowIndex >= -1, "row index must be >= -1, found instead %s", rowIndex);
-        checkNotEmpty(header, "Invalid header! To select all headers use ALL", "");
-        return "$[" + (rowIndex == -1 ? "ALL" : rowIndex) + "]." + header;
+    public static void checkQuery(Expr expr) {
+        if (!isQuery(expr)) {
+            throw new IllegalArgumentException("Provided expression " + expr + " is not a Trace Query! "
+                    + " (i.e. Does it begin with   " + ROOT.getLabel() + "  ?");
+        }
     }
+
 }

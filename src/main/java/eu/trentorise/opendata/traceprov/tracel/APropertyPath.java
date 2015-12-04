@@ -9,9 +9,12 @@ import org.immutables.value.Value;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import eu.trentorise.opendata.commons.BuilderStylePublic;
+import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
+import eu.trentorise.opendata.traceprov.tracel.PropertyPath.Builder;
 
 /**
  * A TRACEL expression made only of a root identifier and {@link Property properties} following it
@@ -45,25 +48,50 @@ abstract class APropertyPath extends Expr {
         return sb.toString();
     }
 
-    public PropertyPath next() {
-        if (getProperties().size() <= 1) {
-            throw new TraceProvException("Can't make subpath from a path of one element!");
-        }
+    
+    public static PropertyPath of(List<String> path){
+        checkNotEmpty(path, "Invalid fields of property path!");
         return PropertyPath.builder()
-                           .addAllProperties(getProperties().subList(1, getProperties().size()))
-                           .build();
+                .setRoot(Id.of(path.get(0)))
+                .addProperties(Iterables.skip(path, 1)).build();
     }
     
     public static PropertyPath of(String rootElement, String... props ){
         PropertyPath.Builder ret = PropertyPath.builder().setRoot(Id.of(rootElement));
-        
-        ImmutableList.Builder<Property> retProps = ImmutableList.builder();
+                
         for (String p : props){
             ret.addProperties(Property.of(p));    
         }
                 
         return ret.build();
     }
+    
+    /**
+     * Returns a new PropertyPath with provided properties appended to the existing ones.
+     */
+    public PropertyPath appendProperties(String... props){
+        PropertyPath.Builder ret = PropertyPath.builder().from((PropertyPath) this);
+                
+        for (String p : props){
+            ret.addProperties(Property.of(p));    
+        }
+        
+        return ret.build();
+    }
+
+    /**
+     * Returns a new PropertyPath with provided properties appended to the existing ones.
+     */
+    public PropertyPath appendProperties(Property... props){
+        PropertyPath.Builder ret = PropertyPath.builder().from((PropertyPath) this);
+                
+        for (Property p : props){
+            ret.addProperties(p);    
+        }
+        
+        return ret.build();
+    }
+    
     
     /**
      * Returns the root identifier followed by all the properties as strings.
@@ -76,4 +104,25 @@ abstract class APropertyPath extends Expr {
         }
         return retb.build();
     }
+    
+    public static abstract class Builder {
+                
+        public abstract PropertyPath.Builder addProperties(Property element);
+        
+        public PropertyPath.Builder addProperties(Iterable<String> path){
+            for (String label : path){
+                addProperties(Property.of(label));
+            }
+            return addProperties();
+        }
+        
+        /**
+         * @see {@link #addProperties(List)}
+         *  
+         */
+        public PropertyPath.Builder addProperties(String... path){
+            return addProperties(Arrays.asList(path));
+        }
+    }
+    
 }
