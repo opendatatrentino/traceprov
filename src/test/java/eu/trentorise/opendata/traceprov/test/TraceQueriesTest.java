@@ -21,7 +21,8 @@ import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataNodes;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
 import eu.trentorise.opendata.traceprov.tracel.PropertyPath;
-import eu.trentorise.opendata.traceprov.tracel.TracePaths;
+import eu.trentorise.opendata.traceprov.tracel.TraceQueries;
+import eu.trentorise.opendata.traceprov.tracel.Tracel;
 import eu.trentorise.opendata.traceprov.types.TraceRefs;
 
 import org.junit.Assert;
@@ -33,38 +34,38 @@ import org.junit.Test;
  *
  * @author David Leoni
  */
-public class TracePathsTest {
+public class TraceQueriesTest {
 
     @BeforeClass
     public static void setUpClass() {
-        TodConfig.init(TracePathsTest.class);
+        TodConfig.init(TraceQueriesTest.class);
     }
 
     @Test
     public void testTable() {
         try {
-            TracePaths.tablePath(-2, 0);
+            TraceQueries.tablePath(-2, 0);
         } catch (IllegalArgumentException ex) {
 
         }
 
         try {
-            TracePaths.tablePath(0, -2);
+            TraceQueries.tablePath(0, -2);
         } catch (IllegalArgumentException ex) {
 
         }
 
-        assertEquals("$[0][ALL]", TracePaths.tablePath(0, -1));
+        assertEquals("$[0][ALL]", TraceQueries.tablePath(0, -1));
 
-        assertEquals("$[ALL][0]", TracePaths.tablePath(-1, 0));
+        assertEquals("$[ALL][0]", TraceQueries.tablePath(-1, 0));
 
-        assertEquals("$[ALL][ALL]", TracePaths.tablePath(-1, -1));
+        assertEquals("$[ALL][ALL]", TraceQueries.tablePath(-1, -1));
 
-        assertEquals("$[0].ALL", TracePaths.tablePath(0, "ALL"));
+        assertEquals("$[0].ALL", TraceQueries.tablePath(0, "ALL"));
 
-        assertEquals("$[ALL].a", TracePaths.tablePath(-1, "a"));
+        assertEquals("$[ALL].a", TraceQueries.tablePath(-1, "a"));
 
-        assertEquals("$[ALL].ALL", TracePaths.tablePath(-1, "ALL"));
+        assertEquals("$[ALL].ALL", TraceQueries.tablePath(-1, "ALL"));
 
     }
 
@@ -89,30 +90,34 @@ public class TracePathsTest {
 
     @Test
     public void testDcat() {
-        assertEquals("$.catalog", PropertyPath.of("$", DcatMetadata.class, "catalog").asString());
+        Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of( "catalog"));
+        
 
-        try {
-            PropertyPath.of("$", DcatMetadata.class, "bla");
-            Assert.fail();
+        try { // checks PropertyPath is *not* smart
+            Tracel.checkPathFromClass( DcatMetadata.class, PropertyPath.of("this", "catalog"));
+            Assert.fail("Shoudln't arrive here!");
         } catch (IllegalArgumentException ex) {
 
         }
 
         try {
-            PropertyPath.of("$", DcatMetadata.class, ImmutableList.<String> of());
+            Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of("this"));
+            Assert.fail("Shoudln't arrive here!");
+            
         } catch (IllegalArgumentException ex) {
 
         }
 
-        try {
-            PropertyPath.of("$", DcatMetadata.class, " ", "publisher");
+        try {           
+            Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of("$", " ", "publisher"));
+            Assert.fail("Shoudln't arrive here!");
         } catch (IllegalArgumentException ex) {
 
         }
 
-        assertEquals("$.catalog.publisher", PropertyPath.of("$", DcatMetadata.class, "catalog", "publisher").asString());
+        Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of("catalog", "publisher"));
 
-        assertEquals("$.dataset.themes.uri", PropertyPath.of("$", DcatMetadata.class, "dataset", "themes", "uri").asString());
+        Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of("dataset", "themes", "uri"));
     }
 
 }

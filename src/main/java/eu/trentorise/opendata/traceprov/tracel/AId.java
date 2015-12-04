@@ -14,7 +14,6 @@ import eu.trentorise.opendata.traceprov.geojson.Feature;
  * TODO COMPLETE THIS CLASS
  *
  */
-
 @Value.Immutable
 @SimpleStyle
 @JsonSerialize(as = Id.class)
@@ -23,11 +22,11 @@ abstract class AId extends Token {
 
     /**
      * The property, like "myProp" or "My Property". By default is the value
-     * "$".
+     * "this".
      */
     @Value.Default
     public String getLabel() {
-        return "$";
+        return "this";
     }
 
     @Value.Check
@@ -38,7 +37,7 @@ abstract class AId extends Token {
     }
 
     @Override
-    public String asString(){
+    public String toText(){
         return getLabel();
     }
 }

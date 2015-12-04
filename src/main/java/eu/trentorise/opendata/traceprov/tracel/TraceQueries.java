@@ -19,14 +19,12 @@ import java.util.logging.Logger;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
-public final class TracePaths {
+public final class TraceQueries {
 
-    private static final Logger LOG = Logger.getLogger(TracePaths.class.getName());    
+    private static final Logger LOG = Logger.getLogger(TraceQueries.class.getName());    
     
-    private TracePaths() {
+    private TraceQueries() {
     }
-
-   
 
     public static String dataNodesPath(Iterable<Long> nodeIds) {
         checkNotEmpty(nodeIds, "Invalid node ids!");

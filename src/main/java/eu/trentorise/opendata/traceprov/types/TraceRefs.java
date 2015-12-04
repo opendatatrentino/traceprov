@@ -18,7 +18,7 @@ package eu.trentorise.opendata.traceprov.types;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.commons.validation.Ref.Builder;
 import eu.trentorise.opendata.traceprov.data.DataNodes;
-import eu.trentorise.opendata.traceprov.tracel.TracePaths;
+import eu.trentorise.opendata.traceprov.tracel.TraceQueries;
 
 import java.util.logging.Logger;
 
@@ -80,7 +80,7 @@ public final class TraceRefs {
         Builder retb = Ref.builder();
 
         retb.setDocumentId(DataNodes.DATANODES_IRI);
-        retb.setTracePath(TracePaths.dataNodesPath(nodeIds));
+        retb.setTracePath(TraceQueries.dataNodesPath(nodeIds));
 
         return retb.build();
 

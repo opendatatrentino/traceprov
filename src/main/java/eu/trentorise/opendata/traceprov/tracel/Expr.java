@@ -4,5 +4,5 @@ import java.util.List;
 
 public abstract class Expr {
         
-    public abstract String asString();
+    public abstract String toText();
 }

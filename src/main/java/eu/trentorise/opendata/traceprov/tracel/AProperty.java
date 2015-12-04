@@ -25,7 +25,7 @@ public abstract class AProperty extends Token {
     }
        
     @Override
-    public String asString(){
+    public String toText(){
         if (Tracel.isValidId(getLabel())){
             return "." + getLabel();
         } else {

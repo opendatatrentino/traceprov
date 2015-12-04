@@ -6,6 +6,6 @@ package eu.trentorise.opendata.traceprov.tracel;
  * is still valid ES6 Javascript, though. More info in the docs.
  *
  */
-abstract class TracePath extends ATraceExpr {
+abstract class TraceQuery extends TraceExpr {
     
 }
