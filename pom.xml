@@ -133,6 +133,7 @@
 									<include> org.apache.commons:*</include>
 									<include> commons-io:*</include>
 									<include> com.esotericsoftware:*</include>
+									<include> org.mozilla:rhino</include>
 								</includes>
 							</artifactSet>
 							<relocations>
@@ -144,10 +145,14 @@
 									<pattern>commons-io</pattern>
 									<shadedPattern>eu.trentorise.opendata.traceprov.internal.commons-io</shadedPattern>
 								</relocation>
-								<dependency>
+								<relocation>
 									<pattern>com.esotericsoftware.kryo</pattern>
-									<shadedPattern>eu.trentorise.opendata.traceprov.internal.kryo</shadedPattern>			
-								</dependency>
+									<shadedPattern>eu.trentorise.opendata.traceprov.internal.kryo</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>org.mozilla.javascript</pattern>
+									<shadedPattern>eu.trentorise.opendata.traceprov.internal.rhino</shadedPattern>
+								</relocation>								
 							</relocations>
 						</configuration>
 					</execution>
@@ -223,8 +228,15 @@
 
 		<dependency>
 			<groupId>com.esotericsoftware</groupId>
-			<artifactId>kryo-shaded</artifactId>			
+			<artifactId>kryo-shaded</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.mozilla</groupId>
+			<artifactId>rhino</artifactId>
+			<version>1.7.7</version>
+		</dependency>
+
 
 		<!-- ****************** TEST DEPENDENCIES ********************** -->
 		<dependency>

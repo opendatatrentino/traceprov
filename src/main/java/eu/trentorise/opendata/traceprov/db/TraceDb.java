@@ -54,6 +54,7 @@ import eu.trentorise.opendata.traceprov.data.DataObject;
 import eu.trentorise.opendata.traceprov.data.NodeMetadata;
 import eu.trentorise.opendata.traceprov.dcat.AFoafAgent;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
+import eu.trentorise.opendata.traceprov.engine.Engine;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvException;
 import eu.trentorise.opendata.traceprov.exceptions.TraceProvNotFoundException;
 import eu.trentorise.opendata.traceprov.exceptions.AmbiguousUrlException;
@@ -123,6 +124,8 @@ public class TraceDb {
     private long idCounter;
 
     private TypeRegistry typeRegistry;
+    
+    private Engine engine;
 
     /**
      * Not called init() yet

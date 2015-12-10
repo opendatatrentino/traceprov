@@ -1,13 +1,13 @@
-package eu.trentorise.opendata.traceprov.tracel;
+package eu.trentorise.opendata.traceprov.tracel.java;
 
 import org.immutables.value.Value;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.SimpleStyle;
-import eu.trentorise.opendata.traceprov.geojson.Feature;
+import eu.trentorise.opendata.traceprov.engine.Engine;
+import eu.trentorise.opendata.traceprov.tracel.java.Property;
 
 /**
  * The property, like "myProp" or "My Property". Notice that even if the
@@ -41,7 +41,7 @@ public abstract class AProperty extends Token {
         String all = All.of().toText();
         if (all.equals(b)){
             return "["+all+"]";  // todo make work with all selectors
-        } else if (Tracel.isValidId(b)) {
+        } else if (Engine.isValidId(b)) {
             return "." + b;
         } else {
             try {

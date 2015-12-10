@@ -1,4 +1,4 @@
-package eu.trentorise.opendata.traceprov.tracel;
+package eu.trentorise.opendata.traceprov.tracel.java;
 
 import java.util.List;
 

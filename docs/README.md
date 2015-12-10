@@ -499,16 +499,17 @@ let x = 5; props["some field"].makeNice(someParams, x)[4]
 
 Token examples:
 ID:			myId
-DEF:		let ID = EXPR
-ENTRY:		(ID | STRING_LITERAL) : EXPR
-ENVEXPR:  	DEF; EXPR
-ARRAY:		[EXPRs]
-OBJECT:		{ENTRYs}
 INDEX:		[i]
                             (x[e]) x : array,  e : integer)
 PROPERTY: 		[e]
 							(x[e]) x : object,  e : string)
 			|	.ID
+
+DEF:		let ID = EXPR
+ENTRY:		(ID | STRING_LITERAL) : EXPR
+ENVEXPR:  	DEF; EXPR
+ARRAY:		[EXPRs]
+OBJECT:		{ENTRYs}
 
 FUNCALL:  	ID(EXPRs)           makeNice()
 LAMBDA:   	(IDs)=>EXPR		    (x)=>x*2

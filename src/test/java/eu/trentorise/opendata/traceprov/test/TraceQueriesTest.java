@@ -20,10 +20,10 @@ import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.commons.validation.Ref;
 import eu.trentorise.opendata.traceprov.data.DataNodes;
 import eu.trentorise.opendata.traceprov.data.DcatMetadata;
-import eu.trentorise.opendata.traceprov.tracel.PropertyPath;
-import eu.trentorise.opendata.traceprov.tracel.TraceQueries;
-import eu.trentorise.opendata.traceprov.tracel.Tracel;
+import eu.trentorise.opendata.traceprov.engine.Engine;
 import eu.trentorise.opendata.traceprov.types.TraceRefs;
+import eu.trentorise.opendata.traceprov.tracel.java.PropertyPath;
+import eu.trentorise.opendata.traceprov.tracel.java.TraceQueries;
 
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -45,28 +45,28 @@ public class TraceQueriesTest {
     @Test
     public void testTable() {
         try {
-            Tracel.tablePath(TraceQueries.ROOT_EXPR, -2L, 0L);
+            Engine.tablePath(TraceQueries.ROOT_EXPR, -2L, 0L);
         } catch (IllegalArgumentException ex) {
 
         }
 
         try {
-            Tracel.tablePath(TraceQueries.ROOT_EXPR, 0, -2);
+            Engine.tablePath(TraceQueries.ROOT_EXPR, 0, -2);
         } catch (IllegalArgumentException ex) {
 
         }
 
-        assertEquals("T[0][ALL]", Tracel.tablePath(TraceQueries.ROOT_EXPR,0, -1).toText());
+        assertEquals("T[0][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,0, -1).toText());
 
-        assertEquals("T[ALL][0]", Tracel.tablePath(TraceQueries.ROOT_EXPR,-1, 0).toText());
+        assertEquals("T[ALL][0]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, 0).toText());
 
-        assertEquals("T[ALL][ALL]", Tracel.tablePath(TraceQueries.ROOT_EXPR,-1, -1).toText());
+        assertEquals("T[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, -1).toText());
 
-        assertEquals("T[0][ALL]", Tracel.tablePath(TraceQueries.ROOT_EXPR,0, "ALL").toText());
+        assertEquals("T[0][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,0, "ALL").toText());
 
-        assertEquals("T[ALL].a", Tracel.tablePath(TraceQueries.ROOT_EXPR,-1, "a").toText());
+        assertEquals("T[ALL].a", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, "a").toText());
 
-        assertEquals("T[ALL][ALL]", Tracel.tablePath(TraceQueries.ROOT_EXPR,-1, "ALL").toText());
+        assertEquals("T[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, "ALL").toText());
 
     }
 
@@ -92,18 +92,18 @@ public class TraceQueriesTest {
 
     @Test
     public void testDcat() {
-        Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of( "catalog"));
+        Engine.checkPathFromClass(DcatMetadata.class, PropertyPath.of( "catalog"));
         
 
         try { // checks PropertyPath is *not* smart
-            Tracel.checkPathFromClass( DcatMetadata.class, PropertyPath.of("this", "catalog"));
+            Engine.checkPathFromClass( DcatMetadata.class, PropertyPath.of("this", "catalog"));
             Assert.fail("Shoudln't arrive here!");
         } catch (IllegalArgumentException ex) {
 
         }
 
         try {
-            Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of("this"));
+            Engine.checkPathFromClass(DcatMetadata.class, PropertyPath.of("this"));
             Assert.fail("Shoudln't arrive here!");
             
         } catch (IllegalArgumentException ex) {
@@ -111,7 +111,7 @@ public class TraceQueriesTest {
         }
 
         try {           
-            Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of(TraceQueries.ROOT.getLabel(),
+            Engine.checkPathFromClass(DcatMetadata.class, PropertyPath.of(TraceQueries.ROOT.getLabel(),
                     " ", 
                     "publisher"));
             Assert.fail("Shoudln't arrive here!");
@@ -119,9 +119,9 @@ public class TraceQueriesTest {
 
         }
 
-        Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of("catalog", "publisher"));
+        Engine.checkPathFromClass(DcatMetadata.class, PropertyPath.of("catalog", "publisher"));
 
-        Tracel.checkPathFromClass(DcatMetadata.class, PropertyPath.of("dataset", "themes", "uri"));
+        Engine.checkPathFromClass(DcatMetadata.class, PropertyPath.of("dataset", "themes", "uri"));
     }
 
 }

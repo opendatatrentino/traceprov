@@ -28,10 +28,9 @@ import eu.trentorise.opendata.traceprov.data.TraceFile;
 import eu.trentorise.opendata.traceprov.data.ParsedType;
 import eu.trentorise.opendata.traceprov.dcat.DcatDataset;
 import eu.trentorise.opendata.traceprov.dcat.FoafAgent;
-import eu.trentorise.opendata.traceprov.tracel.TraceQueries;
-import eu.trentorise.opendata.traceprov.tracel.Tracel;
+import eu.trentorise.opendata.traceprov.engine.Engine;
+import eu.trentorise.opendata.traceprov.tracel.java.TraceQueries;
 import eu.trentorise.opendata.traceprov.types.AnyType;
-import eu.trentorise.opendata.traceprov.types.TraceRefs;
 import eu.trentorise.opendata.traceprov.data.PropertyMapping;
 import java.util.Locale;
 import org.junit.Test;
@@ -75,10 +74,10 @@ public class CodeGenTest {
 
     @Test
     public void testRef() {
-        assertEquals("T[0][0]", Tracel.tablePath(TraceQueries.ROOT_EXPR, 0, 0).toText());        
-        assertEquals("T[ALL][1]", Tracel.tablePath(TraceQueries.ROOT_EXPR,-1, 1).toText());  
-        assertEquals("T[1][ALL]", Tracel.tablePath(TraceQueries.ROOT_EXPR,1, -1).toText());          
-        assertEquals("T[ALL][ALL]", Tracel.tablePath(TraceQueries.ROOT_EXPR,-1, -1).toText());
+        assertEquals("T[0][0]", Engine.tablePath(TraceQueries.ROOT_EXPR, 0, 0).toText());        
+        assertEquals("T[ALL][1]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, 1).toText());  
+        assertEquals("T[1][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,1, -1).toText());          
+        assertEquals("T[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, -1).toText());
     }
 
     @Test

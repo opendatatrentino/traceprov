@@ -1,23 +1,11 @@
-package eu.trentorise.opendata.traceprov.tracel;
+package eu.trentorise.opendata.traceprov.tracel.java;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
+import eu.trentorise.opendata.traceprov.tracel.java.Id;
+import eu.trentorise.opendata.traceprov.tracel.java.PropertyPath;
 
 public final class TraceQueries {
 

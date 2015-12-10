@@ -7,57 +7,57 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import eu.trentorise.opendata.commons.TodConfig;
-import eu.trentorise.opendata.traceprov.tracel.Tracel;
+import eu.trentorise.opendata.traceprov.engine.Engine;
 
-public class TracelTest {
+public class EngineTest {
 
     @BeforeClass
     public static void setUpClass() {
-        TodConfig.init(TracelTest.class);
+        TodConfig.init(EngineTest.class);
     }
 
     @Test
-    public void testTracel() {
-        assertTrue(Tracel.isValidId("$"));
-        assertTrue(Tracel.isValidId("a1"));
+    public void testEngine() {
+        assertTrue(Engine.isValidId("$"));
+        assertTrue(Engine.isValidId("a1"));
         
         try {
-            Tracel.checkValidId("");
+            Engine.checkValidId("");
             Assert.fail("Shouldn't arrive here");
         } catch (IllegalArgumentException ex){
             
         }
         
         try {
-            Tracel.checkValidId("1");
+            Engine.checkValidId("1");
             Assert.fail("Shouldn't arrive here");
         } catch (IllegalArgumentException ex){
             
         }
         
         try {
-            Tracel.checkValidId("1a");
+            Engine.checkValidId("1a");
             Assert.fail("Shouldn't arrive here");
         } catch (IllegalArgumentException ex){
             
         }
         
         try {
-            Tracel.checkValidId("a b");
+            Engine.checkValidId("a b");
             Assert.fail("Shouldn't arrive here");
         } catch (IllegalArgumentException ex){
             
         }
         
         try {
-            Tracel.checkValidId("a ");
+            Engine.checkValidId("a ");
             Assert.fail("Shouldn't arrive here");
         } catch (IllegalArgumentException ex){
             
         }
         
         try {
-            Tracel.checkValidId(" a");
+            Engine.checkValidId(" a");
             Assert.fail("Shouldn't arrive here");
         } catch (IllegalArgumentException ex){
             
