@@ -56,17 +56,17 @@ public class TraceQueriesTest {
 
         }
 
-        assertEquals("T[0][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,0, -1).toText());
+        assertEquals("S[0][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,0, -1).toText());
 
-        assertEquals("T[ALL][0]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, 0).toText());
+        assertEquals("S[ALL][0]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, 0).toText());
 
-        assertEquals("T[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, -1).toText());
+        assertEquals("S[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, -1).toText());
 
-        assertEquals("T[0][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,0, "ALL").toText());
+        assertEquals("S[0][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,0, "ALL").toText());
 
-        assertEquals("T[ALL].a", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, "a").toText());
+        assertEquals("S[ALL].a", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, "a").toText());
 
-        assertEquals("T[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, "ALL").toText());
+        assertEquals("S[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, "ALL").toText());
 
     }
 
@@ -76,7 +76,7 @@ public class TraceQueriesTest {
         try {
             assertEquals(Ref.builder()
                             .setDocumentId(DataNodes.DATANODES_IRI)
-                            .setTracePath("T[ALL]")
+                            .setTracePath("S[ALL]")
                             .build(),
                     TraceRefs.dataNodesRef(ImmutableList.<Long> of()));
             Assert.fail("Shouldn't arrive here!");
@@ -85,7 +85,7 @@ public class TraceQueriesTest {
 
         assertEquals(Ref.builder()
                         .setDocumentId(DataNodes.DATANODES_IRI)
-                        .setTracePath("T[1,3]")
+                        .setTracePath("S[1,3]")
                         .build(),
                 TraceRefs.dataNodesRef(ImmutableList.of(1L, 3L)));
     }

@@ -9,9 +9,9 @@ import eu.trentorise.opendata.traceprov.tracel.java.PropertyPath;
 
 public final class TraceQueries {
 
-    private static final Logger LOG = Logger.getLogger(TraceQueries.class.getName());
-
-    public static final Id ROOT = Id.of("T");
+    private static final Logger LOG = Logger.getLogger(TraceQueries.class.getName());   
+    
+    public static final Id ROOT = Id.of("S");
     
     public static final PropertyPath ROOT_EXPR = PropertyPath.builder().setRoot(Id.of("T")).build();
 

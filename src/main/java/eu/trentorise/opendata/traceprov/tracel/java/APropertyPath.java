@@ -1,10 +1,14 @@
 package eu.trentorise.opendata.traceprov.tracel.java;
 
+import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.immutables.value.Value;
+import org.mozilla.javascript.ConsString;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -12,10 +16,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import eu.trentorise.opendata.commons.BuilderStylePublic;
-import static eu.trentorise.opendata.commons.validation.Preconditions.checkNotEmpty;
-import eu.trentorise.opendata.traceprov.tracel.java.Id;
-import eu.trentorise.opendata.traceprov.tracel.java.Property;
-import eu.trentorise.opendata.traceprov.tracel.java.PropertyPath;
+import eu.trentorise.opendata.traceprov.engine.Engine;
 
 /**
  * A TRACEL expression made only of a root identifier and {@link Property
@@ -50,25 +51,19 @@ abstract class APropertyPath extends Expr {
         return sb.toString();
     }
 
+    
     /**
      * Parses an expression like {@code a["b"].c}
-     
-    public static PropertyPath of(String expr) {
-
-        TracelParser parser = Parboiled.createParser(TracelParser.class);
-
-        String input = "a[\"ciao\"]";
-        ParsingResult<?> result = new ReportingParseRunner(parser.CompilationUnit()).run(input);
-
-        if (result.parseErrors.isEmpty()) {
-            System.out.println(printNodeTree(result) + '\n');
-        } else {
-            throw new RuntimeException("Error while parsing!");
+     */
+    public static PropertyPath parse(String expr) {
+        // todo maybe needs escaping
+        List lst = (List) Engine.of().execute("tracel.parsePropertyPath(\""+expr+"\")");
+        ArrayList<String> sl = new ArrayList();
+        for (Object cs : lst){
+            sl.add(cs.toString());
         }
-
-    } */
-
-    
+        return PropertyPath.of(sl);
+    }
 
     public static PropertyPath of(Iterable<String> path) {
         checkNotEmpty(path, "Invalid fields of property path!");
@@ -79,6 +74,7 @@ abstract class APropertyPath extends Expr {
                            .build();
     }
 
+    
     public static PropertyPath of(String rootElement, String... props) {
         PropertyPath.Builder ret = PropertyPath.builder()
                                                .setRoot(Id.of(rootElement));
@@ -137,10 +133,12 @@ abstract class APropertyPath extends Expr {
         public abstract PropertyPath.Builder addProperties(Property element);
 
         public PropertyPath.Builder addProperties(Iterable<String> path) {
+            checkNotEmpty(path,"Invalid empty path!");
+            PropertyPath.Builder ret = null;
             for (String label : path) {
-                addProperties(Property.of(label));
+                ret = addProperties(Property.of(label));
             }
-            return addProperties();
+            return ret;
         }
 
         /**
