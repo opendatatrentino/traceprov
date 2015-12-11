@@ -1,0 +1,19 @@
+{
+    "version": "1.7.3",
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "commonjs",
+        "outDir": "js",              
+        "sourceMap": true,
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": false,
+        "noEmitOnError": false ,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators":true    
+    },
+    "exclude": [
+        "node_modules",
+        "js"         
+    ]
+}

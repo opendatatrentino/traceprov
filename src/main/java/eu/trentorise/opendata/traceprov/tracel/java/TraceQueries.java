@@ -13,7 +13,7 @@ public final class TraceQueries {
     
     public static final Id ROOT = Id.of("S");
     
-    public static final PropertyPath ROOT_EXPR = PropertyPath.builder().setRoot(Id.of("T")).build();
+    public static final PropertyPath ROOT_EXPR = PropertyPath.builder().setRoot(ROOT).build();
 
     private TraceQueries() {
     }

@@ -1,0 +1,580 @@
+{
+  "pos": 0,
+  "end": 6,
+  "text": "a.b.c;",
+  "bindDiagnostics": [],
+  "languageVersion": 1,
+  "fileName": "foo.ts",
+  "flags": 0,
+  "languageVariant": 0,
+  "referencedFiles": [],
+  "amdDependencies": [],
+  "statements": [
+    {
+      "pos": 0,
+      "end": 6,
+      "expression": {
+        "pos": 0,
+        "end": 5,
+        "expression": {
+          "pos": 0,
+          "end": 3,
+          "expression": {
+            "pos": 0,
+            "end": 1,
+            "text": "a",
+            "parent": "[Circular ~.statements.0.expression.expression]",
+            "_children": []
+          },
+          "dotToken": {
+            "pos": 1,
+            "end": 2,
+            "parent": "[Circular ~.statements.0.expression.expression]",
+            "_children": []
+          },
+          "name": {
+            "pos": 2,
+            "end": 3,
+            "text": "b",
+            "parent": "[Circular ~.statements.0.expression.expression]",
+            "_children": []
+          },
+          "parent": "[Circular ~.statements.0.expression]",
+          "_children": [
+            {
+              "pos": 0,
+              "end": 1,
+              "text": "a",
+              "parent": "[Circular ~.statements.0.expression.expression]",
+              "_children": []
+            },
+            {
+              "pos": 1,
+              "end": 2,
+              "parent": "[Circular ~.statements.0.expression.expression]",
+              "_children": []
+            },
+            {
+              "pos": 2,
+              "end": 3,
+              "text": "b",
+              "parent": "[Circular ~.statements.0.expression.expression]",
+              "_children": []
+            }
+          ]
+        },
+        "dotToken": {
+          "pos": 3,
+          "end": 4,
+          "parent": "[Circular ~.statements.0.expression]",
+          "_children": []
+        },
+        "name": {
+          "pos": 4,
+          "end": 5,
+          "text": "c",
+          "parent": "[Circular ~.statements.0.expression]",
+          "_children": []
+        },
+        "parent": "[Circular ~.statements.0]",
+        "_children": [
+          {
+            "pos": 0,
+            "end": 3,
+            "expression": {
+              "pos": 0,
+              "end": 1,
+              "text": "a",
+              "parent": "[Circular ~.statements.0.expression._children.0]",
+              "_children": []
+            },
+            "dotToken": {
+              "pos": 1,
+              "end": 2,
+              "parent": "[Circular ~.statements.0.expression._children.0]",
+              "_children": []
+            },
+            "name": {
+              "pos": 2,
+              "end": 3,
+              "text": "b",
+              "parent": "[Circular ~.statements.0.expression._children.0]",
+              "_children": []
+            },
+            "parent": "[Circular ~.statements.0.expression]",
+            "_children": [
+              {
+                "pos": 0,
+                "end": 1,
+                "text": "a",
+                "parent": "[Circular ~.statements.0.expression._children.0]",
+                "_children": []
+              },
+              {
+                "pos": 1,
+                "end": 2,
+                "parent": "[Circular ~.statements.0.expression._children.0]",
+                "_children": []
+              },
+              {
+                "pos": 2,
+                "end": 3,
+                "text": "b",
+                "parent": "[Circular ~.statements.0.expression._children.0]",
+                "_children": []
+              }
+            ]
+          },
+          {
+            "pos": 3,
+            "end": 4,
+            "parent": "[Circular ~.statements.0.expression]",
+            "_children": []
+          },
+          {
+            "pos": 4,
+            "end": 5,
+            "text": "c",
+            "parent": "[Circular ~.statements.0.expression]",
+            "_children": []
+          }
+        ]
+      },
+      "parent": "[Circular ~]",
+      "_children": [
+        {
+          "pos": 0,
+          "end": 5,
+          "expression": {
+            "pos": 0,
+            "end": 3,
+            "expression": {
+              "pos": 0,
+              "end": 1,
+              "text": "a",
+              "parent": "[Circular ~.statements.0._children.0.expression]",
+              "_children": []
+            },
+            "dotToken": {
+              "pos": 1,
+              "end": 2,
+              "parent": "[Circular ~.statements.0._children.0.expression]",
+              "_children": []
+            },
+            "name": {
+              "pos": 2,
+              "end": 3,
+              "text": "b",
+              "parent": "[Circular ~.statements.0._children.0.expression]",
+              "_children": []
+            },
+            "parent": "[Circular ~.statements.0._children.0]",
+            "_children": [
+              {
+                "pos": 0,
+                "end": 1,
+                "text": "a",
+                "parent": "[Circular ~.statements.0._children.0.expression]",
+                "_children": []
+              },
+              {
+                "pos": 1,
+                "end": 2,
+                "parent": "[Circular ~.statements.0._children.0.expression]",
+                "_children": []
+              },
+              {
+                "pos": 2,
+                "end": 3,
+                "text": "b",
+                "parent": "[Circular ~.statements.0._children.0.expression]",
+                "_children": []
+              }
+            ]
+          },
+          "dotToken": {
+            "pos": 3,
+            "end": 4,
+            "parent": "[Circular ~.statements.0._children.0]",
+            "_children": []
+          },
+          "name": {
+            "pos": 4,
+            "end": 5,
+            "text": "c",
+            "parent": "[Circular ~.statements.0._children.0]",
+            "_children": []
+          },
+          "parent": "[Circular ~.statements.0]",
+          "_children": [
+            {
+              "pos": 0,
+              "end": 3,
+              "expression": {
+                "pos": 0,
+                "end": 1,
+                "text": "a",
+                "parent": "[Circular ~.statements.0._children.0._children.0]",
+                "_children": []
+              },
+              "dotToken": {
+                "pos": 1,
+                "end": 2,
+                "parent": "[Circular ~.statements.0._children.0._children.0]",
+                "_children": []
+              },
+              "name": {
+                "pos": 2,
+                "end": 3,
+                "text": "b",
+                "parent": "[Circular ~.statements.0._children.0._children.0]",
+                "_children": []
+              },
+              "parent": "[Circular ~.statements.0._children.0]",
+              "_children": [
+                {
+                  "pos": 0,
+                  "end": 1,
+                  "text": "a",
+                  "parent": "[Circular ~.statements.0._children.0._children.0]",
+                  "_children": []
+                },
+                {
+                  "pos": 1,
+                  "end": 2,
+                  "parent": "[Circular ~.statements.0._children.0._children.0]",
+                  "_children": []
+                },
+                {
+                  "pos": 2,
+                  "end": 3,
+                  "text": "b",
+                  "parent": "[Circular ~.statements.0._children.0._children.0]",
+                  "_children": []
+                }
+              ]
+            },
+            {
+              "pos": 3,
+              "end": 4,
+              "parent": "[Circular ~.statements.0._children.0]",
+              "_children": []
+            },
+            {
+              "pos": 4,
+              "end": 5,
+              "text": "c",
+              "parent": "[Circular ~.statements.0._children.0]",
+              "_children": []
+            }
+          ]
+        },
+        {
+          "pos": 5,
+          "end": 6,
+          "flags": 4096,
+          "parent": "[Circular ~.statements.0]",
+          "_children": []
+        }
+      ]
+    }
+  ],
+  "endOfFileToken": {
+    "pos": 6,
+    "end": 6,
+    "parent": "[Circular ~]",
+    "_children": []
+  },
+  "nodeCount": 10,
+  "identifierCount": 3,
+  "identifiers": {
+    "a": "a",
+    "b": "b",
+    "c": "c"
+  },
+  "parseDiagnostics": [],
+  "_children": [
+    {
+      "pos": 0,
+      "end": 6,
+      "flags": 4096,
+      "parent": "[Circular ~]",
+      "_children": [
+        {
+          "pos": 0,
+          "end": 6,
+          "expression": {
+            "pos": 0,
+            "end": 5,
+            "expression": {
+              "pos": 0,
+              "end": 3,
+              "expression": {
+                "pos": 0,
+                "end": 1,
+                "text": "a",
+                "parent": "[Circular ~._children.0._children.0.expression.expression]",
+                "_children": []
+              },
+              "dotToken": {
+                "pos": 1,
+                "end": 2,
+                "parent": "[Circular ~._children.0._children.0.expression.expression]",
+                "_children": []
+              },
+              "name": {
+                "pos": 2,
+                "end": 3,
+                "text": "b",
+                "parent": "[Circular ~._children.0._children.0.expression.expression]",
+                "_children": []
+              },
+              "parent": "[Circular ~._children.0._children.0.expression]",
+              "_children": [
+                {
+                  "pos": 0,
+                  "end": 1,
+                  "text": "a",
+                  "parent": "[Circular ~._children.0._children.0.expression.expression]",
+                  "_children": []
+                },
+                {
+                  "pos": 1,
+                  "end": 2,
+                  "parent": "[Circular ~._children.0._children.0.expression.expression]",
+                  "_children": []
+                },
+                {
+                  "pos": 2,
+                  "end": 3,
+                  "text": "b",
+                  "parent": "[Circular ~._children.0._children.0.expression.expression]",
+                  "_children": []
+                }
+              ]
+            },
+            "dotToken": {
+              "pos": 3,
+              "end": 4,
+              "parent": "[Circular ~._children.0._children.0.expression]",
+              "_children": []
+            },
+            "name": {
+              "pos": 4,
+              "end": 5,
+              "text": "c",
+              "parent": "[Circular ~._children.0._children.0.expression]",
+              "_children": []
+            },
+            "parent": "[Circular ~._children.0._children.0]",
+            "_children": [
+              {
+                "pos": 0,
+                "end": 3,
+                "expression": {
+                  "pos": 0,
+                  "end": 1,
+                  "text": "a",
+                  "parent": "[Circular ~._children.0._children.0.expression._children.0]",
+                  "_children": []
+                },
+                "dotToken": {
+                  "pos": 1,
+                  "end": 2,
+                  "parent": "[Circular ~._children.0._children.0.expression._children.0]",
+                  "_children": []
+                },
+                "name": {
+                  "pos": 2,
+                  "end": 3,
+                  "text": "b",
+                  "parent": "[Circular ~._children.0._children.0.expression._children.0]",
+                  "_children": []
+                },
+                "parent": "[Circular ~._children.0._children.0.expression]",
+                "_children": [
+                  {
+                    "pos": 0,
+                    "end": 1,
+                    "text": "a",
+                    "parent": "[Circular ~._children.0._children.0.expression._children.0]",
+                    "_children": []
+                  },
+                  {
+                    "pos": 1,
+                    "end": 2,
+                    "parent": "[Circular ~._children.0._children.0.expression._children.0]",
+                    "_children": []
+                  },
+                  {
+                    "pos": 2,
+                    "end": 3,
+                    "text": "b",
+                    "parent": "[Circular ~._children.0._children.0.expression._children.0]",
+                    "_children": []
+                  }
+                ]
+              },
+              {
+                "pos": 3,
+                "end": 4,
+                "parent": "[Circular ~._children.0._children.0.expression]",
+                "_children": []
+              },
+              {
+                "pos": 4,
+                "end": 5,
+                "text": "c",
+                "parent": "[Circular ~._children.0._children.0.expression]",
+                "_children": []
+              }
+            ]
+          },
+          "parent": "[Circular ~]",
+          "_children": [
+            {
+              "pos": 0,
+              "end": 5,
+              "expression": {
+                "pos": 0,
+                "end": 3,
+                "expression": {
+                  "pos": 0,
+                  "end": 1,
+                  "text": "a",
+                  "parent": "[Circular ~._children.0._children.0._children.0.expression]",
+                  "_children": []
+                },
+                "dotToken": {
+                  "pos": 1,
+                  "end": 2,
+                  "parent": "[Circular ~._children.0._children.0._children.0.expression]",
+                  "_children": []
+                },
+                "name": {
+                  "pos": 2,
+                  "end": 3,
+                  "text": "b",
+                  "parent": "[Circular ~._children.0._children.0._children.0.expression]",
+                  "_children": []
+                },
+                "parent": "[Circular ~._children.0._children.0._children.0]",
+                "_children": [
+                  {
+                    "pos": 0,
+                    "end": 1,
+                    "text": "a",
+                    "parent": "[Circular ~._children.0._children.0._children.0.expression]",
+                    "_children": []
+                  },
+                  {
+                    "pos": 1,
+                    "end": 2,
+                    "parent": "[Circular ~._children.0._children.0._children.0.expression]",
+                    "_children": []
+                  },
+                  {
+                    "pos": 2,
+                    "end": 3,
+                    "text": "b",
+                    "parent": "[Circular ~._children.0._children.0._children.0.expression]",
+                    "_children": []
+                  }
+                ]
+              },
+              "dotToken": {
+                "pos": 3,
+                "end": 4,
+                "parent": "[Circular ~._children.0._children.0._children.0]",
+                "_children": []
+              },
+              "name": {
+                "pos": 4,
+                "end": 5,
+                "text": "c",
+                "parent": "[Circular ~._children.0._children.0._children.0]",
+                "_children": []
+              },
+              "parent": "[Circular ~._children.0._children.0]",
+              "_children": [
+                {
+                  "pos": 0,
+                  "end": 3,
+                  "expression": {
+                    "pos": 0,
+                    "end": 1,
+                    "text": "a",
+                    "parent": "[Circular ~._children.0._children.0._children.0._children.0]",
+                    "_children": []
+                  },
+                  "dotToken": {
+                    "pos": 1,
+                    "end": 2,
+                    "parent": "[Circular ~._children.0._children.0._children.0._children.0]",
+                    "_children": []
+                  },
+                  "name": {
+                    "pos": 2,
+                    "end": 3,
+                    "text": "b",
+                    "parent": "[Circular ~._children.0._children.0._children.0._children.0]",
+                    "_children": []
+                  },
+                  "parent": "[Circular ~._children.0._children.0._children.0]",
+                  "_children": [
+                    {
+                      "pos": 0,
+                      "end": 1,
+                      "text": "a",
+                      "parent": "[Circular ~._children.0._children.0._children.0._children.0]",
+                      "_children": []
+                    },
+                    {
+                      "pos": 1,
+                      "end": 2,
+                      "parent": "[Circular ~._children.0._children.0._children.0._children.0]",
+                      "_children": []
+                    },
+                    {
+                      "pos": 2,
+                      "end": 3,
+                      "text": "b",
+                      "parent": "[Circular ~._children.0._children.0._children.0._children.0]",
+                      "_children": []
+                    }
+                  ]
+                },
+                {
+                  "pos": 3,
+                  "end": 4,
+                  "parent": "[Circular ~._children.0._children.0._children.0]",
+                  "_children": []
+                },
+                {
+                  "pos": 4,
+                  "end": 5,
+                  "text": "c",
+                  "parent": "[Circular ~._children.0._children.0._children.0]",
+                  "_children": []
+                }
+              ]
+            },
+            {
+              "pos": 5,
+              "end": 6,
+              "flags": 4096,
+              "parent": "[Circular ~._children.0._children.0]",
+              "_children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pos": 6,
+      "end": 6,
+      "parent": "[Circular ~]",
+      "_children": []
+    }
+  ]
+}

@@ -74,10 +74,10 @@ public class CodeGenTest {
 
     @Test
     public void testRef() {
-        assertEquals("T[0][0]", Engine.tablePath(TraceQueries.ROOT_EXPR, 0, 0).toText());        
-        assertEquals("T[ALL][1]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, 1).toText());  
-        assertEquals("T[1][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,1, -1).toText());          
-        assertEquals("T[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, -1).toText());
+        assertEquals("S[0][0]", Engine.tablePath(TraceQueries.ROOT_EXPR, 0, 0).toText());        
+        assertEquals("S[ALL][1]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, 1).toText());  
+        assertEquals("S[1][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,1, -1).toText());          
+        assertEquals("S[ALL][ALL]", Engine.tablePath(TraceQueries.ROOT_EXPR,-1, -1).toText());
     }
 
     @Test

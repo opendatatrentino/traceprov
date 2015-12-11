@@ -107,7 +107,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
 			</plugin>
-			
+
+
+
 			<plugin>
 				<groupId>com.github.searls</groupId>
 				<artifactId>jasmine-maven-plugin</artifactId>
@@ -119,6 +121,27 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<!--  todo find better way to handle deps!!! -->
+					<preloadSources>
+						<source>eu/trentorise/opendata/traceprov/tracel/node_modules/typescript/lib/typescriptServices.js</source>
+					</preloadSources>
+					<sourceExcludes>
+						<sourceExclude> **/node_modules/**/* </sourceExclude>
+						<!--  <sourceExclude> **/engine-init.js </sourceExclude> -->					
+					</sourceExcludes>
+					
+					<webDriverClassName>
+						org.openqa.selenium.htmlunit.HtmlUnitDriver
+					</webDriverClassName>
+					<jsSrcDir>
+						${project.basedir}/src/main/typescript/
+					</jsSrcDir>
+					<jsTestSrcDir>
+						${project.basedir}/src/test/typescript/
+					</jsTestSrcDir>
+
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -174,10 +197,28 @@
 			</plugin>
 		</plugins>
 
+		<resources>
+			<resource>
+				<directory>src/main/typescript</directory>
+				<targetPath>typescript/</targetPath>
+				<includes>
+					<include>**/*.ts</include>
+					<include>**/*.js</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 
 	<dependencies>
+
+		<!--  better to insist on the right version otherwise it gets downgraded to 15.0 -->
+     	 <dependency>
+            <groupId>com.google.guava</groupId>        
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>  
+        
 
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -188,14 +229,15 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.immutables</groupId>
+			<artifactId>value</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>eu.trentorise.opendata</groupId>
 			<artifactId>tod-commons-jackson</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.immutables</groupId>
-			<artifactId>value</artifactId>
-		</dependency>
 
 		<!-- the Jackson core, which includes Streaming API, shared low-level abstractions 
 			(but NOT data-binding) -->

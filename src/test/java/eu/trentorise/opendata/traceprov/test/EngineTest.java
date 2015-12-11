@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import eu.trentorise.opendata.commons.TodConfig;
 import eu.trentorise.opendata.traceprov.engine.Engine;
+import eu.trentorise.opendata.traceprov.exceptions.EngineException;
 import eu.trentorise.opendata.traceprov.tracel.java.PropertyPath;
 
 public class EngineTest {
@@ -78,8 +79,7 @@ public class EngineTest {
             Assert.fail("Shouldn't arrive here");
         } catch (IllegalArgumentException ex){
             
-        }        
-        
+        }                
     }
     
     @Test
@@ -87,6 +87,13 @@ public class EngineTest {
         Number n = (Number) engine.execute("1 + 1");
         assertEquals(2, n.intValue());
         
-        assertEquals(PropertyPath.of("a","b"), PropertyPath.parse("a.b"));        
+        assertEquals(PropertyPath.of("a","b"), PropertyPath.parse("a.b"));  
+        
+        try {
+            PropertyPath.parse("");
+            Assert.fail("Shound't arrive here!");
+        } catch (EngineException ex){
+            
+        }
     }
 }

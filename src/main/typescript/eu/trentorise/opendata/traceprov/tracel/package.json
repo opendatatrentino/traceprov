@@ -1,0 +1,30 @@
+{
+  "name": "tracel",
+  "version": "0.4.0",
+  "description": "TraceProv Expression Language",
+  "author": "David Leoni",
+  "contributors": [{
+  "name": "Scott Joplin",
+  "email": "scott-joplin@ragtime.piano"
+}],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opendatatrentino/traceprov"
+  },
+  "bugs": {
+    "url": "https://github.com/opendatatrentino/traceprov/issues"
+  },
+  "keywords": [
+      "traceprov",
+      "tracel",
+      "typescript",
+      "lang"
+    ],
+  "dependencies": {    
+	  "typescript" : "1.7.3"
+  },
+  "devDependencies": {
+	
+  },
+  "license": "Apache-2.0"
+}

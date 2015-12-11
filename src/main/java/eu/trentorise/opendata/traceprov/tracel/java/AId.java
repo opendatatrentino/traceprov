@@ -5,10 +5,8 @@ import org.immutables.value.Value;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import eu.trentorise.opendata.commons.BuilderStylePublic;
 import eu.trentorise.opendata.commons.SimpleStyle;
 import eu.trentorise.opendata.traceprov.engine.Engine;
-import eu.trentorise.opendata.traceprov.geojson.Feature;
 import eu.trentorise.opendata.traceprov.tracel.java.Id;
 
 /**
