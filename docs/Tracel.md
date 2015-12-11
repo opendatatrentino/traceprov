@@ -59,16 +59,16 @@ There is no widely used standard query language for json / javascript objects. `
 
 todo write more.
 
-| JsonPath                  |TraceQuery| Description                                                        ||
-| :------------------------ | |:----------------------------------------------------------------- |
-| `$`                       | `S` |The root element to query. This starts all query expressions.       |
-| `@`                       | `NODE`|The current node being processed by a filter predicate.            |
-| `*`                       | `ALL`|Wildcard. Available anywhere a name or numeric are required.       |
-| `..`                      | `.DEEP.`|Deep scan. Available anywhere a name is required.                  |
-| `.<name>`                 |  `.<name>`|Dot-notated child                                                  |
-| `['<name>' (, '<name>')]` | better not use comma (although with some wizardry we could use Javascript comma operator)|Bracket-notated child or children                                  |
-| `[<number> (, <number>)]` |  better not use comma (although with some wizardry we could use Javascript comma operator)|Array index or indexes                                             |
-| `[start:end]`             | `[SLICE(start,end)]`|Array slice operator                                               |
+| JsonPath                  |TraceQuery| Description  |
+|:------------------------:|:-----------------------------------------------------------------:|:----:|
+| `$`                       | `S` |The root element to query. This starts all query expressions.|
+| `@`                       | `NODE`|The current node being processed by a filter predicate.|
+| `*`                       | `ALL`|Wildcard. Available anywhere a name or numeric are required.|
+| `..`                      | `.DEEP.`|Deep scan. Available anywhere a name is required.|
+| `.<name>`                 |  `.<name>`|Dot-notated child|
+| `['<name>' (, '<name>')]` | better not use comma (although with some wizardry we could use Javascript comma operator)|Bracket-notated child or children |
+| `[<number> (, <number>)]` |  better not use comma (although with some wizardry we could use Javascript comma operator)|Array index or indexes |
+| `[start:end]`             | `[SLICE(start,end)]`|Array slice operator |
 | `[?(<expression>)]`       |`[FILTER(<expression>)]` |Filter expression. Expression must evaluate to a boolean value.    |
 
 ### Modellings CSVs
