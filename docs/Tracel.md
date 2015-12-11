@@ -60,7 +60,7 @@ There is no widely used standard query language for json / javascript objects. `
 todo write more.
 
 | JsonPath                  |TraceQuery| Description  |
-|:------------------------:|:-----------------------------------------------------------------:|:----:|
+|:------------------------:|:------------:|:-----------------------------------------------------------:|
 | `$`                       | `S` |The root element to query. This starts all query expressions.|
 | `@`                       | `NODE`|The current node being processed by a filter predicate.|
 | `*`                       | `ALL`|Wildcard. Available anywhere a name or numeric are required.|
