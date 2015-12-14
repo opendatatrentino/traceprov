@@ -11,11 +11,12 @@ RELEASE DOCS ARE ON THE <a href="http://opendatatrentino.github.io/traceprov/" t
 
 **About**
 
-Java library for data tracking. Features
+Java library for data tracking. Features:
 
 * Contains models for  <a href="http://www.w3.org/TR/vocab-dcat/" target="_blank"> DCAT catalog vocabulary </a> and <a href="http://geojson.org" target="_blank"> GeoJson </a> 
 * data origin tracking with a variant of JsonPath
 * validation of schemas
+* a serverside Javascript / <a href="http://www.typescriptlang.org/" target="_blank"> Typescript </a> scripting engine 
 * persistence with a nosql db interface
 * all classes are immutable
 

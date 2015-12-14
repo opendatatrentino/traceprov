@@ -7,9 +7,16 @@
 declare var require: any;
 
 var ts;
-if (!ts) {
+if (!ts) {    
     ts = require("typescript");
 }
+
+var exports: any;
+if (!exports) {    
+    exports = {}
+}
+
+var tracel = exports;
 
 
 // ------------------------
@@ -143,13 +150,13 @@ a["\""];
 
 
 let internalTracel = {
-    
-    printAllChildren : function(sourceCode : string, node: any, depth = 0) {
+
+    printAllChildren: function(sourceCode: string, node: any, depth = 0) {
         console.log(new Array(depth + 1).join('----'), kindToString(node.kind), node.pos, node.end, "-> ",
             sourceCode.substr(node.pos, node.end - node.pos));
         depth++;
         node.getChildren().forEach(c=> internalTracel.printAllChildren(c, depth));
-    }    
+    }
 }
 
 
@@ -181,7 +188,7 @@ function checkLength(expectedNumber: number, actualChildren: ts.Node[]) {
     if (expectedNumber !== actualChildren.length) {
 
         throw new Error("Expected exactly " + expectedNumber + ", found instead " + actualChildren.length
-            + " nodes. Nodes are: " + actualChildren.forEach((c)=>nodeToJson(c)));
+            + " nodes. Nodes are: " + actualChildren.forEach((c) => nodeToJson(c)));
     }
 }
 
@@ -195,109 +202,111 @@ function getText(text: string, node: ts.Node) {
 //                  STUFF TO *REALLY* EXPORT
 // *********************************************************
 
-let tracel = { 
+
     
-    /**
-    * Parses the provided string which must be a valid Javascript property path, 
-    * starting with an identifier and followed by any number of accessor
-    * <pre>
-        * Valid paths: 
-        * a.b
-        * a["b"].c
-        * a[b][c] 
-        * a["b c"].d
-        * a[3]
-        * b["3"]
-        * c["3.4"]
-        * 
-        * Invalid:
-        * "a"
-        * a[f(b)]
-        * [c]
-        * f(a)[b]
-    * </pre>
-    */
-    parsePropertyPath: function(text: string): string[] {
-        if (!text){
-            throw new Error("Provided text must not be empty, found instead " + text);
-        }
-        let ret = [];
-        let sf = ts.createSourceFile('foo.ts', text, scriptTarget, false);
+/**
+* Parses the provided string which must be a valid Javascript property path, 
+* starting with an identifier and followed by any number of accessor
+* <pre>
+    * Valid paths: 
+    * a.b
+    * a["b"].c
+    * a[b][c] 
+    * a["b c"].d
+    * a[3]
+    * b["3"]
+    * c["3.4"]
+    * 
+    * Invalid:
+    * "a"
+    * a[f(b)]
+    * [c]
+    * f(a)[b]
+* </pre>
+*/
+exports.parsePropertyPath = function(text: string): string[] {
+    if (!text) {
+        throw new Error("Provided text must not be empty, found instead " + text);
+    }
+    let ret = [];
+    let sf = ts.createSourceFile('foo.ts', text, scriptTarget, false);
 
-        let parseDiagnostics = (<any>sf).parseDiagnostics;
-        if (parseDiagnostics.length > 0) {
-            throw new Error("Found parse errors! " + nodeToJson(parseDiagnostics));
-        }
-
-        let curNode: ts.Node;
-        try {
-            curNode = sf;
-
-            checkKind(ts.SyntaxKind.SourceFile, curNode.kind);
-            let ch = curNode.getChildren();
-            checkLength(2, ch);
-
-            curNode = ch[0];
-            checkKind(ts.SyntaxKind.SyntaxList, curNode.kind);
-            ch = curNode.getChildren();
-            checkLength(1, ch);
-
-            curNode = ch[0];
-            checkKind(ts.SyntaxKind.ExpressionStatement, curNode.kind);
-
-        } catch (e) {
-            console.error("ERROR AT INTERVAL [" + curNode.pos + ","
-                + curNode.end + ") with text -->" + getText(text, curNode) + "<--");
-            throw new Error(e);
-        }
-
-        let curExpr = (<ts.ExpressionStatement>curNode).expression;
-
-        while (curExpr) {
-            try {
-                if (!(ts.SyntaxKind.Identifier === curExpr.kind
-                    || ts.SyntaxKind.PropertyAccessExpression === curExpr.kind
-                    || ts.SyntaxKind.ElementAccessExpression === curExpr.kind
-                    || ts.SyntaxKind.FirstLiteralToken === curExpr.kind)) {
-                    throw new Error("Found invalid expression kind: " + kindToString(curExpr.kind));
-                }
-
-                if (ts.SyntaxKind.Identifier === curExpr.kind) {
-                    let id = <ts.Identifier>curExpr;
-                    ret.unshift(id.text);
-                    curExpr = null;
-                } else if (ts.SyntaxKind.PropertyAccessExpression === curExpr.kind) {
-                    let propExpr = <ts.PropertyAccessExpression>curExpr;
-                    console.log("propExpr.name = ", propExpr.name);
-                    ret.unshift(propExpr.name.text);
-                    curExpr = propExpr.expression;
-                } else if (ts.SyntaxKind.ElementAccessExpression === curExpr.kind) {
-                    let accExpr = <ts.ElementAccessExpression>curExpr;
-                    let argExpr = accExpr.argumentExpression;
-                    let text: string;
-                    if (ts.SyntaxKind.Identifier === argExpr.kind) {
-                        text = (<ts.Identifier>argExpr).text;
-                    } else if (ts.SyntaxKind.FirstLiteralToken === argExpr.kind) {
-                        text = (<ts.LiteralExpression>argExpr).text;
-                    } else {
-                        throw new Error("Found invalid expression kind: " + kindToString(argExpr.kind));
-                    }
-                    ret.unshift(text);
-                    curExpr = accExpr.expression;
-                } else {
-                    curExpr = null;
-                }
-            } catch (e) {
-                console.error("ERROR AT INTERVAL [" + curExpr.pos + "," + curExpr.end + ") with text -->" + getText(text, curExpr) + "<--");
-                throw (e);
-            }
-        }
-
-
-        return ret;
+    let parseDiagnostics = (<any>sf).parseDiagnostics;
+    if (parseDiagnostics.length > 0) {
+        throw new Error("Found parse errors! " + nodeToJson(parseDiagnostics));
     }
 
+    let curNode: ts.Node;
+    try {
+        curNode = sf;
+
+        checkKind(ts.SyntaxKind.SourceFile, curNode.kind);
+        let ch = curNode.getChildren();
+        checkLength(2, ch);
+
+        curNode = ch[0];
+        checkKind(ts.SyntaxKind.SyntaxList, curNode.kind);
+        ch = curNode.getChildren();
+        checkLength(1, ch);
+
+        curNode = ch[0];
+        checkKind(ts.SyntaxKind.ExpressionStatement, curNode.kind);
+
+    } catch (e) {
+        console.error("ERROR AT INTERVAL [" + curNode.pos + ","
+            + curNode.end + ") with text -->" + getText(text, curNode) + "<--");
+        throw new Error(e);
+    }
+
+    let curExpr = (<ts.ExpressionStatement>curNode).expression;
+
+    while (curExpr) {
+        try {
+            if (!(ts.SyntaxKind.Identifier === curExpr.kind
+                || ts.SyntaxKind.PropertyAccessExpression === curExpr.kind
+                || ts.SyntaxKind.ElementAccessExpression === curExpr.kind
+                || ts.SyntaxKind.FirstLiteralToken === curExpr.kind)) {
+                throw new Error("Found invalid expression kind: " + kindToString(curExpr.kind));
+            }
+
+            if (ts.SyntaxKind.Identifier === curExpr.kind) {
+                let id = <ts.Identifier>curExpr;
+                ret.unshift(id.text);
+                curExpr = null;
+            } else if (ts.SyntaxKind.PropertyAccessExpression === curExpr.kind) {
+                let propExpr = <ts.PropertyAccessExpression>curExpr;
+                console.log("propExpr.name = ", propExpr.name);
+                ret.unshift(propExpr.name.text);
+                curExpr = propExpr.expression;
+            } else if (ts.SyntaxKind.ElementAccessExpression === curExpr.kind) {
+                let accExpr = <ts.ElementAccessExpression>curExpr;
+                let argExpr = accExpr.argumentExpression;
+                let text: string; 
+                if (ts.SyntaxKind.Identifier === argExpr.kind) {
+                    text = (<ts.Identifier>argExpr).text;
+                } else if (ts.SyntaxKind.FirstLiteralToken === argExpr.kind) {
+                    text = (<ts.LiteralExpression>argExpr).text;
+                } else if (ts.SyntaxKind.StringLiteral === argExpr.kind) {
+                    text = (<ts.StringLiteral>argExpr).text;
+                } else {
+                    throw new Error("Found invalid expression kind: " + kindToString(argExpr.kind));
+                }
+                ret.unshift(text);
+                curExpr = accExpr.expression;
+            } else {
+                curExpr = null;
+            }
+        } catch (e) {
+            console.error("ERROR AT INTERVAL [" + curExpr.pos + "," + curExpr.end + ") with text -->" + getText(text, curExpr) + "<--");
+            throw (e);
+        }
+    }
+
+
+    return ret;
 }
+
+
 
 
 // console.log("sourceFile = ", sourceFile);
@@ -305,4 +314,3 @@ let tracel = {
 
 // console.log("PropertyPath = ", tracel.parsePropertyPath(sourceCode));
 
- 

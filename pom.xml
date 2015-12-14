@@ -128,7 +128,8 @@
 					</preloadSources>
 					<sourceExcludes>
 						<sourceExclude> **/node_modules/**/* </sourceExclude>
-						<!--  <sourceExclude> **/engine-init.js </sourceExclude> -->					
+						<!-- <sourceExclude> **/engine-init.js </sourceExclude> -->					
+						<sourceExclude> **/debug-tracel.js </sourceExclude>
 					</sourceExcludes>
 					
 					<webDriverClassName>

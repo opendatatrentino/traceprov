@@ -3,6 +3,11 @@ var ts;
 if (!ts) {
     ts = require("typescript");
 }
+var exports;
+if (!exports) {
+    exports = {};
+}
+var tracel = exports;
 // ------------------------
 var scriptTarget = 1 /* ES5 */;
 /*var content =
@@ -151,102 +156,103 @@ function getText(text, node) {
 // *********************************************************
 //                  STUFF TO *REALLY* EXPORT
 // *********************************************************
-var tracel = {
-    /**
-    * Parses the provided string which must be a valid Javascript property path,
-    * starting with an identifier and followed by any number of accessor
-    * <pre>
-        * Valid paths:
-        * a.b
-        * a["b"].c
-        * a[b][c]
-        * a["b c"].d
-        * a[3]
-        * b["3"]
-        * c["3.4"]
-        *
-        * Invalid:
-        * "a"
-        * a[f(b)]
-        * [c]
-        * f(a)[b]
-    * </pre>
-    */
-    parsePropertyPath: function (text) {
-        if (!text) {
-            throw new Error("Provided text must not be empty, found instead " + text);
-        }
-        var ret = [];
-        var sf = ts.createSourceFile('foo.ts', text, scriptTarget, false);
-        var parseDiagnostics = sf.parseDiagnostics;
-        if (parseDiagnostics.length > 0) {
-            throw new Error("Found parse errors! " + nodeToJson(parseDiagnostics));
-        }
-        var curNode;
+/**
+* Parses the provided string which must be a valid Javascript property path,
+* starting with an identifier and followed by any number of accessor
+* <pre>
+    * Valid paths:
+    * a.b
+    * a["b"].c
+    * a[b][c]
+    * a["b c"].d
+    * a[3]
+    * b["3"]
+    * c["3.4"]
+    *
+    * Invalid:
+    * "a"
+    * a[f(b)]
+    * [c]
+    * f(a)[b]
+* </pre>
+*/
+exports.parsePropertyPath = function (text) {
+    if (!text) {
+        throw new Error("Provided text must not be empty, found instead " + text);
+    }
+    var ret = [];
+    var sf = ts.createSourceFile('foo.ts', text, scriptTarget, false);
+    var parseDiagnostics = sf.parseDiagnostics;
+    if (parseDiagnostics.length > 0) {
+        throw new Error("Found parse errors! " + nodeToJson(parseDiagnostics));
+    }
+    var curNode;
+    try {
+        curNode = sf;
+        checkKind(248 /* SourceFile */, curNode.kind);
+        var ch = curNode.getChildren();
+        checkLength(2, ch);
+        curNode = ch[0];
+        checkKind(271 /* SyntaxList */, curNode.kind);
+        ch = curNode.getChildren();
+        checkLength(1, ch);
+        curNode = ch[0];
+        checkKind(195 /* ExpressionStatement */, curNode.kind);
+    }
+    catch (e) {
+        console.error("ERROR AT INTERVAL [" + curNode.pos + ","
+            + curNode.end + ") with text -->" + getText(text, curNode) + "<--");
+        throw new Error(e);
+    }
+    var curExpr = curNode.expression;
+    while (curExpr) {
         try {
-            curNode = sf;
-            checkKind(248 /* SourceFile */, curNode.kind);
-            var ch = curNode.getChildren();
-            checkLength(2, ch);
-            curNode = ch[0];
-            checkKind(271 /* SyntaxList */, curNode.kind);
-            ch = curNode.getChildren();
-            checkLength(1, ch);
-            curNode = ch[0];
-            checkKind(195 /* ExpressionStatement */, curNode.kind);
-        }
-        catch (e) {
-            console.error("ERROR AT INTERVAL [" + curNode.pos + ","
-                + curNode.end + ") with text -->" + getText(text, curNode) + "<--");
-            throw new Error(e);
-        }
-        var curExpr = curNode.expression;
-        while (curExpr) {
-            try {
-                if (!(69 /* Identifier */ === curExpr.kind
-                    || 166 /* PropertyAccessExpression */ === curExpr.kind
-                    || 167 /* ElementAccessExpression */ === curExpr.kind
-                    || 8 /* FirstLiteralToken */ === curExpr.kind)) {
-                    throw new Error("Found invalid expression kind: " + kindToString(curExpr.kind));
+            if (!(69 /* Identifier */ === curExpr.kind
+                || 166 /* PropertyAccessExpression */ === curExpr.kind
+                || 167 /* ElementAccessExpression */ === curExpr.kind
+                || 8 /* FirstLiteralToken */ === curExpr.kind)) {
+                throw new Error("Found invalid expression kind: " + kindToString(curExpr.kind));
+            }
+            if (69 /* Identifier */ === curExpr.kind) {
+                var id = curExpr;
+                ret.unshift(id.text);
+                curExpr = null;
+            }
+            else if (166 /* PropertyAccessExpression */ === curExpr.kind) {
+                var propExpr = curExpr;
+                console.log("propExpr.name = ", propExpr.name);
+                ret.unshift(propExpr.name.text);
+                curExpr = propExpr.expression;
+            }
+            else if (167 /* ElementAccessExpression */ === curExpr.kind) {
+                var accExpr = curExpr;
+                var argExpr = accExpr.argumentExpression;
+                var text_1 = void 0;
+                if (69 /* Identifier */ === argExpr.kind) {
+                    text_1 = argExpr.text;
                 }
-                if (69 /* Identifier */ === curExpr.kind) {
-                    var id = curExpr;
-                    ret.unshift(id.text);
-                    curExpr = null;
+                else if (8 /* FirstLiteralToken */ === argExpr.kind) {
+                    text_1 = argExpr.text;
                 }
-                else if (166 /* PropertyAccessExpression */ === curExpr.kind) {
-                    var propExpr = curExpr;
-                    console.log("propExpr.name = ", propExpr.name);
-                    ret.unshift(propExpr.name.text);
-                    curExpr = propExpr.expression;
-                }
-                else if (167 /* ElementAccessExpression */ === curExpr.kind) {
-                    var accExpr = curExpr;
-                    var argExpr = accExpr.argumentExpression;
-                    var text_1 = void 0;
-                    if (69 /* Identifier */ === argExpr.kind) {
-                        text_1 = argExpr.text;
-                    }
-                    else if (8 /* FirstLiteralToken */ === argExpr.kind) {
-                        text_1 = argExpr.text;
-                    }
-                    else {
-                        throw new Error("Found invalid expression kind: " + kindToString(argExpr.kind));
-                    }
-                    ret.unshift(text_1);
-                    curExpr = accExpr.expression;
+                else if (9 /* StringLiteral */ === argExpr.kind) {
+                    text_1 = argExpr.text;
                 }
                 else {
-                    curExpr = null;
+                    throw new Error("Found invalid expression kind: " + kindToString(argExpr.kind));
                 }
+                ret.unshift(text_1);
+                curExpr = accExpr.expression;
             }
-            catch (e) {
-                console.error("ERROR AT INTERVAL [" + curExpr.pos + "," + curExpr.end + ") with text -->" + getText(text, curExpr) + "<--");
-                throw (e);
+            else {
+                curExpr = null;
             }
         }
-        return ret;
+        catch (e) {
+            console.error("ERROR AT INTERVAL [" + curExpr.pos + "," + curExpr.end + ") with text -->" + getText(text, curExpr) + "<--");
+            throw (e);
+        }
     }
+    return ret;
 };
 // console.log("sourceFile = ", sourceFile);
 // console.log("jsonized ast = ", nodeToJson(sourceFile));
